@@ -1,14 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { EmailPreview } from './EmailPreview';
 import { emailService } from '../services/email.service';
+import { useSearchParams } from 'react-router-dom';
+import { EmailContext } from './EmailContext';
 
-export const EmailList = ({ emails, handleEmailSelect }) => {
-    const [emailList, setEmailList] = useState(emails);
+export const EmailList = () => {
+    const { filteredEmails, setFilterBy, handleEmailSelect } = useContext(EmailContext);
+    const [emailList, setEmailList] = useState(filteredEmails);
     const [contextMenu, setContextMenu] = useState(null);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [sortCriterion, setSortCriterion] = useState('');
 
     useEffect(() => {
-        setEmailList(emails);
-    }, [emails]);
+        setEmailList(filteredEmails);
+    }, [filteredEmails, sortCriterion]);
+
+    const handleSortChange = (e) => {
+        setSortCriterion(e.target.value);
+    };
+
+    useEffect(() => {
+        const isRead = searchParams.get('isRead');
+        const sort = searchParams.get('sort');
+
+        setFilterBy(prev => ({ ...prev, isRead: isRead === 'true' ? true : isRead === 'false' ? false : null }));
+        setSortCriterion(sort || '');
+    }, [searchParams]);
 
     useEffect(() => {
         // Handler to close context menu on outside clicks
@@ -29,15 +46,11 @@ export const EmailList = ({ emails, handleEmailSelect }) => {
         };
       }, [contextMenu]);
 
-    const onToggleStar = async (emailId) => {
-        const updatedEmails = emailList.map(email => {
-            if (email.id === emailId) {
-                return { ...email, isStarred: !email.isStarred };
-            }
-            return email;
-        });
-
-        emailService.updateStarFolder(updatedEmails, emailId);
+    const onToggleStar = async (email) => {
+        const updatedEmail = { ...email, isStarred: !email.isStarred };
+        await emailService.saveEmail(updatedEmail, updatedEmail.folder);
+    
+        const updatedEmails = emailList.map(e => e.id === email.id ? updatedEmail : e);
         setEmailList(updatedEmails);
     };
 
@@ -61,12 +74,17 @@ export const EmailList = ({ emails, handleEmailSelect }) => {
     
     return (
         <div className="email-list">
-            {emails.map(email => (
+            <select onChange={handleSortChange} value={sortCriterion}>
+                <option value="">Sort By</option>
+                <option value="date">Date</option>
+                <option value="title">Title</option>
+            </select>
+            {emailList.map(email => (
                 <EmailPreview
                     key={email.id}
                     email={email}
                     onSelectEmail={() => handleEmailSelect(email.id)}
-                    onToggleStar={onToggleStar}
+                    onToggleStar={() => onToggleStar(email)}
                     onMarkAsUnread={onMarkAsUnread}
                     onMarkAsRead={onMarkAsRead}
                     onContextMenu={handleContextMenu}

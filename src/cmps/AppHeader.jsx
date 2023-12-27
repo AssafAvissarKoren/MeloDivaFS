@@ -5,7 +5,7 @@ export function AppHeader() {
     return (
         <header className="app-header">
             <section className="container">
-                <h1>Log111 Email</h1>
+                <h1>Green Mail</h1>
                 <nav>
                     <NavLink to="/">Home</NavLink>
                     <NavLink to="/aboutUs">About</NavLink>

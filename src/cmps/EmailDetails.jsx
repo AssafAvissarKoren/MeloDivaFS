@@ -21,8 +21,12 @@ export const EmailDetails = () => {
     }
 
     async function onDeleteEmail(email) {
-        await emailService.saveEmail(email, ["trash"])
-        goBack();
+        if(params.folder == "trash") {
+            await emailService.remove(email.id)
+        } else {
+            await emailService.saveEmail(email, "trash");
+        }
+        backOneURLSegment();
     }
 
 
@@ -30,7 +34,7 @@ export const EmailDetails = () => {
         return <div>Loading email...</div>;
     }
 
-    function goBack() {
+    function backOneURLSegment() {
         const pathArray = window.location.hash.split('/');
         const newPath = '/' + pathArray.slice(1, 2).join('/');
         navigate(newPath);
@@ -39,7 +43,7 @@ export const EmailDetails = () => {
 
     return (
         <div className="email-details">
-            <button onClick={() => {goBack()}}>Back to list</button>
+            <button onClick={() => {backOneURLSegment()}}>Back to list</button>
             <h2>{email.subject}</h2>
             <p>From: {email.from}</p>
             <p>To: {email.to}</p>

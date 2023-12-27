@@ -20,11 +20,11 @@ export const EmailFilter = ({ filterBy, onSetFilter }) => {
         onSetFilter(filterByToEdit)
     }, [filterByToEdit])
 
-    const { status, text, isRead } = filterByToEdit
+    const { folder, text, isRead } = filterByToEdit
 
     return (
         <div className="email-filter">
-            <select name="status" onChange={handleChange} value={status} style={{ margin: '10px' }}>
+            <select name="folder" onChange={handleChange} value={folder} style={{ margin: '10px' }}>
                 <option value="all">All</option>
                 <option value="inbox">Inbox</option>
                 <option value="sent">Sent</option>

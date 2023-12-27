@@ -1,0 +1,37 @@
+.email-side-nav {
+    background-color: #f1f3f4;
+    padding: 10px;
+    overflow-y: auto; /* Allows scrolling if content is taller than the grid area */
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+}
+
+.email-side-nav div {
+    padding: 8px 12px;
+    margin: 4px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #202124;
+    transition: background-color 0.3s;
+}
+
+.email-side-nav div:hover {
+    background-color: #e8eaed;
+}
+
+/* Active folder style */
+.email-side-nav .active {
+    background-color: #d2e3fc;
+    font-weight: bold;
+}
+
+/* Count style */
+.email-side-nav span {
+    float: right;
+    background-color: #dadce0;
+    border-radius: 999px;
+    padding: 0 6px;
+    font-size: 12px;
+    margin-left: 8px;
+}

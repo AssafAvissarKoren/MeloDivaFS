@@ -1,38 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { EmailList } from './EmailList';
-import { EmailFilter } from './EmailFilter';
+import { EmailSideNav } from './EmailSideNav';
+import { EmailHeaderFilter } from './EmailHeaderFilter';
 import { emailService } from '../services/email.service';
-import { useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+import { EmailContext } from './EmailContext';
+
 
 export const EmailIndex = () => {
-    const [emails, setEmails] = useState(null);
+    const [allEmails, setAllEmails] = useState(null); // Full list of emails
+    const [filteredEmails, setFilteredEmails] = useState(null); // Filtered list of emails
     const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
-    const [sortCriterion, setSortCriterion] = useState('');
     const navigate = useNavigate();
+    const { folder } = useParams();
 
     useEffect(() => {
-        loadEmails()
-    }, [filterBy, sortCriterion]);
+        loadEmails();
+        const filterURL = emailService.filterURL(filterBy)
+        navigate(filterURL, { replace: true });
+    }, [filterBy]);
 
     async function loadEmails() {
-        let fetchedEmails = await emailService.queryEmails(filterBy);
-        switch (sortCriterion) {
-            case 'date':
-                fetchedEmails.sort((a, b) => b.sentAt - a.sentAt);
-                break;
-            case 'title':
-                fetchedEmails.sort((a, b) => a.subject.localeCompare(b.subject));
-                break;
-            default:
-                // Default sorting logic if needed
-                break;
-        }
-        setEmails(fetchedEmails);
+        const allEmails = await emailService.getEmails();
+        setAllEmails(allEmails);
+        const fetchedEmails = await emailService.queryEmails(allEmails, filterBy);
+        setFilteredEmails(fetchedEmails);
     }
-
-    const handleSortChange = (e) => {
-        setSortCriterion(e.target.value);
-    };
 
     function onSetFilter(filterBy) {
         setFilterBy(prevFilter => ({ ...prevFilter, ...filterBy }))
@@ -40,44 +34,34 @@ export const EmailIndex = () => {
 
     const handleEmailSelect = async (emailId) => {
         const updatedEmails = await emailService.markAsRead(emailId);
-        setEmails(updatedEmails);
-        navigate(`/email/${emailId}`);
+        setFilteredEmails(updatedEmails);
+        navigate(`/email/${folder}/${emailId}`);
     };
     
-    const resetEmails = () => {
-        emailService.initEmails()
-        setFilterBy(emailService.getDefaultFilter());
-        loadEmails()
-    };
+    if (!filteredEmails) return <div>Loading...</div>;
 
-    function onComposeClick () {
-        navigate('/email/compose');
-    };
-
-
-    if (!emails) return <div>Loading...</div>;
-
-    const unreadCount = emails.filter(email => !email.isRead).length;
-    const totalEmails = emails.length;
+    const unreadCount = filteredEmails.filter(email => !email.isRead).length;
+    const totalEmails = filteredEmails.length;
     const unreadPercentage = totalEmails ? (unreadCount / totalEmails) * 100 : 0;
 
+    // const filteredEmails = folder ? emails.filter(email => email.folder === folder) : emails;
+
     return (
-        <div>
-            <button onClick={resetEmails} style={{ margin: '10px' }}>Reset Emails</button>
-            <select onChange={handleSortChange} value={sortCriterion}>
-                <option value="">Sort By</option>
-                <option value="date">Date</option>
-                <option value="title">Title</option>
-            </select>
-            <EmailFilter filterBy={filterBy} onSetFilter={onSetFilter} />
-            <EmailList emails={emails} handleEmailSelect={handleEmailSelect} />
-            <button onClick={onComposeClick} style={{ margin: '10px' }}>Compose Email</button>
-            <div style={{ margin: '10px 0' }}>
-                <div>Unread Emails: {unreadCount} / {totalEmails}</div>
-                <div style={{ width: '100%', backgroundColor: '#ddd' }}>
-                    <div style={{ height: '20px', width: `${unreadPercentage}%`, backgroundColor: 'green' }}></div>
+        <EmailContext.Provider value={{ filteredEmails, setFilterBy, handleEmailSelect }}>
+            <div className="email-index-container">
+                <div className="email-name">
+                    <h1>Green Mail</h1>
+                </div>
+                <div className="email-header-filter">
+                    <EmailHeaderFilter setFilterBy={setFilterBy} />
+                </div>
+                <div className="email-side-nav">
+                    <EmailSideNav emails={allEmails} setFilterBy={setFilterBy} />
+                </div>
+                <div className="email-list">
+                    <Outlet />
                 </div>
             </div>
-        </div>
+        </EmailContext.Provider>
     );
 };

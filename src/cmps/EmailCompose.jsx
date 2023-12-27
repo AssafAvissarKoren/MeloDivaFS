@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { emailService } from '../services/email.service';
 import { storageService } from '../services/async-storage.service.js'
 import { useNavigate, useParams } from 'react-router-dom';
-import '../assets/css/cmps/email-compose.css';
 
 export const EmailCompose = () => {
     const [emailForm, setEmailForm] = useState({
@@ -23,10 +22,10 @@ export const EmailCompose = () => {
         const newEmail = await emailService.createEmail(
             emailForm.subject,
             emailForm.body,
-            emailForm.to
+            emailForm.to,
         );
         //storageService.put(newEmail)
-        await emailService.saveEmail(newEmail, ["sent"])
+        await emailService.saveEmail(newEmail, "sent")
         navigate('/email');
     };
 

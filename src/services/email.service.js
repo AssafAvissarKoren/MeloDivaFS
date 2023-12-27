@@ -11,31 +11,25 @@ export const emailService = {
     markAsRead,
     markAsUnread,
     getDefaultFilter,
-    updateStarFolder,
-    findEmailFolders
+    getEmails,
+    filterURL,
 }
 
 const EMAIL_STORAGE_KEY = 'emailDB'
 const USER_STORAGE_KEY = 'userDB'
-const FOLDER_STORAGE_KEY = 'folderDB'
 
-async function queryEmails(filterBy) {
-    let emails = await storageService.query(EMAIL_STORAGE_KEY);
-    const folderStructure = await storageService.query(FOLDER_STORAGE_KEY);
+async function queryEmails(emailsParam, filterBy) {
+    let emails = [...emailsParam];
 
     if (filterBy) {
-        // If filterBy.status is specified and not 'all', filter by folder
-        if (filterBy.status && filterBy.status !== 'all') {
-            const folder = folderStructure.find(f => f.folder === filterBy.status);
-            if (folder) {
-                emails = emails.filter(email => folder.emails.includes(email.id));
+        if (filterBy.folder) {
+            if (filterBy.folder == 'starred') {
+                emails = emails.filter(email => email.isStarred);
             } else {
-                // If specified folder doesn't exist, return empty array
-                return [];
+                emails = emails.filter(email => email.folder == filterBy.folder);
             }
         }
 
-        // Apply other filters if any
         if (filterBy.text || filterBy.isRead !== null) {
             emails = emails.filter(email => {
                 const textMatch = !filterBy.text || email.subject.includes(filterBy.text) || email.body.includes(filterBy.text) || email.from.includes(filterBy.text);
@@ -49,67 +43,42 @@ async function queryEmails(filterBy) {
     return emails;
 }
 
+function filterURL(filterBy) {
+    let url = `/email/${filterBy.folder || 'inbox'}`;
+    const queryParams = new URLSearchParams();
+
+    if (filterBy.text) {
+        queryParams.append('text', filterBy.text);
+    }
+    if (filterBy.isRead !== null) {
+        queryParams.append('isRead', filterBy.isRead);
+    }
+    if ([...queryParams].length) {
+        url += `?${queryParams}`;
+    }
+    return url
+}
+
+function getEmails() {
+    return storageService.query(EMAIL_STORAGE_KEY);
+}
+
 function getById(id) {
     return storageService.get(EMAIL_STORAGE_KEY, id)
 }
-
-async function findEmailFolders(emailId) {
-    const folderStructure = await storageService.query(FOLDER_STORAGE_KEY);
-    const foldersWithEmail = folderStructure
-        .filter(folder => folder.emails.includes(emailId))
-        .map(folder => folder.folder);
-    return foldersWithEmail;
-}
-
 
 function remove(id) {
     return storageService.remove(EMAIL_STORAGE_KEY, id)
 }
 
-async function saveEmail(emailToSave, folders = ["inbox"]) {
-    let savedEmail;
+async function saveEmail(emailToSave, folderName = "inbox") {
+    const savedEmail = {...emailToSave, folder: folderName};
 
-    if (emailToSave.id) {
-        savedEmail = await storageService.put(EMAIL_STORAGE_KEY, emailToSave);
+    if (savedEmail.id) {
+        await storageService.put(EMAIL_STORAGE_KEY, savedEmail);
     } else {
-        savedEmail = await storageService.post(EMAIL_STORAGE_KEY, emailToSave);
+        await storageService.post(EMAIL_STORAGE_KEY, savedEmail);
     }
-
-    _saveFolder(savedEmail.id, folders);
-    return savedEmail;
-}
-
-async function _saveFolder(emailToSaveId, folderNames) {
-    let folders = await storageService.query(FOLDER_STORAGE_KEY);
-    let emails = await storageService.query(EMAIL_STORAGE_KEY);
-
-    // Get the email by id
-    const email = emails.find(e => e.id === emailToSaveId);
-
-    // Update the folder structure
-    folders = folders.map(folder => {
-        // If the email should be in this folder, add it (if not already present)
-        if (folderNames.includes(folder.folder)) {
-            if (!folder.emails.includes(emailToSaveId)) {
-                return { ...folder, emails: [...folder.emails, emailToSaveId] };
-            }
-            return folder;
-        }
-
-        // If the email shouldn't be in this folder, remove it
-        return {...folder, emails: folder.emails.filter(emailId => emailId !== emailToSaveId)};
-    });
-
-    // Special handling for 'star' folder based on email's isStarred status
-    if (email && email.isStarred && !folderNames.includes('star')) {
-        const starFolder = folders.find(folder => folder.folder === 'star');
-        if (!starFolder.emails.includes(emailToSaveId)) {
-            starFolder.emails.push(emailToSaveId);
-        }
-    }
-
-    // Directly save the updated folder structure
-    await storageService.saveAll(FOLDER_STORAGE_KEY, folders);
 }
 
 async function markAsRead(id) {
@@ -134,16 +103,15 @@ async function _markAs(id, isRead) {
     return updatedEmails; // Return the updated list of emails
 }
 
-
 function getDefaultFilter() {
     return {
-        status: 'all',
+        folder: 'inbox',
         text: '',
         isRead: null,
     }
 }
 
-async function createEmail(subject = '', body = '', to = '') {
+async function createEmail(subject = '', body = '', to = '', folder='inbox') {
     const loggedinUser = await storageService.query(USER_STORAGE_KEY);
     const newEmail = { 
         id: null,
@@ -154,7 +122,8 @@ async function createEmail(subject = '', body = '', to = '') {
         sentAt: new Date().getTime(), 
         removedAt: null, 
         from: loggedinUser.email, 
-        to: to 
+        to: to,
+        folder: folder,
     }
     return newEmail
 }
@@ -177,6 +146,7 @@ async function initEmails() {
 
     defaultEmails = defaultEmails.map(email => ({
         ...email,
+        folder: "inbox",
         isRead: null,
         isStarred: null,
         sentAt: new Date().getTime() - Math.floor(Math.random() * 1000000000),
@@ -184,42 +154,9 @@ async function initEmails() {
         to: loggedinUser.email
     }));
     utilService.saveToStorage(EMAIL_STORAGE_KEY, defaultEmails);
-
-    let folderStructure = [
-        { folder: "inbox", emails: defaultEmails.map(email => email.id) },
-        { folder: "sent", emails: [] },
-        { folder: "trash", emails: [] },
-        { folder: "star", emails: [] }
-    ];
-    utilService.saveToStorage(FOLDER_STORAGE_KEY, folderStructure);
 }
-
 
 function _createUser() {
     const loggedinUser = { email: 'user@appsus.com', fullname: 'Mahatma Appsus' }
     utilService.saveToStorage(USER_STORAGE_KEY, loggedinUser)
-}
-
-async function updateStarFolder(updatedEmails, emailId) {
-    // Get the current folder structure
-    const folderStructure = await storageService.query(FOLDER_STORAGE_KEY);
-    const starFolder = folderStructure.find(folder => folder.folder === 'star');
-
-    // Update the email in storage
-    const emailToUpdate = updatedEmails.find(email => email.id === emailId);
-    if (emailToUpdate) {
-        await saveEmail(emailToUpdate);
-
-        // Update the star folder
-        if (emailToUpdate.isStarred) {
-            if (!starFolder.emails.includes(emailId)) {
-                starFolder.emails.push(emailId);
-            }
-        } else {
-            starFolder.emails = starFolder.emails.filter(id => id !== emailId);
-        }
-
-        // Save the updated folder structure
-        await storageService.saveAll(FOLDER_STORAGE_KEY, folderStructure);    
-    }
 }

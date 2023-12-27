@@ -1,5 +1,4 @@
 import React from 'react';
-import '../assets/css/cmps/email-preview.css';
 
 export const EmailPreview = ({
     email,

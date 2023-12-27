@@ -1,0 +1,12 @@
+.email-header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.email-header input {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
