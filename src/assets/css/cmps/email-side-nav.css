@@ -1,12 +1,16 @@
 .email-side-nav {
+    display: flex;
+    flex-direction: column;
     background-color: #f1f3f4;
     padding: 10px;
-    overflow-y: auto; /* Allows scrolling if content is taller than the grid area */
+    overflow-y: auto;
     box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
     font-family: 'Roboto', sans-serif;
 }
 
 .email-side-nav div {
+    display: flex;
+    justify-content: space-between;
     padding: 8px 12px;
     margin: 4px 0;
     border-radius: 4px;
@@ -20,18 +24,38 @@
     background-color: #e8eaed;
 }
 
-/* Active folder style */
 .email-side-nav .active {
     background-color: #d2e3fc;
     font-weight: bold;
 }
 
-/* Count style */
-.email-side-nav span {
-    float: right;
-    background-color: #dadce0;
-    border-radius: 999px;
-    padding: 0 6px;
-    font-size: 12px;
-    margin-left: 8px;
+.icon-style {
+    margin-right: 10px;
+}
+
+.compose-btn {
+    background-color: #e8f0fe; /* Light blue background */
+    border: none; /* No border */
+    border-radius: 20px; /* Rounded corners */
+    margin: 1vh;
+    font-family: 'Roboto', sans-serif; /* Font, assuming you have Roboto loaded */
+    font-size: 14px; /* Adjust size as needed */
+    color: #3c4043; /* Dark grey text color */
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2); /* Subtle shadow */
+    cursor: pointer; /* Hand cursor on hover */
+    display: flex; /* Flex container to align icon and text */
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+    gap: 10px; /* Space between icon and text */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Transition for hover effects */
+    height: 7vh;
+}
+
+.compose-btn:hover {
+    background-color: #dce4fa; /* Slightly darker blue on hover */
+    box-shadow: 0 4px 6px 0 rgba(0,0,0,0.2); /* Larger shadow on hover */
+}
+
+.compose-btn i {
+    font-size: 16px; /* Size of the icon */
 }

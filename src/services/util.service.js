@@ -1,10 +1,14 @@
+import { LoremIpsum } from 'lorem-ipsum';
 
 export const utilService = {
     makeId,
     saveToStorage,
     loadFromStorage,
-    tracking
+    tracking,
+    makeLorem
 }
+
+const lorem = new LoremIpsum();
 
 function makeId(length = 5) {
     var text = "";
@@ -27,4 +31,8 @@ function loadFromStorage(key, defaultValue = null) {
 function tracking(functionRef, ...functionArgs) {
     const functionName = typeof functionRef === 'function' ? functionRef.name : functionRef;
     console.log(`${JSON.stringify(functionName)}:`, ...functionArgs);
+}
+
+function makeLorem(paragraphCount = 1) {
+    return lorem.generateParagraphs(paragraphCount);
 }

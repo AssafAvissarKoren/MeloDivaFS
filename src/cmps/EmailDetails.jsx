@@ -4,7 +4,7 @@ import { emailService } from '../services/email.service';
 
 export const EmailDetails = () => {
     const [email, setEmail] = useState(null);
-    const params = useParams() //emailId
+    const params = useParams()
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -36,7 +36,7 @@ export const EmailDetails = () => {
 
     function backOneURLSegment() {
         const pathArray = window.location.hash.split('/');
-        const newPath = '/' + pathArray.slice(1, 2).join('/');
+        const newPath = '/' + pathArray.slice(1, 3).join('/');
         navigate(newPath);
     }
 

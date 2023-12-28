@@ -4,8 +4,7 @@ export const EmailPreview = ({
     email,
     onSelectEmail,
     onToggleStar,
-    onMarkAsUnread,
-    onMarkAsRead,
+    onToggleRead,
     onContextMenu,
     contextMenuOpen,
     contextMenuPosition
@@ -13,25 +12,18 @@ export const EmailPreview = ({
     const subjectPreview = email.subject.length > 50 ? `${email.subject.substring(0, 47)}...` : email.subject;
 
     const handleEmailClick = () => {
+        onToggleRead(email, false);
         onSelectEmail(email);
     };
 
     const handleStarClick = (e) => {
         e.stopPropagation();
-        onToggleStar(email.id);
+        onToggleStar(email);
     };
 
     const handleRightClick = (e) => {
         e.preventDefault();
         onContextMenu(email.id, { top: e.pageY, left: e.pageX });
-    };
-
-    const handleMarkAsReadUnread = () => {
-        if (email.isRead) {
-            onMarkAsUnread(email.id);
-        } else {
-            onMarkAsRead(email.id);
-        }
     };
 
     return (
@@ -48,7 +40,7 @@ export const EmailPreview = ({
                 <div
                     className="context-menu"
                     style={{ position: 'absolute', top: contextMenuPosition.top, left: contextMenuPosition.left }}
-                    onClick={handleMarkAsReadUnread}
+                    onClick={() => onToggleRead(email, true)}
                 >
                     {email.isRead ? 'Mark as Unread' : 'Mark as Read'}
                 </div>

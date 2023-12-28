@@ -9,11 +9,11 @@ import { EmailContext } from './EmailContext';
 
 
 export const EmailIndex = () => {
-    const [allEmails, setAllEmails] = useState(null); // Full list of emails
-    const [filteredEmails, setFilteredEmails] = useState(null); // Filtered list of emails
-    const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter());
+    const [allEmails, setAllEmails] = useState(null);
+    const [filteredEmails, setFilteredEmails] = useState(null);
+    const params = useParams();
+    const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter(params));
     const navigate = useNavigate();
-    const { folder } = useParams();
 
     useEffect(() => {
         loadEmails();
@@ -33,9 +33,11 @@ export const EmailIndex = () => {
     }
 
     const handleEmailSelect = async (emailId) => {
-        const updatedEmails = await emailService.markAsRead(emailId);
-        setFilteredEmails(updatedEmails);
-        navigate(`/email/${folder}/${emailId}`);
+        if(params.folder == "drafts") {
+            navigate(`/email/${params.folder}/edit/${emailId}`);
+        } else {
+            navigate(`/email/${params.folder}/${emailId}`);
+        }
     };
     
     if (!filteredEmails) return <div>Loading...</div>;
@@ -43,8 +45,6 @@ export const EmailIndex = () => {
     const unreadCount = filteredEmails.filter(email => !email.isRead).length;
     const totalEmails = filteredEmails.length;
     const unreadPercentage = totalEmails ? (unreadCount / totalEmails) * 100 : 0;
-
-    // const filteredEmails = folder ? emails.filter(email => email.folder === folder) : emails;
 
     return (
         <EmailContext.Provider value={{ filteredEmails, setFilterBy, handleEmailSelect }}>

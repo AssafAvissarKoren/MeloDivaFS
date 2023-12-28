@@ -4,18 +4,34 @@ import { emailService } from '../services/email.service';
 
 export const EmailSideNav = ({ emails, setFilterBy }) => {
     const navigate = useNavigate();
-    const { folder } = useParams();
+    const params = useParams();
+    const folder = params.folder
 
     useEffect(() => {
         setFilterBy(prev => ({ ...prev, folder }));
     }, [folder, setFilterBy]);
 
-    const folderCounts = {
-        inbox: emails.filter(email => email.folder === 'inbox').length,
-        starred: emails.filter(email => email.isStarred).length,
-        sent: emails.filter(email => email.folder === 'sent').length,
-        drafts: emails.filter(email => email.folder === 'drafts').length,
-        trash: emails.filter(email => email.folder === 'trash').length,
+    const folderData = {
+        inbox: { 
+            count: emails.filter(email => email.folder === 'inbox').length,
+            icon: 'fa fa-inbox' // FontAwesome inbox icon
+        },
+        starred: { 
+            count: emails.filter(email => email.isStarred).length,
+            icon: 'fa fa-star' // FontAwesome star icon
+        },
+        sent: { 
+            count: emails.filter(email => email.folder === 'sent').length,
+            icon: 'fa fa-paper-plane' // FontAwesome paper plane (sent) icon
+        },
+        drafts: { 
+            count: emails.filter(email => email.folder === 'drafts').length,
+            icon: 'fa fa-pencil-alt' // FontAwesome pencil (drafts) icon
+        },
+        trash: { 
+            count: emails.filter(email => email.folder === 'trash').length,
+            icon: 'fa fa-trash' // FontAwesome trash icon
+        },
     };
 
     const handleFolderSelect = (selectedFolder) => {
@@ -24,7 +40,7 @@ export const EmailSideNav = ({ emails, setFilterBy }) => {
 
     const resetEmails = () => {
         emailService.initEmails()
-        setFilterBy(emailService.getDefaultFilter());
+        setFilterBy(emailService.getDefaultFilter(params));
     };
 
     function onComposeClick () {
@@ -34,17 +50,26 @@ export const EmailSideNav = ({ emails, setFilterBy }) => {
     return (
         <div className="email-side-nav">
             <button onClick={resetEmails} style={{ margin: '10px' }}>Reset Emails</button>
-            <button onClick={onComposeClick} style={{ margin: '10px' }}>Compose Email</button>
-            {Object.entries(folderCounts).map(([key, count]) => (
-                <div
-                    key={key}
-                    onClick={() => handleFolderSelect(key)}
-                    className={key === folder ? 'active' : ''}
-                >
-                    {key.charAt(0).toUpperCase() + key.slice(1)}
-                    <span>({count})</span>
-                </div>
-            ))}
+            <button onClick={onComposeClick} className="compose-btn">
+                <i className="fas fa-pencil-alt" aria-hidden="true"></i> Compose Email
+            </button>
+            {Object.entries(folderData).map(([key, { count, icon }]) => {
+                return (
+                    <div
+                        key={key}
+                        onClick={() => handleFolderSelect(key)}
+                        className={key === folder ? 'active' : ''}
+                    >
+                        <span>
+                            {/* <span style={{ marginRight: '10px' }}>{icon}</span>
+                            <span>{key.charAt(0).toUpperCase() + key.slice(1)}</span> */}
+                            <i className={`${icon} icon-style`} aria-hidden="true"></i>
+                            <span>{key.charAt(0).toUpperCase() + key.slice(1)}</span>
+                        </span>
+                        <span style={{ marginLeft: '10px' }}>({count})</span>
+                    </div>
+                );
+            })}
         </div>
     );
 };

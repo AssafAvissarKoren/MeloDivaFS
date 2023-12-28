@@ -8,8 +8,6 @@ export const emailService = {
     remove,
     getById,
     createEmail,
-    markAsRead,
-    markAsUnread,
     getDefaultFilter,
     getEmails,
     filterURL,
@@ -64,56 +62,36 @@ function getEmails() {
 }
 
 function getById(id) {
-    return storageService.get(EMAIL_STORAGE_KEY, id)
+    return storageService.get(EMAIL_STORAGE_KEY, id);
 }
 
 function remove(id) {
-    return storageService.remove(EMAIL_STORAGE_KEY, id)
+    return storageService.remove(EMAIL_STORAGE_KEY, id);
 }
 
 async function saveEmail(emailToSave, folderName = "inbox") {
+    utilService.tracking("saveEmail", emailToSave)
+
     const savedEmail = {...emailToSave, folder: folderName};
 
     if (savedEmail.id) {
-        await storageService.put(EMAIL_STORAGE_KEY, savedEmail);
+        return await storageService.put(EMAIL_STORAGE_KEY, savedEmail);
     } else {
-        await storageService.post(EMAIL_STORAGE_KEY, savedEmail);
+        return await storageService.post(EMAIL_STORAGE_KEY, savedEmail);
     }
 }
 
-async function markAsRead(id) {
-    return _markAs(id, true)
-}
-
-async function markAsUnread(id) {
-    return _markAs(id, false)
-}
-
-async function _markAs(id, isRead) {
-    const emails = await storageService.query(EMAIL_STORAGE_KEY); // Assuming this queries all emails
-    const updatedEmails = emails.map(email => {
-        if (email.id === id) {
-            return { ...email, isRead: isRead };
-        }
-        return email;
-    });
-
-    // Assuming you have a function to save all emails back to storage
-    await storageService.saveAll(EMAIL_STORAGE_KEY, updatedEmails);
-    return updatedEmails; // Return the updated list of emails
-}
-
-function getDefaultFilter() {
+function getDefaultFilter(params) {
     return {
-        folder: 'inbox',
-        text: '',
-        isRead: null,
-    }
+        folder: params.folder || "inbox",
+        text: params.text || "",
+        isRead: params.isRead !== undefined ? params.isRead : null,
+    };
 }
 
-async function createEmail(subject = '', body = '', to = '', folder='inbox') {
+async function createEmail(subject = "", body = "", to = "", folder="inbox") {
     const loggedinUser = await storageService.query(USER_STORAGE_KEY);
-    const newEmail = { 
+    return { 
         id: null,
         subject: subject, 
         body: body, 
@@ -125,27 +103,27 @@ async function createEmail(subject = '', body = '', to = '', folder='inbox') {
         to: to,
         folder: folder,
     }
-    return newEmail
 }
 
 async function initEmails() {
     _createUser()
     const loggedinUser = await storageService.query(USER_STORAGE_KEY);
     let defaultEmails = [
-        { id: 'e101', subject: 'Miss you!', body: 'Would love to catch up sometimes,', from: 'momo@momo.com' },
-        { id: 'e102', subject: 'Meeting Update', body: 'The meeting has been rescheduled to next week.', from: 'jane@company.com' },
-        { id: 'e103', subject: 'Your Order Confirmation', body: 'Thank you for your purchase! Your order is on the way.', from: 'orders@store.com' },
-        { id: 'e104', subject: 'Upcoming Event Reminder', body: 'Don\'t forget about the event this Saturday!', from: 'events@community.org' },
-        { id: 'e105', subject: 'Happy Birthday!', body: 'Wishing you all the best on your special day!', from: 'friend@email.com' },
-        { id: 'e106', subject: 'Project Collaboration', body: 'Looking forward to working with you on our upcoming project.', from: 'colleague@work.com' },
-        { id: 'e107', subject: 'Weekend Plans', body: 'Are we still on for hiking this weekend?', from: 'friend@personal.com' },
-        { id: 'e108', subject: 'Subscription Renewal', body: 'Your subscription will be renewed automatically in 3 days.', from: 'service@subscription.com' },
-        { id: 'e109', subject: 'Flight Itinerary', body: 'Your flight details and itinerary are enclosed.', from: 'travel@airline.com' },
-        { id: 'e110', subject: 'Security Alert', body: 'Unusual activity detected in your account.', from: 'security@bank.com' }
+        { id: 'e101', subject: 'Miss you!', from: 'momo@momo.com' },
+        { id: 'e102', subject: 'Meeting Update', from: 'jane@company.com' },
+        { id: 'e103', subject: 'Your Order Confirmation', from: 'orders@store.com' },
+        { id: 'e104', subject: 'Upcoming Event Reminder', from: 'events@community.org' },
+        { id: 'e105', subject: 'Happy Birthday!', from: 'friend@email.com' },
+        { id: 'e106', subject: 'Project Collaboration', from: 'colleague@work.com' },
+        { id: 'e107', subject: 'Weekend Plans', from: 'friend@personal.com' },
+        { id: 'e108', subject: 'Subscription Renewal', from: 'service@subscription.com' },
+        { id: 'e109', subject: 'Flight Itinerary', from: 'travel@airline.com' },
+        { id: 'e110', subject: 'Security Alert', from: 'security@bank.com' }
     ];
 
     defaultEmails = defaultEmails.map(email => ({
         ...email,
+        body: utilService.makeLorem(1),
         folder: "inbox",
         isRead: null,
         isStarred: null,

@@ -3,6 +3,7 @@ import { EmailPreview } from './EmailPreview';
 import { emailService } from '../services/email.service';
 import { useSearchParams } from 'react-router-dom';
 import { EmailContext } from './EmailContext';
+import { utilService } from '../services/util.service';
 
 export const EmailList = () => {
     const { filteredEmails, setFilterBy, handleEmailSelect } = useContext(EmailContext);
@@ -13,7 +14,7 @@ export const EmailList = () => {
 
     useEffect(() => {
         setEmailList(filteredEmails);
-    }, [filteredEmails, sortCriterion]);
+    }, [sortCriterion, filteredEmails]);
 
     const handleSortChange = (e) => {
         setSortCriterion(e.target.value);
@@ -47,21 +48,20 @@ export const EmailList = () => {
       }, [contextMenu]);
 
     const onToggleStar = async (email) => {
-        const updatedEmail = { ...email, isStarred: !email.isStarred };
+        const updatedEmail = { ...email, isStarred: !email.isStarred }
+        await emailService.saveEmail(updatedEmail);
+        setEmailList(emailList.map(e => e.id === updatedEmail.id ? updatedEmail : e));
+        setFilterBy(prevFilter => ({ ...prevFilter }))
+    };
+
+    const onToggleRead = async (email, isContextMenu = false) => {
+        let updatedEmail = email
+        if (isContextMenu || (!isContextMenu && !email.isRead)) {
+            updatedEmail = { ...email, isRead: !email.isRead }
+        } 
         await emailService.saveEmail(updatedEmail, updatedEmail.folder);
-    
-        const updatedEmails = emailList.map(e => e.id === email.id ? updatedEmail : e);
-        setEmailList(updatedEmails);
-    };
-
-    const onMarkAsUnread = async (emailId) => {
-        const updatedEmails = await emailService.markAsUnread(emailId);
-        setEmailList(updatedEmails);
-    };
-
-    const onMarkAsRead = async (emailId) => {
-        const updatedEmails = await emailService.markAsRead(emailId);
-        setEmailList(updatedEmails);
+        setEmailList(emailList.map(e => e.id === updatedEmail.id ? updatedEmail : e));
+        setContextMenu(null);
     };
 
     const handleContextMenu = (emailId, position) => {
@@ -85,8 +85,7 @@ export const EmailList = () => {
                     email={email}
                     onSelectEmail={() => handleEmailSelect(email.id)}
                     onToggleStar={() => onToggleStar(email)}
-                    onMarkAsUnread={onMarkAsUnread}
-                    onMarkAsRead={onMarkAsRead}
+                    onToggleRead={onToggleRead}
                     onContextMenu={handleContextMenu}
                     contextMenuOpen={contextMenu?.emailId === email.id}
                     contextMenuPosition={contextMenu?.position}
