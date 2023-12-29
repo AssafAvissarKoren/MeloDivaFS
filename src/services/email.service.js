@@ -11,13 +11,14 @@ export const emailService = {
     getDefaultFilter,
     getEmails,
     filterURL,
+    sortByFilter,
 }
 
 const EMAIL_STORAGE_KEY = 'emailDB'
 const USER_STORAGE_KEY = 'userDB'
 
-async function queryEmails(emailsParam, filterBy) {
-    let emails = [...emailsParam];
+async function queryEmails(allEmails, filterBy) {
+    let emails = [...allEmails];
 
     if (filterBy) {
         if (filterBy.folder) {
@@ -51,10 +52,13 @@ function filterURL(filterBy) {
     if (filterBy.isRead !== null) {
         queryParams.append('isRead', filterBy.isRead);
     }
+    if (filterBy.sort) {
+        queryParams.append('sort', filterBy.sort);
+    }
     if ([...queryParams].length) {
         url += `?${queryParams}`;
     }
-    return url
+    return url;
 }
 
 function getEmails() {
@@ -70,8 +74,6 @@ function remove(id) {
 }
 
 async function saveEmail(emailToSave, folderName = "inbox") {
-    utilService.tracking("saveEmail", emailToSave)
-
     const savedEmail = {...emailToSave, folder: folderName};
 
     if (savedEmail.id) {
@@ -86,8 +88,24 @@ function getDefaultFilter(params) {
         folder: params.folder || "inbox",
         text: params.text || "",
         isRead: params.isRead !== undefined ? params.isRead : null,
+        sort: params.sort || "",
     };
 }
+
+function sortByFilter(fetchedEmails, sortParam) {
+    switch (sortParam) {
+    case 'date':
+        fetchedEmails.sort((a, b) => new Date(b.sentAt) - new Date(a.sentAt));
+        break;
+    case 'title':
+        fetchedEmails.sort((a, b) => a.subject.localeCompare(b.subject));
+        break;
+    default:
+        break;
+    }
+    return fetchedEmails
+}
+
 
 async function createEmail(subject = "", body = "", to = "", folder="inbox") {
     const loggedinUser = await storageService.query(USER_STORAGE_KEY);

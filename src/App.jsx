@@ -12,12 +12,10 @@ export function App() {
     return (
         <Router>
             <section className='main-app'>
-                {/* <AppHeader /> */}
                 <main className='container'>
                     <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/aboutUs" element={<AboutUs />} />
-                        <Route path="/email" element={<Navigate to="/email/inbox" replace />} />
+                        <Route path="/" element={<Navigate to="/email/inbox" replace />} />
+                        <Route path="/email/aboutUs" element={<AboutUs />} />
                         <Route path="/email/:folder" element={<EmailIndex />}>
                             <Route index element={<EmailList />} />
                             <Route path=":emailId" element={<EmailDetails />} />

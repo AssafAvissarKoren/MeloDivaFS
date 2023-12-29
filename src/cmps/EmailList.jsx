@@ -9,7 +9,7 @@ export const EmailList = () => {
     const { filteredEmails, setFilterBy, handleEmailSelect } = useContext(EmailContext);
     const [emailList, setEmailList] = useState(filteredEmails);
     const [contextMenu, setContextMenu] = useState(null);
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams(); // CRQ receive filterBy or useSearchParams w/o using setSearchParams
     const [sortCriterion, setSortCriterion] = useState('');
 
     useEffect(() => {
@@ -17,16 +17,19 @@ export const EmailList = () => {
     }, [sortCriterion, filteredEmails]);
 
     const handleSortChange = (e) => {
-        setSortCriterion(e.target.value);
+        const newSortCriterion = e.target.value;
+        setSortCriterion(newSortCriterion);
+        setFilterBy(prevFilter => ({...prevFilter, sort: newSortCriterion}));
     };
+    
 
-    useEffect(() => {
-        const isRead = searchParams.get('isRead');
-        const sort = searchParams.get('sort');
-
-        setFilterBy(prev => ({ ...prev, isRead: isRead === 'true' ? true : isRead === 'false' ? false : null }));
-        setSortCriterion(sort || '');
-    }, [searchParams]);
+    // useEffect(() => {
+    //     const isRead = searchParams.get('isRead');
+    //     const sort = searchParams.get('sort');
+    //     utilService.tracking("sort useEffect", sort)
+    //     setFilterBy(prev => ({ ...prev, isRead: isRead === 'true' ? true : isRead === 'false' ? false : null }));
+    //     setSortCriterion(sort || '');
+    // }, [searchParams]);
 
     useEffect(() => {
         // Handler to close context menu on outside clicks

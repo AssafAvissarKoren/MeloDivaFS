@@ -6,10 +6,11 @@ import { EmailHeaderFilter } from './EmailHeaderFilter';
 import { emailService } from '../services/email.service';
 import { Outlet } from 'react-router-dom';
 import { EmailContext } from './EmailContext';
+import { utilService } from '../services/util.service';
 
 
 export const EmailIndex = () => {
-    const [allEmails, setAllEmails] = useState(null);
+    const [allEmails, setAllEmails] = useState(null); 
     const [filteredEmails, setFilteredEmails] = useState(null);
     const params = useParams();
     const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter(params));
@@ -22,11 +23,13 @@ export const EmailIndex = () => {
     }, [filterBy]);
 
     async function loadEmails() {
-        const allEmails = await emailService.getEmails();
+        const allEmails = await emailService.getEmails(); // CRQ any other way to keep allEmails for up to date sidenav?
         setAllEmails(allEmails);
-        const fetchedEmails = await emailService.queryEmails(allEmails, filterBy);
-        setFilteredEmails(fetchedEmails);
+        let fetchedEmails = await emailService.queryEmails(allEmails, filterBy);
+        const sortedEmails = emailService.sortByFilter(fetchedEmails, filterBy.sort);
+        setFilteredEmails(sortedEmails);
     }
+    
 
     function onSetFilter(filterBy) {
         setFilterBy(prevFilter => ({ ...prevFilter, ...filterBy }))

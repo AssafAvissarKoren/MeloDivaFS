@@ -61,9 +61,6 @@ export const EmailCompose = () => {
         if(isFormChanged()) {
             setDraftEmail(await emailService.saveEmail(draftEmail, "drafts"));
             setLastSavedForm({to: draftEmail.to, subject: draftEmail.subject, body: draftEmail.body});
-            console.log("emailService.saveEmail")
-        } else {
-            console.log("do nothing")
         }
     };
     
@@ -85,7 +82,6 @@ export const EmailCompose = () => {
         }
     
         // Save the email to 'sent'
-        utilService.tracking("handleSubmit", emailToSave)
         await emailService.saveEmail(emailToSave, "sent");
         navigate('/email');
     };
