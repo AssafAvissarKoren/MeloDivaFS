@@ -12,6 +12,7 @@ export const emailService = {
     getEmails,
     filterURL,
     sortByFilter,
+    backOneURLSegment,
 }
 
 const EMAIL_STORAGE_KEY = 'emailDB'
@@ -155,4 +156,10 @@ async function initEmails() {
 function _createUser() {
     const loggedinUser = { email: 'user@appsus.com', fullname: 'Mahatma Appsus' }
     utilService.saveToStorage(USER_STORAGE_KEY, loggedinUser)
+}
+
+function backOneURLSegment(navigate) {
+    const pathArray = window.location.hash.split('/');
+    const newPath = '/' + pathArray.slice(1, pathArray.length - 1).join('/');
+    navigate(newPath);
 }
