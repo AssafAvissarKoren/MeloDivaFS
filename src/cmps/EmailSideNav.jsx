@@ -12,26 +12,11 @@ export const EmailSideNav = ({ emails, setFilterBy }) => {
     }, [folder, setFilterBy]);
 
     const folderData = {
-        inbox: { 
-            count: emails.filter(email => email.folder === 'inbox').length,
-            icon: 'fa fa-inbox'
-        },
-        starred: { 
-            count: emails.filter(email => email.isStarred).length,
-            icon: 'fa fa-star'
-        },
-        sent: { 
-            count: emails.filter(email => email.folder === 'sent').length,
-            icon: 'fa fa-paper-plane'
-        },
-        drafts: { 
-            count: emails.filter(email => email.folder === 'drafts').length,
-            icon: 'fa fa-pencil-alt'
-        },
-        trash: { 
-            count: emails.filter(email => email.folder === 'trash').length,
-            icon: 'fa fa-trash'
-        },
+        inbox: { count: emails.filter(email => email.folder === 'inbox').length, icon: 'fa fa-inbox' },
+        starred: { count: emails.filter(email => email.isStarred).length, icon: 'fa fa-star' },
+        sent: { count: emails.filter(email => email.folder === 'sent').length, icon: 'fa fa-paper-plane' },
+        drafts: { count: emails.filter(email => email.folder === 'drafts').length, icon: 'fa fa-pencil-alt' },
+        trash: { count: emails.filter(email => email.folder === 'trash').length, icon: 'fa fa-trash' },
     };
 
     const handleFolderSelect = (selectedFolder) => {

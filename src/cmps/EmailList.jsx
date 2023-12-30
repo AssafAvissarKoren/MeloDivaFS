@@ -22,15 +22,6 @@ export const EmailList = () => {
         setFilterBy(prevFilter => ({...prevFilter, sort: newSortCriterion}));
     };
     
-
-    // useEffect(() => {
-    //     const isRead = searchParams.get('isRead');
-    //     const sort = searchParams.get('sort');
-    //     utilService.tracking("sort useEffect", sort)
-    //     setFilterBy(prev => ({ ...prev, isRead: isRead === 'true' ? true : isRead === 'false' ? false : null }));
-    //     setSortCriterion(sort || '');
-    // }, [searchParams]);
-
     useEffect(() => {
         // Handler to close context menu on outside clicks
         const handleOutsideClick = (e) => {
