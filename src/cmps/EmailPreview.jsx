@@ -5,9 +5,10 @@ export const EmailPreview = ({
     onSelectEmail,
     onToggleStar,
     onToggleRead,
+    onToggleSelect,
     onContextMenu,
     contextMenuOpen,
-    contextMenuPosition
+    contextMenuPosition,
 }) => {
     const subjectPreview = email.subject.length > 50 ? `${email.subject.substring(0, 47)}...` : email.subject;
 
@@ -26,11 +27,20 @@ export const EmailPreview = ({
         onContextMenu(email.id, { top: e.pageY, left: e.pageX });
     };
 
+    const handleCheckboxClick = (e) => {
+        e.stopPropagation();
+        onToggleSelect(email);
+    };
+
+
     return (
         <div>
             <div className="email-preview" onClick={handleEmailClick} onContextMenu={handleRightClick}>
+                <span onClick={handleCheckboxClick} style={{ cursor: 'pointer', marginRight: '10px' }}>
+                    <i className={`far ${email.isChecked ? 'fa-check-square' : 'fa-square'}`}></i>
+                </span>
                 <span onClick={handleStarClick} style={{ cursor: 'pointer', marginRight: '10px' }}>
-                    {email.isStarred ? '⭐' : '☆'}
+                    {email.isStarred ? '★' : '☆'}
                 </span>
                 <p className={`email-subject ${email.isRead ? 'read' : 'unread'}`} style={{ display: 'inline' }}>
                     {subjectPreview}

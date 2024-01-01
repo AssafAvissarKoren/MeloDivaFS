@@ -7,6 +7,7 @@ import { EmailIndex } from './cmps/EmailIndex';
 import { EmailDetails } from './cmps/EmailDetails';
 import { EmailCompose } from './cmps/EmailCompose';
 import { EmailList } from './cmps/EmailList';
+import { UserMsg } from './cmps/UserMsg';
 
 export function App() {
     return (
@@ -24,6 +25,7 @@ export function App() {
                         </Route>
                     </Routes>
                 </main>
+                <UserMsg />
                 <AppFooter />
             </section>
         </Router>

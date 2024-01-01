@@ -1,27 +1,30 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { emailService } from '../services/email.service';
 import { eventBusService, showErrorMsg, showSuccessMsg } from "../services/event-bus.service";
 import { EmailModal } from '../cmps/EmailModal';
 import { utilService } from '../services/util.service';
+import { EmailContext } from './EmailContext';
 
 export const EmailDetails = () => {
     const [email, setEmail] = useState(null);
+    const [position, setPosition] = useState({ top: 0, left: 0 });
+    const { indexEmailsList } = useContext(EmailContext); // Destructure setLength from context
+    const params = useParams();
+    const navigate = useNavigate();
 
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const [showMoreOptionsModal, setShowMoreOptionsModal] = useState(false);
     const detailsDDRef = useRef(null);
     const moreOptionsDDRef = useRef(null);
-    
-    const [position, setPosition] = useState({ top: 0, left: 0 });
-    const params = useParams();
-    const navigate = useNavigate();
 
     useEffect(() => {
         const loadEmail = async () => {
             try {
-                const email = await emailService.getById(params.emailId);
-                setEmail(email);
+                const email = indexEmailsList.find(listEmail => listEmail.id === params.emailId)
+                let updatedEmail = {...email, isRead: true}
+                await emailService.saveEmail(updatedEmail, updatedEmail.folder);
+                setEmail(updatedEmail);
             } catch (error) {
                 console.error('Error loading email:', error);
             }
@@ -33,12 +36,17 @@ export const EmailDetails = () => {
         try {
             if(params.folder === "trash") {
                 await emailService.remove(email.id);
+                showSuccessMsg('Email deleted successfully')
             } else {
                 await emailService.saveEmail(email, "trash");
+                showSuccessMsg('Email moved to Trash folder successfully')
             }
+            eventBusService.emit('email-deleted', { type: 'success', txt: 'Email deleted successfully' });
             emailService.backOneURLSegment(navigate);
         } catch (error) {
             console.error('Error deleting email:', error);
+            eventBusService.emit('email-deleted', { type: 'error', txt: 'Could not delete email' })
+            showErrorMsg('Could not delete email')
         }
     };
 
@@ -77,6 +85,13 @@ export const EmailDetails = () => {
         }
     };
 
+    const navigateToEmail = async (emailId) => {
+        if (emailId) {
+            if (email) {
+                navigate(`/email/${email.folder}/${emailId}`);
+            }
+        }
+    };
 
     if (!email) {
         return <div>Loading email...</div>;
@@ -97,8 +112,19 @@ export const EmailDetails = () => {
                 {/* openMoreOptionsModal */}
                     <i className="fas fa-ellipsis-v" aria-hidden="true"></i>
                 </button>
+                <span>{email.listIndex} of {indexEmailsList ?  indexEmailsList.length : 0}</span>
+                <button 
+                    disabled={!email.prevEmailId}
+                    onClick={async () => await navigateToEmail(email.prevEmailId)}>
+                    <i className="fa fa-chevron-left"></i> Previous
+                </button>
+
+                <button 
+                    disabled={!email.nextEmailId}
+                    onClick={() => navigateToEmail(email.nextEmailId)}>
+                    Next <i className="fa fa-chevron-right"></i>
+                </button>
             </div>
-            <button onClick={() => emailService.backOneURLSegment(navigate)}>Back to list</button>
             <h2>{email.subject}</h2>
             <p className="email-from">From: {email.from}</p>
             <div className="email-to-and-time">

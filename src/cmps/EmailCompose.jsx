@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { emailService } from '../services/email.service';
 import { utilService } from '../services/util.service';
+import { eventBusService, showErrorMsg, showSuccessMsg } from "../services/event-bus.service";
 
 export const EmailCompose = () => {
     const defaultForm = { to: '', subject: '', body: '', folder: 'drafts' };
@@ -66,24 +67,43 @@ export const EmailCompose = () => {
     
     useEffect(() => {
         const intervalId = setInterval(saveDraft, 5000);
-        return () => clearInterval(intervalId);
+
+        return async () => {
+            clearInterval(intervalId);
+            await saveDraft();
+            try {
+                // eventBusService.emit('draft-saved', { type: 'success', txt: 'Email draft saved successfully' });
+                showSuccessMsg('Email draft saved successfully');
+            } catch (error) {
+                console.error('Error saving draft:', error);
+                // eventBusService.emit('draft-saved', { type: 'error', txt: 'Could not save draft' });
+                showErrorMsg('Could not reset emails');
+            }
+        };
     }, [draftEmail, lastSavedForm]);
     
     const handleSubmit = async (e) => {
-        e.preventDefault();
-    
-        let emailToSave;
-        if (!lastSavedForm && draftEmail) {
-            // If there's no draft, create a new one and use it
-            emailToSave = await emailService.createEmail(draftEmail.subject, draftEmail.body, draftEmail.to, "drafts");
-        } else {
-            // If there's an existing draft, use it
-            emailToSave = draftEmail;
+        try {
+            e.preventDefault();
+        
+            let emailToSave;
+            if (!lastSavedForm && draftEmail) {
+                // If there's no draft, create a new one and use it
+                emailToSave = await emailService.createEmail(draftEmail.subject, draftEmail.body, draftEmail.to, "drafts");
+            } else {
+                // If there's an existing draft, use it
+                emailToSave = draftEmail;
+            }
+        
+            // Save the email to 'sent'
+            await emailService.saveEmail(emailToSave, "sent");
+            navigate('/email');
+            showSuccessMsg('Email sent successfully');
+        } catch (error) {
+            console.error('Error sending email:', error);
+            showErrorMsg('Could not send email');
         }
-    
-        // Save the email to 'sent'
-        await emailService.saveEmail(emailToSave, "sent");
-        navigate('/email');
+
     };
     
     return (

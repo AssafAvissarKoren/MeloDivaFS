@@ -11,7 +11,6 @@ export const emailService = {
     getDefaultFilter,
     getEmails,
     filterURL,
-    sortByFilter,
     backOneURLSegment,
 }
 
@@ -21,12 +20,13 @@ const USER_STORAGE_KEY = 'userDB'
 async function queryEmails(allEmails, filterBy) {
     let emails = [...allEmails];
 
+    // Apply filtering based on the provided filter criteria
     if (filterBy) {
         if (filterBy.folder) {
-            if (filterBy.folder == 'starred') {
+            if (filterBy.folder === 'starred') {
                 emails = emails.filter(email => email.isStarred);
             } else {
-                emails = emails.filter(email => email.folder == filterBy.folder);
+                emails = emails.filter(email => email.folder === filterBy.folder);
             }
         }
 
@@ -34,10 +34,34 @@ async function queryEmails(allEmails, filterBy) {
             emails = emails.filter(email => {
                 const textMatch = !filterBy.text || email.subject.includes(filterBy.text) || email.body.includes(filterBy.text) || email.from.includes(filterBy.text);
                 const isReadMatch = filterBy.isRead === null || email.isRead === filterBy.isRead;
-                
                 return textMatch && isReadMatch;
             });
         }
+    }
+
+    // Sort the emails based on the filter criteria
+    switch (filterBy.sort) {
+        case 'date':
+            emails.sort((a, b) => new Date(b.sentAt) - new Date(a.sentAt));
+            break;
+        case 'title':
+            emails.sort((a, b) => a.subject.localeCompare(b.subject));
+            break;
+        // Add more sort cases if necessary
+    }
+
+    // Link emails with their next and previous emails
+    if (emails.length > 0) {
+        emails[0].prevEmailId = null;
+        emails[0].listIndex = 1; // Start index at 1
+
+        for (let i = 1; i < emails.length; i++) {
+            emails[i].prevEmailId = emails[i - 1].id;
+            emails[i - 1].nextEmailId = emails[i].id;
+            emails[i].listIndex = i + 1;
+        }
+
+        emails[emails.length - 1].nextEmailId = null; // Last email's nextEmailId is null
     }
 
     return emails;
@@ -93,22 +117,7 @@ function getDefaultFilter(params) {
     };
 }
 
-function sortByFilter(fetchedEmails, sortParam) {
-    switch (sortParam) {
-    case 'date':
-        fetchedEmails.sort((a, b) => new Date(b.sentAt) - new Date(a.sentAt));
-        break;
-    case 'title':
-        fetchedEmails.sort((a, b) => a.subject.localeCompare(b.subject));
-        break;
-    default:
-        break;
-    }
-    return fetchedEmails
-}
-
-
-async function createEmail(subject = "", body = "", to = "", folder="inbox") {
+async function createEmail(subject = "", body = "", to = "", folder="inbox", from=loggedinUser.email, sentAt=new Date().getTime()) {
     const loggedinUser = await storageService.query(USER_STORAGE_KEY);
     return { 
         id: null,
@@ -116,41 +125,48 @@ async function createEmail(subject = "", body = "", to = "", folder="inbox") {
         body: body, 
         isRead: null, 
         isStarred: false, 
-        sentAt: new Date().getTime(), 
+        sentAt: sentAt, 
         removedAt: null, 
-        from: loggedinUser.email, 
+        from: from, 
         to: to,
         folder: folder,
+        prevEmailId: null,
+        nextEmailId: null,
+        listIndex: null,
+        isChecked: false,
     }
 }
 
 async function initEmails() {
     _createUser()
     const loggedinUser = await storageService.query(USER_STORAGE_KEY);
-    let defaultEmails = [
-        { id: 'e101', subject: 'Miss you!', from: 'momo@momo.com' },
-        { id: 'e102', subject: 'Meeting Update', from: 'jane@company.com' },
-        { id: 'e103', subject: 'Your Order Confirmation', from: 'orders@store.com' },
-        { id: 'e104', subject: 'Upcoming Event Reminder', from: 'events@community.org' },
-        { id: 'e105', subject: 'Happy Birthday!', from: 'friend@email.com' },
-        { id: 'e106', subject: 'Project Collaboration', from: 'colleague@work.com' },
-        { id: 'e107', subject: 'Weekend Plans', from: 'friend@personal.com' },
-        { id: 'e108', subject: 'Subscription Renewal', from: 'service@subscription.com' },
-        { id: 'e109', subject: 'Flight Itinerary', from: 'travel@airline.com' },
-        { id: 'e110', subject: 'Security Alert', from: 'security@bank.com' }
+    let defaultContent = [
+        { subject: 'Miss you!', from: 'momo@momo.com' },
+        { subject: 'Meeting Update', from: 'jane@company.com' },
+        { subject: 'Your Order Confirmation', from: 'orders@store.com' },
+        { subject: 'Upcoming Event Reminder', from: 'events@community.org' },
+        { subject: 'Happy Birthday!', from: 'friend@email.com' },
+        { subject: 'Project Collaboration', from: 'colleague@work.com' },
+        { subject: 'Weekend Plans', from: 'friend@personal.com' },
+        { subject: 'Subscription Renewal', from: 'service@subscription.com' },
+        { subject: 'Flight Itinerary', from: 'travel@airline.com' },
+        { subject: 'Security Alert', from: 'security@bank.com' }
     ];
+    let savedEmails = []; // Array to store saved emails
 
-    defaultEmails = defaultEmails.map(email => ({
-        ...email,
-        body: utilService.makeLorem(1),
-        folder: "inbox",
-        isRead: null,
-        isStarred: null,
-        sentAt: new Date().getTime() - Math.floor(Math.random() * 1000000000),
-        removedAt: null,
-        to: loggedinUser.email
-    }));
-    utilService.saveToStorage(EMAIL_STORAGE_KEY, defaultEmails);
+    for (const email of defaultContent) {
+        const emailToCreate = await createEmail(
+            email.subject, 
+            utilService.makeLorem(1), 
+            loggedinUser.email, 
+            "inbox",
+            email.from,
+            new Date().getTime() - Math.floor(Math.random() * 1000000000),
+        );
+        const savedEmailsWithId = {...emailToCreate, id: utilService.makeId()}
+        savedEmails.push(savedEmailsWithId); // Add the saved email to the array
+    }
+    utilService.saveToStorage(EMAIL_STORAGE_KEY, savedEmails)
 }
 
 function _createUser() {

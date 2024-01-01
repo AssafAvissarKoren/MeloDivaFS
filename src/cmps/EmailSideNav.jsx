@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { emailService } from '../services/email.service';
+import { eventBusService, showErrorMsg, showSuccessMsg } from "../services/event-bus.service";
 
 export const EmailSideNav = ({ emails, setFilterBy }) => {
     const navigate = useNavigate();
@@ -23,10 +24,19 @@ export const EmailSideNav = ({ emails, setFilterBy }) => {
         setFilterBy(prev => ({ ...prev, folder: selectedFolder }));
     };
 
-    const resetEmails = () => {
-        emailService.initEmails()
-        setFilterBy(emailService.getDefaultFilter(params));
+    const resetEmails = async () => {
+        try {
+            await emailService.initEmails();
+            setFilterBy(emailService.getDefaultFilter(params));
+            eventBusService.emit('emails-reset', { type: 'success', txt: 'Emails reset successfully' });
+            showSuccessMsg('Emails reset successfully');
+        } catch (error) {
+            console.error('Error resetting emails:', error);
+            eventBusService.emit('emails-reset', { type: 'error', txt: 'Could not reset emails' });
+            showErrorMsg('Could not reset emails');
+        }
     };
+    
 
     function onComposeClick () {
         navigate(`/email/${folder}/compose`);

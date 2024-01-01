@@ -7,34 +7,35 @@ import { emailService } from '../services/email.service';
 import { Outlet } from 'react-router-dom';
 import { EmailContext } from './EmailContext';
 import { utilService } from '../services/util.service';
-
+import { eventBusService, showErrorMsg, showSuccessMsg } from "../services/event-bus.service";
 
 export const EmailIndex = () => {
     const [allEmails, setAllEmails] = useState(null); 
-    const [filteredEmails, setFilteredEmails] = useState(null);
+    const [indexEmailsList, setIndexEmailsList] = useState(null);
     const params = useParams();
     const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter(params));
     const navigate = useNavigate();
 
     useEffect(() => {
+        const unsubscribeEmailDeleted = eventBusService.on('email-deleted', () => {loadEmails();});
+        const unsubscribeEmailsReset = eventBusService.on('emails-reset', () => {loadEmails();});
+    
         loadEmails();
-        const filterURL = emailService.filterURL(filterBy)
+        const filterURL = emailService.filterURL(filterBy);
         navigate(filterURL, { replace: true });
+    
+        return () => {
+            unsubscribeEmailDeleted();
+            unsubscribeEmailsReset();
+        };    
     }, [filterBy]);
-
+    
     async function loadEmails() {
         const allEmails = await emailService.getEmails(); // CRQ any other way to keep allEmails for up to date sidenav?
         setAllEmails(allEmails);
-        let fetchedEmails = await emailService.queryEmails(allEmails, filterBy);
-        const sortedEmails = emailService.sortByFilter(fetchedEmails, filterBy.sort);
-        setFilteredEmails(sortedEmails);
+        setIndexEmailsList(await emailService.queryEmails(allEmails, filterBy));
     }
     
-
-    function onSetFilter(filterBy) {
-        setFilterBy(prevFilter => ({ ...prevFilter, ...filterBy }))
-    }
-
     const handleEmailSelect = async (emailId) => {
         if(params.folder == "drafts") {
             navigate(`/email/${params.folder}/edit/${emailId}`);
@@ -43,14 +44,14 @@ export const EmailIndex = () => {
         }
     };
     
-    if (!filteredEmails) return <div>Loading...</div>;
+    if (!indexEmailsList) return <div>Loading...</div>;
 
-    const unreadCount = filteredEmails.filter(email => !email.isRead).length;
-    const totalEmails = filteredEmails.length;
+    const unreadCount = indexEmailsList.filter(email => !email.isRead).length;
+    const totalEmails = indexEmailsList.length;
     const unreadPercentage = totalEmails ? (unreadCount / totalEmails) * 100 : 0;
 
     return (
-        <EmailContext.Provider value={{ filteredEmails, setFilterBy, handleEmailSelect }}>
+        <EmailContext.Provider value={{ indexEmailsList, setFilterBy, handleEmailSelect }}>
             <div className="email-index-container">
                 <div className="email-name">
                     <h1>Green Mail</h1>
