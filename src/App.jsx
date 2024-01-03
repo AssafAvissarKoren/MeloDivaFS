@@ -1,5 +1,5 @@
 import { Route, HashRouter as Router, Routes, Navigate } from 'react-router-dom';
-import { Home } from './pages/Home';
+import { Dashboard } from './pages/Dashboard';
 import { AboutUs } from './pages/AboutUs';
 import { AppFooter } from './cmps/AppFooter';
 import { AppHeader } from './cmps/AppHeader';
@@ -13,10 +13,12 @@ export function App() {
     return (
         <Router>
             <section className='main-app'>
+                <AppHeader />
                 <main className='container'>
                     <Routes>
-                        <Route path="/" element={<Navigate to="/email/inbox" replace />} />
-                        <Route path="/email/aboutUs" element={<AboutUs />} />
+                        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/aboutUs" element={<AboutUs />} />
                         <Route path="/email/:folder" element={<EmailIndex />}>
                             <Route index element={<EmailList />} />
                             <Route path=":emailId" element={<EmailDetails />} />

@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { emailService } from '../services/email.service';
 import { eventBusService, showErrorMsg, showSuccessMsg } from "../services/event-bus.service";
 
-export const EmailSideNav = ({ emails, setFilterBy }) => {
+export const EmailSideNav = ({ emails, setFilterBy, onComposeClick }) => {
     const navigate = useNavigate();
     const params = useParams();
     const folder = params.folder
@@ -38,9 +38,9 @@ export const EmailSideNav = ({ emails, setFilterBy }) => {
     };
     
 
-    function onComposeClick () {
-        navigate(`/email/${folder}/compose`);
-    };
+    // function onComposeClick () {
+    //     navigate(`/email/${folder}/compose`);
+    // };
 
     return (
         <div className="email-side-nav">

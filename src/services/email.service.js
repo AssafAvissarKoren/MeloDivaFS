@@ -12,10 +12,21 @@ export const emailService = {
     getEmails,
     filterURL,
     backOneURLSegment,
+    saveStats,
+    getStats,
 }
 
 const EMAIL_STORAGE_KEY = 'emailDB'
 const USER_STORAGE_KEY = 'userDB'
+const STATS_STORAGE_KEY = 'statsDB'
+
+function saveStats(stats) {
+    utilService.saveToStorage(STATS_STORAGE_KEY, stats)
+}
+
+function getStats(stats) {
+    return utilService.loadFromStorage(STATS_STORAGE_KEY)
+}
 
 async function queryEmails(allEmails, filterBy) {
     let emails = [...allEmails];

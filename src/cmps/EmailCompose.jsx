@@ -4,7 +4,7 @@ import { emailService } from '../services/email.service';
 import { utilService } from '../services/util.service';
 import { eventBusService, showErrorMsg, showSuccessMsg } from "../services/event-bus.service";
 
-export const EmailCompose = () => {
+export const EmailCompose = ({ closeModal }) => {
     const defaultForm = { to: '', subject: '', body: '', folder: 'drafts' };
     const [draftEmail, setDraftEmail] = useState({ to: '', subject: '', body: '', folder: 'drafts' });
     const [lastSavedForm, setLastSavedForm] = useState({ to: '', subject: '', body: '', folder: 'drafts' });
@@ -107,7 +107,8 @@ export const EmailCompose = () => {
     };
     
     return (
-        <div className="email-compose">
+        <div className="email-compose-modal">
+            <button className="close-modal" onClick={closeModal}>X</button>
             <form onSubmit={handleSubmit}>
                 <input 
                     type="email" 

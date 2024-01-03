@@ -165,8 +165,6 @@ export const EmailList = () => {
         </div>
     );
     
-    console.log(emailList[0].isChecked)        
-
     return (
         <div className="email-list">
             <div className="email-checkbox-dropdown">

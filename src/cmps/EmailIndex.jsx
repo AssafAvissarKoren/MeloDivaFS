@@ -8,12 +8,15 @@ import { Outlet } from 'react-router-dom';
 import { EmailContext } from './EmailContext';
 import { utilService } from '../services/util.service';
 import { eventBusService, showErrorMsg, showSuccessMsg } from "../services/event-bus.service";
+import { EmailCompose } from "./EmailCompose"
 
 export const EmailIndex = () => {
+    const params = useParams();
     const [allEmails, setAllEmails] = useState(null); 
     const [indexEmailsList, setIndexEmailsList] = useState(null);
-    const params = useParams();
     const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter(params));
+    const [isComposeModalOpen, setIsComposeModalOpen] = useState(false);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,9 +34,10 @@ export const EmailIndex = () => {
     }, [filterBy]);
     
     async function loadEmails() {
-        const allEmails = await emailService.getEmails(); // CRQ any other way to keep allEmails for up to date sidenav?
-        setAllEmails(allEmails);
-        setIndexEmailsList(await emailService.queryEmails(allEmails, filterBy));
+        const newAllEmails = await emailService.getEmails();
+        emailService.saveStats(analyzeEmails(newAllEmails))
+        setAllEmails(newAllEmails);
+        setIndexEmailsList(await emailService.queryEmails(newAllEmails, filterBy));
     }
     
     const handleEmailSelect = async (emailId) => {
@@ -44,6 +48,35 @@ export const EmailIndex = () => {
         }
     };
     
+    const analyzeEmails = (emails) => {
+        const folderStats = {};
+    
+        emails.forEach(email => {
+            const folder = email.folder;
+            const isRead = email.isRead;
+    
+            if (!folderStats[folder]) {
+                folderStats[folder] = { total: 0, unread: 0 };
+            }
+    
+            folderStats[folder].total += 1;
+            if (!isRead) {
+                folderStats[folder].unread += 1;
+            }
+        });
+    
+        return folderStats;
+    };
+
+    const openComposeModal = () => {
+        setIsComposeModalOpen(true);
+    };
+    
+    const closeComposeModal = () => {
+        setIsComposeModalOpen(false);
+    };
+    
+
     if (!indexEmailsList) return <div>Loading...</div>;
 
     const unreadCount = indexEmailsList.filter(email => !email.isRead).length;
@@ -60,7 +93,8 @@ export const EmailIndex = () => {
                     <EmailHeaderFilter setFilterBy={setFilterBy} />
                 </div>
                 <div className="email-side-nav">
-                    <EmailSideNav emails={allEmails} setFilterBy={setFilterBy} />
+                    <EmailSideNav emails={allEmails} setFilterBy={setFilterBy} onComposeClick={openComposeModal} />
+                    {isComposeModalOpen && <EmailCompose closeModal={closeComposeModal} />}
                 </div>
                 <div className="email-list">
                     <Outlet />
@@ -69,3 +103,4 @@ export const EmailIndex = () => {
         </EmailContext.Provider>
     );
 };
+
