@@ -6,7 +6,11 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 
 export const Dashboard = () => {
-    const emailStats = emailService.getStats()
+    const fetchedEmailStats = emailService.getStats()
+    const defaultEmailStats = { inbox: { total: 10, unread: 7 } };
+
+    const emailStats = fetchedEmailStats || defaultEmailStats;
+
     const data = {
         labels: Object.keys(emailStats),
         datasets: [
