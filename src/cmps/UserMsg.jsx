@@ -1,33 +1,30 @@
-import { useEffect, useState } from "react"
-import { eventBusService } from "../services/event-bus.service"
+import { useEffect, useState } from "react";
+import { eventBusService } from "../services/event-bus.service";
 
 export function UserMsg() {
-    const [msg, setMsg] = useState(null)
+    const [msg, setMsg] = useState(null);
 
     useEffect(() => {
-        const unsubscribe = eventBusService.on('show-user-msg', (msg) => {
-            setMsg(msg)
+        const unsubscribe = eventBusService.eventBus.on('show-user-msg', (msg) => {
+            setMsg(msg);
             setTimeout(() => {
-                onCloseMsg()
-            }, 3000)
-        })
+                onCloseMsg();
+            }, 3000);
+        });
 
-        return unsubscribe
-
-        // return () => {
-        //     unsubscribe()
-        // }
-    }, [])
+        return unsubscribe;
+    }, []);
 
     function onCloseMsg() {
-        setMsg(null)
+        setMsg(null);
     }
 
-    if (!msg) return <></>
+    if (!msg) return <></>;
+
     return (
         <div className={"user-msg " + msg.type}>
-            <p>{msg.txt}</p>
+            <p dangerouslySetInnerHTML={{ __html: msg.txt }}></p>
             <button onClick={onCloseMsg}>X</button>
         </div>
-    )
+    );
 }

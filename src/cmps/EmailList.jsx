@@ -1,23 +1,25 @@
 import { useEffect, useState, useContext, useRef } from 'react';
 import { EmailPreview } from './EmailPreview';
 import { emailService } from '../services/email.service';
-import { useSearchParams } from 'react-router-dom';
 import { EmailContext } from './EmailContext';
-import { utilService } from '../services/util.service';
 import { EmailModal } from './EmailModal';
+import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faSquare as farSquare, faCheckSquare } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { EmailActionButtons } from './EmailActionButtons';
+import { EmailListNavButtons } from './EmailNavButtons'
 
 export const EmailList = () => {
-    const { indexEmailsList, setFilterBy, handleEmailSelect } = useContext(EmailContext);
-    const [emailList, setEmailList] = useState(indexEmailsList);
+    const { indexEmailList, setFilterBy, handleEmailSelect } = useContext(EmailContext);
+    const [emailList, setEmailList] = useState(indexEmailList);
     const [contextMenu, setContextMenu] = useState(null);
     const [sortCriterion, setSortCriterion] = useState('');
 
     const [allChecked, setAllChecked] = useState(false);
-    const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const [showDropdownModal, setShowDropdownModal] = useState(false);
     const dropdownRef = useRef(null);
-    const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0 });
+
     const [checkboxStates, setCheckboxStates] = useState({
         All: false,
         None: false,
@@ -29,8 +31,8 @@ export const EmailList = () => {
 
 
     useEffect(() => {
-        setEmailList(indexEmailsList);
-    }, [sortCriterion, indexEmailsList]);
+        setEmailList(indexEmailList);
+    }, [sortCriterion, indexEmailList]);
 
     const handleSortChange = (e) => {
         const newSortCriterion = e.target.value;
@@ -83,23 +85,10 @@ export const EmailList = () => {
         }
     };
 
-    const openModal = (elementRef, setShowModal) => {
-        if (elementRef.current) {
-            const rect = elementRef.current.getBoundingClientRect();
-            setDropdownPosition({
-                top: rect.bottom + window.scrollY,
-                left: rect.left + window.scrollX
-            });
-            setShowModal(true);
-        }
-    };
-
     const toggleAllChecked = () => {
         setAllChecked(!allChecked);
-        // Update the checked status of all emails
         const updatedEmails = emailList.map(email => ({ ...email, isChecked: !allChecked }));
         setEmailList(updatedEmails);
-        // Save the updated emails (if needed)
     };
 
     const handleModalOptionClick = (option) => {
@@ -107,6 +96,13 @@ export const EmailList = () => {
         setCheckboxStates(prevStates => {
             const newState = { ...prevStates, [option]: !prevStates[option] };
     
+            if (option !== 'None' && newState[option]) {
+                newState['None'] = false;
+            }
+            if (option !== 'All' && newState[option]) {
+                newState['All'] = false;
+            }
+            
             // Handle opposites
             switch (option) {
                 case 'All':
@@ -153,33 +149,48 @@ export const EmailList = () => {
             )
         })));
     }, [checkboxStates]);
-            
 
+    useEffect(() => {
+        if (emailList.some(email => !email.isChecked)) {
+            setAllChecked(false);
+        }
+    }, [emailList]);
+                
     const dropdownContent = (
         <div className="dropdown-modal-content">
             {Object.entries(checkboxStates).map(([option, isChecked]) => (
                 <div key={option} onClick={() => handleModalOptionClick(option)}>
-                    <i className={`far ${isChecked ? 'fa-check-square' : 'fa-square'}`} aria-hidden="true"></i> {option}
+                    <FontAwesomeIcon icon={isChecked ? faCheckSquare : farSquare} aria-hidden="true" /> {option}
                 </div>
             ))}
         </div>
     );
-    
+
     return (
         <div className="email-list">
-            <div className="email-checkbox-dropdown">
-                <button onClick={toggleAllChecked}>
-                    <i className={`far ${allChecked ? 'fa-check-square' : 'fa-square'}`} aria-hidden="true"></i>
-                </button>
-                <button ref={dropdownRef} onClick={() => openModal(dropdownRef, setShowDropdownModal)}>
-                <i className="fa fa-chevron-down" aria-hidden="true"></i>
-                    </button>
-                    <EmailModal
-                        isOpen={showDropdownModal}
-                        content={dropdownContent}
-                        onClose={() => setShowDropdownModal(false)}
-                        position={dropdownPosition}
+            <div className="action-bar">
+                <div className="start-buttons">
+                    <div className="multi-selector">
+                            <button onClick={toggleAllChecked}>
+                                <FontAwesomeIcon icon={allChecked ? faCheckSquare : farSquare} aria-hidden="true" />
+                            </button>
+                            <button ref={dropdownRef}>
+                                <FontAwesomeIcon icon={faChevronDown} aria-hidden="true" />
+                            </button>
+                            <EmailModal
+                                triggerRef={dropdownRef}
+                                content={dropdownContent}
+                                onClose={() => setShowDropdownModal(false)}
+                            />
+                    </div>
+                </div>
+                {emailList.some(email => email.isChecked) && 
+                    <EmailActionButtons 
+                        emails={emailList.filter(email => email.isChecked)} 
+                        setIndexEmailList={setEmailList}
                     />
+                }
+                <EmailListNavButtons emails={emailList} />
             </div>
             <select onChange={handleSortChange} value={sortCriterion}>
                 <option value="">Sort By</option>

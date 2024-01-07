@@ -17,6 +17,7 @@ export function App() {
                 <main className='container'>
                     <Routes>
                         <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                        <Route path="/email" element={<Navigate to="/email/inbox" replace />} />
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/aboutUs" element={<AboutUs />} />
                         <Route path="/email/:folder" element={<EmailIndex />}>

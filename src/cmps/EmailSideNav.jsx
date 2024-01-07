@@ -1,24 +1,32 @@
-import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { emailService } from '../services/email.service';
-import { eventBusService, showErrorMsg, showSuccessMsg } from "../services/event-bus.service";
+import { statsService } from '../services/stats.service';
+import { eventBusService } from "../services/event-bus.service";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faInbox, faStar, faPaperPlane, faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 
-export const EmailSideNav = ({ emails, setFilterBy, onComposeClick }) => {
-    const navigate = useNavigate();
+export const EmailSideNav = ({ setFilterBy, onComposeClick, loadEmails }) => {
     const params = useParams();
     const folder = params.folder
+    const stats = statsService.getStats()
 
     useEffect(() => {
         setFilterBy(prev => ({ ...prev, folder }));
     }, [folder, setFilterBy]);
 
+    // useEffect(() => {
+    //     resetEmails();
+    // }, [])
+
     const folderData = {
-        inbox: { count: emails.filter(email => email.folder === 'inbox').length, icon: 'fa fa-inbox' },
-        starred: { count: emails.filter(email => email.isStarred).length, icon: 'fa fa-star' },
-        sent: { count: emails.filter(email => email.folder === 'sent').length, icon: 'fa fa-paper-plane' },
-        drafts: { count: emails.filter(email => email.folder === 'drafts').length, icon: 'fa fa-pencil-alt' },
-        trash: { count: emails.filter(email => email.folder === 'trash').length, icon: 'fa fa-trash' },
+        inbox: { total: stats.Inbox?.total || 0, unread: stats.Inbox?.unread || 0, icon: faInbox },
+        starred: { total: stats.Starred?.total || 0, unread: stats.Starred?.unread || 0, icon: faStar },
+        sent: { total: stats.Sent?.total || 0, unread: stats.Sent?.unread || 0, icon: faPaperPlane },
+        drafts: { total: stats.Drafts?.total || 0, unread: stats.Drafts?.unread || 0, icon: faPencilAlt },
+        trash: { total: stats.Trash?.total || 0, unread: stats.Trash?.unread || 0, icon: faTrash },
     };
+
 
     const handleFolderSelect = (selectedFolder) => {
         setFilterBy(prev => ({ ...prev, folder: selectedFolder }));
@@ -28,27 +36,21 @@ export const EmailSideNav = ({ emails, setFilterBy, onComposeClick }) => {
         try {
             await emailService.initEmails();
             setFilterBy(emailService.getDefaultFilter(params));
-            eventBusService.emit('emails-reset', { type: 'success', txt: 'Emails reset successfully' });
-            showSuccessMsg('Emails reset successfully');
+            loadEmails();
+            eventBusService.showSuccessMsg('Emails reset successfully');
         } catch (error) {
             console.error('Error resetting emails:', error);
-            eventBusService.emit('emails-reset', { type: 'error', txt: 'Could not reset emails' });
-            showErrorMsg('Could not reset emails');
+            eventBusService.showErrorMsg('Could not reset emails');
         }
     };
     
-
-    // function onComposeClick () {
-    //     navigate(`/email/${folder}/compose`);
-    // };
-
     return (
         <div className="email-side-nav">
             <button onClick={resetEmails} style={{ margin: '10px' }}>Reset Emails</button>
             <button onClick={onComposeClick} className="compose-btn">
-                <i className="fas fa-pencil-alt" aria-hidden="true"></i> Compose Email
+                <FontAwesomeIcon icon={faPencilAlt} aria-hidden="true" /> Compose Email
             </button>
-            {Object.entries(folderData).map(([key, { count, icon }]) => {
+            {Object.entries(folderData).map(([key, { total, unread, icon }]) => {
                 return (
                     <div
                         key={key}
@@ -56,10 +58,10 @@ export const EmailSideNav = ({ emails, setFilterBy, onComposeClick }) => {
                         className={key === folder ? 'active' : ''}
                     >
                         <span>
-                            <i className={`${icon} icon-style`} aria-hidden="true"></i>
+                            <FontAwesomeIcon icon={icon} className="icon-style" aria-hidden="true" />
                             <span>{key.charAt(0).toUpperCase() + key.slice(1)}</span>
                         </span>
-                        <span style={{ marginLeft: '10px' }}>({count})</span>
+                        <span style={{ marginLeft: '10px' }}>({unread}/{total})</span>
                     </div>
                 );
             })}

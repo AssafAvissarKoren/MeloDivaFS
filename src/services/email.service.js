@@ -1,35 +1,30 @@
 import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
+import { userService } from './user.service.js'
+import { statsService } from './stats.service.js'
 
-export const emailService = {
+export const emailService = { // CRA seperate wservice for user and stats
     initEmails,
     queryEmails,
     saveEmail,
-    remove,
+    removeEmail,
     getById,
     createEmail,
     getDefaultFilter,
     getEmails,
     filterURL,
     backOneURLSegment,
-    saveStats,
-    getStats,
+    getFolders,
 }
 
 const EMAIL_STORAGE_KEY = 'emailDB'
-const USER_STORAGE_KEY = 'userDB'
-const STATS_STORAGE_KEY = 'statsDB'
 
-function saveStats(stats) {
-    utilService.saveToStorage(STATS_STORAGE_KEY, stats)
+function getFolders() {
+    return ["Inbox", "Spam", "Trash"];
 }
 
-function getStats(stats) {
-    return utilService.loadFromStorage(STATS_STORAGE_KEY)
-}
-
-async function queryEmails(allEmails, filterBy) {
-    let emails = [...allEmails];
+async function queryEmails(filterBy) {
+    let emails = await emailService.getEmails();
 
     // Apply filtering based on the provided filter criteria
     if (filterBy) {
@@ -105,12 +100,12 @@ function getById(id) {
     return storageService.get(EMAIL_STORAGE_KEY, id);
 }
 
-function remove(id) {
+function removeEmail(id) {
     return storageService.remove(EMAIL_STORAGE_KEY, id);
 }
 
 async function saveEmail(emailToSave, folderName = "inbox") {
-    const savedEmail = {...emailToSave, folder: folderName};
+    const savedEmail = {...emailToSave, folder: folderName, isChecked: false};
 
     if (savedEmail.id) {
         return await storageService.put(EMAIL_STORAGE_KEY, savedEmail);
@@ -128,65 +123,127 @@ function getDefaultFilter(params) {
     };
 }
 
-async function createEmail(subject = "", body = "", to = "", folder="inbox", from=loggedinUser.email, sentAt=new Date().getTime()) {
-    const loggedinUser = await storageService.query(USER_STORAGE_KEY);
+async function createEmail(
+    subject = "", 
+    body = "", 
+    to = "", 
+    folder = "inbox", 
+    from = null, 
+    sentAt = new Date().getTime(), 
+    isRead = null, 
+    isStarred = false,
+    location = null,
+) {
+    console.log("body", body)
+    let newLocation;
+    if(!location) {
+        try {
+            newLocation = await getLocation();
+        } catch (err) {
+            console.error('Error fetching location:', err);
+            newLocation = { latitude: null, longitude: null };
+        }
+    } else {
+        newLocation = location;
+    }
+    
+    let newFrom;
+    if(!from) {
+        try {
+            newFrom = await userService.getUser().email;
+        } catch (err) {
+            console.error('Error fetching location:', err);
+            newFrom = null;
+        }
+    } else {
+        newFrom = from;
+    }
+
     return { 
         id: null,
         subject: subject, 
         body: body, 
-        isRead: null, 
-        isStarred: false, 
+        isRead: isRead, 
+        isStarred: isStarred,
         sentAt: sentAt, 
         removedAt: null, 
-        from: from, 
+        from: newFrom, 
         to: to,
         folder: folder,
         prevEmailId: null,
         nextEmailId: null,
         listIndex: null,
         isChecked: false,
+        location: newLocation,
     }
 }
 
-async function initEmails() {
-    _createUser()
-    const loggedinUser = await storageService.query(USER_STORAGE_KEY);
-    let defaultContent = [
-        { subject: 'Miss you!', from: 'momo@momo.com' },
-        { subject: 'Meeting Update', from: 'jane@company.com' },
-        { subject: 'Your Order Confirmation', from: 'orders@store.com' },
-        { subject: 'Upcoming Event Reminder', from: 'events@community.org' },
-        { subject: 'Happy Birthday!', from: 'friend@email.com' },
-        { subject: 'Project Collaboration', from: 'colleague@work.com' },
-        { subject: 'Weekend Plans', from: 'friend@personal.com' },
-        { subject: 'Subscription Renewal', from: 'service@subscription.com' },
-        { subject: 'Flight Itinerary', from: 'travel@airline.com' },
-        { subject: 'Security Alert', from: 'security@bank.com' }
-    ];
-    let savedEmails = []; // Array to store saved emails
-
-    for (const email of defaultContent) {
-        const emailToCreate = await createEmail(
-            email.subject, 
-            utilService.makeLorem(1), 
-            loggedinUser.email, 
-            "inbox",
-            email.from,
-            new Date().getTime() - Math.floor(Math.random() * 1000000000),
+const getLocation = () => {
+    return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+            reject('Geolocation is not supported by this browser.');
+        }
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                const { latitude, longitude } = position.coords;
+                resolve({ latitude, longitude });
+            }, 
+            err => {
+                reject(err);
+            }
         );
-        const savedEmailsWithId = {...emailToCreate, id: utilService.makeId()}
-        savedEmails.push(savedEmailsWithId); // Add the saved email to the array
-    }
-    utilService.saveToStorage(EMAIL_STORAGE_KEY, savedEmails)
-}
-
-function _createUser() {
-    const loggedinUser = { email: 'user@appsus.com', fullname: 'Mahatma Appsus' }
-    utilService.saveToStorage(USER_STORAGE_KEY, loggedinUser)
-}
+    });
+};
 
 function backOneURLSegment(navigate) {
     const pathArray = window.location.hash.split('/');
     const newPath = '/' + pathArray.slice(1, pathArray.length - 1).join('/');
     navigate(newPath);
+}
+
+async function initEmails() {
+    userService.createUser()
+    const loggedinUser = userService.getUser()
+    let defaultContent = [
+        { subject: 'Miss you!', from: 'momo@momo.com', isRead: true, folder: 'inbox', isStarred: false },
+        { subject: 'Meeting Update', from: 'jane@company.com', isRead: true, folder: 'sent', isStarred: true },
+        { subject: 'Your Order Confirmation', from: 'orders@store.com', isRead: true, folder: 'drafts', isStarred: false },
+        { subject: 'Upcoming Event Reminder', from: 'events@community.org', isRead: false, folder: 'trash', isStarred: true },
+        { subject: 'Happy Birthday!', from: 'friend@email.com', isRead: true, folder: 'inbox', isStarred: false },
+        { subject: 'Project Collaboration', from: 'colleague@work.com', isRead: false, folder: 'inbox', isStarred: true },
+        { subject: 'Weekend Plans', from: 'friend@personal.com', isRead: true, folder: 'sent', isStarred: false },
+        { subject: 'Subscription Renewal', from: 'service@subscription.com', isRead: true, folder: 'drafts', isStarred: true },
+        { subject: 'Flight Itinerary', from: 'travel@airline.com', isRead: true, folder: 'trash', isStarred: false },
+        { subject: 'Security Alert', from: 'security@bank.com', isRead: false, folder: 'sent', isStarred: true },
+        { subject: 'New Year Greetings', from: 'greetings@holiday.com', isRead: true, folder: 'inbox', isStarred: false },
+        { subject: 'Tech Conference Invitation', from: 'events@techconference.com', isRead: false, folder: 'drafts', isStarred: true },
+        { subject: 'Gym Membership Renewal', from: 'noreply@gym.com', isRead: true, folder: 'drafts', isStarred: false },
+        { subject: 'Book Club Meeting', from: 'bookclub@library.com', isRead: true, folder: 'sent', isStarred: true },
+        { subject: 'Dinner Reservation Confirmation', from: 'reservations@restaurant.com', isRead: true, folder: 'trash', isStarred: false },
+        { subject: 'Welcome to Our Newsletter', from: 'newsletter@updates.com', isRead: false, folder: 'inbox', isStarred: true },
+        { subject: 'Warranty Expiry Reminder', from: 'warranty@electronics.com', isRead: true, folder: 'sent', isStarred: false },
+        { subject: 'Survey Invitation', from: 'feedback@surveys.com', isRead: false, folder: 'drafts', isStarred: true },
+        { subject: 'Appointment Reminder', from: 'appointments@clinic.com', isRead: true, folder: 'trash', isStarred: false },
+        { subject: 'Your Monthly Statement', from: 'statements@bank.com', isRead: false, folder: 'trash', isStarred: true }    
+        ];
+
+    let savedEmails = []; // Array to store saved emails
+    const location = await getLocation();
+    for (const email of defaultContent) {
+        const emailToCreate = await createEmail(
+            email.subject, 
+            utilService.makeLorem(1), 
+            loggedinUser.email, 
+            email.folder,
+            email.from,
+            new Date().getTime() - Math.floor(Math.random() * 1000000000),
+            email.isRead,
+            email.isStarred,
+            location,
+        );
+        const savedEmailsWithId = {...emailToCreate, id: utilService.makeId()}
+        savedEmails.push(savedEmailsWithId); // Add the saved email to the array
+    };
+    utilService.saveToStorage(EMAIL_STORAGE_KEY, savedEmails);
+    statsService.createStats();
 }

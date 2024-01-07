@@ -1,0 +1,32 @@
+.user-msg {
+    background-color: lightgray;
+    padding: 0.5em 1em;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    color: white;
+    font-weight: bold;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    &.success {
+        background-color: lightgreen;
+    }
+
+    &.error {
+        background-color: pink;
+    }
+
+    &.tba {
+        background-color: #3498db;
+    }
+
+    button {
+        float: right;
+        margin: 1em;
+        width: fit-content;
+    }
+}

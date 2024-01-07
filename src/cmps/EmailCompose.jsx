@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { emailService } from '../services/email.service';
-import { utilService } from '../services/util.service';
-import { eventBusService, showErrorMsg, showSuccessMsg } from "../services/event-bus.service";
+import { eventBusService } from "../services/event-bus.service";
+import { Formik, Form, Field } from 'formik';
+import { TextField, Button, FormControl, TextareaAutosize } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCompressAlt, faExpandAlt, faSave } from '@fortawesome/free-solid-svg-icons';
 
 export const EmailCompose = ({ closeModal }) => {
     const defaultForm = { to: '', subject: '', body: '', folder: 'drafts' };
-    const [draftEmail, setDraftEmail] = useState({ to: '', subject: '', body: '', folder: 'drafts' });
-    const [lastSavedForm, setLastSavedForm] = useState({ to: '', subject: '', body: '', folder: 'drafts' });
+    const [draftEmail, setDraftEmail] = useState(defaultForm);
+    const [lastSavedForm, setLastSavedForm] = useState(defaultForm);
     
     const navigate = useNavigate();
     const params = useParams()
@@ -18,7 +21,7 @@ export const EmailCompose = ({ closeModal }) => {
             if (params.folder === 'drafts' && params.emailId) {
                 startDraft = await loadDraft(params.emailId);
             } else {
-                startDraft = await createNewDraft();
+                startDraft = await createNewDraft(); //fix this to save a new draft only if there has been a change from blank
             }
             if (startDraft) {
                 setDraftEmail(startDraft);
@@ -33,7 +36,7 @@ export const EmailCompose = ({ closeModal }) => {
     
     const createNewDraft = async () => {
         try {
-            return await emailService.createEmail(defaultForm.to, defaultForm.subject, defaultForm.body, "drafts");
+            return await emailService.createEmail(defaultForm.subject, defaultForm.body, defaultForm.to);
         } catch (error) {
             console.log('error:', error)
         }
@@ -47,10 +50,10 @@ export const EmailCompose = ({ closeModal }) => {
         }
     }
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setDraftEmail(prevDraft => ({ ...prevDraft, [name]: value}));
-    };
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setDraftEmail(prevDraft => ({ ...prevDraft, [name]: value}));
+    // };
         
     function isFormChanged() {
         return draftEmail.to !== lastSavedForm.to ||
@@ -72,69 +75,99 @@ export const EmailCompose = ({ closeModal }) => {
             clearInterval(intervalId);
             await saveDraft();
             try {
-                // eventBusService.emit('draft-saved', { type: 'success', txt: 'Email draft saved successfully' });
-                showSuccessMsg('Email draft saved successfully');
+                eventBusService.showSuccessMsg('Email draft saved successfully');
             } catch (error) {
                 console.error('Error saving draft:', error);
-                // eventBusService.emit('draft-saved', { type: 'error', txt: 'Could not save draft' });
-                showErrorMsg('Could not reset emails');
+                eventBusService.showErrorMsg('Could not reset emails');
             }
         };
     }, [draftEmail, lastSavedForm]);
     
-    const handleSubmit = async (e) => {
+    const handleFormSubmit  = async (values) => {
+        console.log("values.body", values.body)
         try {
-            e.preventDefault();
-        
-            let emailToSave;
-            if (!lastSavedForm && draftEmail) {
-                // If there's no draft, create a new one and use it
-                emailToSave = await emailService.createEmail(draftEmail.subject, draftEmail.body, draftEmail.to, "drafts");
-            } else {
-                // If there's an existing draft, use it
-                emailToSave = draftEmail;
-            }
-        
-            // Save the email to 'sent'
+            let emailToSave = await emailService.createEmail(values.subject, values.body, values.to, "sent");
             await emailService.saveEmail(emailToSave, "sent");
             navigate('/email');
-            showSuccessMsg('Email sent successfully');
+            eventBusService.showSuccessMsg('Email sent successfully');
         } catch (error) {
             console.error('Error sending email:', error);
-            showErrorMsg('Could not send email');
+            eventBusService.showErrorMsg('Could not send email');
         }
-
     };
-    
+
+    function handleMinimize() {
+        return null;
+    }
+    function handleFullScreen() {
+        return null;
+    }
+    function handleClose() {
+        closeModal();
+        return null;
+    }
+
     return (
         <div className="email-compose-modal">
-            <button className="close-modal" onClick={closeModal}>X</button>
-            <form onSubmit={handleSubmit}>
-                <input 
-                    type="email" 
-                    name="to" 
-                    placeholder="To" 
-                    value={draftEmail ? draftEmail.to : ''} 
-                    onChange={handleChange} 
-                    required 
-                />
-                <input 
-                    type="text" 
-                    name="subject" 
-                    placeholder="Subject" 
-                    value={draftEmail ? draftEmail.subject : ''} 
-                    onChange={handleChange} 
-                    required 
-                />
-                <textarea 
-                    name="body" 
-                    placeholder="Compose email" 
-                    value={draftEmail ? draftEmail.body : ''} 
-                    onChange={handleChange} 
-                    required 
-                />
-                <button type="submit">Send</button>
-            </form>
+            <div className="modal-top-bar">
+                <span>New Message</span>
+                <span>
+                    <Button className="modal-button" title="Minimize" onClick={handleMinimize}>
+                        <FontAwesomeIcon icon={faCompressAlt} />
+                    </Button>
+                    <Button className="modal-button" title="Full screen (Shift for pop-out)" onClick={handleFullScreen} >
+                        <FontAwesomeIcon icon={faExpandAlt} />
+                    </Button>
+                    <Button className="modal-button" title="Save & Close" onClick={handleClose} >
+                        <FontAwesomeIcon icon={faSave} />
+                    </Button>
+                </span>
+            </div>
+            <Formik
+                initialValues={defaultForm}
+                onSubmit={handleFormSubmit}
+                enableReinitialize
+            >
+                {({ values, handleChange, handleSubmit }) => (
+                    <Form onSubmit={handleSubmit}>
+                        <Field
+                            as={TextField}
+                            type="email"
+                            name="to"
+                            label="Recipients"
+                            value={values.to}
+                            onChange={handleChange}
+                            required
+                            variant="standard"
+                        />
+
+                        <Field
+                            as={TextField}
+                            type="text"
+                            name="subject"
+                            label="Subject"
+                            value={values.subject}
+                            onChange={handleChange}
+                            required
+                            variant="standard"
+                        />
+
+                        <FormControl fullWidth margin="normal">
+                            <TextareaAutosize
+                                name="body"
+                                placeholder="Compose email"
+                                minRows={15}
+                                value={values.body}
+                                onChange={handleChange}
+                                required
+                                style={{ width: '100%' }}
+                            />
+                        </FormControl>
+
+                        <Button type="submit" variant="contained">Send</Button>
+                    </Form>
+                )}
+            </Formik>
         </div>
     );
 };

@@ -1,12 +1,13 @@
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { emailService } from '../services/email.service';
+import { statsService } from '../services/stats.service';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 
 export const Dashboard = () => {
-    const fetchedEmailStats = emailService.getStats()
+    const fetchedEmailStats = statsService.getStats()
     const defaultEmailStats = { inbox: { total: 10, unread: 7 } };
 
     const emailStats = fetchedEmailStats || defaultEmailStats;

@@ -15,10 +15,15 @@
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-regular-svg-icons": "^6.5.1",
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@mui/icons-material": "^5.15.2",
     "@mui/material": "^5.15.2",
     "animate.css": "^4.1.1",
     "formik": "^2.4.5",
+    "google-map-react": "^2.2.1",
     "lorem-ipsum": "^2.0.8",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
@@ -36,6 +41,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "gh-pages": "^6.1.0",
+    "sass": "^1.69.7",
     "vite": "^4.5.1"
   }
 }

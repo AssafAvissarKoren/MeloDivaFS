@@ -1,4 +1,8 @@
 import React from 'react';
+import { faSquare as farSquare, faCheckSquare, faStar as farStar } from '@fortawesome/free-regular-svg-icons';
+import { faStar as fasStar } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 export const EmailPreview = ({
     email,
@@ -37,10 +41,13 @@ export const EmailPreview = ({
         <div>
             <div className="email-preview" onClick={handleEmailClick} onContextMenu={handleRightClick}>
                 <span onClick={handleCheckboxClick} style={{ cursor: 'pointer', marginRight: '10px' }}>
-                    <i className={`far ${email.isChecked ? 'fa-check-square' : 'fa-square'}`}></i>
+                    <FontAwesomeIcon icon={email.isChecked ? faCheckSquare : farSquare} />
                 </span>
                 <span onClick={handleStarClick} style={{ cursor: 'pointer', marginRight: '10px' }}>
-                    {email.isStarred ? '★' : '☆'}
+                    {email.isStarred ? 
+                        <FontAwesomeIcon icon={fasStar} style={{ color: '#f7ca4c' }}/> : 
+                        <FontAwesomeIcon icon={farStar} />
+                    }
                 </span>
                 <p className={`email-subject ${email.isRead ? 'read' : 'unread'}`} style={{ display: 'inline' }}>
                     {subjectPreview}

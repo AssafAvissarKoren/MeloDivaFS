@@ -4,40 +4,28 @@ import { EmailList } from './EmailList';
 import { EmailSideNav } from './EmailSideNav';
 import { EmailHeaderFilter } from './EmailHeaderFilter';
 import { emailService } from '../services/email.service';
+import { statsService } from '../services/stats.service';
 import { Outlet } from 'react-router-dom';
 import { EmailContext } from './EmailContext';
-import { utilService } from '../services/util.service';
-import { eventBusService, showErrorMsg, showSuccessMsg } from "../services/event-bus.service";
 import { EmailCompose } from "./EmailCompose"
 
 export const EmailIndex = () => {
     const params = useParams();
-    const [allEmails, setAllEmails] = useState(null); 
-    const [indexEmailsList, setIndexEmailsList] = useState(null);
+    const [indexEmailList, setIndexEmailList] = useState(null);
     const [filterBy, setFilterBy] = useState(emailService.getDefaultFilter(params));
     const [isComposeModalOpen, setIsComposeModalOpen] = useState(false);
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const unsubscribeEmailDeleted = eventBusService.on('email-deleted', () => {loadEmails();});
-        const unsubscribeEmailsReset = eventBusService.on('emails-reset', () => {loadEmails();});
-    
+    useEffect(() => {   
         loadEmails();
         const filterURL = emailService.filterURL(filterBy);
-        navigate(filterURL, { replace: true });
-    
-        return () => {
-            unsubscribeEmailDeleted();
-            unsubscribeEmailsReset();
-        };    
+        navigate(filterURL, { replace: true }); 
     }, [filterBy]);
     
     async function loadEmails() {
-        const newAllEmails = await emailService.getEmails();
-        emailService.saveStats(analyzeEmails(newAllEmails))
-        setAllEmails(newAllEmails);
-        setIndexEmailsList(await emailService.queryEmails(newAllEmails, filterBy));
+        setIndexEmailList(await emailService.queryEmails(filterBy));
+        await statsService.createStats();
     }
     
     const handleEmailSelect = async (emailId) => {
@@ -48,26 +36,6 @@ export const EmailIndex = () => {
         }
     };
     
-    const analyzeEmails = (emails) => {
-        const folderStats = {};
-    
-        emails.forEach(email => {
-            const folder = email.folder;
-            const isRead = email.isRead;
-    
-            if (!folderStats[folder]) {
-                folderStats[folder] = { total: 0, unread: 0 };
-            }
-    
-            folderStats[folder].total += 1;
-            if (!isRead) {
-                folderStats[folder].unread += 1;
-            }
-        });
-    
-        return folderStats;
-    };
-
     const openComposeModal = () => {
         setIsComposeModalOpen(true);
     };
@@ -77,14 +45,10 @@ export const EmailIndex = () => {
     };
     
 
-    if (!indexEmailsList) return <div>Loading...</div>;
-
-    const unreadCount = indexEmailsList.filter(email => !email.isRead).length;
-    const totalEmails = indexEmailsList.length;
-    const unreadPercentage = totalEmails ? (unreadCount / totalEmails) * 100 : 0;
+    if (!indexEmailList) return <div>Loading...</div>;
 
     return (
-        <EmailContext.Provider value={{ indexEmailsList, setFilterBy, handleEmailSelect }}>
+        <EmailContext.Provider value={{ indexEmailList, setFilterBy, handleEmailSelect, setIndexEmailList }}>
             <div className="email-index-container">
                 <div className="email-name">
                     <h1>Green Mail</h1>
@@ -93,7 +57,7 @@ export const EmailIndex = () => {
                     <EmailHeaderFilter setFilterBy={setFilterBy} />
                 </div>
                 <div className="email-side-nav">
-                    <EmailSideNav emails={allEmails} setFilterBy={setFilterBy} onComposeClick={openComposeModal} />
+                    <EmailSideNav setFilterBy={setFilterBy} onComposeClick={openComposeModal} loadEmails={loadEmails} />
                     {isComposeModalOpen && <EmailCompose closeModal={closeComposeModal} />}
                 </div>
                 <div className="email-list">
