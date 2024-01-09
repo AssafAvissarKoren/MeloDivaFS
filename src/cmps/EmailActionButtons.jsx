@@ -1,47 +1,41 @@
 import React from 'react';
+// import { useDispatch } from 'react-redux';
 import { useState, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { emailService } from '../services/email.service';
+import { statsService } from "../services/stats.service";
 import { eventBusService } from "../services/event-bus.service";
 import { EmailModal } from '../cmps/EmailModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArchive, faExclamationCircle, faTrashAlt, faEnvelopeOpenText, faEnvelope, faClock, faTasks, faFolder, faTag, faEllipsisV, faStar, 
     faCalendarPlus, faFilter, faVolumeMute, faHighlighter } from '@fortawesome/free-solid-svg-icons';
+// import { updateStateAndStorageAction } from '../redux/actions/actions';
+
     
-export const EmailActionButtons = ({ emails, setIndexEmailList }) => {
+export const EmailActionButtons = ({ emails, setIndexEmailList, batchEmailsDelete }) => {
     const navigate = useNavigate();
     const [showOptionsModal, setShowOptionsModal] = useState(false);
     const [showMoveModal, setShowMoveModal] = useState(false);
     const optionsDDRef = useRef(null);
     const moveDDRef = useRef(null);
-    const params = useParams(null);
+    // const dispatch = useDispatch();
 
-    async function onDeleteEmail(email) {
-        if(email.folder === "trash") {
-            await emailService.removeEmail(email.id);
-            eventBusService.showSuccessMsg('Email deleted successfully');
-            navigate(`/email/${params.folder}`);
-        } else {
-            await emailService.saveEmail(email, "trash");
-            eventBusService.showSuccessMsg('Email moved to Trash folder successfully');
+    const handleDeleteAll = async () => {
+        try {
+            await batchEmailsDelete(emails);
+            const deletedEmail = {...emails[0], folder: "trash"}
+            // await handleUpdateStateAndStorage(deletedEmail, true);
+            navigate(`/email/${emails[0].folder}`);
+        } catch (error) {
+            console.error('Error deleting emails:', error);
+            eventBusService.showErrorMsg('Could not delete emails');
         }
     };
 
-    function handleDeleteAll() {
-        Promise.all(emails.map(email => onDeleteEmail(email)))
-            .then(() => {
-                // Update the email list by removing the deleted emails
-                setIndexEmailList(prevList => {
-                    return prevList.filter(indexEmail => 
-                        !emails.some(emailToDelete => emailToDelete.id === indexEmail.id)
-                    );
-                });
-            })
-            .catch(error => {
-                console.error('Error deleting emails:', error);
-                eventBusService.showErrorMsg('Could not delete emails');
-            });
-    }
+    const handleUpdateStateAndStorage = (updatedEmail, isReRender) => {
+        dispatch(updateStateAndStorageAction(updatedEmail, isReRender));
+      };
+    
 
     async function handleReadAll( markAsRead ) {
         const updatedEmails = await Promise.all(emails.map(async email => {
@@ -58,7 +52,6 @@ export const EmailActionButtons = ({ emails, setIndexEmailList }) => {
 
     const handleFeatureTBA = (featureName) => {
         eventBusService.showTBAMsg(`${featureName}\nwill be implemented shortly!`);
-
     };
         
     const moreOptionsContent = (

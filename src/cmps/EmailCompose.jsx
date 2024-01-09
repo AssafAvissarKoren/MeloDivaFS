@@ -84,7 +84,6 @@ export const EmailCompose = ({ closeModal }) => {
     }, [draftEmail, lastSavedForm]);
     
     const handleFormSubmit  = async (values) => {
-        console.log("values.body", values.body)
         try {
             let emailToSave = await emailService.createEmail(values.subject, values.body, values.to, "sent");
             await emailService.saveEmail(emailToSave, "sent");

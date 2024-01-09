@@ -15,10 +15,6 @@ export const EmailSideNav = ({ setFilterBy, onComposeClick, loadEmails }) => {
         setFilterBy(prev => ({ ...prev, folder }));
     }, [folder, setFilterBy]);
 
-    // useEffect(() => {
-    //     resetEmails();
-    // }, [])
-
     const folderData = {
         inbox: { total: stats.Inbox?.total || 0, unread: stats.Inbox?.unread || 0, icon: faInbox },
         starred: { total: stats.Starred?.total || 0, unread: stats.Starred?.unread || 0, icon: faStar },

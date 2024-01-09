@@ -1,25 +1,27 @@
 import { useEffect, useState, useContext, useRef } from 'react';
-import { EmailPreview } from './EmailPreview';
-import { emailService } from '../services/email.service';
-import { EmailContext } from './EmailContext';
-import { EmailModal } from './EmailModal';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { faSquare as farSquare, faCheckSquare } from '@fortawesome/free-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { EmailPreview } from './EmailPreview';
+import { EmailContext } from './EmailContext';
+import { EmailModal } from './EmailModal';
 import { EmailActionButtons } from './EmailActionButtons';
 import { EmailListNavButtons } from './EmailNavButtons'
 
+import { emailService } from '../services/email.service';
+import { eventBusService } from '../services/event-bus.service';
+import { statsService } from '../services/stats.service';
+
 export const EmailList = () => {
-    const { indexEmailList, setFilterBy, handleEmailSelect } = useContext(EmailContext);
+    const { indexEmailList, setFilterBy, setIndexEmailList } = useContext(EmailContext);
     const [emailList, setEmailList] = useState(indexEmailList);
+
     const [contextMenu, setContextMenu] = useState(null);
     const [sortCriterion, setSortCriterion] = useState('');
-
     const [allChecked, setAllChecked] = useState(false);
-
-    const [showDropdownModal, setShowDropdownModal] = useState(false);
-    const dropdownRef = useRef(null);
-
+    const [emailsBeingDeleted, setEmailsBeingDeleted] = useState(null);
     const [checkboxStates, setCheckboxStates] = useState({
         All: false,
         None: false,
@@ -29,17 +31,13 @@ export const EmailList = () => {
         Unstarred: false
     });
 
+    const [showDropdownModal, setShowDropdownModal] = useState(false);
+    const dropdownRef = useRef(null);
 
     useEffect(() => {
         setEmailList(indexEmailList);
     }, [sortCriterion, indexEmailList]);
 
-    const handleSortChange = (e) => {
-        const newSortCriterion = e.target.value;
-        setSortCriterion(newSortCriterion);
-        setFilterBy(prevFilter => ({...prevFilter, sort: newSortCriterion}));
-    };
-    
     useEffect(() => {
         const handleOutsideClick = (e) => {
           if (contextMenu) {
@@ -54,27 +52,51 @@ export const EmailList = () => {
         };
       }, [contextMenu]);
 
+    useEffect(() => {
+        // Apply multiple conditions simultaneously to update the email list
+        setEmailList(emailList.map(email => ({
+            ...email,
+            isChecked: (
+                checkboxStates['All'] || 
+                (checkboxStates['Read'] && email.isRead) || 
+                (checkboxStates['Starred'] && email.isStarred) ||
+                (checkboxStates['Unread'] && !email.isRead) || 
+                (checkboxStates['Unstarred'] && !email.isStarred)
+            )
+        })));
+    }, [checkboxStates]);
+
+    useEffect(() => {
+        if (emailList.some(email => !email.isChecked)) {
+            setAllChecked(false);
+        }
+    }, [emailList]);
+
     const onToggleStar = async (email) => {
-        const updatedEmail = { ...email, isStarred: !email.isStarred }
-        await emailService.saveEmail(updatedEmail);
-        setEmailList(emailList.map(e => e.id === updatedEmail.id ? updatedEmail : e));
-        setFilterBy(prevFilter => ({ ...prevFilter }))
+        const updatedEmail = { ...email, isStarred: !email.isStarred };
+        await updateStateAndStorage(updatedEmail, true);
     };
 
     const onToggleRead = async (email, isContextMenu = false) => {
         let updatedEmail = email
         if (isContextMenu || (!isContextMenu && !email.isRead)) {
             updatedEmail = { ...email, isRead: !email.isRead }
-        } 
-        await emailService.saveEmail(updatedEmail, updatedEmail.folder);
-        setEmailList(emailList.map(e => e.id === updatedEmail.id ? updatedEmail : e));
+        }
+        await updateStateAndStorage(updatedEmail, false);
         setContextMenu(null);
     };
 
     const onToggleSelect = async (email) => {
         const updatedEmail = { ...email, isChecked: !email.isChecked }
+        await updateStateAndStorage(updatedEmail, false);
+    }
+
+    async function updateStateAndStorage(updatedEmail, isReRender=false) {
         await emailService.saveEmail(updatedEmail, updatedEmail.folder);
         setEmailList(emailList.map(e => e.id === updatedEmail.id ? updatedEmail : e));
+        if(isReRender) {
+            setFilterBy(prevFilter => ({ ...prevFilter }))
+        }
     }
 
     const handleContextMenu = (emailId, position) => {
@@ -85,6 +107,25 @@ export const EmailList = () => {
         }
     };
 
+    const batchEmailsDelete = async (emails) => {
+        const updatedEmailsIds = emails.map(email => email.id);
+        setEmailsBeingDeleted(updatedEmailsIds);
+        setTimeout(async () => {
+            await emailService.updateAllEmails(emails, "trash") //storage
+            eventBusService.showSuccessMsg('Emails deleted successfully');
+            const updatedEmailList = emailList.filter(listEmail => !updatedEmailsIds.includes(listEmail.id))
+            setEmailList(updatedEmailList); // state
+            setEmailsBeingDeleted(null);
+            await statsService.createStats();
+        }, 1000);
+    }
+
+    const handleSortChange = (e) => {
+        const newSortCriterion = e.target.value;
+        setSortCriterion(newSortCriterion);
+        setFilterBy(prevFilter => ({...prevFilter, sort: newSortCriterion}));
+    };
+    
     const toggleAllChecked = () => {
         setAllChecked(!allChecked);
         const updatedEmails = emailList.map(email => ({ ...email, isChecked: !allChecked }));
@@ -135,27 +176,7 @@ export const EmailList = () => {
             return newState;
         });
     };
-    
-    useEffect(() => {
-        // Apply multiple conditions simultaneously to update the email list
-        setEmailList(emailList.map(email => ({
-            ...email,
-            isChecked: (
-                checkboxStates['All'] || 
-                (checkboxStates['Read'] && email.isRead) || 
-                (checkboxStates['Starred'] && email.isStarred) ||
-                (checkboxStates['Unread'] && !email.isRead) || 
-                (checkboxStates['Unstarred'] && !email.isStarred)
-            )
-        })));
-    }, [checkboxStates]);
-
-    useEffect(() => {
-        if (emailList.some(email => !email.isChecked)) {
-            setAllChecked(false);
-        }
-    }, [emailList]);
-                
+                    
     const dropdownContent = (
         <div className="dropdown-modal-content">
             {Object.entries(checkboxStates).map(([option, isChecked]) => (
@@ -187,7 +208,8 @@ export const EmailList = () => {
                 {emailList.some(email => email.isChecked) && 
                     <EmailActionButtons 
                         emails={emailList.filter(email => email.isChecked)} 
-                        setIndexEmailList={setEmailList}
+                        setIndexEmailList={setIndexEmailList}
+                        batchEmailsDelete={batchEmailsDelete}
                     />
                 }
                 <EmailListNavButtons emails={emailList} />
@@ -201,7 +223,7 @@ export const EmailList = () => {
                 <EmailPreview
                     key={email.id}
                     email={email}
-                    onSelectEmail={() => handleEmailSelect(email.id)}
+                    emailsBeingDeleted={emailsBeingDeleted}
                     onToggleStar={() => onToggleStar(email)}
                     onToggleRead={onToggleRead}
                     onToggleSelect={onToggleSelect}

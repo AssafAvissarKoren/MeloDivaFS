@@ -2,8 +2,9 @@ import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
 import { userService } from './user.service.js'
 import { statsService } from './stats.service.js'
+import { eventBusService } from './event-bus.service.js'
 
-export const emailService = { // CRA seperate wservice for user and stats
+export const emailService = {
     initEmails,
     queryEmails,
     saveEmail,
@@ -15,6 +16,8 @@ export const emailService = { // CRA seperate wservice for user and stats
     filterURL,
     backOneURLSegment,
     getFolders,
+    onDeleteEmail,
+    updateAllEmails,
 }
 
 const EMAIL_STORAGE_KEY = 'emailDB'
@@ -106,12 +109,14 @@ function removeEmail(id) {
 
 async function saveEmail(emailToSave, folderName = "inbox") {
     const savedEmail = {...emailToSave, folder: folderName, isChecked: false};
-
+    let newEmail
     if (savedEmail.id) {
-        return await storageService.put(EMAIL_STORAGE_KEY, savedEmail);
+        newEmail = await storageService.put(EMAIL_STORAGE_KEY, savedEmail);
     } else {
-        return await storageService.post(EMAIL_STORAGE_KEY, savedEmail);
+        newEmail = await storageService.post(EMAIL_STORAGE_KEY, savedEmail);
     }
+    await statsService.createStats();
+    return newEmail
 }
 
 function getDefaultFilter(params) {
@@ -134,7 +139,6 @@ async function createEmail(
     isStarred = false,
     location = null,
 ) {
-    console.log("body", body)
     let newLocation;
     if(!location) {
         try {
@@ -246,4 +250,41 @@ async function initEmails() {
     };
     utilService.saveToStorage(EMAIL_STORAGE_KEY, savedEmails);
     statsService.createStats();
+}
+
+async function onDeleteEmail(email) {
+    if(email.folder === "trash") {
+        await removeEmail(email.id);
+        eventBusService.showSuccessMsg('Email deleted successfully');
+    } else {
+        await saveEmail(email, "trash");
+        eventBusService.showSuccessMsg('Email moved to Trash folder successfully');
+    }
+};
+
+async function updateAllEmails(updatedEmails, folder) {
+    const emailsWithUpdatedFolder = updatedEmails.map(email => ({...email, folder: folder}));
+    const allEmails = await getEmails();
+    const updatedAllEmails = await _updateEmailLists(emailsWithUpdatedFolder, allEmails);
+    utilService.saveToStorage(EMAIL_STORAGE_KEY, updatedAllEmails);
+    return updatedAllEmails;
+}
+
+
+async function _updateEmailLists (updatedEmails, currentEmails) {
+    const updatedHashMap = {};
+    const currentHashMap = {};
+    updatedEmails.forEach((updatedEmail, index) => {
+        updatedHashMap[updatedEmail.id] = index;
+    });
+    currentEmails.forEach((currentEmail, index) => {
+        currentHashMap[currentEmail.id] = index;
+    });
+    const mergedEmailList = currentEmails.map(currentEmail => {
+        if (updatedHashMap.hasOwnProperty(currentEmail.id)) {
+            return updatedEmails[updatedHashMap[currentEmail.id]];
+        }
+        return currentEmail;
+    });
+    return mergedEmailList;
 }

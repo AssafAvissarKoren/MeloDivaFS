@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { EmailList } from './EmailList';
 import { EmailSideNav } from './EmailSideNav';
 import { EmailHeaderFilter } from './EmailHeaderFilter';
 import { emailService } from '../services/email.service';
@@ -24,18 +23,11 @@ export const EmailIndex = () => {
     }, [filterBy]);
     
     async function loadEmails() {
-        setIndexEmailList(await emailService.queryEmails(filterBy));
+        const newEmailList = await emailService.queryEmails(filterBy)
+        setIndexEmailList(newEmailList);
         await statsService.createStats();
     }
-    
-    const handleEmailSelect = async (emailId) => {
-        if(params.folder == "drafts") {
-            navigate(`/email/${params.folder}/edit/${emailId}`);
-        } else {
-            navigate(`/email/${params.folder}/${emailId}`);
-        }
-    };
-    
+
     const openComposeModal = () => {
         setIsComposeModalOpen(true);
     };
@@ -44,11 +36,10 @@ export const EmailIndex = () => {
         setIsComposeModalOpen(false);
     };
     
-
     if (!indexEmailList) return <div>Loading...</div>;
 
     return (
-        <EmailContext.Provider value={{ indexEmailList, setFilterBy, handleEmailSelect, setIndexEmailList }}>
+        <EmailContext.Provider value={{ indexEmailList, setFilterBy, setIndexEmailList }}>
             <div className="email-index-container">
                 <div className="email-name">
                     <h1>Green Mail</h1>
@@ -57,7 +48,11 @@ export const EmailIndex = () => {
                     <EmailHeaderFilter setFilterBy={setFilterBy} />
                 </div>
                 <div className="email-side-nav">
-                    <EmailSideNav setFilterBy={setFilterBy} onComposeClick={openComposeModal} loadEmails={loadEmails} />
+                    <EmailSideNav 
+                        setFilterBy={setFilterBy} 
+                        onComposeClick={openComposeModal} 
+                        loadEmails={loadEmails} 
+                    />
                     {isComposeModalOpen && <EmailCompose closeModal={closeComposeModal} />}
                 </div>
                 <div className="email-list">

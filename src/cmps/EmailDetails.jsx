@@ -7,7 +7,6 @@ import { EmailActionButtons } from './EmailActionButtons';
 import { EmailNavButtons } from './EmailNavButtons'
 import { EmailMap } from './EmailMap';
 
-
 export const EmailDetails = () => {
     const [email, setEmail] = useState(null);
     const { indexEmailList, setIndexEmailList } = useContext(EmailContext);
@@ -60,6 +59,7 @@ export const EmailDetails = () => {
                 <EmailActionButtons 
                     emails={[email]}
                     setIndexEmailList={setIndexEmailList}
+                    batchEmailsDelete={emailService.onDeleteEmail}
                 />
                 <EmailNavButtons email={email} emailListLength={indexEmailList.length}/>
             </div>
@@ -74,7 +74,8 @@ export const EmailDetails = () => {
                 onClose={() => setShowDetailsModal(false)}
             />
             </div>
-            <div className="email-body" dangerouslySetInnerHTML={createMarkup(email.body)}></div> {/* CRQ any better way than dangerouslySetInnerHTML?*/}
+            {/* <div className="email-body" dangerouslySetInnerHTML={createMarkup(email.body)}></div>  */} {/* CRQ any better way than dangerouslySetInnerHTML?*/}
+            <div className="email-body"><pre>{email.body}</pre></div>
             <button className="email-action-button">Reply</button>
             <button className="email-action-button">Forward</button>
             <EmailMap location={location}/>
