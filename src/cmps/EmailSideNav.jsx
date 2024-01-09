@@ -12,10 +12,6 @@ export const EmailSideNav = ({ setFilterBy, onComposeClick, loadEmails }) => {
     const stats = statsService.getStats()
 
     useEffect(() => {
-        resetEmails();
-    }, []);
-
-    useEffect(() => {
         setFilterBy(prev => ({ ...prev, folder }));
     }, [folder, setFilterBy]);
 
