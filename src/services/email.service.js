@@ -17,7 +17,7 @@ export const emailService = {
     backOneURLSegment,
     getFolders,
     onDeleteEmail,
-    updateAllEmails,
+    updateBatchEmails,
 }
 
 const EMAIL_STORAGE_KEY = 'emailDB'
@@ -240,12 +240,10 @@ async function onDeleteEmail(email) {
     statsService.createStats();
 };
 
-async function updateAllEmails(updatedEmails, folder) {
-    const emailsWithUpdatedFolder = updatedEmails.map(email => ({...email, folder: folder}));
+async function updateBatchEmails(updatedEmails) {
     const allEmails = await getEmails();
-    const updatedAllEmails = await _updateEmailLists(emailsWithUpdatedFolder, allEmails);
+    const updatedAllEmails = await _updateEmailLists(updatedEmails, allEmails);
     utilService.saveToStorage(EMAIL_STORAGE_KEY, updatedAllEmails);
-    return updatedAllEmails;
 }
 
 

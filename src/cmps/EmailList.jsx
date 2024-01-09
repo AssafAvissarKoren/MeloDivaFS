@@ -7,7 +7,7 @@ import { faSquare as farSquare, faCheckSquare } from '@fortawesome/free-regular-
 import { EmailPreview } from './EmailPreview';
 import { EmailContext } from './EmailContext';
 import { EmailModal } from './EmailModal';
-import { EmailActionButtonsList } from './EmailActionButtons';
+import { EmailActionButtons } from './EmailActionButtons';
 import { EmailListNavButtons } from './EmailNavButtons'
 
 import { emailService } from '../services/email.service';
@@ -109,17 +109,34 @@ export const EmailList = () => {
 
     const batchEmailsMove = async (emails, folder) => {
         const updatedEmailsIds = emails.map(email => email.id);
+        const updatedEmails = emails.map(email => ({...email, folder: folder}));
         setEmailsBeingMoved(updatedEmailsIds);
         setTimeout(async () => {
-            await emailService.updateAllEmails(emails, folder) //storage
+            await emailService.updateBatchEmails(updatedEmails) //storage
             eventBusService.showSuccessMsg('Emails moved successfully');
             const updatedEmailList = emailList.filter(listEmail => !updatedEmailsIds.includes(listEmail.id))
-            setEmailList(updatedEmailList); // state
+            setIndexEmailList(updatedEmailList); // state
             setEmailsBeingMoved(null);
             await statsService.createStats();
             setFilterBy(prevFilter => ({ ...prevFilter }))
         }, 1000);
     }
+
+    const batchEmailsRead = async (emails, markAsRead) => {
+        const updatedEmailsIds = emails.map(email => email.id);
+        const updatedEmails = emails.map(email => ({ ...email, isRead: markAsRead }));
+        await emailService.updateBatchEmails(updatedEmails)
+        const updatedEmailList = emailList.map(email => {
+            if (updatedEmailsIds.includes(email.id)) {
+                return { ...email, isRead: markAsRead };
+            }
+            return email;
+        });
+        setIndexEmailList(updatedEmailList);
+        setFilterBy(prevFilter => ({ ...prevFilter }))
+        await statsService.createStats();
+    }
+
 
     const handleSortChange = (e) => {
         const newSortCriterion = e.target.value;
@@ -207,10 +224,10 @@ export const EmailList = () => {
                     </div>
                 </div>
                 {emailList.some(email => email.isChecked) && 
-                    <EmailActionButtonsList 
+                    <EmailActionButtons 
                         emails={emailList.filter(email => email.isChecked)} 
-                        setIndexEmailList={setIndexEmailList}
-                        batchEmailsMove={batchEmailsMove}
+                        handleMove={batchEmailsMove}
+                        handleRead={batchEmailsRead}
                     />
                 }
                 <EmailListNavButtons emails={emailList} />

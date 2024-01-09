@@ -3,14 +3,16 @@ import { useParams } from 'react-router-dom';
 import { emailService } from '../services/email.service';
 import { EmailModal } from '../cmps/EmailModal';
 import { EmailContext } from './EmailContext';
-import { EmailActionButtonsDetails } from './EmailActionButtons';
+import { EmailActionButtons } from './EmailActionButtons';
 import { EmailNavButtons } from './EmailNavButtons'
 import { EmailMap } from './EmailMap';
+import { useNavigate } from 'react-router-dom';
 
 export const EmailDetails = () => {
     const [email, setEmail] = useState(null);
     const { indexEmailList, setIndexEmailList, setFilterBy } = useContext(EmailContext);
     const params = useParams();
+    const navigate = useNavigate();
 
     const [showDetailsModal, setShowDetailsModal] = useState(false);
     const detailsDDRef = useRef(null);
@@ -43,6 +45,19 @@ export const EmailDetails = () => {
         </div>
     );
 
+    const handleSingleMove = async (email, folder) => {
+        await emailService.saveEmail(email, folder);
+        setIndexEmailList(prevEmails => prevEmails.map(prevEmail => prevEmail.id == email.id ? email : prevEmail));
+        setFilterBy(prevFilter => ({ ...prevFilter }));
+        navigate(`/email/${email.folder}`);    
+    }
+
+    const handleSingleRead = async (email, markAsRead) => {
+        const updatedEmail = {...email, isRead: markAsRead};
+        await emailService.saveEmail(updatedEmail, updatedEmail.folder);
+        setIndexEmailList(prevEmails => prevEmails.map(prevEmail => prevEmail.id == updatedEmail.id ? updatedEmail : prevEmail));
+    }
+
     if (!email) {
         return <div>Loading email...</div>;
     }
@@ -52,10 +67,10 @@ export const EmailDetails = () => {
             <div className="action-bar">
                 <div className="start-buttons">
                 </div>
-                <EmailActionButtonsDetails 
-                    email={email}
-                    setIndexEmailList={setIndexEmailList}
-                    setFilterBy={setFilterBy}
+                <EmailActionButtons 
+                    emails={[email]}
+                    handleMove={handleSingleMove}
+                    handleRead={handleSingleRead}
                 />
                 <EmailNavButtons email={email} emailListLength={indexEmailList.length}/>
             </div>

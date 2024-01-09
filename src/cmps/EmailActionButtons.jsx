@@ -1,72 +1,44 @@
 import React from 'react';
 import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { emailService } from '../services/email.service';
-import { statsService } from "../services/stats.service";
 import { eventBusService } from "../services/event-bus.service";
 import { EmailModal } from '../cmps/EmailModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArchive, faExclamationCircle, faTrashAlt, faEnvelopeOpenText, faEnvelope, faClock, faTasks, faFolder, faTag, faEllipsisV, faStar, 
     faCalendarPlus, faFilter, faVolumeMute, faHighlighter } from '@fortawesome/free-solid-svg-icons';
-
-
-export const EmailActionButtonsList = ({ emails, setIndexEmailList, batchEmailsMove }) => {
-    return (
-        <EmailActionButtons
-            emails={emails}
-            setIndexEmailList={setIndexEmailList}
-            batchEmailsMove={batchEmailsMove}
-        />
-    );
-}
-
-export const EmailActionButtonsDetails = ({ email, setIndexEmailList, setFilterBy }) => {
-    return (
-        <EmailActionButtons
-            emails={[email]}
-            setIndexEmailList={setIndexEmailList}
-            setFilterBy={setFilterBy}
-        />
-    );
-}
     
-const EmailActionButtons = ({ emails, setIndexEmailList, setFilterBy=null, batchEmailsMove=null }) => {
-    const navigate = useNavigate();
+export const EmailActionButtons = ({ emails, handleMove , handleRead }) => {
     const [showOptionsModal, setShowOptionsModal] = useState(false);
     const [showMoveModal, setShowMoveModal] = useState(false);
     const optionsDDRef = useRef(null);
     const moveDDRef = useRef(null);
 
-    const handleBatchMove = async (folder) => {
-
+    const handleEmailsMove = async (folder) => {
         try {
-            if(batchEmailsMove) {
-                await batchEmailsMove(emails, folder);
+            if(emails.length == 1) {
+                await handleMove(emails[0], folder);
+            } else {
+                await handleMove(emails, folder);
             }
-            if(setFilterBy) {
-                await emailService.saveEmail(emails[0], folder);
-                setFilterBy(prevFilter => ({ ...prevFilter }));
-            }
-            navigate(`/email/${emails[0].folder}`);    
         } catch (error) {
-            console.error('Error deleting emails:', error);
-            eventBusService.showErrorMsg('Could not delete emails');
+            console.error('Error moving emails:', error);
+            eventBusService.showErrorMsg('Could not move emails');
         }
     };
 
 
-    async function handleReadAll( markAsRead ) {
-        const updatedEmails = await Promise.all(emails.map(async email => {
-            const updatedEmail = { ...email, isRead: markAsRead };
-            await emailService.saveEmail(updatedEmail, updatedEmail.folder);
-            return updatedEmail;
-        }));
-    
-        setIndexEmailList(prevList => prevList.map(email => {
-            const updatedEmail = updatedEmails.find(uEmail => uEmail.id === email.id);
-            return updatedEmail || email;
-        }));
-    }
+    const handleEmailsRead = async (markAsRead) => {
+        try {
+            if(emails.length == 1) {
+                await handleRead(emails[0], markAsRead);
+            } else {
+                await handleRead(emails, markAsRead);
+            }
+        } catch (error) {
+            console.error('Error changing emails read status:', error);
+            eventBusService.showErrorMsg('Could not change emails read status');
+        }
+    };
 
     const handleFeatureTBA = (featureName) => {
         eventBusService.showTBAMsg(`${featureName}\nwill be implemented shortly!`);
@@ -107,7 +79,7 @@ const EmailActionButtons = ({ emails, setIndexEmailList, setFilterBy=null, batch
                 .filter(folder => folder.toLowerCase() !== emails[0].folder)
                 .map((folder, index) => (
                     <div key={index} className="modal-option">
-                        <span className="option-text" onClick={async () => await handleBatchMove(folder.toLocaleLowerCase())}>{folder}</span>
+                        <span className="option-text" onClick={async () => await handleEmailsMove(folder.toLocaleLowerCase())}>{folder}</span>
                     </div>
             ))}
         </div>
@@ -115,14 +87,28 @@ const EmailActionButtons = ({ emails, setIndexEmailList, setFilterBy=null, batch
 
     return (
         <div className="email-action-buttons">
-            <button className="archive" name="archive" onClick={handleFeatureTBA}><FontAwesomeIcon icon={faArchive} /></button>
-            <button className="report-spam" name="report spam"><FontAwesomeIcon icon={faExclamationCircle} /></button>
-            <button className="delete" name="delete" onClick={async () => await handleBatchMove("trash")}><FontAwesomeIcon icon={faTrashAlt} /></button>
+            <button className="archive" name="archive" onClick={() => handleFeatureTBA("Archiving messages")}>
+                <FontAwesomeIcon icon={faArchive} />
+            </button>
+            <button className="report-spam" name="report spam" onClick={() => handleFeatureTBA("Report spam")}>
+                <FontAwesomeIcon icon={faExclamationCircle} />
+            </button>
+            <button className="delete" name="delete" onClick={async () => await handleEmailsMove("trash")}>
+                <FontAwesomeIcon icon={faTrashAlt} />
+            </button>
             <div className="divider"></div>
-            <button className="mark-as-unread" name="mark as unread" onClick={() => handleReadAll(false)}><FontAwesomeIcon icon={faEnvelopeOpenText} /></button>
-            <button className="mark-as-read" name="mark as read" onClick={() => handleReadAll(true)}><FontAwesomeIcon icon={faEnvelope} /></button>
-            <button className="snooze" name="snooze"><FontAwesomeIcon icon={faClock} /></button>
-            <button className="add-to-tasks" name="add to tasks"><FontAwesomeIcon icon={faTasks} /></button>
+            <button className="mark-as-unread" name="mark as unread" onClick={() => handleEmailsRead(false)}>
+                <FontAwesomeIcon icon={faEnvelopeOpenText} />
+            </button>
+            <button className="mark-as-read" name="mark as read" onClick={() => handleEmailsRead(true)}>
+                <FontAwesomeIcon icon={faEnvelope} />
+            </button>
+            <button className="snooze" name="snooze" onClick={() => handleFeatureTBA("Snoozing messages")}>
+                <FontAwesomeIcon icon={faClock} />
+            </button>
+            <button className="add-to-tasks" name="add to tasks" onClick={() => handleFeatureTBA("Adding to tasks")}>
+                <FontAwesomeIcon icon={faTasks} />
+            </button>
             
             <button className="move-to" name="move to" ref={moveDDRef}><FontAwesomeIcon icon={faFolder} /></button>
             <EmailModal
