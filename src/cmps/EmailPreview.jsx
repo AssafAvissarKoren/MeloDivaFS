@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const EmailPreview = ({
     email,
-    emailsBeingDeleted,
+    emailsBeingMoved,
     onToggleStar,
     onToggleRead,
     onToggleSelect,
@@ -15,8 +15,8 @@ export const EmailPreview = ({
     contextMenuPosition,
 }) => {
     const subjectPreview = email.subject.length > 50 ? `${email.subject.substring(0, 47)}...` : email.subject;
-    const isBeingDeleted = emailsBeingDeleted ? emailsBeingDeleted.includes(email.id) : "";
-    const emailClass = `email-preview ${isBeingDeleted ? 'animate__animated animate__backOutRight' : ''}`;
+    const isBeingMoved = emailsBeingMoved ? emailsBeingMoved.includes(email.id) : "";
+    const emailClass = `email-preview ${isBeingMoved ? 'animate__animated animate__backOutRight' : ''}`;
     const navigate = useNavigate();
 
     const handleEmailClick = async () => {
@@ -45,7 +45,7 @@ export const EmailPreview = ({
 
     return (
         <div>
-            <div key={email.id + (isBeingDeleted ? '_deleting' : '')}>
+            <div key={email.id + (isBeingMoved ? '_deleting' : '')}>
                 <div className={emailClass} onClick={handleEmailClick} onContextMenu={handleRightClick}>
                     <span onClick={handleCheckboxClick} style={{ cursor: 'pointer', marginRight: '10px' }}>
                         <FontAwesomeIcon icon={email.isChecked ? faCheckSquare : farSquare} />

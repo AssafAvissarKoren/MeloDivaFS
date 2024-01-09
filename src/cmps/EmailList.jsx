@@ -21,7 +21,7 @@ export const EmailList = () => {
     const [contextMenu, setContextMenu] = useState(null);
     const [sortCriterion, setSortCriterion] = useState('');
     const [allChecked, setAllChecked] = useState(false);
-    const [emailsBeingDeleted, setEmailsBeingDeleted] = useState(null);
+    const [emailsBeingMoved, setEmailsBeingMoved] = useState(null);
     const [checkboxStates, setCheckboxStates] = useState({
         All: false,
         None: false,
@@ -107,15 +107,15 @@ export const EmailList = () => {
         }
     };
 
-    const batchEmailsDelete = async (emails) => {
+    const batchEmailsMove = async (emails, folder) => {
         const updatedEmailsIds = emails.map(email => email.id);
-        setEmailsBeingDeleted(updatedEmailsIds);
+        setEmailsBeingMoved(updatedEmailsIds);
         setTimeout(async () => {
-            await emailService.updateAllEmails(emails, "trash") //storage
-            eventBusService.showSuccessMsg('Emails deleted successfully');
+            await emailService.updateAllEmails(emails, folder) //storage
+            eventBusService.showSuccessMsg('Emails moved successfully');
             const updatedEmailList = emailList.filter(listEmail => !updatedEmailsIds.includes(listEmail.id))
             setEmailList(updatedEmailList); // state
-            setEmailsBeingDeleted(null);
+            setEmailsBeingMoved(null);
             await statsService.createStats();
             setFilterBy(prevFilter => ({ ...prevFilter }))
         }, 1000);
@@ -187,7 +187,7 @@ export const EmailList = () => {
             ))}
         </div>
     );
-    console.log("emailList.length", emailList ? emailList.length : 0)
+
     return (
         <div className="email-list">
             <div className="action-bar">
@@ -210,7 +210,7 @@ export const EmailList = () => {
                     <EmailActionButtonsList 
                         emails={emailList.filter(email => email.isChecked)} 
                         setIndexEmailList={setIndexEmailList}
-                        batchEmailsDelete={batchEmailsDelete}
+                        batchEmailsMove={batchEmailsMove}
                     />
                 }
                 <EmailListNavButtons emails={emailList} />
@@ -224,7 +224,7 @@ export const EmailList = () => {
                 <EmailPreview
                     key={email.id}
                     email={email}
-                    emailsBeingDeleted={emailsBeingDeleted}
+                    emailsBeingMoved={emailsBeingMoved}
                     onToggleStar={() => onToggleStar(email)}
                     onToggleRead={onToggleRead}
                     onToggleSelect={onToggleSelect}

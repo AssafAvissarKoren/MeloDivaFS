@@ -4,12 +4,16 @@ import { emailService } from '../services/email.service';
 import { statsService } from '../services/stats.service';
 import { eventBusService } from "../services/event-bus.service";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInbox, faStar, faPaperPlane, faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faInbox, faStar, faPaperPlane, faPencilAlt, faTrash, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 
 export const EmailSideNav = ({ setFilterBy, onComposeClick, loadEmails }) => {
     const params = useParams();
     const folder = params.folder
     const stats = statsService.getStats()
+
+    useEffect(() => {
+        resetEmails();
+    }, []);
 
     useEffect(() => {
         setFilterBy(prev => ({ ...prev, folder }));
@@ -21,6 +25,7 @@ export const EmailSideNav = ({ setFilterBy, onComposeClick, loadEmails }) => {
         sent: { total: stats.Sent?.total || 0, unread: stats.Sent?.unread || 0, icon: faPaperPlane },
         drafts: { total: stats.Drafts?.total || 0, unread: stats.Drafts?.unread || 0, icon: faPencilAlt },
         trash: { total: stats.Trash?.total || 0, unread: stats.Trash?.unread || 0, icon: faTrash },
+        spam: { total: stats.Spam?.total || 0, unread: stats.Spam?.unread || 0, icon: faExclamationCircle },
     };
 
 

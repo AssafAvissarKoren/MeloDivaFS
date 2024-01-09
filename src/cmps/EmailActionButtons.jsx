@@ -10,12 +10,12 @@ import { faArchive, faExclamationCircle, faTrashAlt, faEnvelopeOpenText, faEnvel
     faCalendarPlus, faFilter, faVolumeMute, faHighlighter } from '@fortawesome/free-solid-svg-icons';
 
 
-export const EmailActionButtonsList = ({ emails, setIndexEmailList, batchEmailsDelete }) => {
+export const EmailActionButtonsList = ({ emails, setIndexEmailList, batchEmailsMove }) => {
     return (
         <EmailActionButtons
             emails={emails}
             setIndexEmailList={setIndexEmailList}
-            batchEmailsDelete={batchEmailsDelete}
+            batchEmailsMove={batchEmailsMove}
         />
     );
 }
@@ -30,29 +30,30 @@ export const EmailActionButtonsDetails = ({ email, setIndexEmailList, setFilterB
     );
 }
     
-const EmailActionButtons = ({ emails, setIndexEmailList, batchEmailsDelete=null, setFilterBy=null }) => {
+const EmailActionButtons = ({ emails, setIndexEmailList, setFilterBy=null, batchEmailsMove=null }) => {
     const navigate = useNavigate();
     const [showOptionsModal, setShowOptionsModal] = useState(false);
     const [showMoveModal, setShowMoveModal] = useState(false);
     const optionsDDRef = useRef(null);
     const moveDDRef = useRef(null);
 
-    const handleDeleteAll = async () => {
+    const handleBatchMove = async (folder) => {
+
         try {
-            const afterURL = `/email/${emails[0].folder}`
-            if(batchEmailsDelete) {
-                await batchEmailsDelete(emails);
+            if(batchEmailsMove) {
+                await batchEmailsMove(emails, folder);
             }
             if(setFilterBy) {
-                await emailService.onDeleteEmail(emails[0])
-                setFilterBy(prevFilter => ({ ...prevFilter }))
+                await emailService.saveEmail(emails[0], folder);
+                setFilterBy(prevFilter => ({ ...prevFilter }));
             }
-            navigate(afterURL);
+            navigate(`/email/${emails[0].folder}`);    
         } catch (error) {
             console.error('Error deleting emails:', error);
             eventBusService.showErrorMsg('Could not delete emails');
         }
     };
+
 
     async function handleReadAll( markAsRead ) {
         const updatedEmails = await Promise.all(emails.map(async email => {
@@ -102,10 +103,12 @@ const EmailActionButtons = ({ emails, setIndexEmailList, batchEmailsDelete=null,
 
     const moveContent = (
         <div className="modal-content">
-            {emailService.getFolders().map((folder, index) => (
-                <div key={index} className="modal-option">
-                    <span className="option-text">{folder}</span>
-                </div>
+            {emailService.getFolders()
+                .filter(folder => folder.toLowerCase() !== emails[0].folder)
+                .map((folder, index) => (
+                    <div key={index} className="modal-option">
+                        <span className="option-text" onClick={async () => await handleBatchMove(folder.toLocaleLowerCase())}>{folder}</span>
+                    </div>
             ))}
         </div>
     );
@@ -114,7 +117,7 @@ const EmailActionButtons = ({ emails, setIndexEmailList, batchEmailsDelete=null,
         <div className="email-action-buttons">
             <button className="archive" name="archive" onClick={handleFeatureTBA}><FontAwesomeIcon icon={faArchive} /></button>
             <button className="report-spam" name="report spam"><FontAwesomeIcon icon={faExclamationCircle} /></button>
-            <button className="delete" name="delete" onClick={handleDeleteAll}><FontAwesomeIcon icon={faTrashAlt} /></button>
+            <button className="delete" name="delete" onClick={async () => await handleBatchMove("trash")}><FontAwesomeIcon icon={faTrashAlt} /></button>
             <div className="divider"></div>
             <button className="mark-as-unread" name="mark as unread" onClick={() => handleReadAll(false)}><FontAwesomeIcon icon={faEnvelopeOpenText} /></button>
             <button className="mark-as-read" name="mark as read" onClick={() => handleReadAll(true)}><FontAwesomeIcon icon={faEnvelope} /></button>

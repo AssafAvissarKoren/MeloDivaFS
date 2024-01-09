@@ -208,29 +208,6 @@ function backOneURLSegment(navigate) {
 async function initEmails() {
     userService.createUser()
     const loggedinUser = userService.getUser()
-    let defaultContent = [
-        { subject: 'Miss you!', from: 'momo@momo.com', isRead: true, folder: 'inbox', isStarred: false },
-        { subject: 'Meeting Update', from: 'jane@company.com', isRead: true, folder: 'sent', isStarred: true },
-        { subject: 'Your Order Confirmation', from: 'orders@store.com', isRead: true, folder: 'drafts', isStarred: false },
-        { subject: 'Upcoming Event Reminder', from: 'events@community.org', isRead: false, folder: 'trash', isStarred: true },
-        { subject: 'Happy Birthday!', from: 'friend@email.com', isRead: true, folder: 'inbox', isStarred: false },
-        { subject: 'Project Collaboration', from: 'colleague@work.com', isRead: false, folder: 'inbox', isStarred: true },
-        { subject: 'Weekend Plans', from: 'friend@personal.com', isRead: true, folder: 'sent', isStarred: false },
-        { subject: 'Subscription Renewal', from: 'service@subscription.com', isRead: true, folder: 'drafts', isStarred: true },
-        { subject: 'Flight Itinerary', from: 'travel@airline.com', isRead: true, folder: 'trash', isStarred: false },
-        { subject: 'Security Alert', from: 'security@bank.com', isRead: false, folder: 'sent', isStarred: true },
-        { subject: 'New Year Greetings', from: 'greetings@holiday.com', isRead: true, folder: 'inbox', isStarred: false },
-        { subject: 'Tech Conference Invitation', from: 'events@techconference.com', isRead: false, folder: 'drafts', isStarred: true },
-        { subject: 'Gym Membership Renewal', from: 'noreply@gym.com', isRead: true, folder: 'drafts', isStarred: false },
-        { subject: 'Book Club Meeting', from: 'bookclub@library.com', isRead: true, folder: 'sent', isStarred: true },
-        { subject: 'Dinner Reservation Confirmation', from: 'reservations@restaurant.com', isRead: true, folder: 'trash', isStarred: false },
-        { subject: 'Welcome to Our Newsletter', from: 'newsletter@updates.com', isRead: false, folder: 'inbox', isStarred: true },
-        { subject: 'Warranty Expiry Reminder', from: 'warranty@electronics.com', isRead: true, folder: 'sent', isStarred: false },
-        { subject: 'Survey Invitation', from: 'feedback@surveys.com', isRead: false, folder: 'drafts', isStarred: true },
-        { subject: 'Appointment Reminder', from: 'appointments@clinic.com', isRead: true, folder: 'trash', isStarred: false },
-        { subject: 'Your Monthly Statement', from: 'statements@bank.com', isRead: false, folder: 'trash', isStarred: true }    
-        ];
-
     let savedEmails = []; // Array to store saved emails
     const location = await getLocation();
     for (const email of defaultContent) {
@@ -289,3 +266,31 @@ async function _updateEmailLists (updatedEmails, currentEmails) {
     });
     return mergedEmailList;
 }
+
+const defaultContent = [
+    { subject: 'Miss you!', from: 'momo@momo.com', isRead: true, folder: 'inbox', isStarred: false },
+    { subject: 'Meeting Update', from: 'jane@company.com', isRead: true, folder: 'sent', isStarred: true },
+    { subject: 'Your Order Confirmation', from: 'orders@store.com', isRead: true, folder: 'drafts', isStarred: false },
+    { subject: 'Upcoming Event Reminder', from: 'events@community.org', isRead: false, folder: 'trash', isStarred: true },
+    { subject: 'Happy Birthday!', from: 'friend@email.com', isRead: true, folder: 'inbox', isStarred: false },
+    { subject: 'Project Collaboration', from: 'colleague@work.com', isRead: false, folder: 'inbox', isStarred: true },
+    { subject: 'Weekend Plans', from: 'friend@personal.com', isRead: true, folder: 'sent', isStarred: false },
+    { subject: 'Subscription Renewal', from: 'service@subscription.com', isRead: true, folder: 'drafts', isStarred: true },
+    { subject: 'Flight Itinerary', from: 'travel@airline.com', isRead: true, folder: 'trash', isStarred: false },
+    { subject: 'Security Alert', from: 'security@bank.com', isRead: false, folder: 'sent', isStarred: true },
+    { subject: 'New Year Greetings', from: 'greetings@holiday.com', isRead: true, folder: 'inbox', isStarred: false },
+    { subject: 'Tech Conference Invitation', from: 'events@techconference.com', isRead: false, folder: 'drafts', isStarred: true },
+    { subject: 'Gym Membership Renewal', from: 'noreply@gym.com', isRead: true, folder: 'drafts', isStarred: false },
+    { subject: 'Book Club Meeting', from: 'bookclub@library.com', isRead: true, folder: 'sent', isStarred: true },
+    { subject: 'Dinner Reservation Confirmation', from: 'reservations@restaurant.com', isRead: true, folder: 'trash', isStarred: false },
+    { subject: 'Welcome to Our Newsletter', from: 'newsletter@updates.com', isRead: false, folder: 'inbox', isStarred: true },
+    { subject: 'Warranty Expiry Reminder', from: 'warranty@electronics.com', isRead: true, folder: 'sent', isStarred: false },
+    { subject: 'Survey Invitation', from: 'feedback@surveys.com', isRead: false, folder: 'drafts', isStarred: true },
+    { subject: 'Appointment Reminder', from: 'appointments@clinic.com', isRead: true, folder: 'trash', isStarred: false },
+    { subject: 'Your Monthly Statement', from: 'statements@bank.com', isRead: false, folder: 'trash', isStarred: true },
+    { subject: 'Recipe Exchange Invite', from: 'cooking@foodie.net', isRead: false, folder: 'spam', isStarred: true },
+    { subject: 'Your Flight Booking Details', from: 'booking@airlines.com', isRead: true, folder: 'spam', isStarred: false },
+    { subject: 'Software Update Available', from: 'support@techsolutions.com', isRead: false, folder: 'spam', isStarred: true },
+    { subject: 'Local Event: Arts and Crafts Fair', from: 'events@localcommunity.org', isRead: true, folder: 'spam', isStarred: false },
+    { subject: 'Annual Health Checkup Reminder', from: 'noreply@healthclinic.com', isRead: false, folder: 'spam', isStarred: false },
+    ];

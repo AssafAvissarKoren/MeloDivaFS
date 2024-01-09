@@ -30,6 +30,7 @@ export const EmailFilter = ({ filterBy, onSetFilter }) => {
                 <option value="sent">Sent</option>
                 <option value="star">Star</option>
                 <option value="trash">Trash</option>
+                <option value="spam">Spam</option>
             </select>
 
             <input 

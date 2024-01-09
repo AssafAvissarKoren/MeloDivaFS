@@ -1,0 +1,61 @@
+.email-side-nav {
+    display: flex;
+    flex-direction: column;
+    background-color: #f1f3f4;
+    padding: 10px;
+    overflow-y: auto;
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+
+    div {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 12px;
+        margin: 4px 0;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        color: #202124;
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: #e8eaed;
+        }
+    }
+
+    .active {
+        background-color: #d2e3fc;
+        font-weight: bold;
+    }
+}
+
+.icon-style {
+    margin-right: 10px;
+}
+
+.compose-btn {
+    background-color: #e8f0fe;
+    border: none;
+    border-radius: 20px;
+    margin: 1vh;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: #3c4043;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    height: 7vh;
+
+    &:hover {
+        background-color: #dce4fa;
+        box-shadow: 0 4px 6px 0 rgba(0,0,0,0.2);
+    }
+
+    i {
+        font-size: 16px;
+    }
+}
