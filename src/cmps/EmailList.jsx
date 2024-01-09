@@ -7,7 +7,7 @@ import { faSquare as farSquare, faCheckSquare } from '@fortawesome/free-regular-
 import { EmailPreview } from './EmailPreview';
 import { EmailContext } from './EmailContext';
 import { EmailModal } from './EmailModal';
-import { EmailActionButtons } from './EmailActionButtons';
+import { EmailActionButtonsList } from './EmailActionButtons';
 import { EmailListNavButtons } from './EmailNavButtons'
 
 import { emailService } from '../services/email.service';
@@ -117,6 +117,7 @@ export const EmailList = () => {
             setEmailList(updatedEmailList); // state
             setEmailsBeingDeleted(null);
             await statsService.createStats();
+            setFilterBy(prevFilter => ({ ...prevFilter }))
         }, 1000);
     }
 
@@ -186,7 +187,7 @@ export const EmailList = () => {
             ))}
         </div>
     );
-
+    console.log("emailList.length", emailList ? emailList.length : 0)
     return (
         <div className="email-list">
             <div className="action-bar">
@@ -206,7 +207,7 @@ export const EmailList = () => {
                     </div>
                 </div>
                 {emailList.some(email => email.isChecked) && 
-                    <EmailActionButtons 
+                    <EmailActionButtonsList 
                         emails={emailList.filter(email => email.isChecked)} 
                         setIndexEmailList={setIndexEmailList}
                         batchEmailsDelete={batchEmailsDelete}

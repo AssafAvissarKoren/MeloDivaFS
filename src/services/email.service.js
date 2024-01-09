@@ -260,6 +260,7 @@ async function onDeleteEmail(email) {
         await saveEmail(email, "trash");
         eventBusService.showSuccessMsg('Email moved to Trash folder successfully');
     }
+    statsService.createStats();
 };
 
 async function updateAllEmails(updatedEmails, folder) {

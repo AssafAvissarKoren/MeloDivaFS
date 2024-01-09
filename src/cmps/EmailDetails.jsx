@@ -3,13 +3,13 @@ import { useParams } from 'react-router-dom';
 import { emailService } from '../services/email.service';
 import { EmailModal } from '../cmps/EmailModal';
 import { EmailContext } from './EmailContext';
-import { EmailActionButtons } from './EmailActionButtons';
+import { EmailActionButtonsDetails } from './EmailActionButtons';
 import { EmailNavButtons } from './EmailNavButtons'
 import { EmailMap } from './EmailMap';
 
 export const EmailDetails = () => {
     const [email, setEmail] = useState(null);
-    const { indexEmailList, setIndexEmailList } = useContext(EmailContext);
+    const { indexEmailList, setIndexEmailList, setFilterBy } = useContext(EmailContext);
     const params = useParams();
 
     const [showDetailsModal, setShowDetailsModal] = useState(false);
@@ -43,10 +43,6 @@ export const EmailDetails = () => {
         </div>
     );
 
-    const createMarkup = (body) => {
-        return { __html: body.replace(/\n/g, '<br>') };
-    };
-
     if (!email) {
         return <div>Loading email...</div>;
     }
@@ -56,10 +52,10 @@ export const EmailDetails = () => {
             <div className="action-bar">
                 <div className="start-buttons">
                 </div>
-                <EmailActionButtons 
-                    emails={[email]}
+                <EmailActionButtonsDetails 
+                    email={email}
                     setIndexEmailList={setIndexEmailList}
-                    batchEmailsDelete={emailService.onDeleteEmail}
+                    setFilterBy={setFilterBy}
                 />
                 <EmailNavButtons email={email} emailListLength={indexEmailList.length}/>
             </div>
