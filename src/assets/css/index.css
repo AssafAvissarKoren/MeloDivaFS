@@ -1,5 +1,5 @@
 /*  Basics */
-@import "basics/base.css";
+@import "basics/base.scss";
 @import "basics/helpers.css";
 @import "basics/layout.css";
 @import "basics/animations.css";
@@ -8,14 +8,6 @@
 @import "./pages/home.css";
 
 /* Components */
-@import "./cmps/app-header.css";
-@import "./cmps/email-compose.scss";
-@import "./cmps/email-header-filter.scss";
-@import "./cmps/email-index.scss";
-@import "./cmps/email-preview.scss";
-@import "./cmps/email-side-nav.scss";
-@import "./cmps/email-details.scss";
-@import "./cmps/email-modal.scss";
-@import "./cmps/email-action-buttons.scss";
+@import "./cmps/index.scss";
 @import "./cmps/user-msg.scss";
-
+@import "./cmps/footer-player.scss";

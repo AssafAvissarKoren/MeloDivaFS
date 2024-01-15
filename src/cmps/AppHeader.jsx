@@ -1,17 +1,26 @@
-import { NavLink } from "react-router-dom";
-import '../assets/css/cmps/app-header.css';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export function AppHeader() {
+export const AppHeader = ({ setFilterBy }) => {
+    const [text, setText] = useState('');
+
+    useEffect(() => {
+        setFilterBy(prev => ({ ...prev, text }));
+    }, [text, setFilterBy]);
+
+    const handleTextChange = (e) => {
+        setText(e.target.value);
+        setFilterBy(prev => ({ ...prev, text: e.target.value }));
+    };
+
     return (
         <header className="app-header">
-            <section className="container">
-                <h1>Green Mail</h1>
-                <nav>
-                    <NavLink to="/dashboard">Dashboard</NavLink>
-                    <NavLink to="/aboutUs">About</NavLink>
-                    <NavLink to="/email/inbox">Email</NavLink>
-                </nav>
-            </section>
+            <input 
+                type="text" 
+                placeholder="Playlists or Songs" 
+                value={text} 
+                onChange={handleTextChange}
+            />
         </header>
-    )
-}
+    );
+};

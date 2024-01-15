@@ -78,12 +78,9 @@ input {
     -webkit-border-radius: 100px;
 }
 
-.main-app {
+ .main-app {
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
 }
-
 
 .main-app main {
     flex-grow: 1;

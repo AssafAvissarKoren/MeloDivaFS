@@ -1,11 +1,12 @@
+import imgTLI from '../assets/imgs/the lonely island - tutleneck & chain.png';
 import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
 import { userService } from './user.service.js'
 import { statsService } from './stats.service.js'
 import { eventBusService } from './event-bus.service.js'
 
-export const emailService = {
-    initEmails,
+export const songService = {
+    initSongs,
     queryEmails,
     saveEmail,
     removeEmail,
@@ -20,14 +21,14 @@ export const emailService = {
     updateBatchEmails,
 }
 
-const EMAIL_STORAGE_KEY = 'emailDB'
+const SONG_STORAGE_KEY = 'songDB'
 
 function getFolders() {
     return ["Inbox", "Spam", "Trash"];
 }
 
 async function queryEmails(filterBy) {
-    let emails = await emailService.getEmails();
+    let emails = await songService.getEmails();
 
     // Apply filtering based on the provided filter criteria
     if (filterBy) {
@@ -77,7 +78,7 @@ async function queryEmails(filterBy) {
 }
 
 function filterURL(filterBy) {
-    let url = `/email/${filterBy.folder || 'inbox'}`;
+    let url = `/melodiva/${filterBy.folder || 'inbox'}`;
     const queryParams = new URLSearchParams();
 
     if (filterBy.text) {
@@ -96,24 +97,24 @@ function filterURL(filterBy) {
 }
 
 function getEmails() {
-    return storageService.query(EMAIL_STORAGE_KEY);
+    return storageService.query(SONG_STORAGE_KEY);
 }
 
 function getById(id) {
-    return storageService.get(EMAIL_STORAGE_KEY, id);
+    return storageService.get(SONG_STORAGE_KEY, id);
 }
 
 function removeEmail(id) {
-    return storageService.remove(EMAIL_STORAGE_KEY, id);
+    return storageService.remove(SONG_STORAGE_KEY, id);
 }
 
 async function saveEmail(emailToSave, folderName = "inbox") {
     const savedEmail = {...emailToSave, folder: folderName, isChecked: false};
     let newEmail
     if (savedEmail.id) {
-        newEmail = await storageService.put(EMAIL_STORAGE_KEY, savedEmail);
+        newEmail = await storageService.put(SONG_STORAGE_KEY, savedEmail);
     } else {
-        newEmail = await storageService.post(EMAIL_STORAGE_KEY, savedEmail);
+        newEmail = await storageService.post(SONG_STORAGE_KEY, savedEmail);
     }
     await statsService.createStats();
     return newEmail
@@ -121,7 +122,7 @@ async function saveEmail(emailToSave, folderName = "inbox") {
 
 function getDefaultFilter(params) {
     return {
-        folder: params.folder || "inbox",
+        folder: params.tab || "home",
         text: params.text || "",
         isRead: params.isRead !== undefined ? params.isRead : null,
         sort: params.sort || "",
@@ -205,30 +206,6 @@ function backOneURLSegment(navigate) {
     navigate(newPath);
 }
 
-async function initEmails() {
-    userService.createUser()
-    const loggedinUser = userService.getUser()
-    let savedEmails = []; // Array to store saved emails
-    const location = await getLocation();
-    for (const email of defaultContent) {
-        const emailToCreate = await createEmail(
-            email.subject, 
-            utilService.makeLorem(1), 
-            loggedinUser.email, 
-            email.folder,
-            email.from,
-            new Date().getTime() - Math.floor(Math.random() * 1000000000),
-            email.isRead,
-            email.isStarred,
-            location,
-        );
-        const savedEmailsWithId = {...emailToCreate, id: utilService.makeId()}
-        savedEmails.push(savedEmailsWithId); // Add the saved email to the array
-    };
-    utilService.saveToStorage(EMAIL_STORAGE_KEY, savedEmails);
-    statsService.createStats();
-}
-
 async function onDeleteEmail(email) {
     if(email.folder === "trash") {
         await removeEmail(email.id);
@@ -243,7 +220,7 @@ async function onDeleteEmail(email) {
 async function updateBatchEmails(updatedEmails) {
     const allEmails = await getEmails();
     const updatedAllEmails = await _updateEmailLists(updatedEmails, allEmails);
-    utilService.saveToStorage(EMAIL_STORAGE_KEY, updatedAllEmails);
+    utilService.saveToStorage(SONG_STORAGE_KEY, updatedAllEmails);
 }
 
 
@@ -265,30 +242,23 @@ async function _updateEmailLists (updatedEmails, currentEmails) {
     return mergedEmailList;
 }
 
+async function initSongs() {
+    const savedSongs = defaultContent.map(song => ({
+        ...song,
+        coverImage: imgTLI,
+        likes: 0,
+      }));
+    utilService.saveToStorage(SONG_STORAGE_KEY, savedSongs);
+    // statsService.createStats();
+}
+    
 const defaultContent = [
-    { subject: 'Miss you!', from: 'momo@momo.com', isRead: true, folder: 'inbox', isStarred: false },
-    { subject: 'Meeting Update', from: 'jane@company.com', isRead: true, folder: 'sent', isStarred: true },
-    { subject: 'Your Order Confirmation', from: 'orders@store.com', isRead: true, folder: 'drafts', isStarred: false },
-    { subject: 'Upcoming Event Reminder', from: 'events@community.org', isRead: false, folder: 'trash', isStarred: true },
-    { subject: 'Happy Birthday!', from: 'friend@email.com', isRead: true, folder: 'inbox', isStarred: false },
-    { subject: 'Project Collaboration', from: 'colleague@work.com', isRead: false, folder: 'inbox', isStarred: true },
-    { subject: 'Weekend Plans', from: 'friend@personal.com', isRead: true, folder: 'sent', isStarred: false },
-    { subject: 'Subscription Renewal', from: 'service@subscription.com', isRead: true, folder: 'drafts', isStarred: true },
-    { subject: 'Flight Itinerary', from: 'travel@airline.com', isRead: true, folder: 'trash', isStarred: false },
-    { subject: 'Security Alert', from: 'security@bank.com', isRead: false, folder: 'sent', isStarred: true },
-    { subject: 'New Year Greetings', from: 'greetings@holiday.com', isRead: true, folder: 'inbox', isStarred: false },
-    { subject: 'Tech Conference Invitation', from: 'events@techconference.com', isRead: false, folder: 'drafts', isStarred: true },
-    { subject: 'Gym Membership Renewal', from: 'noreply@gym.com', isRead: true, folder: 'drafts', isStarred: false },
-    { subject: 'Book Club Meeting', from: 'bookclub@library.com', isRead: true, folder: 'sent', isStarred: true },
-    { subject: 'Dinner Reservation Confirmation', from: 'reservations@restaurant.com', isRead: true, folder: 'trash', isStarred: false },
-    { subject: 'Welcome to Our Newsletter', from: 'newsletter@updates.com', isRead: false, folder: 'inbox', isStarred: true },
-    { subject: 'Warranty Expiry Reminder', from: 'warranty@electronics.com', isRead: true, folder: 'sent', isStarred: false },
-    { subject: 'Survey Invitation', from: 'feedback@surveys.com', isRead: false, folder: 'drafts', isStarred: true },
-    { subject: 'Appointment Reminder', from: 'appointments@clinic.com', isRead: true, folder: 'trash', isStarred: false },
-    { subject: 'Your Monthly Statement', from: 'statements@bank.com', isRead: false, folder: 'trash', isStarred: true },
-    { subject: 'Recipe Exchange Invite', from: 'cooking@foodie.net', isRead: false, folder: 'spam', isStarred: true },
-    { subject: 'Your Flight Booking Details', from: 'booking@airlines.com', isRead: true, folder: 'spam', isStarred: false },
-    { subject: 'Software Update Available', from: 'support@techsolutions.com', isRead: false, folder: 'spam', isStarred: true },
-    { subject: 'Local Event: Arts and Crafts Fair', from: 'events@localcommunity.org', isRead: true, folder: 'spam', isStarred: false },
-    { subject: 'Annual Health Checkup Reminder', from: 'noreply@healthclinic.com', isRead: false, folder: 'spam', isStarred: false },
-    ];
+    { _id: "GI6CfKcMhjY", title: "Jack Sparrow", artist: "The Lonely Island", featuredArtist: ["Michael Bolton"] },
+    { _id: "Jr9Kaa1sycs", title: "Finest Girl (Bin Laden Song) - Uncensored Version", artist: "The Lonely Island", featuredArtist: [] },
+    { _id: "BKQ6nINAeq8", title: "Go Kindergarten", artist: "The Lonely Island", featuredArtist: ["Robyn", "Sean Combs", "Paul Rudd"] },
+    { _id: "avaSdC0QOUM", title: "I'm On A Boat", artist: "The Lonely Island", featuredArtist: ["T-Pain"] },
+    { _id: "8yvEYKRF5IA", title: "Boombox", artist: "The Lonely Island", featuredArtist: ["Julian Casablancas"] },
+    { _id: "NisCkxU544c", title: "Like A Boss", artist: "The Lonely Island", featuredArtist: ["Seth Rogen"] },
+    { _id: "jUw4Qh9uFK8", title: "Spring Break Anthem", artist: "The Lonely Island", featuredArtist: [] }
+  ];
+  

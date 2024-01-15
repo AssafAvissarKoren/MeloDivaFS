@@ -60,7 +60,7 @@ function _createRobots() {
             { _id: 'r1', model: 'Dominique Sote', batteryStatus: 100, type: 'Pleasure' },
             { _id: 'r4', model: 'DevTron', batteryStatus: 40, type: 'Office' }
         ]
-        util.saveToStorage(STORAGE_KEY, robots)
+        utilService.saveToStorage(STORAGE_KEY, robots)
     }
 }
 

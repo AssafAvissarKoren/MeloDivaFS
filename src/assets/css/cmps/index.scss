@@ -1,0 +1,26 @@
+.index-container {
+    display: grid;
+    grid-template-columns: minmax(250px, 1fr) repeat(13, 1fr);
+    grid-template-rows: minmax(60px, auto) repeat(15, 1fr);
+    height: 100vh;
+
+    .name {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .app-header {
+        grid-column: 2 / -1;
+        grid-row: 1;
+    }
+
+    .side-nav {
+        grid-column: 1;
+        grid-row: 2 / -1;
+    }
+
+    .main-view {
+        grid-column: 2 / -1;
+        grid-row: 2 / -1;
+    }
+}
