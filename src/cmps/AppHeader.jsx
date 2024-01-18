@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 export const AppHeader = ({ setFilterBy }) => {
     const [text, setText] = useState('');
 
-    useEffect(() => {
-        setFilterBy(prev => ({ ...prev, text }));
-    }, [text, setFilterBy]);
-
     const handleTextChange = (e) => {
         setText(e.target.value);
-        setFilterBy(prev => ({ ...prev, text: e.target.value }));
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            setFilterBy(prev => ({ ...prev, text }));
+        }
     };
 
     return (
@@ -19,6 +20,7 @@ export const AppHeader = ({ setFilterBy }) => {
                 placeholder="Playlists or Songs" 
                 value={text} 
                 onChange={handleTextChange}
+                onKeyDown={handleKeyDown}
             />
         </header>
     );
