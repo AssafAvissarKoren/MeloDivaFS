@@ -3,23 +3,24 @@
     grid-template-columns: minmax(250px, 1fr) repeat(13, 1fr);
     grid-template-rows: minmax(60px, auto) repeat(15, 1fr);
     height: 100vh;
+    background-color: black;
 
-    .name {
+    .index-name {
         grid-column: 1;
         grid-row: 1;
     }
 
-    .app-header {
+    .index-app-header {
         grid-column: 2 / -1;
         grid-row: 1;
     }
 
-    .side-nav {
+    .index-side-nav {
         grid-column: 1;
         grid-row: 2 / -1;
     }
 
-    .main-view {
+    .index-main-view {
         grid-column: 2 / -1;
         grid-row: 2 / -1;
     }

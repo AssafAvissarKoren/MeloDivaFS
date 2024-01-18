@@ -1,25 +1,42 @@
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome, faSearch, faBook } from '@fortawesome/free-solid-svg-icons';
 
-export const SideNav = () => {
+export const SideNav = ({ setFilterBy }) => {
     const params = useParams();
     const tab = params.tab
 
-    const tabData = ["Home", "Search", "Your Library"];
+    useEffect(() => {
+        setFilterBy(prev => ({ ...prev, tab }));
+    }, [tab, setFilterBy]);
 
-    async function handleFolderSelect() {
-        
-    }
-    console.log(tabData)
+    const handleTabSelect = (selectedTab) => {
+        setFilterBy(prev => ({ ...prev, tab: selectedTab }));
+    };
+
+    const tabData = {
+        home: { name: "Home", icon: faHome, symbol: "" },
+        search: { name: "Search", icon: faSearch, symbol: "" },
+        library: { name: "Library", icon: null, symbol: "||∖" }
+    };
+    
+
     return (
         <div className="side-nav">
-            {Object.entries(tabData).map(([key, tabItem]) => {
+            {Object.entries(tabData).map(([key, { name, icon, symbol }]) => {
                 return (
                     <div
                         key={key}
-                        onClick={() => handleFolderSelect(tabItem)}
-                        className={tabItem === tab ? 'active' : ''}
+                        onClick={() => handleTabSelect(key)}
+                        className={key === tab ? 'active' : ''}
                     >
-                    {tabItem}
+                        <span>
+                            {icon ? (
+                                <FontAwesomeIcon icon={icon} className="symbol" aria-hidden="true" />
+                            ) : (<span className="symbol">{symbol}</span>) }
+                            <span className="name-style">{name}</span>
+                        </span>
                     </div>
                 );
             })}

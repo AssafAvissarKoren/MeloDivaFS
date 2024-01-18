@@ -9,8 +9,7 @@ export const userService = {
 const USER_STORAGE_KEY = 'userDB'
 
 function createUser() {
-    const loggedinUser = user;
-    utilService.saveToStorage(USER_STORAGE_KEY, loggedinUser);
+    utilService.saveToStorage(USER_STORAGE_KEY, user);
 }
 
 async function getUser() {
@@ -26,13 +25,9 @@ const user = {
     fullname: "Muki Muka",
     imgUrl: "http://some-img",
     liked: {
-        songs: ["s104", "s111", "s123"],
-        albums: ["pl101", "pl107", "pl119"],
+        stations: ["st109", ],
     },
     following: {
-        artist: ["a321", "a654", "a987"],
-        playlists: ["pl101", "pl107", "pl119"],
-        podcasts: ["a321", "a654", "a987"],
-        users: ["u106", "u726", "u936"],
+        stations: ["5cksxjas89xjsa8xjsa8jxs09", "st109"],
     }
 }

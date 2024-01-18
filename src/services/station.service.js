@@ -1,34 +1,35 @@
 import imgTLI from '../assets/imgs/the lonely island - tutleneck & chain.png';
+import imgRHCP from '../assets/imgs/FunkyMonks.png';
 import { storageService } from './async-storage.service.js'
 import { utilService } from './util.service.js'
 import { userService } from './user.service.js'
 import { statsService } from './stats.service.js'
 import { eventBusService } from './event-bus.service.js'
 
-export const songService = {
-    initSongs,
-    queryEmails,
-    saveEmail,
-    removeEmail,
-    getById,
-    createEmail,
+export const stationService = {
+    initStations,
+    queryStations,
+    saveStation,
+    removeStation,
+    getStationById,
+    createStation,
     getDefaultFilter,
-    getEmails,
+    getStations,
     filterURL,
     backOneURLSegment,
-    getFolders,
-    onDeleteEmail,
-    updateBatchEmails,
+    getTabs,
+    onDeleteStation,
+    updateBatchStations,
 }
 
-const SONG_STORAGE_KEY = 'songDB'
+const STATION_STORAGE_KEY = 'stationDB'
 
-function getFolders() {
-    return ["Inbox", "Spam", "Trash"];
+function getTabs() {
+    return ["home", "search", "library"];
 }
 
-async function queryEmails(filterBy) {
-    let emails = await songService.getEmails();
+async function queryStations(filterBy) {
+    let emails = await getStations();
 
     // Apply filtering based on the provided filter criteria
     if (filterBy) {
@@ -78,17 +79,11 @@ async function queryEmails(filterBy) {
 }
 
 function filterURL(filterBy) {
-    let url = `/melodiva/${filterBy.folder || 'inbox'}`;
+    let url = `/melodiva/${filterBy.tab || 'home'}`;
     const queryParams = new URLSearchParams();
 
     if (filterBy.text) {
         queryParams.append('text', filterBy.text);
-    }
-    if (filterBy.isRead !== null) {
-        queryParams.append('isRead', filterBy.isRead);
-    }
-    if (filterBy.sort) {
-        queryParams.append('sort', filterBy.sort);
     }
     if ([...queryParams].length) {
         url += `?${queryParams}`;
@@ -96,25 +91,25 @@ function filterURL(filterBy) {
     return url;
 }
 
-function getEmails() {
-    return storageService.query(SONG_STORAGE_KEY);
+function getStations() {
+    return storageService.query(STATION_STORAGE_KEY);
 }
 
-function getById(id) {
-    return storageService.get(SONG_STORAGE_KEY, id);
+function getStationById(id) {
+    return storageService.get(STATION_STORAGE_KEY, id);
 }
 
-function removeEmail(id) {
-    return storageService.remove(SONG_STORAGE_KEY, id);
+function removeStation(id) {
+    return storageService.remove(STATION_STORAGE_KEY, id);
 }
 
-async function saveEmail(emailToSave, folderName = "inbox") {
+async function saveStation(emailToSave, folderName = "inbox") {
     const savedEmail = {...emailToSave, folder: folderName, isChecked: false};
     let newEmail
     if (savedEmail.id) {
-        newEmail = await storageService.put(SONG_STORAGE_KEY, savedEmail);
+        newEmail = await storageService.put(STATION_STORAGE_KEY, savedEmail);
     } else {
-        newEmail = await storageService.post(SONG_STORAGE_KEY, savedEmail);
+        newEmail = await storageService.post(STATION_STORAGE_KEY, savedEmail);
     }
     await statsService.createStats();
     return newEmail
@@ -122,14 +117,12 @@ async function saveEmail(emailToSave, folderName = "inbox") {
 
 function getDefaultFilter(params) {
     return {
-        folder: params.tab || "home",
+        tab: params.tab || "home",
         text: params.text || "",
-        isRead: params.isRead !== undefined ? params.isRead : null,
-        sort: params.sort || "",
     };
 }
 
-async function createEmail(
+async function createStation(
     subject = "", 
     body = "", 
     to = "", 
@@ -206,21 +199,21 @@ function backOneURLSegment(navigate) {
     navigate(newPath);
 }
 
-async function onDeleteEmail(email) {
+async function onDeleteStation(email) {
     if(email.folder === "trash") {
-        await removeEmail(email.id);
+        await removeStation(email.id);
         eventBusService.showSuccessMsg('Email deleted successfully');
     } else {
-        await saveEmail(email, "trash");
+        await saveStation(email, "trash");
         eventBusService.showSuccessMsg('Email moved to Trash folder successfully');
     }
     statsService.createStats();
 };
 
-async function updateBatchEmails(updatedEmails) {
-    const allEmails = await getEmails();
+async function updateBatchStations(updatedEmails) {
+    const allEmails = await getStations();
     const updatedAllEmails = await _updateEmailLists(updatedEmails, allEmails);
-    utilService.saveToStorage(SONG_STORAGE_KEY, updatedAllEmails);
+    utilService.saveToStorage(STATION_STORAGE_KEY, updatedAllEmails);
 }
 
 
@@ -242,23 +235,133 @@ async function _updateEmailLists (updatedEmails, currentEmails) {
     return mergedEmailList;
 }
 
-async function initSongs() {
-    const savedSongs = defaultContent.map(song => ({
-        ...song,
-        coverImage: imgTLI,
-        likes: 0,
-      }));
-    utilService.saveToStorage(SONG_STORAGE_KEY, savedSongs);
+async function initStations() {
+    // const savedStations = defaultContent.map(station => ({
+    //     ...station,
+    //     coverImage: imgTLI,
+    //     likes: 0,
+    //   }));
+    utilService.saveToStorage(STATION_STORAGE_KEY, [stationDefault, stationTLI]);
     // statsService.createStats();
 }
     
-const defaultContent = [
-    { _id: "GI6CfKcMhjY", title: "Jack Sparrow", artist: "The Lonely Island", featuredArtist: ["Michael Bolton"] },
-    { _id: "Jr9Kaa1sycs", title: "Finest Girl (Bin Laden Song) - Uncensored Version", artist: "The Lonely Island", featuredArtist: [] },
-    { _id: "BKQ6nINAeq8", title: "Go Kindergarten", artist: "The Lonely Island", featuredArtist: ["Robyn", "Sean Combs", "Paul Rudd"] },
-    { _id: "avaSdC0QOUM", title: "I'm On A Boat", artist: "The Lonely Island", featuredArtist: ["T-Pain"] },
-    { _id: "8yvEYKRF5IA", title: "Boombox", artist: "The Lonely Island", featuredArtist: ["Julian Casablancas"] },
-    { _id: "NisCkxU544c", title: "Like A Boss", artist: "The Lonely Island", featuredArtist: ["Seth Rogen"] },
-    { _id: "jUw4Qh9uFK8", title: "Spring Break Anthem", artist: "The Lonely Island", featuredArtist: [] }
-  ];
+var stationDefault = {
+    _id: "5cksxjas89xjsa8xjsa8jxs09",
+    name: "Funky Monks",
+    tags: [
+        "Funk",
+        "Happy"
+    ],
+    createdBy: {
+        _id: "u101",
+        fullname: "Puki Ben David",
+        imgUrl: imgRHCP
+    },
+    likedByUsers: ['{minimal-user}', '{minimal-user}'],
+    songs: [
+        {
+            id: "s1001",
+            title: "The Meters - Cissy Strut",
+            url: "youtube/song.mp4",
+            imgUrl: "https://i.ytimg.com/vi/4_iC0MyIykM/mqdefault.jpg",
+            addedBy: '{minimal-user}',
+            addedAt: 162521765262
+        },
+        {
+            id: "mUkfiLjooxs",
+            title: "The JB's - Pass The Peas",
+            url: "youtube/song.mp4",
+            imgUrl: "https://i.ytimg.com/vi/mUkfiLjooxs/mqdefault.jpg",
+            addedBy: {}
+        },
+    ],
+    msgs: [
+        {
+            id: 'm101',
+            from: '{mini-user}',
+            txt: 'Manish?'
+        }
+    ]
+}
+
+var stationTLI = {
+    _id: "st109",
+    name: "The Lonely Island",
+    tags: [
+        "Hip-Hop",
+        "Pop",
+        "Sketch Comedy",
+    ],
+    createdBy: {
+        _id: "u101",
+        fullname: "Puki Ben David",
+        imgUrl: imgTLI,
+    },
+    likedByUsers: ['{minimal-user}', '{minimal-user}'],
+    songs: [
+        { 
+            _id: "s10101", 
+            title: "The Lonely Island - Jack Sparrow", 
+            url: "GI6CfKcMhjY", 
+            imgUrl: imgTLI, 
+            addedBy: '{minimal-user}', 
+            addedAt: 162236125356 
+        },
+        { 
+            _id: "s10102", 
+            title: "The Lonely Island - Finest Girl (Bin Laden Song) - Uncensored Version", 
+            url: "Jr9Kaa1sycs", 
+            imgUrl: imgTLI, 
+            addedBy: '{minimal-user}', 
+            addedAt: 160001810248 
+        },
+        { 
+            _id: "s10103", 
+            title: "The Lonely Island - Go Kindergarten", 
+            url: "BKQ6nINAeq8", 
+            imgUrl: imgTLI,  
+            addedBy: '{minimal-user}', 
+            addedAt: 161852128293 
+        },
+        { 
+            _id: "s10104", 
+            title: "The Lonely Island - I'm On A Boat", 
+            url: "avaSdC0QOUM", 
+            imgUrl: imgTLI,  
+            addedBy: '{minimal-user}', 
+            addedAt: 164672153990 
+        },
+        { 
+            _id: "s10104", 
+            title: "The Lonely Island - Boombox", 
+            url: "8yvEYKRF5IA", 
+            imgUrl: imgTLI,  
+            addedBy: '{minimal-user}', 
+            addedAt: 160506213013 
+        },
+        { 
+            _id: "s10104", 
+            title: "The Lonely Island - Like A Boss", 
+            url: "NisCkxU544c", 
+            imgUrl: imgTLI,  
+            addedBy: '{minimal-user}', 
+            addedAt: 164389180962 
+        },
+        { 
+            _id: "s10104", 
+            title: "The Lonely Island - Spring Break Anthem", 
+            url: "jUw4Qh9uFK8", 
+            imgUrl: imgTLI,  
+            addedBy: '{minimal-user}', 
+            addedAt: 160846710840 
+        },
+    ],
+    msgs: [
+        {
+            id: 'm101',
+            from: '{mini-user}',
+            txt: 'Manish?'
+        }
+    ]
+}
   

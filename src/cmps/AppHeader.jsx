@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export const AppHeader = ({ setFilterBy }) => {
     const [text, setText] = useState('');

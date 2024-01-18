@@ -1,6 +1,6 @@
 import { utilService } from './util.service.js'
 import { storageService } from './async-storage.service.js'
-import { songService } from './track.service.js';
+import { stationService } from './station.service.js';
 import { ColorLensOutlined } from '@mui/icons-material';
 
 export const statsService = {
@@ -12,7 +12,7 @@ export const statsService = {
 const STATS_STORAGE_KEY = 'statsDB'
 
 async function createStats() {
-    let emails = await songService.getEmails();
+    let emails = await stationService.getEmails();
     const folderStats = { "Starred": { total: 0, unread: 0 }};
 
     emails.forEach(email => {

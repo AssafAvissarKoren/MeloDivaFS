@@ -1,0 +1,67 @@
+.station-preview {
+  width: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: black;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s, background-color 0.3s; /* Add background-color transition */
+  cursor: pointer;
+  position: relative; /* Added for absolute positioning of child elements */
+  padding: 1vh;
+
+  &:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    background-color: #272727; /* Change background color on hover */
+
+    .play-btn {
+      opacity: 1; /* Show the play button on hover */
+      bottom: 10px; /* Position from the bottom right */
+      right: 10px;
+    }
+  }
+
+  .image-container {
+    img {
+      width: 100%;
+      display: block;
+    }
+  }
+
+  .play-btn {
+    position: absolute;
+    bottom: -50px; /* Initially positioned outside of the view */
+    right: -50px;
+    transform: translate(-5%, -125%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; /* Make the button round */
+    background-color: white; /* Set the background color */
+    color: #1db954;
+    font-size: 50px; /* Set size of the icon */
+    border: none;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s, bottom 0.3s, right 0.3s; /* Add transitions for bottom and right */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+}
+
+.station-info {
+  padding: 10px;
+  background: transparent;
+  color: white;
+  
+  .station-name {
+    margin: 0;
+    font-size: 16px;
+  }
+
+  .creator-name {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.7;
+  }
+}

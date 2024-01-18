@@ -1,7 +1,7 @@
 .side-nav {
     display: flex;
     flex-direction: column;
-    background-color: #f1f3f4;
+    background-color: black;
     padding: 10px;
     overflow-y: auto;
     box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
@@ -14,21 +14,27 @@
         margin: 4px 0;
         border-radius: 4px;
         cursor: pointer;
-        font-size: 14px;
-        color: #202124;
-        transition: background-color 0.3s;
+        font-size: 16px;
+        color: grey;
+        transition: background-color 0.3s, color 0.3s;
 
         &:hover {
-            background-color: #e8eaed;
+            color: white;
         }
     }
 
     .active {
-        background-color: #d2e3fc;
+        background-color: #8080807f; 
+        color: white;
         font-weight: bold;
     }
+
+    .symbol {
+        margin-right: 10px;
+        font-weight: bold;
+    }
+    
 }
 
-.icon-style {
-    margin-right: 10px;
-}
+
+  
