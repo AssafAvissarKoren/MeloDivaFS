@@ -7,6 +7,7 @@ import { Search } from '../pages/Search.jsx';
 import { Library } from '../pages/Library.jsx';
 import { Home } from '../pages/Home.jsx';
 import imgUrl from '../assets/imgs/MeloDiva.png'
+import { Station } from '../pages/Station.jsx';
 
 export const Index = () => {
     const params = useParams();
@@ -15,24 +16,23 @@ export const Index = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        stationService.initStations()
-    }, []);
-
     useEffect(() => {   
         loadStations();
         const filterURL = stationService.filterURL(filterBy);
-        navigate(filterURL, { replace: true }); 
+        navigate(filterURL, { replace: true }) 
     }, [filterBy]);
     
     async function loadStations() {
-        const newStationList = await stationService.queryStations(filterBy)
+        const newStationList = await stationService.getStations(filterBy)
         setIndexStationList(newStationList);
         // await statsService.createStats();
     }
 
     let MainViewComponent;
     switch (params.tab) {
+        case 'station':
+            MainViewComponent = Station;
+            break;
         case 'search':
             MainViewComponent = Search;
             break;
