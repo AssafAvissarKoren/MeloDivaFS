@@ -72,6 +72,7 @@ function getDefaultFilter(params) {
         tab: params.tab || "home",
         text: params.text || "",
     }
+}
 
 function filterURL(filterBy) {
     let url = `/melodiva/${filterBy.tab || 'home'}`;
