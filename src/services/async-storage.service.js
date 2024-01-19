@@ -14,14 +14,14 @@ function query(entityType, delay = 200) {
 
 async function get(entityType, entityId) {
     const entities = await query(entityType)
-    const entity = entities.find(entity_1 => entity_1.id === entityId)
+    const entity = entities.find(entity => entity._id === entityId)
     if (!entity) throw new Error(`Get failed, cannot find entity with id: ${entityId} in: ${entityType}`)
     return entity
 }
 
 async function post(entityType, newEntity) {
     newEntity = { ...newEntity }
-    newEntity.id = _makeId()
+    newEntity._id = _makeId()
     const entities = await query(entityType)
     entities.push(newEntity)
     _save(entityType, entities)
@@ -30,8 +30,8 @@ async function post(entityType, newEntity) {
 
 async function put(entityType, updatedEntity) {
     const entities = await query(entityType)
-    const idx = entities.findIndex(entity => entity.id === updatedEntity.id)
-    if (idx < 0) throw new Error(`Update failed, cannot find entity with id: ${updatedEntity.id} in: ${entityType}`)
+    const idx = entities.findIndex(entity => entity._id === updatedEntity._id)
+    if (idx < 0) throw new Error(`Update failed, cannot find entity with id: ${updatedEntity._id} in: ${entityType}`)
     entities.splice(idx, 1, updatedEntity)
     _save(entityType, entities)
     return updatedEntity
@@ -39,7 +39,7 @@ async function put(entityType, updatedEntity) {
 
 async function remove(entityType, entityId) {
     const entities = await query(entityType)
-    const idx = entities.findIndex(entity => entity.id === entityId)
+    const idx = entities.findIndex(entity => entity._id === entityId)
     if (idx < 0) throw new Error(`Remove failed, cannot find entity with id: ${entityId} in: ${entityType}`)
     entities.splice(idx, 1)
     _save(entityType, entities)

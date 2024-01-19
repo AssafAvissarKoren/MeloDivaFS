@@ -1,0 +1,18 @@
+
+.track-preview {
+
+
+    & .track-preview-img {
+        height: 50px;
+        width: 50px;
+        object-fit: cover;
+    }
+
+    & .track-preview-options {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        align-items: center;
+        justify-items: center;
+    }
+
+}

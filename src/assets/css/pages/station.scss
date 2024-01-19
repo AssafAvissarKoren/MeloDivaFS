@@ -1,0 +1,82 @@
+.station {
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    overflow-y: auto;
+    color: white;
+    background-color: #121212;
+    border-radius: 10px;
+
+    &::-webkit-scrollbar {
+        width: 8px;
+        height: 0px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #474747; 
+    }
+
+    & > * {
+        padding: 10px 0;
+    }
+
+    & .station-head {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: 10px;
+
+        & .station-head-img {
+            height: 200px;
+            width: 200px;
+            object-fit: cover;
+        }
+
+        & .station-head-info {
+            display: grid;
+            grid-template-rows: 1fr auto;
+            align-items: center;
+            height: 100%;
+
+            & h1 {
+                font-size: 2em;
+            }
+        }
+    }
+
+    & .station-options {
+        padding: 10px;
+
+        .station-play-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%; /* Make the button round */
+            background-color: white; /* Set the background color */
+            color: #1db954;
+            font-size: 50px; /* Set size of the icon */
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+    }
+
+    & .station-content-layout {
+        display: grid;
+        grid-template-columns: auto auto 1fr 150px;
+        align-items: center;
+        gap: 5px;
+    }
+
+    & .station-content {
+
+        & .station-track-list {
+            list-style-type: none;
+            padding-inline-start: 0;
+
+            grid-column: 1 / -1;
+        }
+    }
+
+}

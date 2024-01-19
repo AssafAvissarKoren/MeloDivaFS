@@ -60,7 +60,7 @@ input {
 
 /* MAC like scrollbar */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 0;
     background-color: rgba(0, 0, 0, 0);
     -webkit-border-radius: 100px;
 }
