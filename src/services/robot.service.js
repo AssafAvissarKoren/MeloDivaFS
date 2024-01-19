@@ -14,7 +14,7 @@ const STORAGE_KEY = 'robots'
 _createRobots()
 
 async function query(filterBy) {
-    const robots = await storageService.query(STORAGE_KEY)
+    let robots = await storageService.query(STORAGE_KEY)
     if (filterBy) {
         var { type, maxBatteryStatus, minBatteryStatus, model } = filterBy
         maxBatteryStatus = maxBatteryStatus || Infinity

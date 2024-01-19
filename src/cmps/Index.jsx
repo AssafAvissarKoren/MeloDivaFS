@@ -28,6 +28,8 @@ export const Index = () => {
         // await statsService.createStats();
     }
 
+    const mainViewComponentProps = {}; 
+
     let MainViewComponent;
     switch (params.tab) {
         case 'station':
@@ -35,6 +37,7 @@ export const Index = () => {
             break;
         case 'search':
             MainViewComponent = Search;
+            mainViewComponentProps.searchText = filterBy.text; // Pass 'text' from 'filterBy' to Search
             break;
         case 'library':
             MainViewComponent = Library;
@@ -64,7 +67,7 @@ export const Index = () => {
                     />
                 </div>
                 <div className="index-main-view">
-                    <MainViewComponent />
+                    <MainViewComponent {...mainViewComponentProps} />
                 </div>
             </div>
     );
