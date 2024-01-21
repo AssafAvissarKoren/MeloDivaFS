@@ -1,9 +1,20 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
 import { faHeart } from '@fortawesome/free-regular-svg-icons'
+import { useState } from 'react'
+import { MiniMenu } from './MiniMenu'
 
 
 export function TrackPreview({ layout = '', track, trackNum }) {
+    const [isMenu, setIsMenu] = useState(false)
+
+    function toggleMenu() {
+        setIsMenu(currentIsMenu => !currentIsMenu)
+    }
+
+    function onCloseMiniMenu() {
+        setIsMenu(false)
+    }
 
     return (
         <section className={`track-preview ${layout}`}>
@@ -13,7 +24,28 @@ export function TrackPreview({ layout = '', track, trackNum }) {
             <div className="track-preview-options">
                 <FontAwesomeIcon icon={faHeart} />
                 <p>song length</p>
-                <FontAwesomeIcon icon={faEllipsis} />
+                <button className="btn-more" onClick={toggleMenu}>
+                    <FontAwesomeIcon icon={faEllipsis} />
+                </button>
+                {isMenu && 
+                        <MiniMenu onCloseMiniMenu={onCloseMiniMenu}>
+                            <button onClick={onCloseMiniMenu}>
+                                Add to playlist
+                            </button>
+                            <button onClick={onCloseMiniMenu}>
+                                Remove from this playlist
+                            </button>
+                            <button onClick={onCloseMiniMenu}>
+                                Save to your liked songs
+                            </button>
+                            <button onClick={onCloseMiniMenu}>
+                                Add to queqe
+                            </button>
+                            <button onClick={onCloseMiniMenu}>
+                                Share
+                            </button>
+                        </MiniMenu> 
+                    }
             </div>
 
         </section>
