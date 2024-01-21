@@ -21,6 +21,17 @@ export function Station() {
             useStation(station)
         } catch (err) {
             eventBusService.showErrorMsg('faild to load station')
+        }
+    }
+
+    async function deleteTrack(trackUrl) {
+        try {
+            console.log(station)
+            const tracks = station.tracks.filter(track => track.url !== trackUrl)
+            await stationService.saveStation({...station, tracks: tracks})
+            useStation({...station, tracks: tracks})
+        } catch (err) {
+            eventBusService.showErrorMsg('faild to delete station')
             console.log(err)
         }
     }
@@ -51,6 +62,7 @@ export function Station() {
                             layout={"station-content-layout"}
                             track={track} 
                             trackNum={trackNum++}
+                            deleteTrack={deleteTrack}
                         />
                     </li> 
                 )}

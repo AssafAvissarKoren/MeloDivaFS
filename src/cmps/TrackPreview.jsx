@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { MiniMenu } from './MiniMenu'
 
 
-export function TrackPreview({ layout = '', track, trackNum }) {
+export function TrackPreview({ layout = '', track, trackNum, deleteTrack }) {
     const [isMenu, setIsMenu] = useState(false)
 
     function toggleMenu() {
@@ -14,6 +14,10 @@ export function TrackPreview({ layout = '', track, trackNum }) {
 
     function onCloseMiniMenu() {
         setIsMenu(false)
+    }
+
+    function onDeleteTrack() {
+        deleteTrack(track.url)
     }
 
     return (
@@ -32,7 +36,7 @@ export function TrackPreview({ layout = '', track, trackNum }) {
                             <button onClick={onCloseMiniMenu}>
                                 Add to playlist
                             </button>
-                            <button onClick={onCloseMiniMenu}>
+                            <button onClick={onDeleteTrack}>
                                 Remove from this playlist
                             </button>
                             <button onClick={onCloseMiniMenu}>
