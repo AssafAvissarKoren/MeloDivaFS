@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StationPreview } from './StationPreview';
 import { useNavigate } from 'react-router';
+import { categoryService } from '../services/category.service';
 
 export const Status = {
   ROW: 'row',
@@ -10,14 +11,29 @@ export const Status = {
 
 export const Category = ({ stations, category_name, category_color = "black", category_image = null, style, setCurrentCategory }) => {
   const navigate = useNavigate();
+  const [categoryStations, setCategoryStations] = useState([]);
 
-  function handleOnClick(categoryName) {
+  useEffect(() => {
+      const fetchCategory = async () => {
+          const fetchedCategories = await categoryService.getCategories();
+          const specificCategory = fetchedCategories.find(category => category.categoryName === category_name);
+
+          if (specificCategory) {
+              const filteredStations = stations.filter(station => specificCategory.stationsIds.includes(station._id));
+              setCategoryStations(filteredStations);
+          }
+      };
+
+      fetchCategory();
+  }, [stations, category_name]); 
+
+function handleOnClick(categoryName) {
     navigate(`/melodiva/genre/${categoryName}`, { replace: true });
     setCurrentCategory(category_name)
   } 
 
-  const renderStations = () => {
-    return stations.map(station => (
+  const renderStations = (renderedStations = stations) => {
+    return renderedStations.map(station => (
       <StationPreview 
         key={station._id} 
         station={station}
@@ -45,7 +61,7 @@ export const Category = ({ stations, category_name, category_color = "black", ca
     return (
       <div className="category-results">
         <h2>{category_name}</h2>
-        <div className="grid">{renderStations()}</div>
+        <div className="grid">{renderStations(categoryStations)}</div>
       </div>
     );
     

@@ -17,10 +17,6 @@ export function Home({ stations, setCurrentCategory }) {
     }, []);
 
     const getStationsForCategory = (categoryIds) => {
-        // console.log("1", categoryIds)
-        // console.log("2", stations)
-        const temp = stations.filter(station => categoryIds.includes(station._id));
-        // console.log("3", temp)
         return stations.filter(station => categoryIds.includes(station._id));
     };
 

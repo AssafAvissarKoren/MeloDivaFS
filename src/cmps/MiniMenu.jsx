@@ -1,7 +1,5 @@
 import { useEffect, useRef } from "react"
 
-
-
 export function MiniMenu({children, onCloseMiniMenu}) {
     const modalRef = useRef()
 

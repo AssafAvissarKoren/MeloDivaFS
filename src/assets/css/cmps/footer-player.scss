@@ -1,12 +1,60 @@
 .footer-player {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #181818;
+    color: #fff;
     position: fixed;
     left: 0;
+    right: 0;
     bottom: 0;
-    width: 100%;
-    min-width: 100px;
-    background-color: #000;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-    z-index: 1000;
+    border-top: 3px solid #282828;
+    height: 100px;
+
+    .video-thumbnail {
+        // Add styles for the thumbnail
+    }
+
+    .video-info {
+        .video-name {
+            font-size: 16px;
+        }
+        .channel-name {
+            font-size: 12px;
+        }
+    }
+
+    .player-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        button {
+            // Style your buttons here
+        }
+    }
+
+    .progress-bar {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        .current-time, .end-time {
+            // Style your timestamps here
+        }
+        // Add styles for the progress bar
+    }
+
+    .volume-control {
+        // Style your volume control here
+    }
+
+    YouTube {
+        display: none; // Hide the video portion
+    }
+
+    .youtube-container {
+        position: absolute;
+        left: -9999px; // Move the player off-screen
+        top: 0;
+    }
 }

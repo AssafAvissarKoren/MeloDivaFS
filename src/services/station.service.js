@@ -31,7 +31,7 @@ async function getStations(filterBy = null) {
     if (filterBy) {
         if (filterBy.text) {
             stations = stations.filter(station => {
-                const textMatch = !filterBy.text || station.title.includes(filterBy.text)
+                const textMatch = !filterBy.text || station.name.includes(filterBy.text)
                 return textMatch;
             });
         }
