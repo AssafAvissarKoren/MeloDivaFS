@@ -40,12 +40,17 @@ function save(track) {
 }
 
 function createTrack(track, addedBy) {
+    const snippet = track.snippet || {};
+    const resourceId = snippet.resourceId || {};
+    const thumbnails = snippet.thumbnails || {};
+    const standard = thumbnails.standard || {};
+
     return {
-        title: track.snippet.title,
-        url: track.snippet.resourceId.videoId,
-        imgUrl: track.snippet.thumbnails.standard.url,
+        title: snippet.title || 'Unknown Title',
+        url: resourceId.videoId || 'Unknown Video ID',
+        imgUrl: standard.url || 'default_thumbnail_url', // Replace with a default thumbnail URL
         addedBy: addedBy
-    }
+    };
 }
 
 //=================================

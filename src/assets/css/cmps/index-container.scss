@@ -2,8 +2,8 @@
     display: grid;
     grid-template-columns: minmax(250px, 1fr) repeat(13, 1fr);
     grid-template-rows: minmax(60px, auto) repeat(15, 1fr);
-    height: 100vh;
     background-color: black;
+    min-height: 100vh;
 
     .index-name {
         grid-column: 1;

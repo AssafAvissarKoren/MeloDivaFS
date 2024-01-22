@@ -1,8 +1,8 @@
 import { storageService } from './async-storage.service.js'
 import { createStationData } from './data.service.js'
 
-
 export const stationService = {
+    initStations,
     getStations,
     saveStation,
     removeById,
@@ -15,6 +15,13 @@ export const stationService = {
 const STATION_STORAGE_KEY = 'stationDB'
 
 createStationData(STATION_STORAGE_KEY)
+
+async function initStations() {
+    const stationDefault = require('../assets/JSON/stationDefault.json');
+    const stationTLI = require('../assets/JSON/stationTLI.json');
+
+    utilService.saveToStorage(STATION_STORAGE_KEY, [stationDefault, stationTLI]);
+}
 
 async function getStations(filterBy = null) {
     let stations = await storageService.query(STATION_STORAGE_KEY) // add filter later
@@ -319,134 +326,3 @@ function filterURL(filterBy) {
 //     });
 //     return mergedEmailList;
 // }
-
-// async function initStations() {
-//     // const savedStations = defaultContent.map(station => ({
-//     //     ...station,
-//     //     coverImage: imgTLI,
-//     //     likes: 0,
-//     //   }));
-//     utilService.saveToStorage(STATION_STORAGE_KEY, [stationDefault, stationTLI]);
-//     // statsService.createStats();
-// }
-    
-// var stationDefault = {
-//     _id: "5cksxjas89xjsa8xjsa8jxs09",
-//     name: "Funky Monks",
-//     tags: [
-//         "Funk",
-//         "Happy"
-//     ],
-//     createdBy: {
-//         _id: "u101",
-//         fullname: "Puki Ben David",
-//         imgUrl: imgRHCP
-//     },
-//     likedByUsers: ['{minimal-user}', '{minimal-user}'],
-//     songs: [
-//         {
-//             id: "s1001",
-//             title: "The Meters - Cissy Strut",
-//             url: "youtube/song.mp4",
-//             imgUrl: "https://i.ytimg.com/vi/4_iC0MyIykM/mqdefault.jpg",
-//             addedBy: '{minimal-user}',
-//             addedAt: 162521765262
-//         },
-//         {
-//             id: "mUkfiLjooxs",
-//             title: "The JB's - Pass The Peas",
-//             url: "youtube/song.mp4",
-//             imgUrl: "https://i.ytimg.com/vi/mUkfiLjooxs/mqdefault.jpg",
-//             addedBy: {}
-//         },
-//     ],
-//     msgs: [
-//         {
-//             id: 'm101',
-//             from: '{mini-user}',
-//             txt: 'Manish?'
-//         }
-//     ]
-// }
-
-// var stationTLI = {
-//     _id: "st109",
-//     name: "The Lonely Island",
-//     tags: [
-//         "Hip-Hop",
-//         "Pop",
-//         "Sketch Comedy",
-//     ],
-//     createdBy: {
-//         _id: "u101",
-//         fullname: "Puki Ben David",
-//         imgUrl: imgTLI,
-//     },
-//     likedByUsers: ['{minimal-user}', '{minimal-user}'],
-//     songs: [
-//         { 
-//             _id: "s10101", 
-//             title: "The Lonely Island - Jack Sparrow", 
-//             url: "GI6CfKcMhjY", 
-//             imgUrl: imgTLI, 
-//             addedBy: '{minimal-user}', 
-//             addedAt: 162236125356 
-//         },
-//         { 
-//             _id: "s10102", 
-//             title: "The Lonely Island - Finest Girl (Bin Laden Song) - Uncensored Version", 
-//             url: "Jr9Kaa1sycs", 
-//             imgUrl: imgTLI, 
-//             addedBy: '{minimal-user}', 
-//             addedAt: 160001810248 
-//         },
-//         { 
-//             _id: "s10103", 
-//             title: "The Lonely Island - Go Kindergarten", 
-//             url: "BKQ6nINAeq8", 
-//             imgUrl: imgTLI,  
-//             addedBy: '{minimal-user}', 
-//             addedAt: 161852128293 
-//         },
-//         { 
-//             _id: "s10104", 
-//             title: "The Lonely Island - I'm On A Boat", 
-//             url: "avaSdC0QOUM", 
-//             imgUrl: imgTLI,  
-//             addedBy: '{minimal-user}', 
-//             addedAt: 164672153990 
-//         },
-//         { 
-//             _id: "s10104", 
-//             title: "The Lonely Island - Boombox", 
-//             url: "8yvEYKRF5IA", 
-//             imgUrl: imgTLI,  
-//             addedBy: '{minimal-user}', 
-//             addedAt: 160506213013 
-//         },
-//         { 
-//             _id: "s10104", 
-//             title: "The Lonely Island - Like A Boss", 
-//             url: "NisCkxU544c", 
-//             imgUrl: imgTLI,  
-//             addedBy: '{minimal-user}', 
-//             addedAt: 164389180962 
-//         },
-//         { 
-//             _id: "s10104", 
-//             title: "The Lonely Island - Spring Break Anthem", 
-//             url: "jUw4Qh9uFK8", 
-//             imgUrl: imgTLI,  
-//             addedBy: '{minimal-user}', 
-//             addedAt: 160846710840 
-//         },
-//     ],
-//     msgs: [
-//         {
-//             id: 'm101',
-//             from: '{mini-user}',
-//             txt: 'Manish?'
-//         }
-//     ]
-// }
-  

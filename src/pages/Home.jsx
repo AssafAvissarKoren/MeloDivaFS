@@ -1,34 +1,46 @@
 import { useState, useEffect } from 'react';
 import { stationService } from '../services/station.service';
-import imgUrl from '../assets/imgs/react.png'
-import { StationPreview } from '../cmps/StationPreview';
+import { categoryService } from '../services/category.service';
+import imgUrl from '../assets/imgs/react.png';
+import { Category, Status } from '../cmps/Category';
 
-export function Home() {
-    const [stations, setStations] = useState(null);
+export function Home({ stations, setCurrentCategory }) {
+    const [categories, setCategories] = useState([]);
 
-    useEffect(() => {   
-        loadStations();
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const fetchedCategories = await categoryService.getCategories();
+            setCategories(fetchedCategories);
+        };
+
+        fetchCategories();
     }, []);
 
-    async function loadStations() {
-        const newStationsList = await stationService.getStations()
-        console.log("newStationsList", newStationsList)
-        setStations(newStationsList);
-    }
+    const getStationsForCategory = (categoryIds) => {
+        // console.log("1", categoryIds)
+        // console.log("2", stations)
+        const temp = stations.filter(station => categoryIds.includes(station._id));
+        // console.log("3", temp)
+        return stations.filter(station => categoryIds.includes(station._id));
+    };
 
-
-    if (!stations) return <div>Loading...</div>;
-
+    if (!stations || !categories.length) return <div>Loading...</div>;
+    
     return (
         <section className="home">
-            <h1 style={{color: "white"}}>Welcome to the Home Page</h1>
-            {stations && 
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    < StationPreview station={stations[0]}/>
-                    < StationPreview station={stations[1]}/>
-                </div>
-            }
-            <img src={imgUrl} alt="" />
+            <div className='category-display'>
+                {categories.map(category => (
+                    <Category 
+                        key={category.categoryName}
+                        stations={getStationsForCategory(category.stationsIds)}
+                        category_name={category.categoryName}
+                        category_color={"brown"}
+                        category_image={imgUrl}
+                        style={Status.ROW}
+                        setCurrentCategory={setCurrentCategory}
+                    />
+                ))}
+            </div>
         </section>
-    )
+    );
 }

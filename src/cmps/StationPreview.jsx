@@ -8,13 +8,15 @@ export const StationPreview = ({ station }) => {
 
   const navigate = useNavigate();
 
-  console.log(station)
+  function handleOnClick() {
+    navigate(`/melodiva/station/${station._id}`, { replace: true })
+  }
 
   return (
     <div className="station-preview">
       <div className="image-container">
         <img src={station.imgUrl} alt={station.name} />
-        <button className="play-btn" onClick={() => {navigate(`/melodiva/station/${station._id}`, { replace: true })}}>
+        <button className="play-btn" onClick={() => handleOnClick(station._id)}>
           <FontAwesomeIcon icon={faPlayCircle} /> {/* Use Font Awesome icon */}
         </button>
       </div>

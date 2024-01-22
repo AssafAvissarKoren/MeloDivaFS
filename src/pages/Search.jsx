@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // axios is used to make HTTP requests
+import axios from 'axios';
+import { Category, Status } from '../cmps/Category'
+import imgUrl from '../assets/imgs/MeloDiva.png'
+import { categoryService } from '../services/category.service';
 
-export function Search({ searchText }) {
+export function Search({ stations, searchText, setCurrentCategory }) {
     const [videos, setVideos] = useState([]);
+    const [categories, setCategories] = useState([]);
 
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const fetchedCategories = await categoryService.getCategories();
+            setCategories(fetchedCategories);
+        };
+    
+        fetchCategories();
+    }, []);
+    
     useEffect(() => {
         if (searchText) {
             searchVideos(searchText);
@@ -26,15 +39,36 @@ export function Search({ searchText }) {
         }
     };
 
+    const getStationsForCategory = (categoryIds) => {
+        return stations.filter(station => categoryIds.includes(station._id));
+    };
+    
+    if (!stations || !categories.length) return <div>Loading...</div>;
+    
     return (
-        <div className="search">
-            <h1 style={{ color: "white" }}>Welcome to the Search Page</h1>
-            {videos.map((video, index) => (
-                <div key={video.id.videoId || index}>
-                    <h3>{video.snippet.title}</h3>
-                    <img src={video.snippet.thumbnails.default.url} alt={video.snippet.title} />
-                </div>
-            ))}
-        </div>
+        searchText ? (
+            <div className="search">
+                {videos.map((video, index) => (
+                    <div key={video.id.videoId || index}>
+                        <h3>{video.snippet.title}</h3>
+                        <img src={video.snippet.thumbnails.default.url} alt={video.snippet.title} />
+                    </div>
+                ))}
+            </div>
+        ) : (
+            <div className="search">
+                {categories.map(category => (
+                    <Category 
+                        key={category.categoryName}
+                        stations={getStationsForCategory(category.stationsIds)}
+                        category_name={category.categoryName}
+                        category_color={category.categoryColor}
+                        category_image={imgUrl}
+                        style={Status.CUBE}
+                        setCurrentCategory={setCurrentCategory}
+                    />
+                ))}            
+            </div>
+        )
     );
 }

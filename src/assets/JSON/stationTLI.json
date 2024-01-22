@@ -1,0 +1,76 @@
+{
+    "_id": "st109",
+    "name": "The Lonely Island",
+    "tags": ["Hip-Hop", "Pop", "Sketch Comedy"],
+    "createdBy": {
+        "_id": "u101",
+        "fullname": "Puki Ben David",
+        "imgUrl": "url_to_imgTLI"
+    },
+    "likedByUsers": ["{minimal-user}", "{minimal-user}"],
+    "songs": [
+        { 
+            "_id": "s10101", 
+            "title": "The Lonely Island - Jack Sparrow", 
+            "url": "GI6CfKcMhjY", 
+            "imgUrl": "src/assets/imgs/the lonely island - tutleneck & chain.png", 
+            "addedBy": "{minimal-user}", 
+            "addedAt": 162236125356 
+        },
+        { 
+            "_id": "s10102", 
+            "title": "The Lonely Island - Finest Girl (Bin Laden Song) - Uncensored Version", 
+            "url": "Jr9Kaa1sycs", 
+            "imgUrl": "src/assets/imgs/the lonely island - tutleneck & chain.png", 
+            "addedBy": "{minimal-user}", 
+            "addedAt": 160001810248 
+        },
+        { 
+            "_id": "s10103", 
+            "title": "The Lonely Island - Go Kindergarten", 
+            "url": "BKQ6nINAeq8", 
+            "imgUrl": "src/assets/imgs/the lonely island - tutleneck & chain.png",  
+            "addedBy": "{minimal-user}", 
+            "addedAt": 161852128293 
+        },
+        { 
+            "_id": "s10104", 
+            "title": "The Lonely Island - I'm On A Boat", 
+            "url": "avaSdC0QOUM", 
+            "imgUrl": "src/assets/imgs/the lonely island - tutleneck & chain.png",  
+            "addedBy": "{minimal-user}", 
+            "addedAt": 164672153990 
+        },
+        { 
+            "_id": "s10104", 
+            "title": "The Lonely Island - Boombox", 
+            "url": "8yvEYKRF5IA", 
+            "imgUrl": "src/assets/imgs/the lonely island - tutleneck & chain.png",  
+            "addedBy": "{minimal-user}", 
+            "addedAt": 160506213013 
+        },
+        { 
+            "_id": "s10104", 
+            "title": "The Lonely Island - Like A Boss", 
+            "url": "NisCkxU544c", 
+            "imgUrl": "src/assets/imgs/the lonely island - tutleneck & chain.png",  
+            "addedBy": "{minimal-user}", 
+            "addedAt": 164389180962 
+        },
+        { 
+            "_id": "s10104", 
+            "title": "The Lonely Island - Spring Break Anthem", 
+            "url": "jUw4Qh9uFK8", 
+            "imgUrl": "src/assets/imgs/the lonely island - tutleneck & chain.png",  
+            "addedBy": "{minimal-user}", 
+            "addedAt": 160846710840 
+        }
+    ],
+    "msgs": [
+        {
+            "id": "m101",
+            "from": "{mini-user}",
+            "txt": "Manish?"
+        }
+    ]
+}
