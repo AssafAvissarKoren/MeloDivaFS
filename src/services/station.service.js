@@ -69,7 +69,7 @@ function createStation(name = '', createdBy) {
         tags: [],
         createdBy: createdBy,
         likedByUsers: [],
-        track: [],
+        tracks: [],
         msgs: []
     }
 }

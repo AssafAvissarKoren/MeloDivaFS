@@ -64,7 +64,7 @@
 
     & .station-content-layout {
         display: grid;
-        grid-template-columns: auto auto 1fr 150px;
+        grid-template-columns: 30px auto 1fr 150px;
         align-items: center;
         gap: 5px;
     }

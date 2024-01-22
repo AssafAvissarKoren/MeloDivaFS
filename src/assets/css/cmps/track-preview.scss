@@ -1,6 +1,10 @@
 
 .track-preview {
+    position: relative;
 
+    &:hover {
+        background-color: #404040;
+    }
 
     & .track-preview-img {
         height: 50px;
@@ -13,6 +17,13 @@
         grid-template-columns: repeat(3, 1fr);
         align-items: center;
         justify-items: center;
+    }
+
+    & .btn-more {
+        background-color: unset;
+        border: 0;
+        color: white;
+
     }
 
 }
