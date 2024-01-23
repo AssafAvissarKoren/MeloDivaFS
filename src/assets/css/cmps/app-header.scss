@@ -1,0 +1,28 @@
+.app-header {
+    background: black;
+    color: black;
+
+    input[type="text"] {
+        margin-top: 10px;
+        width: 400px;
+        height: 40px;
+        border-radius: 16px;
+        padding-left: 10px; // Add padding on the left side
+
+        // To ensure the placeholder text aligns with the new padding
+        &::placeholder {
+            text-indent: 10px;
+        }
+    }
+
+    .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+    }
+}

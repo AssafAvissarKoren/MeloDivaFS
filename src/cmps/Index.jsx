@@ -8,7 +8,7 @@ import { Search } from '../pages/Search.jsx';
 import { Library } from '../pages/Library.jsx';
 import { Home } from '../pages/Home.jsx';
 import imgUrl from '../assets/imgs/MeloDiva.png'
-import { Station } from '../pages/StationDetails.jsx';
+import { StationDetails } from '../pages/StationDetails.jsx';
 import { Category, Status } from '../cmps/Category'
 
 export const Index = () => {
@@ -48,7 +48,7 @@ export const Index = () => {
             mainViewComponentProps.style = Status.RESULTS;
             break;
         case 'station':
-            MainViewComponent = Station;
+            MainViewComponent = StationDetails;
             break;
         case 'search':
             MainViewComponent = Search;

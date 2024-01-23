@@ -1,5 +1,4 @@
 import axios from "axios"
-import { LoremIpsum } from 'lorem-ipsum';
 import { trackService } from "./track.service"
 import { utilService } from "./util.service"
 
@@ -20,7 +19,6 @@ export async function createStationData(storageKey) {
 
 const API_KEY = 'AIzaSyD5_pPOj9mwAPQz41a1ymh9AuhbZxS6ySQ'
 const STATION_API_URL = 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50'
-const lorem = new LoremIpsum();
 
 async function createStation(stationId, name, createdBy, tags, playlistId) {
     let tracks = await ajaxGetStationTracks(playlistId);
@@ -38,7 +36,7 @@ async function createStation(stationId, name, createdBy, tags, playlistId) {
             {
                 id: 'm101',
                 from: createdBy,
-                txt: lorem.generateWords(5),
+                txt: utilService.makeLoremWords(5),
             }
         ]
     };

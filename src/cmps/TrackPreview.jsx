@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { MiniMenu } from './MiniMenu'
 
 
-export function TrackPreview({ layout = '', track, trackNum, deleteTrack }) {
+export function TrackPreview({ layout = '', track, trackNum, deleteTrack, duration, handleTrackClick }) {
     const [isMenu, setIsMenu] = useState(false)
 
     function toggleMenu() {
@@ -21,13 +21,13 @@ export function TrackPreview({ layout = '', track, trackNum, deleteTrack }) {
     }
 
     return (
-        <section className={`track-preview ${layout}`}>
+        <section className={`track-preview ${layout}`} onClick={() => handleTrackClick(track)}>
             <p>{trackNum}</p>
             <img src={track.imgUrl} className="track-preview-img"/>
             <p>{track.title}</p>
             <div className="track-preview-options">
                 <FontAwesomeIcon icon={faHeart} />
-                <p>song length</p>
+                <p>{duration}</p>
                 <button className="btn-more" onClick={toggleMenu}>
                     <FontAwesomeIcon icon={faEllipsis} />
                 </button>

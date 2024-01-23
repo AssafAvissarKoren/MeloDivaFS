@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 export const AppHeader = ({ setFilterBy }) => {
+    const params = useParams();
     const [text, setText] = useState('');
 
     const handleTextChange = (e) => {
@@ -15,13 +17,19 @@ export const AppHeader = ({ setFilterBy }) => {
 
     return (
         <header className="app-header">
-            <input 
-                type="text" 
-                placeholder="Playlists or Songs" 
-                value={text} 
-                onChange={handleTextChange}
-                onKeyDown={handleKeyDown}
-            />
+            {params.tab == "search" &&
+                <div>
+                <label htmlFor="searchInput" className="visually-hidden">Search Playlists or Songs</label>
+                <input 
+                    id="searchInput"
+                    type="text" 
+                    placeholder="Playlists or Songs" 
+                    value={text} 
+                    onChange={handleTextChange}
+                    onKeyDown={handleKeyDown}
+                />
+                </div>
+            }
         </header>
     );
 };

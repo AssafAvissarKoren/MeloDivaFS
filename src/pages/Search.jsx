@@ -3,13 +3,13 @@ import axios from 'axios';
 import { Category, Status } from '../cmps/Category';
 import imgUrl from '../assets/imgs/MeloDiva.png';
 import { categoryService } from '../services/category.service';
-import { FooterPlayer } from '../cmps/Player';
+import { FooterPlayer } from '../cmps/FooterPlayer';
 
 
 export function Search({ stations, searchText, setCurrentCategory }) {
     const [videos, setVideos] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [selectedVideo, setSelectedVideo] = useState(null); // State to track selected video ID
+    const [selectedVideo, setSelectedVideo] = useState(null);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -46,7 +46,8 @@ export function Search({ stations, searchText, setCurrentCategory }) {
         return stations.filter(station => categoryIds.includes(station._id));
     };
 
-    const handleVideoClick = (video) => {
+    const handleVideoClick = (video) => { //here comes the boom
+        console.log("handleVideoClick", video)
         setSelectedVideo(video);
     };
 
@@ -77,8 +78,8 @@ export function Search({ stations, searchText, setCurrentCategory }) {
                         />
                     ))}
                 </>
-            )}
-            {selectedVideo && <FooterPlayer video={selectedVideo} />} {/* Render FooterPlayer with selected video ID */}
+            )} // 
+            {selectedVideo && <FooterPlayer video={selectedVideo} />}
         </div>
     );
 }

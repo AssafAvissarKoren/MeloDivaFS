@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import YouTube from 'react-youtube';
+import { utilService } from '../services/util.service.js'
 
 export function FooterPlayer({ video }) {
     const [isPlaying, setIsPlaying] = useState(false);
-    const [videoDuration, setVideoDuration] = useState('');
+    const [videoDuration, setVideoDuration] = useState(null);
     const [currentTime, setCurrentTime] = useState(0);
     const playerRef = useRef(null);
     const thumbnailUrl = video.snippet.thumbnails.default.url;
@@ -39,23 +39,6 @@ export function FooterPlayer({ video }) {
         };
     }, [isPlaying]);
 
-    const formatTime = (timeInSeconds) => {
-        const seconds = Math.floor(timeInSeconds % 60);
-        const minutes = Math.floor(timeInSeconds / 60);
-        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    };
-
-    const durationInSeconds = (isoDuration) => {
-        // const match = isoDuration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
-        // if (!match) return 0;
-        // const hours = (parseInt(match[1], 10) || 0);
-        // const minutes = (parseInt(match[2], 10) || 0) + hours * 60;
-        // const seconds = (parseInt(match[3], 10) || 0);
-
-        const { hours, minutes, seconds } = isoMatch(isoDuration);
-        return minutes * 60 + seconds;
-    };
-
     const onReady = (event) => {
         // Store the player reference when ready
         playerRef.current = event.target;
@@ -73,42 +56,24 @@ export function FooterPlayer({ video }) {
     };
 
     useEffect(() => {
-        const fetchVideoDuration = async () => {
-            try {
-                const response = await axios.get(`https://www.googleapis.com/youtube/v3/videos`, {
-                    params: {
-                        part: 'contentDetails',
-                        id: video.id.videoId,
-                        key: 'AIzaSyC3YOy0NUIShjRXdNxhZazirA58eiMbQDI'
+        if (video && video.id.videoId) {
+            const fetchVideoDuration = async () => {
+                try {
+                    const durations = await utilService.getDurations(video.id.videoId);
+                    if (durations) {
+                        setVideoDuration(durations[0]);
                     }
-                });
-                const duration = response.data.items[0].contentDetails.duration;
-                setVideoDuration(duration); // Store duration in state
-            } catch (error) {
-                console.error('Error fetching video duration', error);
-            }
-        };
-
-        fetchVideoDuration();
+                } catch (error) {
+                    console.error('Error fetching video duration', error);
+                }
+            };
+            fetchVideoDuration();
+        }
     }, [video.id.videoId]);
 
-    const isoMatch = (isoDuration) => {
-        const match = isoDuration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
-        if (!match) return 0;
-        const hours = (parseInt(match[1], 10) || 0);
-        const minutes = (parseInt(match[2], 10) || 0) + hours * 60;
-        const seconds = (parseInt(match[3], 10) || 0);
-
-        return {hours: hours, minutes: minutes, seconds: seconds};
-    };
-
-    const formatDuration = (isoDuration) => {
-        // const match = isoDuration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
-        // if (!match) return 0;
-        // const hours = (parseInt(match[1], 10) || 0);
-        // const minutes = (parseInt(match[2], 10) || 0) + hours * 60;
-        // const seconds = (parseInt(match[3], 10) || 0);
-        const { hours, minutes, seconds } = isoMatch(isoDuration);
+    const formatTime = (timeInSeconds) => {
+        const seconds = Math.floor(timeInSeconds % 60);
+        const minutes = Math.floor(timeInSeconds / 60);
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
 
@@ -132,11 +97,13 @@ export function FooterPlayer({ video }) {
                 <button onClick={playNext}>Next</button>
                 <button onClick={toggleRepeat}>Repeat</button>
             </div>
-            <div className="progress-bar">
-                <span className="current-time">{formatTime(currentTime)}</span>
-                <progress value={currentTime} max={durationInSeconds(videoDuration)}></progress>
-                <span className="end-time">{formatDuration(videoDuration)}</span>
-            </div>
+            {videoDuration && (
+                <div className="progress-bar">
+                    <span className="current-time">{formatTime(currentTime)}</span>
+                    <progress value={currentTime} max={utilService.durationInSeconds(videoDuration)}></progress>
+                    <span className="end-time">{utilService.formatDuration(videoDuration)}</span>
+                </div>
+            )}
             <div className="volume-control">
                 {/* Volume control elements */}
             </div>
