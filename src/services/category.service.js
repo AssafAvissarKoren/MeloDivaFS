@@ -5,8 +5,9 @@ import { ColorLensOutlined } from '@mui/icons-material';
 
 export const categoryService = {
     createCategories,
-    saveCategories,
     getCategories,
+    removeById,
+    saveCategory,
 }
 
 const CATEGORIES_STORAGE_KEY = 'categoryDB'
@@ -53,14 +54,42 @@ async function createCategories() {
       });
 
 
-    saveCategories(categoriesArray);
+      utilService.saveToStorage(CATEGORIES_STORAGE_KEY, categoriesArray)
+    return categoriesArray
 }
 
+async function getCategories(filterBy = null) {
+    let categories = await storageService.query(CATEGORIES_STORAGE_KEY) // add filter later
+    if (!filterBy) return categories
 
-function saveCategories(stats) {
-    utilService.saveToStorage(CATEGORIES_STORAGE_KEY, stats)
+    // apply filtering 
+    if (filterBy) {
+        if (filterBy.text) {
+            categories = categories.filter(category => {
+                const textMatch = !filterBy.text || category.categoryName.includes(filterBy.text)
+                return textMatch;
+            });
+        }
+    }
+
+    // apply sorting
+    switch (filterBy.sort) {
+        case 'title':
+            categories.sort((a, b) => a.subject.localeCompare(b.subject));
+            break;
+    }
+
+    return categories
 }
 
-function getCategories() {
-    return utilService.loadFromStorage(CATEGORIES_STORAGE_KEY)
+function removeById(categoryId) {
+    return storageService.remove(CATEGORY_STORAGE_KEY, categoryId)
+}
+
+function saveCategory(category) {
+    if (category._id) {
+        return storageService.put(CATEGORY_STORAGE_KEY, category)
+    } else {
+        return storageService.post(CATEGORY_STORAGE_KEY, category)
+    }
 }
