@@ -1,12 +1,12 @@
 import imgTLI from '../assets/imgs/the lonely island - tutleneck & chain.png';
 import { storageService } from './async-storage.service.js'
+import { createLikedTracksData } from './data.service.js';
 import { utilService } from './util.service.js'
 
 export const trackService = {
-    query,
-    save,
-    remove,
-    getById,
+    initLikedTracks,
+    setLikedTracks,
+    getLikedTrack,
     createTrack,
 
     //===TRASH===
@@ -16,27 +16,21 @@ export const trackService = {
     initSongs,
 }
 
-const TRACK_STORAGE_KEY = 'trackDB'
+const LIKED_TRACK_STORAGE_KEY = 'trackDB'
 
+createLikedTracksData(LIKED_TRACK_STORAGE_KEY)
 
-async function query(filterBy = {}) {
-    return storageService.query(TRACK_STORAGE_KEY) // add filter later
+async function initLikedTracks(likedTracks) {
+    likedTracks = await storageService.query(LIKED_TRACK_STORAGE_KEY)
+    return likedTracks[0]
 }
 
-function getById(trackId) {
-    return storageService.get(TRACK_STORAGE_KEY, trackId)
+function setLikedTracks(likedTracks) {
+    storageService.put(LIKED_TRACK_STORAGE_KEY, likedTracks)
 }
 
-function remove(trackId) {
-    return storageService.remove(TRACK_STORAGE_KEY, trackId)
-}
-
-function save(track) {
-    if (track._id) {
-        return storageService.put(TRACK_STORAGE_KEY, track)
-    } else {
-        return storageService.post(TRACK_STORAGE_KEY, track)
-    }
+async function getLikedTrack() {
+    return storageService.get(LIKED_TRACK_STORAGE_KEY, likedTracksId)
 }
 
 function createTrack(track, addedBy) {

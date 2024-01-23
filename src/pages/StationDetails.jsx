@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router"
-import { stationService } from "../services/station.service"
+import { getStationById, saveStation } from "../store/actions/station.actions"
 import { eventBusService } from "../services/event-bus.service"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faList, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { faClockFour, faHeart } from '@fortawesome/free-regular-svg-icons'
 import { TrackPreview } from "../cmps/TrackPreview"
+import { useSelector } from "react-redux"
 
 
 export function Station() {
     const { stationId } =  useParams()
+    const likedTracks = useSelector(storeState => storeState.stationModule.likedTracks)
     const [station, useStation] = useState()
 
     useEffect(() => {
@@ -18,7 +20,7 @@ export function Station() {
 
     async function loadStation() {
         try {
-            const station = await stationService.getById(stationId)
+            const station = await getStationById(stationId)
             useStation(station)
         } catch (err) {
             eventBusService.showErrorMsg('faild to load station')
@@ -27,9 +29,8 @@ export function Station() {
 
     async function deleteTrack(trackUrl) {
         try {
-            console.log(station)
             const tracks = station.tracks.filter(track => track.url !== trackUrl)
-            await stationService.saveStation({...station, tracks: tracks})
+            await saveStation({...station, tracks: tracks})
             useStation({...station, tracks: tracks})
         } catch (err) {
             eventBusService.showErrorMsg('faild to delete station')
@@ -84,6 +85,7 @@ export function Station() {
                             layout={"station-content-layout"}
                             track={track} 
                             trackNum={trackNum++}
+                            isLiked={likedTracks[track.url] ? true : false}
                             deleteTrack={deleteTrack}
                         />
                     </li> 

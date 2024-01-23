@@ -10,6 +10,7 @@ import { Home } from '../pages/Home.jsx';
 import imgUrl from '../assets/imgs/MeloDiva.png'
 import { Station } from '../pages/StationDetails.jsx';
 import { Category, Status } from '../cmps/Category'
+import { initLikedTracks } from '../store/actions/station.actions.js';
 
 export const Index = () => {
     const params = useParams();
@@ -21,6 +22,7 @@ export const Index = () => {
 
     useEffect(() => {   
         loadStations();
+        initLikedTracks()
         categoryService.createCategories();
     }, []);
 
