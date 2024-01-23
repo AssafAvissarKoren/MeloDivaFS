@@ -1,15 +1,85 @@
 
 .track-preview {
     position: relative;
+    padding: 7px 0;
+    border-radius: 5px;
+    color: #909090;
 
     &:hover {
-        background-color: #404040;
+        background-color: #353535;
+
+        &
+        .btn-like-track,
+        .btn-more {
+            opacity: 1;
+        }
+
+        & .track-numder {
+            & .track-num {
+                display: none;
+                width: 0;
+            }
+            & .btn-track-play {
+                display: block;
+            }
+        }
     }
 
-    & .track-preview-img {
-        height: 50px;
-        width: 50px;
-        object-fit: cover;
+    &.selected {
+        background-color: #555555;
+
+        &
+        .btn-like-track,
+        .btn-more {
+            opacity: 1;
+        }
+
+        & .track-numder {
+            & .track-num {
+                display: none;
+                width: 0;
+            }
+            & .btn-track-play {
+                display: block;
+            }
+        }
+    }
+
+    & .track-numder {
+        display: flex;
+        flex-direction: row-reverse;
+
+        & .track-num {
+            display: block;
+            color: #909090;
+        }
+        & .btn-track-play {
+            display: none;
+            background-color: unset;
+            color: white;
+            border: 0;
+            border-radius: 50%;
+            padding: 0;
+            cursor: unset;
+        }
+    }
+
+    & .track-preview-title {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 10px;
+        align-items: center;
+        
+        & p {
+            font-weight: 600;
+            color: white;
+        }
+
+        & .track-preview-img {
+            height: 42px;
+            width: 42px;
+            object-fit: cover;
+        }
     }
 
     & .track-preview-options {
@@ -17,13 +87,39 @@
         grid-template-columns: repeat(3, 1fr);
         align-items: center;
         justify-items: center;
+
+
+    }
+
+    & .btn-like-track {
+        opacity: 0;
+        background-color: unset;
+        color: #909090;
+        border: 0;
+        font-size: 1.1em;
+        margin-right: 14px;
+
+        &:hover {
+            color: white;
+        }
     }
 
     & .btn-more {
+        opacity: 0;
         background-color: unset;
+        color: #909090;
         border: 0;
-        color: white;
+        font-size: 25px;
+        letter-spacing: 1px;
+        margin-left: -8px;
 
+        &:hover {
+            color: white;
+        }
+
+        & > * {
+            margin-top: -16px;
+        }
     }
 
 }

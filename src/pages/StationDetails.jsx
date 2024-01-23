@@ -3,7 +3,8 @@ import { useParams } from "react-router"
 import { stationService } from "../services/station.service"
 import { eventBusService } from "../services/event-bus.service"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlayCircle } from '@fortawesome/free-solid-svg-icons'
+import { faList, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
+import { faClockFour, faHeart } from '@fortawesome/free-regular-svg-icons'
 import { TrackPreview } from "../cmps/TrackPreview"
 
 
@@ -42,19 +43,40 @@ export function Station() {
     return (
     <section className="station container">
         <div className="station-head">
-            <img className="station-head-img" src={station.imgUrl}/>
+            <div className="station-head-img-container">
+                <img className="station-head-img" src={station.imgUrl}/>
+            </div>
             <div className="station-head-info">
-                <h1>{station.name}</h1>
+                <p>Album</p>
+                <h1 className="station-name">{station.name}</h1>
+                <p></p> {/* station description */}
                 <p>{station.createdBy.fullname} - {station.tracks.length}</p>
             </div>
         </div>
         <div className="station-options">
             <button className="station-play-btn" onClick={() => {}}>
-            <FontAwesomeIcon icon={faPlayCircle} />
+                <FontAwesomeIcon icon={faPlayCircle} />
+            </button>
+            <button className="station-like-btn" onClick={() => {}}>
+                <FontAwesomeIcon icon={faHeart} />
+            </button>
+            <button className="station-more-btn" onClick={() => {}}>
+                <p>...</p>
+            </button>
+            <button className="station-sort-btn" onClick={() => {}}>
+                <p>List</p>
+                <FontAwesomeIcon icon={faList} />
             </button>
         </div>
-        <div className="station-content station-content-layout">
-
+        <div className="station-content">
+            <div className="station-list-head station-content-layout">
+                <p className="track-numder">#</p>
+                <p>Title</p>
+                <div className="track-time">
+                    <FontAwesomeIcon icon={faClockFour} />
+                </div>
+            </div>
+            <div className="br"/>
             <ul className="station-track-list">
                 {station.tracks.map(track => 
                     <li key={track.imgUrl}>
