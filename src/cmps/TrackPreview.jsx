@@ -1,15 +1,47 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsis } from '@fortawesome/free-solid-svg-icons'
-import { faHeart } from '@fortawesome/free-regular-svg-icons'
-import { useState } from 'react'
+import { faHeart as heartLined } from '@fortawesome/free-regular-svg-icons'
+import { faPlay, faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons'
+import { useEffect, useRef, useState } from 'react'
 import { MiniMenu } from './MiniMenu'
+import { toggleLikedTrack } from '../store/actions/station.actions'
 
 
-export function TrackPreview({ layout = '', track, trackNum, deleteTrack, duration, handleTrackClick }) {
+export function TrackPreview({ layout = '', track, trackNum, isLiked, deleteTrack, duration, handleTrackClick}) {
+    const [isSelected, setSelected] = useState(false)
     const [isMenu, setIsMenu] = useState(false)
+    const modalRef = useRef(track.url)
+
+    useEffect(() => {
+        if(isSelected) {
+            setTimeout(() => {
+                document.addEventListener('click', handleClickOutside)
+            }, 0)
+
+            return () => {
+                document.removeEventListener('click', handleClickOutside)
+            }
+        }
+    },[isSelected])
+
+    function handleClickOutside(ev) {
+        if (modalRef.current && !modalRef.current.contains(ev.target)) {
+            onToggleSelected()
+        }
+    }
+
+    function onToggleSelected() {
+        setSelected(prevIsSelected => !prevIsSelected)
+        handleTrackClick(track)
+    }
+
+    function onToggleLiked(ev) {
+        ev.stopPropagation()
+        setIsMenu(false)
+        toggleLikedTrack(track)
+    }
 
     function toggleMenu() {
-        setIsMenu(currentIsMenu => !currentIsMenu)
+        setIsMenu(prevIsMenu => !prevIsMenu)
     }
 
     function onCloseMiniMenu() {
@@ -20,16 +52,30 @@ export function TrackPreview({ layout = '', track, trackNum, deleteTrack, durati
         deleteTrack(track.url)
     }
 
+    const selected = isSelected ? 'selected' : ''
     return (
-        <section className={`track-preview ${layout}`} onClick={() => handleTrackClick(track)}>
-            <p>{trackNum}</p>
-            <img src={track.imgUrl} className="track-preview-img"/>
-            <p>{track.title}</p>
+        <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
+            <div className='track-numder'>
+                <p className='track-num'>{trackNum}</p>
+                <button className="btn-track-play" onClick={() => {}}>
+                    <FontAwesomeIcon icon={faPlay} />
+                </button>
+            </div>
+            <div className="track-preview-title">
+                <img src={track.imgUrl} className="track-preview-img"/>
+                <p>{track.title}</p>
+            </div>
             <div className="track-preview-options">
-                <FontAwesomeIcon icon={faHeart} />
-                <p>{duration}</p>
+                <button className={`btn-like-track ${isLiked && 'green'}`} onClick={onToggleLiked}>
+                    {isLiked 
+                    ? 
+                    <FontAwesomeIcon icon={heartSolid} /> 
+                    :
+                    <FontAwesomeIcon icon={heartLined} />}
+                </button>
+                <p>4:56</p>
                 <button className="btn-more" onClick={toggleMenu}>
-                    <FontAwesomeIcon icon={faEllipsis} />
+                    <p>...</p>
                 </button>
                 {isMenu && 
                         <MiniMenu onCloseMiniMenu={onCloseMiniMenu}>
@@ -39,8 +85,13 @@ export function TrackPreview({ layout = '', track, trackNum, deleteTrack, durati
                             <button onClick={onDeleteTrack}>
                                 Remove from this playlist
                             </button>
-                            <button onClick={onCloseMiniMenu}>
-                                Save to your liked songs
+                            <button onClick={onToggleLiked}>
+                            {isLiked 
+                            ? 
+                            'Remove from your liked songs'
+                            :
+                            'Save to your liked songs'}
+                                
                             </button>
                             <button onClick={onCloseMiniMenu}>
                                 Add to queqe

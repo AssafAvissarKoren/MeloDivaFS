@@ -17,6 +17,11 @@ export async function createStationData(storageKey) {
     }
 }
 
+export async function createLikedTracksData(storageKey) {
+    let stations = utilService.loadFromStorage(storageKey);
+    if (!stations || !stations.length) utilService.saveToStorage(storageKey, [{_id: 'l101'}]);
+}
+
 const API_KEY = 'AIzaSyD5_pPOj9mwAPQz41a1ymh9AuhbZxS6ySQ'
 const STATION_API_URL = 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50'
 

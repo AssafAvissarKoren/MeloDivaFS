@@ -1,7 +1,7 @@
 .station {
     width: 100%;
     height: 100%;
-    padding: 20px;
+    padding-top: 20px;
     overflow-y: auto;
     color: white;
     background-color: #121212;
@@ -17,61 +17,149 @@
     }
 
     & > * {
-        padding: 10px 0;
+        padding: 0 21px;
     }
 
     & .station-head {
         display: grid;
-        grid-template-columns: auto 1fr;
+        grid-template-columns: minmax(100px, 233px) 1fr;
         align-items: center;
-        gap: 10px;
+        gap: 23px;
+        padding-bottom: 19px;
 
-        & .station-head-img {
-            height: 200px;
-            width: 200px;
+        & .station-head-img-container {
+            display: block;
+            aspect-ratio: 1 / 1;
             object-fit: cover;
+            margin-left: 3px;
+
+            & .station-head-img {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+            }
         }
 
         & .station-head-info {
-            display: grid;
-            grid-template-rows: 1fr auto;
-            align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
             height: 100%;
 
-            & h1 {
-                font-size: 2em;
+            & .station-name {
+                font-size: 3em;
+                font-weight: 700;
             }
         }
     }
 
     & .station-options {
-        padding: 10px;
+        padding-top: 26px;
+        display: grid;
+        grid-template-columns: repeat(3, auto) 1fr auto;
+        align-items: center;
 
-        .station-play-btn {
-            width: 50px;
-            height: 50px;
+        & .station-play-btn {
+            width: 56px;
+            height: 56px;
             border-radius: 50%; /* Make the button round */
-            background-color: white; /* Set the background color */
+            background-color: black; /* Set the background color */
             color: #1db954;
-            font-size: 50px; /* Set size of the icon */
+            font-size: 56px; /* Set size of the icon */
             border: none;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-          }
+            margin-left: 3px;
+
+            &:hover {
+                width: 58px;
+                height: 58px;
+                font-size: 58px;
+                margin: -1px -1px -1px 2px;
+            }
+        }
+
+        & .station-like-btn {
+            background-color: unset;
+            border: 0;
+            color: #909090;
+            font-size: 35px;
+            margin-left: 24px;
+
+            &:hover {
+                color: white;
+            }
+        }
+
+        & .station-more-btn {
+            background-color: unset;
+            border: 0;
+            color: #909090;
+            font-size: 40px;
+            letter-spacing: 1px;
+            margin-left: 12px;
+
+            &:hover {
+                color: white;
+            }
+
+            & > * {
+                margin-top: -27px;
+            }
+        }
+
+        & .station-sort-btn {
+            grid-column: -2 / -1;
+            display: grid;
+            grid-template-columns: auto auto;
+            gap: 9px;
+            background-color: unset;
+            border: 0;
+            color: #909090;
+            margin-right: 3px;
+
+            &:hover {
+                color: white;
+            }
+        }
     }
 
     & .station-content-layout {
         display: grid;
-        grid-template-columns: 30px auto 1fr 150px;
+        grid-template-columns: 30px 1fr 125px;
         align-items: center;
-        gap: 5px;
+        gap: 18px;
+        margin-left: 4px;
+
+        & .track-numder {
+            justify-self: right;
+        }
+
+        & .track-time {
+            grid-column: -2 / -1;
+            text-align: center;
+            margin-left: 13px;
+        }
     }
 
     & .station-content {
 
-        & .station-track-list {
+        & .station-list-head {
+            padding-top: 32px;
+            grid-column: 1 / -1;
+            color: #909090;
+        }
+
+        & .br {
+            display: block;
+            height: 1px;
+            background-color: #303030;
+            margin-top: 9px;
+        }
+
+        & .station-track-list { 
             list-style-type: none;
             padding-inline-start: 0;
 
