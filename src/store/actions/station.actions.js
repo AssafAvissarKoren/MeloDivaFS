@@ -18,7 +18,6 @@ export async function loadStations() {
     } finally {
         // store.dispatch({ type: 'SET_IS_LOADING', isLoading: false })
     }
-
 }
 
 export async function getStationById(stationId) {
