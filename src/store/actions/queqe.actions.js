@@ -23,6 +23,7 @@ export async function setQueqeToStation(station, trackNum = 0) {
             tracksToPlay: [],
         }
         store.dispatch({ type: SET_QUEQE, queqe })
+        return GetCurrentTrackInQueqe()
     } catch (err) {
         console.log('Had issues Setting the queqe', err);
         throw err
@@ -54,7 +55,7 @@ export async function nextTrackInQueqe() {
             store.dispatch({ type: REMOVE_STATION_TRACK_TO_PLAY, track })
             store.dispatch({ type: ADD_PLAYED_TRACK, track })
         }
-        return GetCurrentTrackInQueqe
+        return GetCurrentTrackInQueqe()
     } catch (err) {
         console.log('Had issues Setting the queqe', err);
         throw err
@@ -74,7 +75,7 @@ export async function prevTrackInQueqe() {
             store.dispatch({ type: REMOVE_PLAYED_TRACK, track })
             store.dispatch({ type: SET_PLAYED_TRACK, tracks })
         }
-        return GetCurrentTrackInQueqe
+        return GetCurrentTrackInQueqe()
     } catch (err) {
         console.log('Had issues Setting the queqe', err);
         throw err
