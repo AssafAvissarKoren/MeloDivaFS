@@ -10,18 +10,17 @@ import { Home } from '../pages/Home.jsx';
 import imgUrl from '../assets/imgs/MeloDiva.png'
 import { StationDetails } from '../pages/StationDetails.jsx';
 import { Category, Status } from '../cmps/Category'
-import { initLikedTracks } from '../store/actions/station.actions.js';
+import { initLikedTracks, loadStations } from '../store/actions/station.actions.js';
 
 export const Index = () => {
     const params = useParams();
-    const [indexStationList, setIndexStationList] = useState(null);
     const [filterBy, setFilterBy] = useState(stationService.getDefaultFilter(params));
     const [currentCategory, setCurrentCategory] = useState(null);
 
     const navigate = useNavigate();
 
     useEffect(() => {   
-        loadStations();
+        loadStations()
         initLikedTracks()
         categoryService.createCategories();
     }, []);
@@ -32,13 +31,8 @@ export const Index = () => {
         const filterURL = stationService.filterURL(filterBy);
         navigate(filterURL, { replace: true }) 
     }, [filterBy]);
-    
-    async function loadStations() {
-        setIndexStationList(await stationService.getStations(filterBy));
-    }
 
     const mainViewComponentProps = {
-        stations: indexStationList,
         setCurrentCategory: setCurrentCategory,
     }; 
 
@@ -64,9 +58,6 @@ export const Index = () => {
             MainViewComponent = Home;
             break;
     }
-
-    
-    if (!indexStationList) return <div>Loading...</div>;
 
     return (
             <div className="index-container">

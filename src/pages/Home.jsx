@@ -3,9 +3,11 @@ import { stationService } from '../services/station.service';
 import { categoryService } from '../services/category.service';
 import imgUrl from '../assets/imgs/react.png';
 import { Category, Status } from '../cmps/Category';
+import { useSelector } from 'react-redux';
 
-export function Home({ stations, setCurrentCategory }) {
+export function Home({ setCurrentCategory }) {
     const [categories, setCategories] = useState([]);
+    const stations = useSelector(storeState => storeState.stationModule.stations)
 
     useEffect(() => {
         const fetchCategories = async () => {

@@ -9,7 +9,7 @@ export async function loadStations() {
     // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
     const filterBy = store.getState().stationModule.filterBy
     try {
-        const stations = await stationService.query(filterBy)
+        const stations = await stationService.getStations(filterBy)
         
         store.dispatch({ type: SET_STATIONS, stations })
     } catch (err) {
@@ -49,8 +49,8 @@ export async function saveStation(stationToSave) {
     // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
     const type = stationToSave._id ? UPDATE_STATION : ADD_STATION
     try {
-        const savedStation = await stationService.saveStation(stationToSave)
-        store.dispatch({ type, station: savedStation })
+        const station = await stationService.saveStation(stationToSave)
+        store.dispatch({ type, station: station })
     } catch (err) {
         console.log('Had issues saving station', err);
         throw err
@@ -67,7 +67,6 @@ export async function initLikedTracks() {
     // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
     try {
         const likedTracks = await trackService.initLikedTracks()
-        console.log(likedTracks)
         store.dispatch({ type: SET_LIKED_TRACKS, likedTracks })
     } catch (err) {
         console.log('Had issues Initalizing liked tracks', err);
