@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faSearch, faBook } from '@fortawesome/free-solid-svg-icons';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 export const SideNav = ({ setFilterBy }) => {
     const params = useParams();
@@ -18,7 +19,7 @@ export const SideNav = ({ setFilterBy }) => {
     const tabData = {
         home: { name: "Home", icon: faHome, symbol: "" },
         search: { name: "Search", icon: faSearch, symbol: "" },
-        library: { name: "Library", icon: null, symbol: "||∖" }
+        library: { name: "Library", icon: faBook, symbol: "||∖" }
     };
     
 

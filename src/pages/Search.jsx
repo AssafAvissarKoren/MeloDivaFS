@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Category, Status } from '../cmps/Category';
+import { CategoryDisplay } from '../cmps/CategoryDisplay.jsx';
 import imgUrl from '../assets/imgs/MeloDiva.png';
 import { categoryService } from '../services/category.service';
 import { FooterPlayer } from '../cmps/FooterPlayer';
+import { dataService } from '../services/data.service.js';
+import { setQueueToTrack } from '../store/actions/queue.actions.js';
+import { trackService } from '../services/track.service.js';
 
 
 export function Search({ stations, searchText, setCurrentCategory }) {
@@ -28,27 +30,17 @@ export function Search({ stations, searchText, setCurrentCategory }) {
 
     const searchVideos = async (query) => {
         try {
-            const response = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
-                params: {
-                    part: 'snippet',
-                    maxResults: 5,
-                    q: query,
-                    key: 'AIzaSyC3YOy0NUIShjRXdNxhZazirA58eiMbQDI' 
-                }
-            });
+            const response = await dataService.searchYoutube(query);
             setVideos(response.data.items);
         } catch (error) {
             console.error('Error fetching data from YouTube API', error);
         }
     };
 
-    const getStationsForCategory = (categoryIds) => {
-        return stations.filter(station => categoryIds.includes(station._id));
-    };
-
     const handleVideoClick = (video) => { //here comes the boom
         console.log("handleVideoClick", video)
         setSelectedVideo(video);
+        setQueueToTrack(trackService.videoToTrack(video))
     };
 
     if (!stations || !categories.length) return <div>Loading...</div>;
@@ -67,13 +59,10 @@ export function Search({ stations, searchText, setCurrentCategory }) {
             ) : (
                 <>
                     {categories.map(category => (
-                        <Category 
-                            key={category.categoryName}
-                            stations={getStationsForCategory(category.stationsIds)}
-                            category_name={category.categoryName}
-                            category_color={category.categoryColor}
-                            category_image={imgUrl}
-                            style={Status.CUBE}
+                        <CategoryDisplay 
+                            key={category._id}
+                            category={category}
+                            style={categoryService.Status.CUBE}
                             setCurrentCategory={setCurrentCategory}
                         />
                     ))}

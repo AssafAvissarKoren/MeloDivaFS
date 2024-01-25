@@ -2,8 +2,6 @@ import { categoryService } from "../../services/category.service";
 import { ADD_CATEGORY, REMOVE_CATEGORY, SET_IS_LOADING, SET_CATEGORIES, UPDATE_CATEGORY } from "../reducers/category.reducer";
 import { store } from "../store";
 
-
-
 export async function createCategories() {
     // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
     try {
@@ -15,7 +13,6 @@ export async function createCategories() {
     } finally {
         // store.dispatch({ type: 'SET_IS_LOADING', isLoading: false })
     }
-
 }
 
 export async function getCategories(filter = null) {
@@ -29,7 +26,6 @@ export async function getCategories(filter = null) {
     } finally {
         // store.dispatch({ type: 'SET_IS_LOADING', isLoading: false })
     }
-
 }
 
 export async function removeCategory(categoryId) {

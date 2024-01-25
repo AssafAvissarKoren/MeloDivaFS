@@ -1,17 +1,17 @@
+import { dataService } from './data.service.js';
 import { storageService } from './async-storage.service.js'
-import { createLikedTracksData } from './data.service.js';
 
 export const trackService = {
     initLikedTracks,
     setLikedTracks,
     getLikedTrack,
-    createTrack,
     trackToVideo,
+    videoToTrack,
 }
 
 const LIKED_TRACK_STORAGE_KEY = 'trackDB'
 
-createLikedTracksData(LIKED_TRACK_STORAGE_KEY)
+dataService.createLikedTracksData(LIKED_TRACK_STORAGE_KEY)
 
 async function initLikedTracks(likedTracks) {
     likedTracks = await storageService.query(LIKED_TRACK_STORAGE_KEY)
@@ -24,20 +24,6 @@ function setLikedTracks(likedTracks) {
 
 async function getLikedTrack(likedTracksId) {
     return storageService.get(LIKED_TRACK_STORAGE_KEY, likedTracksId)
-}
-
-function createTrack(track, addedBy) {
-    const snippet = track.snippet || {};
-    const resourceId = snippet.resourceId || {};
-    const thumbnails = snippet.thumbnails || {};
-    const standard = thumbnails.standard || {};
-
-    return {
-        title: snippet.title || 'Unknown Title',
-        url: resourceId.videoId || 'Unknown Video ID',
-        imgUrl: standard.url || 'default_thumbnail_url', // Replace with a default thumbnail URL
-        addedBy: addedBy
-    };
 }
 
 function trackToVideo(track, artist) {
@@ -57,6 +43,14 @@ function trackToVideo(track, artist) {
     };
 }
 
+function videoToTrack(video) {
+    return {
+        url: video.id.videoId,
+        title: video.snippet.title,
+        artist: video.snippet.channelTitle,
+        imgUrl: video.snippet.thumbnails.default.url
+    };
+}
 
 // function trackToVideo(track, artist) {
 //     return {

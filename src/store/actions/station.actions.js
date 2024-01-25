@@ -1,6 +1,7 @@
 import { stationService } from "../../services/station.service";
 import { trackService } from "../../services/track.service";
-import { ADD_STATION, REMOVE_STATION, SET_FILTER_BY, SET_IS_LOADING, SET_STATIONS, UPDATE_STATION, SET_LIKED_TRACKS, ADD_LIKED_TRACK, REMOVE_LIKED_TRACK } from "../reducers/station.reducer";
+import { ADD_STATION, REMOVE_STATION, SET_FILTER_BY, SET_IS_LOADING, SET_STATIONS, 
+    UPDATE_STATION, SET_LIKED_TRACKS, ADD_LIKED_TRACK, REMOVE_LIKED_TRACK } from "../reducers/station.reducer";
 import { store } from "../store";
 
 
@@ -67,7 +68,6 @@ export async function initLikedTracks() {
     // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
     try {
         const likedTracks = await trackService.initLikedTracks()
-        console.log(likedTracks)
         store.dispatch({ type: SET_LIKED_TRACKS, likedTracks })
     } catch (err) {
         console.log('Had issues Initalizing liked tracks', err);
@@ -113,4 +113,8 @@ async function removeLikedTrack(likedTracks, track) {
 
 export function setIsLoading(isLoading) {
     store.dispatch({ type: SET_IS_LOADING, isLoading })
+}
+
+export async function getStations() {
+    return await stationService.getStations()
 }

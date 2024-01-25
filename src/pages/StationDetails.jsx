@@ -10,7 +10,8 @@ import { useSelector } from "react-redux"
 import { utilService } from '../services/util.service.js'
 import { FooterPlayer } from '../cmps/FooterPlayer';
 import { trackService } from  '../services/track.service.js'
-
+import defaultImgUrl from '../assets/imgs/MeloDiva.png'
+import { dataService } from  '../services/data.service.js'
 
 export function StationDetails() {
     const { stationId } =  useParams()
@@ -18,6 +19,7 @@ export function StationDetails() {
     const [station, setStation] = useState()
     const [tracksWithDurations, setTracksWithDurations] = useState([]);
     const [selectedTrack, setSelectedTrack] = useState(null);
+    let stationImgURL
 
     useEffect(() => {
         loadStation()
@@ -35,6 +37,7 @@ export function StationDetails() {
             };
     
             fetchAndSetDurations();
+            stationImgURL = station.imgUrl == "default_thumbnail_url" ? defaultImgUrl : station.imgUrl;
         }
     }, [station]);
 
@@ -66,7 +69,7 @@ export function StationDetails() {
                 const urlParts = track.url.split('=');
                 return urlParts[urlParts.length - 1];
             }).join(',');
-            return await utilService.getDurations(tracksIds)
+            return await dataService.getDurations(tracksIds)
         } catch (error) {
             console.error('Error fetching video durations', error);
             return []; // Return an empty array in case of an error
@@ -83,7 +86,7 @@ export function StationDetails() {
     <section className="station container">
         <div className="station-head">
             <div className="station-head-img-container">
-                <img className="station-head-img" src={station.imgUrl}/>
+                <img className="station-head-img" src={stationImgURL}/>
             </div>
             <div className="station-head-info">
                 <p>Album</p>

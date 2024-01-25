@@ -6,6 +6,7 @@
     overflow-y: auto;
     box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
     font-family: 'Roboto', sans-serif;
+    height: 100vh;
 
     div {
         display: flex;
@@ -30,10 +31,15 @@
     }
 
     .symbol {
-        margin-right: 10px;
         font-weight: bold;
-    }
+        width: 40px;
+        &::after {
+            content: " "; /* Add a space as content */
+            width: 5px; /* Adjust the space width as needed */
+            display: inline-block;
+        }
     
+    }
 }
 
 

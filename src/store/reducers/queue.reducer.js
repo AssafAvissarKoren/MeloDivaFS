@@ -1,4 +1,4 @@
-export const SET_QUEQE = 'SET_QUEQE'
+export const SET_QUEUE = 'SET_QUEUE'
 
 export const SET_PLAYED_TRACKS = 'SET_PLAYED_TRACKS'
 export const ADD_PLAYED_TRACK = 'ADD_PLAYED_TRACK'
@@ -21,11 +21,11 @@ const initialState = {
     isLoading: false,
 }
 
-export function queqeReducer(state = initialState, action = {}) {
+export function queueReducer(state = initialState, action = {}) {
     switch (action.type) {  
-        case SET_QUEQE:
+        case SET_QUEUE:
             return {
-                ...state, ...action.queqe
+                ...state, ...action.queue
             }
 
         case SET_PLAYED_TRACKS:
@@ -58,7 +58,7 @@ export function queqeReducer(state = initialState, action = {}) {
         case SET_TRACKS_TO_PLAY:
             return {
                 ...state,
-                queqe: action.tracks
+                queue: action.tracks
             }
         case ADD_TRACK_TO_PLAY:
             return {

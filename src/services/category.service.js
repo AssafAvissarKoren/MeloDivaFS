@@ -3,7 +3,14 @@ import { storageService } from './async-storage.service.js'
 import { stationService } from './station.service.js';
 import { ColorLensOutlined } from '@mui/icons-material';
 
+const Status = {
+    ROW: 'row',
+    CUBE: 'cube',
+    RESULTS: 'results',
+  };
+
 export const categoryService = {
+    Status,
     createCategories,
     getCategories,
     removeById,
@@ -11,7 +18,7 @@ export const categoryService = {
 }
 
 const CATEGORIES_STORAGE_KEY = 'categoryDB'
-
+  
 async function createCategories() {
     let stations = await stationService.getStations();
     let tags = {};
@@ -31,30 +38,25 @@ async function createCategories() {
           tags[tag]?.forEach(id => merged.add(id));
         });
         return Array.from(merged);
-      };
-      
-
-    let categories = {
-        "1960s-1990s": ["1960s", "1970s", "1980s", "1990s"],
-        "2000s-2010s": ["2000s", "2010s"],
-        "Electronic, Ambient & Experimental": ["Electronic", "Ambient", "Experimental"],
-        "Rock, Blues & Psychedelic": ["Rock", "Blues", "Psychedelic"],
-        "Jazz, Trumpet & Bebop": ["Jazz", "Trumpet", "Bebop"],
-        "Pop, Hits & Dance": ["Pop", "Hits", "Dance"],
-        "R&B, Soul & HipHop": ["R&B", "Soul", "HipHop"],
-        "Comedy, Show & Animation": ["Comedy", "Show", "Animation"],
-        "Classic, Iconic & Legendary": ["Classic", "Iconic", "Legendary"],
     };
+      
+    let categories = [
+        {_id: "c101", name: "1960s-1990s", stationIds: ["1960s", "1970s", "1980s", "1990s"], color: "#FFC864"},
+        {_id: "c102", name: "2000s-2010s", stationIds: ["2000s", "2010s"], color: "#779DC3"},
+        {_id: "c103", name: "Electronic, Ambient & Experimental", stationIds: ["Electronic", "Ambient", "Experimental"], color: "#E8115B"},
+        {_id: "c104", name: "Rock, Blues & Psychedelic", stationIds: ["Rock", "Blues", "Psychedelic"], color: "#1E3264"},
+        {_id: "c105", name: "Jazz, Trumpet & Bebop", stationIds: ["Jazz", "Trumpet", "Bebop"], color: "#80433B"},
+        {_id: "c106", name: "Pop, Hits & Dance", stationIds: ["Pop", "Hits", "Dance"], color: "#E13300"},
+        {_id: "c107", name: "R&B, Soul & HipHop", stationIds: ["R&B", "Soul", "HipHop"], color: "#1BD57F"},
+        {_id: "c108", name: "Comedy, Show & Animation", stationIds: ["Comedy", "Show", "Animation"], color: "#EEC1C9"},
+        {_id: "c109", name: "Classic, Iconic & Legendary", stationIds: ["Classic", "Iconic", "Legendary"], color: "#046FBC"},
+    ]     
 
-    const colors = ["#FF5733", "#33FF57", "#3357FF", "#FF33F5", "#57FF33", "#F5FF33", "#33FFF5", "#FF5733"];
-
-          
-    let categoriesArray = Object.entries(categories).map(([categoryName, stationsIds], index) => {
-        return { categoryName, stationsIds: mergeTags(stationsIds), categoryColor: colors[index % colors.length] };
-      });
-
-
-      utilService.saveToStorage(CATEGORIES_STORAGE_KEY, categoriesArray)
+    let categoriesArray = categories.flatMap(({ _id, name, stationIds, color }) => {
+        return { _id ,name, stationIds: mergeTags(stationIds), color: color };
+    });
+    
+    utilService.saveToStorage(CATEGORIES_STORAGE_KEY, categoriesArray)
     return categoriesArray
 }
 
@@ -66,7 +68,7 @@ async function getCategories(filterBy = null) {
     if (filterBy) {
         if (filterBy.text) {
             categories = categories.filter(category => {
-                const textMatch = !filterBy.text || category.categoryName.includes(filterBy.text)
+                const textMatch = !filterBy.text || category.name.includes(filterBy.text)
                 return textMatch;
             });
         }

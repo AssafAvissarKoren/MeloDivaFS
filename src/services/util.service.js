@@ -1,5 +1,4 @@
 import { LoremIpsum } from 'lorem-ipsum';
-import axios from 'axios';
 
 export const utilService = {
     makeId,
@@ -10,7 +9,8 @@ export const utilService = {
     isoMatch,
     durationInSeconds,
     formatDuration,
-    getDurations,
+    saveToSessionStorage,
+    loadFromSessionStorage,
 }
 
 const lorem = new LoremIpsum();
@@ -27,6 +27,15 @@ function makeId(length = 5) {
 function saveToStorage(key, value) {
     localStorage[key] = JSON.stringify(value);
 }
+
+function saveToSessionStorage(key, value) {
+    sessionStorage.setItem(key, JSON.stringify(value));
+}
+
+function loadFromSessionStorage(key) {
+    sessionStorage.getItem(key);
+}
+
 
 function loadFromStorage(key, defaultValue = null) {
     var value = localStorage[key] || defaultValue;
@@ -61,14 +70,3 @@ function formatDuration(isoDuration) {
     const { hours, minutes, seconds } = isoMatch(isoDuration);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
-
-async function getDurations(tracksIds) {
-    const response = await axios.get(`https://www.googleapis.com/youtube/v3/videos`, {
-        params: {
-            part: 'contentDetails',
-            id: tracksIds,
-            key: 'AIzaSyC3YOy0NUIShjRXdNxhZazirA58eiMbQDI'
-        }
-    });
-    return response.data.items.map(item => item.contentDetails.duration);
-}

@@ -1,8 +1,17 @@
 import axios from "axios"
-import { trackService } from "./track.service"
 import { utilService } from "./util.service"
 
-export async function createStationData(storageKey) {
+export const dataService = {
+    createStationData,
+    createLikedTracksData,
+    searchYoutube,
+    getDurations,
+}
+
+const API_KEY = 'AIzaSyD5_pPOj9mwAPQz41a1ymh9AuhbZxS6ySQ' // 'AIzaSyC3YOy0NUIShjRXdNxhZazirA58eiMbQDI' // 
+const STATION_API_URL = 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50'
+
+async function createStationData(storageKey) {
     let stations = utilService.loadFromStorage(storageKey);
 
     if (!stations || !stations.length) {
@@ -17,17 +26,14 @@ export async function createStationData(storageKey) {
     }
 }
 
-export async function createLikedTracksData(storageKey) {
+async function createLikedTracksData(storageKey) {
     let stations = utilService.loadFromStorage(storageKey);
     if (!stations || !stations.length) utilService.saveToStorage(storageKey, [{_id: 'l101'}]);
 }
 
-const API_KEY = 'AIzaSyD5_pPOj9mwAPQz41a1ymh9AuhbZxS6ySQ'
-const STATION_API_URL = 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50'
-
 async function createStation(stationId, name, createdBy, tags, playlistId) {
     let tracks = await ajaxGetStationTracks(playlistId);
-    tracks = tracks.map(track => trackService.createTrack(track, createdBy));
+    tracks = tracks.map(track => createTrack(track, createdBy));
 
     return {
         _id: stationId,
@@ -47,6 +53,20 @@ async function createStation(stationId, name, createdBy, tags, playlistId) {
     };
 }
 
+function createTrack(track, addedBy) {
+    const snippet = track.snippet || {};
+    const resourceId = snippet.resourceId || {};
+    const thumbnails = snippet.thumbnails || {};
+    const standard = thumbnails.standard || {};
+
+    return {
+        title: snippet.title || 'Unknown Title',
+        url: resourceId.videoId || 'Unknown Video ID',
+        imgUrl: standard.url || 'default_thumbnail_url', // Replace with a default thumbnail URL
+        addedBy: addedBy
+    };
+}
+
 async function ajaxGetStationTracks(stationId) {
     try {
         const res = await axios.get(`${STATION_API_URL}&playlistId=${stationId}&key=${API_KEY}`)
@@ -56,6 +76,30 @@ async function ajaxGetStationTracks(stationId) {
         throw err
     }
 }
+
+async function searchYoutube(query) {
+    return await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
+        params: {
+            part: 'snippet',
+            maxResults: 5,
+            q: query,
+            key: API_KEY
+        }
+    });
+}
+
+async function getDurations(tracksIds) {
+    const response = await axios.get(`https://www.googleapis.com/youtube/v3/videos`, {
+        params: {
+            part: 'contentDetails',
+            id: tracksIds,
+            key: API_KEY
+        }
+    });
+    return response.data.items.map(item => item.contentDetails.duration);
+}
+
+
 
 const Users = {
     u01: { _id: "u101", fullname: "Duran Duran", imgUrl: "http://some-photo/" },

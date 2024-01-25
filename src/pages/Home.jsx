@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { stationService } from '../services/station.service';
 import { categoryService } from '../services/category.service';
 import imgUrl from '../assets/imgs/react.png';
-import { Category, Status } from '../cmps/Category';
+import { CategoryDisplay } from '../cmps/CategoryDisplay';
 
 export function Home({ stations, setCurrentCategory }) {
     const [categories, setCategories] = useState([]);
@@ -16,23 +16,16 @@ export function Home({ stations, setCurrentCategory }) {
         fetchCategories();
     }, []);
 
-    const getStationsForCategory = (categoryIds) => {
-        return stations.filter(station => categoryIds.includes(station._id));
-    };
-
     if (!stations || !categories.length) return <div>Loading...</div>;
     
     return (
         <section className="home">
             <div className='category-display'>
                 {categories.map(category => (
-                    <Category 
-                        key={category.categoryName}
-                        stations={getStationsForCategory(category.stationsIds)}
-                        category_name={category.categoryName}
-                        category_color={"brown"}
-                        category_image={imgUrl}
-                        style={Status.ROW}
+                    <CategoryDisplay 
+                        key={category._id}
+                        category={category}
+                        style={categoryService.Status.ROW}
                         setCurrentCategory={setCurrentCategory}
                     />
                 ))}

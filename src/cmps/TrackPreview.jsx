@@ -4,6 +4,7 @@ import { faPlay, faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons
 import { useEffect, useRef, useState } from 'react'
 import { MiniMenu } from './MiniMenu'
 import { toggleLikedTrack } from '../store/actions/station.actions'
+import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 
 
 export function TrackPreview({ layout = '', track, trackNum, isLiked, deleteTrack, duration, handleTrackClick}) {
@@ -51,6 +52,8 @@ export function TrackPreview({ layout = '', track, trackNum, isLiked, deleteTrac
     function onDeleteTrack() {
         deleteTrack(track.url)
     }
+    
+    const trackImgURL = track.imgUrl == "default_thumbnail_url" ? defaultImgUrl : track.imgUrl;
 
     const selected = isSelected ? 'selected' : ''
     return (
@@ -62,7 +65,7 @@ export function TrackPreview({ layout = '', track, trackNum, isLiked, deleteTrac
                 </button>
             </div>
             <div className="track-preview-title">
-                <img src={track.imgUrl} className="track-preview-img"/>
+                <img src={trackImgURL} className="track-preview-img"/>
                 <p>{track.title}</p>
             </div>
             <div className="track-preview-options">
@@ -94,7 +97,7 @@ export function TrackPreview({ layout = '', track, trackNum, isLiked, deleteTrac
                                 
                             </button>
                             <button onClick={onCloseMiniMenu}>
-                                Add to queqe
+                                Add to queue
                             </button>
                             <button onClick={onCloseMiniMenu}>
                                 Share

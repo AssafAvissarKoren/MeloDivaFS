@@ -64,7 +64,6 @@ export function stationReducer(state = initialState, action = {}) {
                 ...state,
                 isLoading: action.isLoading
             }
-
         default:
             return state;
     }

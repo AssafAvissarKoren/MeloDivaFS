@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import YouTube from 'react-youtube';
 import { utilService } from '../services/util.service.js'
+import { dataService } from '../services/data.service.js'
 
 export function FooterPlayer({ video }) {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -59,7 +60,7 @@ export function FooterPlayer({ video }) {
         if (video && video.id.videoId) {
             const fetchVideoDuration = async () => {
                 try {
-                    const durations = await utilService.getDurations(video.id.videoId);
+                    const durations = await dataService.getDurations(video.id.videoId);
                     if (durations) {
                         setVideoDuration(durations[0]);
                     }

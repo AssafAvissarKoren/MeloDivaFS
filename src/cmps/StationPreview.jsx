@@ -1,21 +1,30 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router';
+import defaultImgUrl from '../assets/imgs/MeloDiva.png'
+import { IndexContext } from '../cmps/IndexContext.jsx';
 
 export const StationPreview = ({ station }) => {
-  if (!station) return null; // Add a check for null or undefined station
+  const { setFilterBy } = useContext(IndexContext);
 
-  const navigate = useNavigate();
+  if (!station) return null;
 
-  function handleOnClick() {
-    navigate(`/melodiva/station/${station._id}`, { replace: true })
+  function handleOnClick(stationId) {
+    const newFilterBy = {
+      tab: 'station',
+      stationId: stationId,
+      text: '',
+    };
+
+    setFilterBy(newFilterBy);
   }
+  
+  const stationImgURL = station.imgUrl == "default_thumbnail_url" ? defaultImgUrl : station.imgUrl;
 
   return (
     <div className="station-preview">
       <div className="image-container">
-        <img src={station.imgUrl} alt={station.name} />
+        <img src={stationImgURL} alt={station.name} />
         <button className="play-btn" onClick={() => handleOnClick(station._id)}>
           <FontAwesomeIcon icon={faPlayCircle} /> {/* Use Font Awesome icon */}
         </button>
