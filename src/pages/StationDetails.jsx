@@ -56,7 +56,7 @@ export function StationDetails() {
             await saveStation({...station, tracks: tracks})
             setStation({...station, tracks: tracks})
         } catch (err) {
-            eventBusService.showErrorMsg('faild to delete station')
+            eventBusService.showErrorMsg('faild to delete track')
             console.log(err)
         }
     }
@@ -81,7 +81,6 @@ export function StationDetails() {
     };
 
     if(!station) return <div>loading...</div>
-    var trackNum = 1
     return (
     <section className="station container">
         <div className="station-head">
@@ -125,7 +124,7 @@ export function StationDetails() {
                         <TrackPreview 
                             layout={"station-content-layout"}
                             track={track} 
-                            trackNum={trackNum++}
+                            trackNum={++trackNum}
                             isLiked={likedTracks[track.url] ? true : false}
                             deleteTrack={deleteTrack}
                             duration={utilService.formatDuration(track.duration)}
