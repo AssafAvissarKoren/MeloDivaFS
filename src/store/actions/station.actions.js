@@ -5,14 +5,13 @@ import { ADD_STATION, REMOVE_STATION, SET_FILTER_BY, SET_IS_LOADING, SET_STATION
 import { store } from "../store";
 
 
-
 export async function loadStations() {
     // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
     const filterBy = store.getState().stationModule.filterBy
     try {
         const stations = await stationService.getStations(filterBy)
-        
         store.dispatch({ type: SET_STATIONS, stations })
+        return stations
     } catch (err) {
         console.log('Had issues loading stations', err);
         throw err

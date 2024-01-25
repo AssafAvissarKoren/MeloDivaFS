@@ -18,7 +18,7 @@ export function Home({ setCurrentCategory }) {
         fetchCategories();
     }, []);
 
-    if (!stations || !categories.length) return <div>Loading...</div>;
+    if (!stations || !categories.length) return <div style={{ color: "white" }}>Loading...</div>;
     
     return (
         <section className="home">

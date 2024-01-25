@@ -38,7 +38,6 @@ export function Search({ stations, searchText, setCurrentCategory }) {
     };
 
     const handleVideoClick = (video) => { //here comes the boom
-        console.log("handleVideoClick", video)
         setSelectedVideo(video);
         setQueueToTrack(trackService.videoToTrack(video))
     };

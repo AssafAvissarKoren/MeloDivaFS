@@ -11,7 +11,7 @@ import { Home } from './Home.jsx';
 import imgUrl from '../assets/imgs/MeloDiva.png'
 import { StationDetails } from './StationDetails.jsx';
 import { CategoryDisplay } from '../cmps/CategoryDisplay.jsx'
-import { initLikedTracks } from '../store/actions/station.actions.js';
+import { initLikedTracks, loadStations } from '../store/actions/station.actions.js';
 import { getCurrentTrackInQueue } from '../store/actions/queue.actions.js';
 import { IndexContext } from '../cmps/IndexContext.jsx';
 
@@ -25,14 +25,14 @@ export const Index = () => {
     const navigate = useNavigate();
 
     useEffect(() => {   
-        loadStations();
+        loadStationsLocal();
         initLikedTracks()
         categoryService.createCategories();
     }, []);
 
 
     useEffect(() => {   
-        loadStations();
+        loadStationsLocal()
         const filterURL = stationService.filterURL(filterBy);
         navigate(filterURL, { replace: true }) 
     }, [filterBy]);
@@ -41,8 +41,8 @@ export const Index = () => {
         setSelectedTrack(getCurrentTrackInQueue())
     }, [selectedTrack]);
 
-    async function loadStations() {
-        setIndexStationList(await stationService.getStations(filterBy));
+    async function loadStationsLocal() {
+        setIndexStationList(await loadStations());
     }
 
     const mainViewComponentProps = {

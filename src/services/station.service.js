@@ -95,6 +95,5 @@ function filterURL(filterBy) {
     if ([...queryParams].length) {
         url += `?${queryParams}`;
     }
-    console.log("filterURL", url)
     return url;
 }

@@ -25,8 +25,6 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
   }, [category]); 
   
   function handleOnClick(categoryName) {
-    setFilterBy
-    console.log("handleOnClick", `/melodiva/genre/${categoryName}`)
     navigate(`/melodiva/genre/${categoryName}`, { replace: true });
     setCurrentCategory(categoryName)
   }
