@@ -1,26 +1,32 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { SideNav } from '../cmps/SideNav.jsx';
-import { AppHeader } from '../cmps/AppHeader.jsx';
-import { stationService } from '../services/station.service.js';
-import { categoryService } from '../services/category.service.js';
-import { trackService } from '../services/track.service.js';
+import { useSelector } from 'react-redux';
+import imgUrl from '../assets/imgs/MeloDiva.png'
+
 import { Search } from './Search.jsx';
 import { Library } from './Library.jsx';
 import { Home } from './Home.jsx';
-import imgUrl from '../assets/imgs/MeloDiva.png'
 import { StationDetails } from './StationDetails.jsx';
+
+import { IndexContext } from '../cmps/IndexContext.jsx';
+import { SideNav } from '../cmps/SideNav.jsx';
+import { AppHeader } from '../cmps/AppHeader.jsx';
 import { CategoryDisplay } from '../cmps/CategoryDisplay.jsx'
+import { FooterPlayer } from  '../cmps/FooterPlayer.jsx'
+
 import { initLikedTracks, loadStations } from '../store/actions/station.actions.js';
 import { getCurrentTrackInQueue } from '../store/actions/queue.actions.js';
-import { IndexContext } from '../cmps/IndexContext.jsx';
+
+import { stationService } from '../services/station.service.js';
+import { categoryService } from '../services/category.service.js';
+import { trackService } from '../services/track.service.js';
 
 export const Index = () => {
     const params = useParams();
     const [indexStationList, setIndexStationList] = useState(null);
     const [filterBy, setFilterBy] = useState(stationService.getDefaultFilter(params));
     const [currentCategory, setCurrentCategory] = useState(null);
-    const [selectedTrack, setSelectedTrack] = useState(null);
+    const selectedTrack = useSelector(storeState => storeState.queueModule.playedTracks)
 
     const navigate = useNavigate();
 
@@ -36,10 +42,6 @@ export const Index = () => {
         const filterURL = stationService.filterURL(filterBy);
         navigate(filterURL, { replace: true }) 
     }, [filterBy]);
-
-    useEffect(() => {   
-        setSelectedTrack(getCurrentTrackInQueue())
-    }, [selectedTrack]);
 
     async function loadStationsLocal() {
         setIndexStationList(await loadStations());
@@ -73,9 +75,8 @@ export const Index = () => {
             break;
     }
 
-    
     if (!indexStationList) return <div>Loading...</div>;
-
+    // console.log("selectedTrack", selectedTrack)
     return (
         <IndexContext.Provider value={{ setFilterBy }}>
             <div className="index-container">

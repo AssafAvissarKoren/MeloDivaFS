@@ -1,24 +1,26 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router"
-import { getStationById, saveStation } from "../store/actions/station.actions"
-import { eventBusService } from "../services/event-bus.service"
+import { useSelector } from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faList, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { faClockFour, faHeart } from '@fortawesome/free-regular-svg-icons'
-import { TrackPreview } from "../cmps/TrackPreview"
-import { useSelector } from "react-redux"
-import { utilService } from '../services/util.service.js'
-import { FooterPlayer } from '../cmps/FooterPlayer';
-import { trackService } from  '../services/track.service.js'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
+
+import { eventBusService } from "../services/event-bus.service"
+import { trackService } from  '../services/track.service.js'
 import { dataService } from  '../services/data.service.js'
+import { utilService } from '../services/util.service.js'
+
+import { TrackPreview } from "../cmps/TrackPreview"
+
+import { getStationById, saveStation } from "../store/actions/station.actions"
+import { setQueueToTrack, getCurrentTrackInQueue } from '../store/actions/queue.actions.js';
 
 export function StationDetails() {
     const { stationId } =  useParams()
     const likedTracks = useSelector(storeState => storeState.stationModule.likedTracks)
     const [station, setStation] = useState()
     const [tracksWithDurations, setTracksWithDurations] = useState([]);
-    const [selectedTrack, setSelectedTrack] = useState(null);
     let stationImgURL
 
     useEffect(() => {
@@ -77,7 +79,7 @@ export function StationDetails() {
     };
     
     const handleTrackClick = (track) => {
-        setSelectedTrack(track);
+        setQueueToTrack(track);
     };
 
     if(!station) return <div>loading...</div>
@@ -134,7 +136,6 @@ export function StationDetails() {
                 ))}
             </ul>
         </div>
-        {selectedTrack && <FooterPlayer video={trackService.trackToVideo(selectedTrack)} />}
     </section>
     )
 }

@@ -24,7 +24,7 @@ export async function setQueueToStation(station, trackNum = 0) {
     }
 }
 
-export async function setQueueToTrack(track, trackNum = 0) {
+export async function setQueueToTrack(track) {
     // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
     try {
         const queue = {
@@ -35,6 +35,7 @@ export async function setQueueToTrack(track, trackNum = 0) {
         }
         await queueService.saveQueue(queue)
         store.dispatch({ type: SET_QUEUE, queue })
+        // console.log("setQueueToTrack", getCurrentTrackInQueue())
         return getCurrentTrackInQueue()
     } catch (err) {
         console.log('Had issues Setting the queue', err);
@@ -48,9 +49,11 @@ export async function setQueueToTrack(track, trackNum = 0) {
 export function getCurrentTrackInQueue() {
     const stationTracksToPlay = store.getState().queueModule.stationTracksToPlay
     const tracksToPlay = store.getState().queueModule.tracksToPlay
+    const playedTracks = store.getState().queueModule.playedTracks
 
     if(tracksToPlay.length) return tracksToPlay[0]
     if(stationTracksToPlay.length) return stationTracksToPlay[0]
+    if(playedTracks) return playedTracks
     return null
 }
 

@@ -26,11 +26,12 @@ export function TrackPreview({ layout = '', track, trackNum, isLiked, deleteTrac
 
     function handleClickOutside(ev) {
         if (modalRef.current && !modalRef.current.contains(ev.target)) {
-            onToggleSelected()
+            onToggleSelected(ev)
         }
     }
 
-    function onToggleSelected() {
+    function onToggleSelected(ev) { // problem with the call from handleClickOutside setting the Track, problem with de-selecting the other tracks
+        ev.stopPropagation();
         setSelected(prevIsSelected => !prevIsSelected)
         handleTrackClick(track)
     }
@@ -105,7 +106,6 @@ export function TrackPreview({ layout = '', track, trackNum, isLiked, deleteTrac
                         </MiniMenu> 
                     }
             </div>
-
         </section>
     )
 }

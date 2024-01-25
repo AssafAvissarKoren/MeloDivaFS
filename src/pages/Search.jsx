@@ -11,7 +11,6 @@ import { trackService } from '../services/track.service.js';
 export function Search({ stations, searchText, setCurrentCategory }) {
     const [videos, setVideos] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [selectedVideo, setSelectedVideo] = useState(null);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -38,7 +37,6 @@ export function Search({ stations, searchText, setCurrentCategory }) {
     };
 
     const handleVideoClick = (video) => { //here comes the boom
-        setSelectedVideo(video);
         setQueueToTrack(trackService.videoToTrack(video))
     };
 
@@ -67,7 +65,6 @@ export function Search({ stations, searchText, setCurrentCategory }) {
                     ))}
                 </>
             )} // 
-            {selectedVideo && <FooterPlayer video={selectedVideo} />}
         </div>
     );
 }
