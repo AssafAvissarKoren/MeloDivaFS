@@ -2,11 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import YouTube from 'react-youtube';
 import { utilService } from '../services/util.service.js'
 import { dataService } from '../services/data.service.js'
+import { Slider } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faPause, faStepForward, faStepBackward, faRedo, faRandom } from '@fortawesome/free-solid-svg-icons';
+
 
 export function FooterPlayer({ video }) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [videoDuration, setVideoDuration] = useState(null);
     const [currentTime, setCurrentTime] = useState(0);
+    const [volume, setVolume] = useState(50); // Initial volume (0-100)
     const playerRef = useRef(null);
     const thumbnailUrl = video.snippet.thumbnails.default.url;
 
@@ -78,12 +83,25 @@ export function FooterPlayer({ video }) {
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
 
+    const changeVolume = (newVolume) => {
+        if (playerRef.current) {
+            // Ensure the volume is within the valid range (0-100)
+            const validVolume = Math.min(100, Math.max(0, newVolume));
+            playerRef.current.setVolume(validVolume);
+            setVolume(validVolume);
+        }
+    };
+
     // Event handlers for player actions (not implemented in this example)
+    const shuffleQueue = () => { /* ... */ };
     const playNext = () => { /* ... */ };
     const playPrev = () => { /* ... */ };
     const toggleRepeat = () => { /* ... */ };
 
-    return (
+    // console.log("channelTitle", video.snippet.channelTitle)
+    // console.log("title", video.snippet.title)
+    
+    return (//player-controls
         <footer className="footer-player">
             <div className="video-thumbnail">
                 {thumbnailUrl && <img src={thumbnailUrl} alt={`${video.snippet.title} thumbnail`} />}
@@ -93,24 +111,51 @@ export function FooterPlayer({ video }) {
                 <div className="channel-name">{video.snippet.channelTitle}</div>
             </div>
             <div className="player-controls">
-                <button onClick={playPrev}>Prev</button>
-                <button onClick={togglePlay}>{isPlaying ? 'Pause' : 'Play'}</button>
-                <button onClick={playNext}>Next</button>
-                <button onClick={toggleRepeat}>Repeat</button>
-            </div>
-            {videoDuration && (
-                <div className="progress-bar">
-                    <span className="current-time">{formatTime(currentTime)}</span>
-                    <progress value={currentTime} max={utilService.durationInSeconds(videoDuration)}></progress>
-                    <span className="end-time">{utilService.formatDuration(videoDuration)}</span>
+                <div className="player-action-buttons">
+                    <button onClick={shuffleQueue} name="shuffle">
+                        <FontAwesomeIcon icon={faRandom} />
+                    </button>
+                    <button onClick={playPrev} name="previous">
+                        <FontAwesomeIcon icon={faStepBackward} />
+                    </button>
+                    <button onClick={togglePlay} name="play-pause">
+                        <FontAwesomeIcon icon={isPlaying ? faPause : faPlay} />
+                    </button>
+                    <button onClick={playNext} name="next">
+                        <FontAwesomeIcon icon={faStepForward} />
+                    </button>
+                    <button onClick={toggleRepeat} name="repeat">
+                        <FontAwesomeIcon icon={faRedo} />
+                    </button>
                 </div>
-            )}
+                {videoDuration && (
+                    <div className="progress-section">
+                        <span className="current-time">{formatTime(currentTime)}</span>
+                        <Slider
+                            className="slider"
+                            value={currentTime}
+                            max={utilService.durationInSeconds(videoDuration)}
+                            onChange={(event, newValue) => {
+                                setCurrentTime(newValue);
+                                if (playerRef.current) {
+                                    playerRef.current.seekTo(newValue);
+                                }
+                            }}                    
+                            valueLabelDisplay="auto"
+                            valueLabelFormat={(value) => formatTime(value)}
+                        />
+                        <span className="end-time">{utilService.formatDuration(videoDuration)}</span>
+                    </div>
+                )}
+            </div>
             <div className="volume-control">
-                {/* Volume control elements */}
+                <button onClick={() => changeVolume(volume - 10)}>-</button>
+                <p>Vol: {volume}%</p>
+                <button onClick={() => changeVolume(volume + 10)}>+</button>
             </div>
             <div className="youtube-container">
                 <YouTube videoId={video.id.videoId} opts={opts} onReady={onReady} />
             </div>
-    </footer>
+        </footer>
     );
 }

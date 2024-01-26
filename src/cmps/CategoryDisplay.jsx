@@ -24,9 +24,14 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
       fetchCategory();
   }, [category]); 
   
-  function handleOnClick(categoryName) {
-    navigate(`/melodiva/genre/${categoryName}`, { replace: true });
-    setCurrentCategory(categoryName)
+  function handleOnClick(category) {
+    const newFilterBy = {
+      tab: 'genre',
+      stationId: category._id,
+      text: '',
+    };
+    setFilterBy(newFilterBy);
+    setCurrentCategory(category)
   }
 
   const renderCategory = () => {
@@ -34,14 +39,14 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
       case "row":
         return (
           <div className="category-row">
-            <h2 onClick={() => handleOnClick(category.name)}>{category.name}</h2>
+            <h2 onClick={() => handleOnClick(category)}>{category.name}</h2>
             <div className="row">{renderStations(categoryStations)}</div>
           </div>
         );
       case "cube":
         return (
           <div className="category-cube" style={{ backgroundColor: category.color }}>
-            <h2 onClick={() => handleOnClick(category.name)}>{category.name}</h2>
+            <h2 onClick={() => handleOnClick(category)}>{category.name}</h2>
             <img src={category.image} alt={category.name} className="cube-image" />
           </div>
         );

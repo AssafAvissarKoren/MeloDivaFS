@@ -10,15 +10,21 @@
     right: 0;
     bottom: 0;
     border-top: 3px solid #282828;
-    height: 100px;
+    height: auto; // Adjusted for a potential increase in height due to the vertical layout
 
     .video-thumbnail {
-        width: 225px;
+        width: 80px; // Adjust as needed
+        margin-right: 10px;
     }
 
     .video-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-right: 10px;
         .video-name {
             font-size: 16px;
+            margin-bottom: 5px;
         }
         .channel-name {
             font-size: 12px;
@@ -27,34 +33,51 @@
 
     .player-controls {
         display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
-        align-items: center;
-        button {
-            // Style your buttons here
-        }
-    }
+        flex-grow: 1;
 
-    .progress-bar {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        .current-time, .end-time {
-            // Style your timestamps here
+        .player-action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 10px;
         }
-        // Add styles for the progress bar
+
+        .progress-section {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            .current-time, .end-time {
+                display: block; // Ensure they are on new lines
+            }
+            .slider {
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+        }
     }
 
     .volume-control {
-        // Style your volume control here
-    }
-
-    YouTube {
-        display: none; // Hide the video portion
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        margin-left: 10px;
+        
+        button {
+            margin: 5px 0;
+        }
+      
+        p {
+            margin: 0;
+        }
     }
 
     .youtube-container {
         position: absolute;
-        left: -9999px; // Move the player off-screen
+        left: -9999px; // Keep off-screen
         top: 0;
     }
 }

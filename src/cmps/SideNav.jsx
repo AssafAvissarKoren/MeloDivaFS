@@ -13,7 +13,7 @@ export const SideNav = ({ setFilterBy }) => {
     }, [tab, setFilterBy]);
 
     const handleTabSelect = (selectedTab) => {
-        setFilterBy(prev => ({ ...prev, tab: selectedTab }));
+        setFilterBy(prev => ({ ...prev, tab: selectedTab , stationId: '' }));
     };
 
     const tabData = {

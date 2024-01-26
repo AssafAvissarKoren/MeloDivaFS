@@ -56,7 +56,7 @@ export const Index = () => {
     switch (params.tab) {
         case 'genre':
             MainViewComponent = CategoryDisplay;
-            mainViewComponentProps.category_name = currentCategory;
+            mainViewComponentProps.category = currentCategory;
             mainViewComponentProps.style = categoryService.Status.RESULTS;
             break;
         case 'station':
