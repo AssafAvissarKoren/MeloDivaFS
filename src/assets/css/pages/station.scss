@@ -7,15 +7,6 @@
     background-color: #121212;
     border-radius: 10px;
 
-    &::-webkit-scrollbar {
-        width: 8px;
-        height: 0px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background: #474747; 
-    }
-
     & > * {
         padding: 0 21px;
     }

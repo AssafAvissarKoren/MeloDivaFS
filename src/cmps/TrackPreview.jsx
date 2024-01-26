@@ -31,9 +31,7 @@ export function TrackPreview({ layout = '', track, trackNum, isLiked, deleteTrac
     }
 
     function onToggleSelected(ev) { // problem with the call from handleClickOutside setting the Track, problem with de-selecting the other tracks
-        ev.stopPropagation();
         setSelected(prevIsSelected => !prevIsSelected)
-        handleTrackClick(track)
     }
 
     function onToggleLiked(ev) {
@@ -61,7 +59,7 @@ export function TrackPreview({ layout = '', track, trackNum, isLiked, deleteTrac
         <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
             <div className='track-numder'>
                 <p className='track-num'>{trackNum}</p>
-                <button className="btn-track-play" onClick={() => {}}>
+                <button className="btn-track-play" onClick={() => handleTrackClick(track)}>
                     <FontAwesomeIcon icon={faPlay} />
                 </button>
             </div>
