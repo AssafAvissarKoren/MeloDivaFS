@@ -1,16 +1,15 @@
 import { useSelector } from "react-redux"
 import { StationPreview } from "../cmps/StationPreview"
-import { getLikedTracksAsStation } from "../store/actions/user.actions"
+import { getBasicUser, getLikedTracksAsStation } from "../store/actions/user.actions"
 
 
 export function Library() {
     const stations = useSelector(storeState => storeState.stationModule.stations)
     const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
-    const userId = useSelector(storeState => storeState.userModule.userId)
 
     function getStationsInLibrary() {
         return stations.filter(station => {
-            return station.likedByUsers.filter(likedByUser => likedByUser._id === userId).length
+            return station.likedByUsers.filter(likedByUser => likedByUser._id === getBasicUser()._id).length !== 0
         })
     }
 

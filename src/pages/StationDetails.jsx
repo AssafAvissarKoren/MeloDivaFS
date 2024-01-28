@@ -2,8 +2,8 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router"
 import { useSelector } from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faList, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
-import { faClockFour, faHeart } from '@fortawesome/free-regular-svg-icons'
+import { faList, faPlayCircle, faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons'
+import { faClockFour, faHeart as heartLined } from '@fortawesome/free-regular-svg-icons'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 
 import { eventBusService } from "../services/event-bus.service"
@@ -14,7 +14,7 @@ import { TrackPreview } from "../cmps/TrackPreview"
 
 import { getStationById, saveStation } from "../store/actions/station.actions"
 import { setQueueToTrack, getCurrentTrackInQueue } from '../store/actions/queue.actions.js';
-import { LIKED_TRACK_AS_STATION_ID, getLikedTracksAsStation } from "../store/actions/user.actions.js"
+import { LIKED_TRACK_AS_STATION_ID, getBasicUser, getLikedTracksAsStation } from "../store/actions/user.actions.js"
 
 export function StationDetails() {
     const { stationId } =  useParams()
@@ -64,6 +64,18 @@ export function StationDetails() {
         }
     }
 
+    function onToggleUserLiked() {
+        const user = getBasicUser()
+        const numOfLikedUsers = station.likedByUsers.length
+        var newLikedByUsers = station.likedByUsers.filter(likedByUser => likedByUser._id !== user._id)
+        
+        // if you didn't remove the user then add them
+        if(numOfLikedUsers === newLikedByUsers.length) newLikedByUsers.push(user)
+        
+        saveStation({...station, likedByUsers: newLikedByUsers})
+        setStation(prevStation => ({...prevStation, likedByUsers: newLikedByUsers}))
+    }
+
     async function deleteTrack(trackUrl) {
         try {
             const tracks = station.tracks.filter(track => track.url !== trackUrl)
@@ -95,6 +107,8 @@ export function StationDetails() {
     };
 
     if(!station) return <div>loading...</div>
+    const likedTrackStation = stationId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
+    const isLiked = station.likedByUsers.filter(likedByUser => likedByUser._id === getBasicUser()._id).length !== 0
     return (
     <section className="station container">
         <div className="station-head">
@@ -112,10 +126,14 @@ export function StationDetails() {
             <button className="station-play-btn" onClick={() => {}}>
                 <FontAwesomeIcon icon={faPlayCircle} />
             </button>
-            <button className="station-like-btn" onClick={() => {}}>
-                <FontAwesomeIcon icon={faHeart} />
+            <button className={`station-like-btn ${likedTrackStation} ${isLiked && 'green'}`} onClick={onToggleUserLiked}>
+                { isLiked
+                ?
+                <FontAwesomeIcon icon={heartSolid} />
+                :
+                <FontAwesomeIcon icon={heartLined}/>}
             </button>
-            <button className="station-more-btn" onClick={() => {}}>
+            <button className={`station-more-btn ${likedTrackStation}`} onClick={() => {}}>
                 <p>...</p>
             </button>
             <button className="station-sort-btn" onClick={() => {}}>
