@@ -14,12 +14,13 @@ import { AppHeader } from '../cmps/AppHeader.jsx';
 import { CategoryDisplay } from '../cmps/CategoryDisplay.jsx'
 import { FooterPlayer } from  '../cmps/FooterPlayer.jsx'
 
-import { initLikedTracks, loadStations } from '../store/actions/station.actions.js';
+import { loadStations } from '../store/actions/station.actions.js';
 import { getCurrentTrackInQueue } from '../store/actions/queue.actions.js';
 
 import { stationService } from '../services/station.service.js';
 import { categoryService } from '../services/category.service.js';
 import { trackService } from '../services/track.service.js';
+import { initUser } from '../store/actions/user.actions.js';
 
 export const Index = () => {
     const params = useParams();
@@ -32,7 +33,7 @@ export const Index = () => {
 
     useEffect(() => {   
         loadStationsLocal();
-        initLikedTracks()
+        initUser()
         categoryService.createCategories();
     }, []);
 

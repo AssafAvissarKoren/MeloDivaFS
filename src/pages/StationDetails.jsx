@@ -18,7 +18,7 @@ import { setQueueToTrack, getCurrentTrackInQueue } from '../store/actions/queue.
 
 export function StationDetails() {
     const { stationId } =  useParams()
-    const likedTracks = useSelector(storeState => storeState.stationModule.likedTracks)
+    const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
     const [station, setStation] = useState()
     const [tracksWithDurations, setTracksWithDurations] = useState([]);
     let stationImgURL

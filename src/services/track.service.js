@@ -1,29 +1,8 @@
-import { dataService } from './data.service.js';
-import { storageService } from './async-storage.service.js'
+
 
 export const trackService = {
-    initLikedTracks,
-    setLikedTracks,
-    getLikedTrack,
     trackToVideo,
     videoToTrack,
-}
-
-const LIKED_TRACK_STORAGE_KEY = 'trackDB'
-
-dataService.createLikedTracksData(LIKED_TRACK_STORAGE_KEY)
-
-async function initLikedTracks(likedTracks) {
-    likedTracks = await storageService.query(LIKED_TRACK_STORAGE_KEY)
-    return likedTracks[0]
-}
-
-function setLikedTracks(likedTracks) {
-    storageService.put(LIKED_TRACK_STORAGE_KEY, likedTracks)
-}
-
-async function getLikedTrack(likedTracksId) {
-    return storageService.get(LIKED_TRACK_STORAGE_KEY, likedTracksId)
 }
 
 function trackToVideo(track, artist) {

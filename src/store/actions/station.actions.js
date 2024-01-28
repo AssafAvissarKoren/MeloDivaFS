@@ -1,7 +1,7 @@
 import { stationService } from "../../services/station.service";
 import { trackService } from "../../services/track.service";
 import { ADD_STATION, REMOVE_STATION, SET_FILTER_BY, SET_IS_LOADING, SET_STATIONS, 
-    UPDATE_STATION, SET_LIKED_TRACKS, ADD_LIKED_TRACK, REMOVE_LIKED_TRACK } from "../reducers/station.reducer";
+    UPDATE_STATION, } from "../reducers/station.reducer";
 import { store } from "../store";
 
 
@@ -61,53 +61,6 @@ export async function saveStation(stationToSave) {
 
 export function setFilterBy(filterBy) {
     store.dispatch({ type: SET_FILTER_BY, filterBy })
-}
-
-export async function initLikedTracks() {
-    // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
-    try {
-        const likedTracks = await trackService.initLikedTracks()
-        store.dispatch({ type: SET_LIKED_TRACKS, likedTracks })
-    } catch (err) {
-        console.log('Had issues Initalizing liked tracks', err);
-        throw err
-    } finally {
-        // store.dispatch({ type: SET_IS_LOADING, isLoading: false })
-    }
-} 
-
-export function toggleLikedTrack(track) {
-    const likedTracks = store.getState().stationModule.likedTracks
-    if(likedTracks[track.url]) removeLikedTrack(likedTracks, track)
-    else addLikedTrack(likedTracks, track)
-}
-
-async function addLikedTrack(likedTracks, track) {
-    // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
-    try {
-        trackService.setLikedTracks({...likedTracks, [track.url]: track})
-        store.dispatch({ type: ADD_LIKED_TRACK, track })
-    } catch (err) {
-        console.log('Had issues Adding station', err);
-        throw err
-    } finally {
-        // store.dispatch({ type: SET_IS_LOADING, isLoading: false })
-    }
-}
-
-async function removeLikedTrack(likedTracks, track) {
-    // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
-    likedTracks = {...likedTracks}
-    delete likedTracks[track.url]
-    try {
-        trackService.setLikedTracks(likedTracks)
-        store.dispatch({ type: REMOVE_LIKED_TRACK, track })
-    } catch (err) {
-        console.log('Had issues Removing station', err);
-        throw err
-    } finally {
-        // store.dispatch({ type: SET_IS_LOADING, isLoading: false })
-    }
 }
 
 export function setIsLoading(isLoading) {
