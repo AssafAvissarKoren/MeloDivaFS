@@ -7,7 +7,6 @@ import { faClockFour, faHeart } from '@fortawesome/free-regular-svg-icons'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 
 import { eventBusService } from "../services/event-bus.service"
-import { trackService } from  '../services/track.service.js'
 import { dataService } from  '../services/data.service.js'
 import { utilService } from '../services/util.service.js'
 
@@ -15,6 +14,7 @@ import { TrackPreview } from "../cmps/TrackPreview"
 
 import { getStationById, saveStation } from "../store/actions/station.actions"
 import { setQueueToTrack, getCurrentTrackInQueue } from '../store/actions/queue.actions.js';
+import { LIKED_TRACK_AS_STATION_ID, getLikedTracksAsStation } from "../store/actions/user.actions.js"
 
 export function StationDetails() {
     const { stationId } =  useParams()
@@ -26,6 +26,13 @@ export function StationDetails() {
     useEffect(() => {
         loadStation()
     },[])
+
+    useEffect(() => {
+        if(stationId === LIKED_TRACK_AS_STATION_ID) {
+            const tracks = Object.keys(likedTracks).map((key) => likedTracks[key])
+            setStation(prevStation => ({...prevStation, tracks: tracks}))
+        }
+    },[likedTracks])
 
     useEffect(() => {
         if (station && station.tracks) {
@@ -44,11 +51,16 @@ export function StationDetails() {
     }, [station]);
 
     async function loadStation() {
-        try {
-            const station = await getStationById(stationId)
+        if(stationId === LIKED_TRACK_AS_STATION_ID) {
+            const station = getLikedTracksAsStation()
             setStation(station)
-        } catch (err) {
-            eventBusService.showErrorMsg('faild to load station')
+        }else {
+            try {
+                const station = await getStationById(stationId)
+                setStation(station)
+            } catch (err) {
+                eventBusService.showErrorMsg('faild to load station')
+            }
         }
     }
 

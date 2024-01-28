@@ -1,12 +1,16 @@
+import { stationService } from "../../services/station.service";
 import { userService } from "../../services/user.service";
+import { utilService } from "../../services/util.service";
 import { SET_ID, SET_NAME, SET_IMG, SET_LIKED_TRACKS, ADD_LIKED_TRACK, REMOVE_LIKED_TRACK } from "../reducers/user.reducer";
 import { store } from "../store";
+
+export const LIKED_TRACK_AS_STATION_ID = 'track'
 
 export async function initUser() {
     // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
     try {
         const user = await userService.getUser()
-        const { _id, fullname, imgUrl, likedTracks} = user
+        const { _id, fullname, imgUrl, likedTracks } = user
         store.dispatch({ type: SET_ID, _id })
         store.dispatch({ type: SET_NAME, fullname })
         store.dispatch({ type: SET_IMG, imgUrl })
@@ -19,6 +23,20 @@ export async function initUser() {
     }
 } 
 
+export function getLikedTracksAsStation() {
+    const likedTracks = store.getState().userModule.likedTracks
+    const station = stationService.createStation('Liked Songs', getBasicUser(), utilService.getImgUrl('../assets/imgs/LikedSongs.jpeg'))
+    station.tracks = Object.keys(likedTracks).map((key) => likedTracks[key])
+    station._id = LIKED_TRACK_AS_STATION_ID
+    return station
+}
+
+export function getBasicUser() {
+    const user = store.getState().userModule
+    const { _id, fullname, imgUrl } = user
+    return { _id, fullname, imgUrl }
+}
+
 export function toggleLikedTrack(track) {
     const user = store.getState().userModule
     if(user.likedTracks[track.url]) removeLikedTrack(user, track)
@@ -28,7 +46,6 @@ export function toggleLikedTrack(track) {
 async function addLikedTrack(user, track) {
     // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
     try {
-        console.log({...user, likedTracks: {...user.likedTracks, [track.url]: track}})
         userService.setUser({...user, likedTracks: {...user.likedTracks, [track.url]: track}})
         store.dispatch({ type: ADD_LIKED_TRACK, track })
     } catch (err) {

@@ -41,7 +41,7 @@ async function createStation(stationId, name, createdBy, tags, playlistId) {
         imgUrl: tracks.length > 0 ? tracks[0].imgUrl : 'blank',
         tags,
         createdBy,
-        likedByUsers: [Users.U02, Users.U03],
+        likedByUsers: [Users.u02, Users.u03],
         tracks,
         msgs: [
             {
