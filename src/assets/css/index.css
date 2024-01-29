@@ -6,6 +6,7 @@
 
 /* Pages */
 @import "./pages/home.css";
+@import "./pages/search.scss";
 @import "./pages/station.scss";
 
 /* Components */

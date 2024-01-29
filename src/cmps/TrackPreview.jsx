@@ -7,7 +7,7 @@ import { toggleLikedTrack } from '../store/actions/user.actions'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 
 
-export function TrackPreview({ layout = '', track, trackNum, isLiked, deleteTrack, duration, handleTrackClick}) {
+export function TrackPreview({ layout = '', track = null, trackNum, isLiked, deleteTrack = null, duration, handleTrackClick}) {
     const [isSelected, setSelected] = useState(false)
     const [isMenu, setIsMenu] = useState(false)
     const modalRef = useRef(track.url)
@@ -75,7 +75,7 @@ export function TrackPreview({ layout = '', track, trackNum, isLiked, deleteTrac
                     :
                     <FontAwesomeIcon icon={heartLined} />}
                 </button>
-                <p>4:56</p>
+                <p>{duration}</p>
                 <button className="btn-more" onClick={toggleMenu}>
                     <p>...</p>
                 </button>
@@ -84,9 +84,11 @@ export function TrackPreview({ layout = '', track, trackNum, isLiked, deleteTrac
                             <button onClick={onCloseMiniMenu}>
                                 Add to playlist
                             </button>
+                            { deleteTrack &&
                             <button onClick={onDeleteTrack}>
                                 Remove from this playlist
                             </button>
+                            }
                             <button onClick={onToggleLiked}>
                             {isLiked 
                             ? 

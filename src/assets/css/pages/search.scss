@@ -1,0 +1,42 @@
+.search {
+
+    
+    & .search-track-layout {
+        display: grid;
+        grid-template-columns: 1fr 125px;
+        grid-template-rows: auto;
+        align-items: center;
+        gap: 18px;
+        padding-left: 7px;
+        padding-right: 7px;
+
+        &:hover .track-preview-img {
+            filter: brightness(60%);
+        }
+
+        & .track-numder {
+            grid-column: 1 / 2;
+            grid-row: 1 / -1;
+
+            justify-self: left;
+            z-index: 999;
+            margin-left: 17px;
+        }
+
+        & .track-preview-title {
+            grid-column: 1 / 2;
+            grid-row: 1 / -1;
+        }
+
+        & .track-preview-options {
+            grid-column: 2 / -1;
+            grid-row: 1 / 2;
+            text-align: center;
+            margin: 0;
+
+            & > * {
+                margin: 0;
+            }
+        }
+    }
+}
