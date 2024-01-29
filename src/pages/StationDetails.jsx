@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useParams } from "react-router"
 import { useSelector } from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -14,15 +14,19 @@ import { imageService } from '../services/image.service.js'
 
 import { TrackPreview } from "../cmps/TrackPreview"
 
-import { getStationById, saveStation } from "../store/actions/station.actions"
-import { setQueueToTrack, getCurrentTrackInQueue } from '../store/actions/queue.actions.js';
+import { getStationById, removeStation, saveStation } from "../store/actions/station.actions"
+import { setQueueToTrack, getCurrentTrackInQueue } from '../store/actions/queue.actions.js'
 import { LIKED_TRACK_AS_STATION_ID, getBasicUser, getLikedTracksAsStation } from "../store/actions/user.actions.js"
+import { IndexContext } from '../cmps/IndexContext.jsx'
+import { MiniMenu } from "../cmps/MiniMenu.jsx"
 
 export function StationDetails() {
     const { stationId } =  useParams()
+    const { setFilterBy } = useContext(IndexContext)
     const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
     const [station, setStation] = useState()
-    const [tracksWithDurations, setTracksWithDurations] = useState([]);
+    const [isMenu, setIsMenu] = useState(false)
+    const [tracksWithDurations, setTracksWithDurations] = useState([])
     const [gradientColor, setGradientColor] = useState(null);
 
     useEffect(() => {
@@ -95,6 +99,14 @@ export function StationDetails() {
         setStation(prevStation => ({...prevStation, likedByUsers: newLikedByUsers}))
     }
 
+    function toggleMenu() {
+        setIsMenu(prevIsMenu => !prevIsMenu)
+    }
+
+    function onCloseMiniMenu() {
+        setIsMenu(false)
+    }
+
     async function deleteTrack(trackUrl) {
         try {
             const tracks = station.tracks.filter(track => track.url !== trackUrl)
@@ -104,6 +116,18 @@ export function StationDetails() {
             eventBusService.showErrorMsg('faild to delete track')
             console.log(err)
         }
+    }
+
+    function onDeleteStation() {
+        removeStation(stationId)
+
+        const newFilterBy = {
+            tab: 'home',
+            stationId: '',
+            text: '',
+        };
+    
+        setFilterBy(newFilterBy);
     }
 
     const fetchVideoDurations = async (station) => {
@@ -134,9 +158,8 @@ export function StationDetails() {
     if(!station) return <div>loading...</div>
 
     const likedTrackStation = stationId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
+    const stationByUser = getBasicUser()._id === station.createdBy._id ? 'hiden' : ''
     const isLiked = station.likedByUsers && station.likedByUsers.filter(likedByUser => likedByUser && likedByUser._id === getBasicUser()._id).length !== 0;
-
-    console.log("gradientColor", gradientColor)
 
     return (
     <section className="station-container" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 5%, black 50%)` } : {}}>
@@ -145,7 +168,7 @@ export function StationDetails() {
                 <img className="station-head-img" src={getImage()}/>
             </div>
             <div className="station-head-info">
-                <p>Album</p>
+                <p>Playlist</p>
                 <h1 className="station-name">{station.name}</h1>
                 <p></p> {/* station description */}
                 <p>{station.createdBy.fullname} - {station.tracks.length}</p>
@@ -155,12 +178,38 @@ export function StationDetails() {
             <button className="station-play-btn" onClick={() => {}}>
                 <FontAwesomeIcon icon={faPlayCircle} />
             </button>
-            <button className={`station-like-btn ${likedTrackStation} ${isLiked && 'green'}`} onClick={onToggleUserLiked}>
+            <button className={`station-like-btn ${likedTrackStation} ${stationByUser} ${isLiked && 'green'}`} onClick={onToggleUserLiked}>
                 <FontAwesomeIcon icon={isLiked ? heartSolid : heartLined} />
             </button>
-            <button className={`station-more-btn ${likedTrackStation}`} onClick={() => {}}>
-                <p>...</p>
-            </button>
+            <div className={`station-more-btn ${likedTrackStation}`}>
+                <button className="btn-more" onClick={toggleMenu}>
+                    <p>...</p>
+                </button>
+                {isMenu && 
+                    <MiniMenu onCloseMiniMenu={onCloseMiniMenu}>
+                        {stationByUser
+                            ?
+                            <button onClick={onDeleteStation}>
+                                Delete
+                            </button>
+                            :
+                            <button onClick={onToggleUserLiked}>
+                                {isLiked 
+                                ? 
+                                'Remove from your library'
+                                :
+                                'Add to your library'}
+                            </button>
+                        }
+                        <button onClick={onCloseMiniMenu}>
+                            Add to queue
+                        </button>
+                        <button onClick={onCloseMiniMenu}>
+                            Share
+                        </button>
+                    </MiniMenu> 
+                }
+            </div>
             <button className="station-sort-btn" onClick={() => {}}>
                 <p>List</p>
                 <FontAwesomeIcon icon={faList} />

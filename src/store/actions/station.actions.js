@@ -50,6 +50,7 @@ export async function saveStation(stationToSave) {
     try {
         const station = await stationService.saveStation(stationToSave)
         store.dispatch({ type, station: station })
+        return station
     } catch (err) {
         console.log('Had issues saving station', err);
         throw err

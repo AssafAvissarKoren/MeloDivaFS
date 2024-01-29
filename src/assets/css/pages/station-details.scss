@@ -93,19 +93,23 @@
         }
 
         & .station-more-btn {
-            background-color: unset;
-            border: 0;
-            color: #909090;
-            font-size: 40px;
-            letter-spacing: 1px;
-            margin-left: 12px;
+            position: relative;
 
-            &:hover {
-                color: white;
-            }
-
-            & > * {
-                margin-top: -27px;
+            & .btn-more {
+                background-color: unset;
+                border: 0;
+                color: #909090;
+                font-size: 40px;
+                letter-spacing: 1px;
+                margin-left: 12px;
+    
+                &:hover {
+                    color: white;
+                }
+    
+                & > * {
+                    margin-top: -27px;
+                }
             }
         }
 
