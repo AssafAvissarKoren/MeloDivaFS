@@ -3,7 +3,7 @@ import { faHeart as heartLined } from '@fortawesome/free-regular-svg-icons'
 import { faPlay, faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useRef, useState } from 'react'
 import { MiniMenu } from './MiniMenu'
-import { toggleLikedTrack } from '../store/actions/station.actions'
+import { toggleLikedTrack } from '../store/actions/user.actions'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 
 

@@ -11,6 +11,7 @@ export const utilService = {
     formatDuration,
     saveToSessionStorage,
     loadFromSessionStorage,
+    getImgUrl,
 }
 
 const lorem = new LoremIpsum();
@@ -70,3 +71,7 @@ function formatDuration(isoDuration) {
     const { hours, minutes, seconds } = isoMatch(isoDuration);
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
 };
+
+function getImgUrl(url) {
+    return new URL(url, import.meta.url).href
+}

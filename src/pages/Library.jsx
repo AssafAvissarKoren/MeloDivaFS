@@ -1,10 +1,30 @@
-import imgUrl from '../assets/imgs/react.png'
+import { useSelector } from "react-redux"
+import { StationPreview } from "../cmps/StationPreview"
+import { getBasicUser, getLikedTracksAsStation } from "../store/actions/user.actions"
 
-export function Library({ stations }) {
+
+export function Library() {
+    const stations = useSelector(storeState => storeState.stationModule.stations)
+    const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
+
+    function getStationsInLibrary() {
+        return stations.filter(station => {
+            return station.likedByUsers.filter(likedByUser => likedByUser._id === getBasicUser()._id).length !== 0
+        })
+    }
+
     return (
         <div className="library">
-            <h1 style={{color: "white"}}>Welcome to the Library Page</h1>
-            <img src={imgUrl} alt="" />
+            <ul>
+                <li>
+                <StationPreview station={getLikedTracksAsStation()} />
+                </li>
+                {getStationsInLibrary().map(station => {
+                    return <li key={`library${station._id}`}>
+                        <StationPreview station={station} />
+                    </li>
+                })}
+            </ul>
         </div>
     )
 }

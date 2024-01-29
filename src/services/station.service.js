@@ -63,10 +63,11 @@ function saveStation(station) {
     }
 }
 
-function createStation(name = '', createdBy) {
+function createStation(name, createdBy, imgUrl = 'blank') {
     return {
         name: name,
         tags: [],
+        imgUrl: imgUrl,
         createdBy: createdBy,
         likedByUsers: [],
         tracks: [],

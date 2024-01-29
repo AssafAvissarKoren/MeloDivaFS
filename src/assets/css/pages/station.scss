@@ -7,6 +7,10 @@
     background-color: #121212;
     border-radius: 10px;
 
+    & .hiden {
+        display: none;
+    }
+
     & > * {
         padding: 0 21px;
     }
@@ -79,8 +83,13 @@
             font-size: 35px;
             margin-left: 24px;
 
+            
             &:hover {
                 color: white;
+            }
+            
+            &.green {
+                color: #1db954;
             }
         }
 
