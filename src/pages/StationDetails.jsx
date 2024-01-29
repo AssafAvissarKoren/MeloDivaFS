@@ -83,6 +83,7 @@ export function StationDetails() {
     };
 
     if(!station) return <div>loading...</div>
+
     return (
     <section className="station container">
         <div className="station-head">

@@ -96,10 +96,11 @@ async function getDurations(tracksIds) {
             key: API_KEY
         }
     });
-    return response.data.items.map(item => item.contentDetails.duration);
+    const durations = response.data.items.map(item => item.contentDetails.duration);
+    // console.log("getDurations", durations)
+    // console.log("getDurations", durations.map(duration => utilService.formatDuration(duration)))
+    return durations;
 }
-
-
 
 const Users = {
     u01: { _id: "u101", fullname: "Duran Duran", imgUrl: "http://some-photo/" },

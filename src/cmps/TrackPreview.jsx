@@ -75,7 +75,7 @@ export function TrackPreview({ layout = '', track, trackNum, isLiked, deleteTrac
                     :
                     <FontAwesomeIcon icon={heartLined} />}
                 </button>
-                <p>4:56</p>
+                <p>{duration}</p>
                 <button className="btn-more" onClick={toggleMenu}>
                     <p>...</p>
                 </button>
