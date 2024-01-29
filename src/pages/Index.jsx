@@ -81,9 +81,6 @@ export const Index = () => {
     return (
         <IndexContext.Provider value={{ setFilterBy }}>
             <div className="index-container">
-                <div className="index-name">
-                    <img src={imgUrl} alt="" style={{ width: '100px', height: '100px' }} />
-                </div>
                 <div className="index-app-header">
                     <AppHeader 
                         setFilterBy={setFilterBy}
@@ -97,7 +94,9 @@ export const Index = () => {
                 <div className="index-main-view">
                     <MainViewComponent {...mainViewComponentProps} />
                 </div>
-                {selectedTrack && <FooterPlayer video={trackService.trackToVideo(selectedTrack)} />}
+                <div className="footer-player">
+                    {selectedTrack && <FooterPlayer video={trackService.trackToVideo(selectedTrack)} />}
+                </div>
             </div>
         </IndexContext.Provider>
     );

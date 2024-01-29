@@ -10,6 +10,7 @@ export const stationService = {
     createStation,
     getDefaultFilter,
     filterURL,
+    colorAnalysis,
 }
 
 const STATION_STORAGE_KEY = 'stationDB'
@@ -97,4 +98,58 @@ function filterURL(filterBy) {
         url += `?${queryParams}`;
     }
     return url;
+}
+
+
+async function colorAnalysis(imageURL) {
+    try {
+        const corsAnywhereURL = 'https://cors-anywhere.herokuapp.com/';
+        const response = await fetch(corsAnywhereURL + imageURL);
+        const blob = await response.blob();
+
+        const image = new Image();
+        image.src = URL.createObjectURL(blob);
+
+        return new Promise((resolve, reject) => {
+            image.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = image.width;
+                canvas.height = image.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(image, 0, 0, image.width, image.height);
+
+                const imageData = ctx.getImageData(0, 0, image.width, image.height).data;
+                const colorCounts = {};
+                let maxCount = 0;
+                let mostCommon = null;
+
+                for (let i = 0; i < imageData.length; i += 4) {
+                    const r = imageData[i];
+                    const g = imageData[i + 1];
+                    const b = imageData[i + 2];
+                    const color = `rgb(${r},${g},${b})`;
+
+                    if (!colorCounts[color]) {
+                        colorCounts[color] = 0;
+                    }
+
+                    colorCounts[color]++;
+
+                    if (colorCounts[color] > maxCount) {
+                        maxCount = colorCounts[color];
+                        mostCommon = color;
+                    }
+                }
+
+                resolve(mostCommon);
+            };
+
+            image.onerror = (error) => {
+                reject(error);
+            };
+        });
+    } catch (error) {
+        console.error('Error analyzing image:', error);
+        return null;
+    }
 }

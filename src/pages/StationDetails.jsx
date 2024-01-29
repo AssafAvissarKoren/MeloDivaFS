@@ -9,6 +9,8 @@ import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 import { eventBusService } from "../services/event-bus.service"
 import { dataService } from  '../services/data.service.js'
 import { utilService } from '../services/util.service.js'
+import { stationService } from '../services/station.service.js'
+import { imageService } from '../services/image.service.js'
 
 import { TrackPreview } from "../cmps/TrackPreview"
 
@@ -21,11 +23,28 @@ export function StationDetails() {
     const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
     const [station, setStation] = useState()
     const [tracksWithDurations, setTracksWithDurations] = useState([]);
-    let stationImgURL
+    const [gradientColor, setGradientColor] = useState(null);
 
     useEffect(() => {
         loadStation()
     },[])
+
+    async function analyzeImage(imageURL) {
+        try {
+            // imageService.saveImage(imageURL)
+            // const mostCommonColor = await stationService.colorAnalysis(imageURL)
+            const mostCommonColor = "red" 
+            setGradientColor(mostCommonColor);
+            console.log('Most common color:', mostCommonColor);
+        } catch (error) {
+            console.error('Error analyzing image:', error);
+        }
+    }
+
+    useEffect(() => {
+        analyzeImage(getImage());
+    },[station])
+
 
     useEffect(() => {
         if(stationId === LIKED_TRACK_AS_STATION_ID) {
@@ -46,23 +65,23 @@ export function StationDetails() {
             };
     
             fetchAndSetDurations();
-            stationImgURL = station.imgUrl == "default_thumbnail_url" ? defaultImgUrl : station.imgUrl;
         }
     }, [station]);
 
     async function loadStation() {
-        if(stationId === LIKED_TRACK_AS_STATION_ID) {
-            const station = getLikedTracksAsStation()
-            setStation(station)
-        }else {
-            try {
-                const station = await getStationById(stationId)
-                setStation(station)
-            } catch (err) {
-                eventBusService.showErrorMsg('faild to load station')
-            }
+        if (stationId === LIKED_TRACK_AS_STATION_ID) {
+          const station = getLikedTracksAsStation();
+          setStation(station);
+        } else {
+          try {
+            const station = await getStationById(stationId);
+            setStation(station);
+          } catch (err) {
+            eventBusService.showErrorMsg('failed to load station');
+          }
         }
-    }
+      }
+      
 
     function onToggleUserLiked() {
         const user = getBasicUser()
@@ -106,14 +125,24 @@ export function StationDetails() {
         setQueueToTrack(track);
     };
 
+    function getImage() {
+        if (station) {
+            return station.imgUrl == "default_thumbnail_url" ? defaultImgUrl : station.imgUrl
+        }
+    }
+
     if(!station) return <div>loading...</div>
+
     const likedTrackStation = stationId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
-    const isLiked = station.likedByUsers.filter(likedByUser => likedByUser._id === getBasicUser()._id).length !== 0
+    const isLiked = station.likedByUsers && station.likedByUsers.filter(likedByUser => likedByUser && likedByUser._id === getBasicUser()._id).length !== 0;
+
+    console.log("gradientColor", gradientColor)
+
     return (
-    <section className="station container">
+    <section className="station-container" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 5%, black 50%)` } : {}}>
         <div className="station-head">
             <div className="station-head-img-container">
-                <img className="station-head-img" src={stationImgURL}/>
+                <img className="station-head-img" src={getImage()}/>
             </div>
             <div className="station-head-info">
                 <p>Album</p>
@@ -127,11 +156,7 @@ export function StationDetails() {
                 <FontAwesomeIcon icon={faPlayCircle} />
             </button>
             <button className={`station-like-btn ${likedTrackStation} ${isLiked && 'green'}`} onClick={onToggleUserLiked}>
-                { isLiked
-                ?
-                <FontAwesomeIcon icon={heartSolid} />
-                :
-                <FontAwesomeIcon icon={heartLined}/>}
+                <FontAwesomeIcon icon={isLiked ? heartSolid : heartLined} />
             </button>
             <button className={`station-more-btn ${likedTrackStation}`} onClick={() => {}}>
                 <p>...</p>

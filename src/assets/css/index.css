@@ -6,7 +6,7 @@
 
 /* Pages */
 @import "./pages/home.css";
-@import "./pages/station.scss";
+@import "./pages/station-details.scss";
 
 /* Components */
 @import "./cmps/app-header.scss";
