@@ -108,6 +108,7 @@ export function StationDetails() {
 
     if(!station) return <div>loading...</div>
     const likedTrackStation = stationId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
+    const stationByUser = getBasicUser()._id === station.createdBy._id ? 'hiden' : ''
     const isLiked = station.likedByUsers.filter(likedByUser => likedByUser._id === getBasicUser()._id).length !== 0
     return (
     <section className="station container">
@@ -116,7 +117,7 @@ export function StationDetails() {
                 <img className="station-head-img" src={stationImgURL}/>
             </div>
             <div className="station-head-info">
-                <p>Album</p>
+                <p>Playlist</p>
                 <h1 className="station-name">{station.name}</h1>
                 <p></p> {/* station description */}
                 <p>{station.createdBy.fullname} - {station.tracks.length}</p>
@@ -126,7 +127,7 @@ export function StationDetails() {
             <button className="station-play-btn" onClick={() => {}}>
                 <FontAwesomeIcon icon={faPlayCircle} />
             </button>
-            <button className={`station-like-btn ${likedTrackStation} ${isLiked && 'green'}`} onClick={onToggleUserLiked}>
+            <button className={`station-like-btn ${likedTrackStation} ${stationByUser} ${isLiked && 'green'}`} onClick={onToggleUserLiked}>
                 { isLiked
                 ?
                 <FontAwesomeIcon icon={heartSolid} />
