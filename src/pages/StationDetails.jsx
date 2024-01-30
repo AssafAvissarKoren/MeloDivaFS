@@ -162,8 +162,8 @@ export function StationDetails() {
     const isLiked = station.likedByUsers && station.likedByUsers.filter(likedByUser => likedByUser && likedByUser._id === getBasicUser()._id).length !== 0;
 
     return (
-    <section className="station-container" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 5%, black 50%)` } : {}}>
-        <div className="station-head">
+    <section className="station-container">
+        <div className="station-head" style={gradientColor ? { background: gradientColor } : {}}>
             <div className="station-head-img-container">
                 <img className="station-head-img" src={getImage()}/>
             </div>
@@ -174,71 +174,73 @@ export function StationDetails() {
                 <p>{station.createdBy.fullname} - {station.tracks.length}</p>
             </div>
         </div>
-        <div className="station-options">
-            <button className="station-play-btn" onClick={() => {}}>
-                <FontAwesomeIcon icon={faPlayCircle} />
-            </button>
-            <button className={`station-like-btn ${likedTrackStation} ${stationByUser} ${isLiked && 'green'}`} onClick={onToggleUserLiked}>
-                <FontAwesomeIcon icon={isLiked ? heartSolid : heartLined} />
-            </button>
-            <div className={`station-more-btn ${likedTrackStation}`}>
-                <button className="btn-more" onClick={toggleMenu}>
-                    <p>...</p>
+        <div className="station-content" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 5%, #121212 50%)` } : {}}>
+            <div className="station-options">
+                <button className="station-play-btn" onClick={() => {}}>
+                    <FontAwesomeIcon icon={faPlayCircle} />
                 </button>
-                {isMenu && 
-                    <MiniMenu onCloseMiniMenu={onCloseMiniMenu}>
-                        {stationByUser
-                            ?
-                            <button onClick={onDeleteStation}>
-                                Delete
-                            </button>
-                            :
-                            <button onClick={onToggleUserLiked}>
-                                {isLiked 
-                                ? 
-                                'Remove from your library'
+                <button className={`station-like-btn ${likedTrackStation} ${stationByUser} ${isLiked && 'green'}`} onClick={onToggleUserLiked}>
+                    <FontAwesomeIcon icon={isLiked ? heartSolid : heartLined} />
+                </button>
+                <div className={`station-more-btn ${likedTrackStation}`}>
+                    <button className="btn-more" onClick={toggleMenu}>
+                        <p>...</p>
+                    </button>
+                    {isMenu && 
+                        <MiniMenu onCloseMiniMenu={onCloseMiniMenu}>
+                            {stationByUser
+                                ?
+                                <button onClick={onDeleteStation}>
+                                    Delete
+                                </button>
                                 :
-                                'Add to your library'}
+                                <button onClick={onToggleUserLiked}>
+                                    {isLiked 
+                                    ? 
+                                    'Remove from your library'
+                                    :
+                                    'Add to your library'}
+                                </button>
+                            }
+                            <button onClick={onCloseMiniMenu}>
+                                Add to queue
                             </button>
-                        }
-                        <button onClick={onCloseMiniMenu}>
-                            Add to queue
-                        </button>
-                        <button onClick={onCloseMiniMenu}>
-                            Share
-                        </button>
-                    </MiniMenu> 
-                }
-            </div>
-            <button className="station-sort-btn" onClick={() => {}}>
-                <p>List</p>
-                <FontAwesomeIcon icon={faList} />
-            </button>
-        </div>
-        <div className="station-content">
-            <div className="station-list-head station-content-layout">
-                <p className="track-numder">#</p>
-                <p>Title</p>
-                <div className="track-time">
-                    <FontAwesomeIcon icon={faClockFour} />
+                            <button onClick={onCloseMiniMenu}>
+                                Share
+                            </button>
+                        </MiniMenu> 
+                    }
                 </div>
+                <button className="station-sort-btn" onClick={() => {}}>
+                    <p>List</p>
+                    <FontAwesomeIcon icon={faList} />
+                </button>
             </div>
-            <div className="br"/>
-            <ul className="station-track-list">
-                {tracksWithDurations.map((track, trackNum) => (
-                    <li key={track.imgUrl}>
-                        <TrackPreview 
-                            layout={"station-content-layout"}
-                            track={track} 
-                            trackNum={++trackNum}
-                            isLiked={likedTracks[track.url] ? true : false}
-                            deleteTrack={deleteTrack}
-                            duration={utilService.formatDuration(track.duration)}
-                            handleTrackClick={handleTrackClick}
-                        />
-                    </li> 
-                ))}
-            </ul>
+            <div className="station-list">
+                <div className="station-list-head station-content-layout">
+                    <p className="track-numder">#</p>
+                    <p>Title</p>
+                    <div className="track-time">
+                        <FontAwesomeIcon icon={faClockFour} />
+                    </div>
+                </div>
+                <div className="br"/>
+                <ul className="station-track-list">
+                    {tracksWithDurations.map((track, trackNum) => (
+                        <li key={track.imgUrl}>
+                            <TrackPreview 
+                                layout={"station-content-layout"}
+                                track={track} 
+                                trackNum={++trackNum}
+                                isLiked={likedTracks[track.url] ? true : false}
+                                deleteTrack={deleteTrack}
+                                duration={utilService.formatDuration(track.duration)}
+                                handleTrackClick={handleTrackClick}
+                            />
+                        </li> 
+                    ))}
+                </ul>
+            </div>
         </div>
     </section>
     )
