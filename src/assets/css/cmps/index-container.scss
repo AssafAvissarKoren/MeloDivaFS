@@ -6,7 +6,7 @@
     padding: 10px;
     gap: 10px;
 
-    > *:not(.index-bottom-player) {
+    > *:not(.index-footer-player) {
         background-color: #121212;
         border-radius: 10px;
     }
@@ -43,7 +43,7 @@
         }
     }
 
-    .index-bottom-player {
+    .index-footer-player {
         grid-column: 1 / -1;
         grid-row: -2 / -1;
 

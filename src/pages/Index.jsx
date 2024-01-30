@@ -129,9 +129,9 @@ export const Index = () => {
                     />
                     <MainViewComponent {...mainViewComponentProps} />
                 </div>
-                <div className="index-bottom-player">
-                    {selectedTrack && <FooterPlayer video={trackService.trackToVideo(selectedTrack)} />}
-                </div>
+                {selectedTrack && <div className="index-footer-player">
+                    <FooterPlayer video={trackService.trackToVideo(selectedTrack)} />
+                </div>}
                 <div className="index-side-resizer" style={{marginLeft: `${sideNavWidth - 10}px`}} onMouseDown={startResize}/>
             </div>
         </IndexContext.Provider>
