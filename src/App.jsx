@@ -14,7 +14,7 @@ export function App() {
                     </Routes>
                 </main>
                 <UserMsg />
-                <AppFooter />
+                {/* <AppFooter /> */}
             </section>
         </Router>
     );
