@@ -1,7 +1,11 @@
 .station-preview {
-  height: 260px;
-  width: 180px;
+  display: flex;
+  flex-direction: column;
   flex-shrink: 0;
+  max-height: 294px;
+  min-height: 256px;
+  max-width: 212px;
+  min-width: 172px;
   border-radius: 8px;
   overflow: hidden;
   background-color: black;
@@ -12,6 +16,8 @@
   padding: 1vh;
   align-items: center;
   justify-items: center;
+  justify-content: center;
+
 
   &:hover {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
@@ -26,28 +32,32 @@
 
   .image-container {
     position: relative;
-    width: 150px;
-    height: 150px;
+    max-height: 180px;
+    min-height: 140px;
+    max-width: 180px;
+    min-width: 140px;
+  
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0 auto;
   }
   
   .play-btn {
     position: absolute;
-    bottom: -50px; /* Initially positioned outside of the view */
+    bottom: -50px;
     right: -50px;
-    transform: translate(-5%, -125%);
+    transform: translate(15%, 15%);
     width: 50px;
     height: 50px;
-    border-radius: 50%; /* Make the button round */
-    background-color: white; /* Set the background color */
+    border-radius: 50%;
+    background-color: white;
     color: #1db954;
-    font-size: 50px; /* Set size of the icon */
+    font-size: 50px;
     border: none;
     cursor: pointer;
     opacity: 0;
-    transition: opacity 0.3s, bottom 0.3s, right 0.3s; /* Add transitions for bottom and right */
+    transition: opacity 0.3s, bottom 0.3s, right 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;

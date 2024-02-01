@@ -2,6 +2,7 @@ import { utilService } from './util.service.js'
 import { storageService } from './async-storage.service.js'
 import { stationService } from './station.service.js';
 import { ColorLensOutlined } from '@mui/icons-material';
+import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 
 const Status = {
     ROW: 'row',
@@ -41,20 +42,31 @@ async function createCategories() {
     };
       
     let categories = [
-        {_id: "c101", name: "1960s-1990s", stationIds: ["1960s", "1970s", "1980s", "1990s"], color: "#FFC864"},
-        {_id: "c102", name: "2000s-2010s", stationIds: ["2000s", "2010s"], color: "#779DC3"},
-        {_id: "c103", name: "Electronic, Ambient & Experimental", stationIds: ["Electronic", "Ambient", "Experimental"], color: "#E8115B"},
-        {_id: "c104", name: "Rock, Blues & Psychedelic", stationIds: ["Rock", "Blues", "Psychedelic"], color: "#1E3264"},
-        {_id: "c105", name: "Jazz, Trumpet & Bebop", stationIds: ["Jazz", "Trumpet", "Bebop"], color: "#80433B"},
-        {_id: "c106", name: "Pop, Hits & Dance", stationIds: ["Pop", "Hits", "Dance"], color: "#E13300"},
-        {_id: "c107", name: "R&B, Soul & HipHop", stationIds: ["R&B", "Soul", "HipHop"], color: "#1BD57F"},
-        {_id: "c108", name: "Comedy, Show & Animation", stationIds: ["Comedy", "Show", "Animation"], color: "#EEC1C9"},
-        {_id: "c109", name: "Classic, Iconic & Legendary", stationIds: ["Classic", "Iconic", "Legendary"], color: "#046FBC"},
+        {_id: "c101", name: "1960s-1990s", stationTags: ["1960s", "1970s", "1980s", "1990s"], color: "#FFC864"},
+        {_id: "c102", name: "2000s-2010s", stationTags: ["2000s", "2010s"], color: "#779DC3"},
+        {_id: "c103", name: "Electronic, Ambient & Experimental", stationTags: ["Electronic", "Ambient", "Experimental"], color: "#E8115B"},
+        {_id: "c104", name: "Rock, Blues & Psychedelic", stationTags: ["Rock", "Blues", "Psychedelic"], color: "#1E3264"},
+        {_id: "c105", name: "Jazz, Trumpet & Bebop", stationTags: ["Jazz", "Trumpet", "Bebop"], color: "#80433B"},
+        {_id: "c106", name: "Pop, Hits & Dance", stationTags: ["Pop", "Hits", "Dance"], color: "#E13300"},
+        {_id: "c107", name: "R&B, Soul & HipHop", stationTags: ["R&B", "Soul", "HipHop"], color: "#1BD57F"},
+        {_id: "c108", name: "Comedy, Show & Animation", stationTags: ["Comedy", "Show", "Animation"], color: "#EEC1C9"},
+        {_id: "c109", name: "Classic, Iconic & Legendary", stationTags: ["Classic", "Iconic", "Legendary"], color: "#046FBC"},
     ]     
 
-    let categoriesArray = categories.flatMap(({ _id, name, stationIds, color }) => {
-        return { _id ,name, stationIds: mergeTags(stationIds), color: color };
+    let categoriesArray = categories.flatMap(({ _id, name, stationTags, color }) => {
+        const stationIds = mergeTags(stationTags);
+        let matchingImageUrl = defaultImgUrl;
+        for (let i = 0; i < stationIds.length; i++) {
+            const stationId = stationIds[i];
+            const matchingStation = stations.find(station => station._id === stationId);
+            if (matchingStation && matchingStation.imgUrl !== "default_thumbnail_url") {
+                matchingImageUrl = matchingStation.imgUrl;
+                break;
+            }
+        }
+        return { _id ,name, stationIds: stationIds, color: color, image: matchingImageUrl };
     });
+
     
     utilService.saveToStorage(CATEGORIES_STORAGE_KEY, categoriesArray)
     return categoriesArray

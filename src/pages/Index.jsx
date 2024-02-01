@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import imgUrl from '../assets/imgs/MeloDiva.png'
 
 import { Search } from './Search.jsx';
 import { Library } from './Library.jsx';
@@ -113,7 +112,7 @@ export const Index = () => {
     }
 
     if (!indexStationList) return <div>Loading...</div>;
-    // console.log("selectedTrack", selectedTrack)
+
     return (
         <IndexContext.Provider value={{ setFilterBy }}>
             <div className="index-container">

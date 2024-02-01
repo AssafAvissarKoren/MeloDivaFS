@@ -12,7 +12,7 @@
         align-items: center;
         grid-column: 1;
         grid-row: 1;
-    
+        width: 100%;
         
         .thumbnail {
             width: 80px;
@@ -43,6 +43,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        width: 100%;
 
         .player-action-buttons {
             display: flex;
@@ -105,28 +106,28 @@
                 margin: 0 auto;
 
                 .MuiSlider-rail {
-                    background-color: grey; /* Grey color for the part after the handle */
+                    background-color: grey;
                 }
 
                 .MuiSlider-track {
-                    background-color: white; /* White color for the part before the handle */
-                    transition: background-color 0.2s; /* Add a transition effect */
+                    background-color: white;
+                    transition: background-color 0.2s;
                 }
 
                 .MuiSlider-thumb {
-                    background-color: white; /* White color for the handle */
-                    visibility: hidden; /* Initially hidden */
+                    background-color: white;
+                    visibility: hidden;
                     transition: visibility 0.2s;
                     width: 14px;
                     height: 14px;
                 }
 
                 &:hover .MuiSlider-thumb {
-                    visibility: visible; /* Visible on hover */
+                    visibility: visible;
                 }
 
                 &:hover .MuiSlider-track {
-                    background-color: #1DB954; /* Green color on hover */
+                    background-color: #1DB954;
                 }
             }
         }

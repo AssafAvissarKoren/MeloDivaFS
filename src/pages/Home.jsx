@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-import { stationService } from '../services/station.service';
 import { categoryService } from '../services/category.service';
-import imgUrl from '../assets/imgs/react.png';
 import { CategoryDisplay } from '../cmps/CategoryDisplay';
 import { useSelector } from 'react-redux';
 

@@ -1,16 +1,15 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
+
 import { StationPreview } from './StationPreview';
-import { useNavigate } from 'react-router';
-import { getStations } from "../store/actions/station.actions"
-import { IndexContext } from '../cmps/IndexContext.jsx';
+import { IndexContext } from './IndexContext.jsx';
+
+import { getStations } from '../store/actions/station.actions';
 
 export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
   const { setFilterBy } = useContext(IndexContext);
+  const [categoryStations, setCategoryStations] = useState([]);
 
   if (!category) { return <div>Loading...</div>; }
-
-  const navigate = useNavigate();
-  const [categoryStations, setCategoryStations] = useState([]);
 
   useEffect(() => {
       const fetchCategory = async () => {
@@ -22,8 +21,8 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
       };
 
       fetchCategory();
-  }, [category]); 
-  
+  }, [category]);
+
   function handleOnClick(category) {
     const newFilterBy = {
       tab: 'genre',
@@ -47,7 +46,9 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
         return (
           <div className="category-cube" style={{ backgroundColor: category.color }}>
             <h2 onClick={() => handleOnClick(category)}>{category.name}</h2>
-            <img src={category.image} alt={category.name} className="cube-image" />
+            <div className="cube-image-container">
+              <img src={category.image} alt={category.name} className="cube-image" />
+            </div>
           </div>
         );
       case "results":
@@ -58,10 +59,10 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
           </div>
         );
       default:
-        return null; // Or a default rendering
+        return null;
     }
   };
-
+ 
   const renderStations = (renderedStations) => {
     if (renderedStations && renderedStations.length > 0) {
       return renderedStations.map((station) => (
@@ -71,13 +72,13 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
         />
       ));
     } else {
-      return <p>No stations available.</p>; // Handle the case when there are no stations
+      return <p>No stations available.</p>;
     }
   };
   
   if (category) {
     return renderCategory();
   } else {
-    return null; // Handle the case where category is undefined
+    return null;
   }  
 };
