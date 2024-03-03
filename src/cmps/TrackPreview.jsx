@@ -80,22 +80,22 @@ export function TrackPreview({ layout = '', track = null, trackNum, isLiked, del
                     <p>...</p>
                 </button>
                 {isMenu && 
-                        <MiniMenu onCloseMiniMenu={onCloseMiniMenu}>
+                        <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
                             <button onClick={onCloseMiniMenu}>
                                 Add to playlist
                             </button>
                             { deleteTrack &&
-                            <button onClick={onDeleteTrack}>
-                                Remove from this playlist
-                            </button>
+                                <button onClick={onDeleteTrack}>
+                                    Remove from this playlist
+                                </button>
                             }
                             <button onClick={onToggleLiked}>
-                            {isLiked 
-                            ? 
-                            'Remove from your liked songs'
-                            :
-                            'Save to your liked songs'}
-                                
+                                {isLiked 
+                                    ? 
+                                    'Remove from your liked songs'
+                                    :
+                                    'Save to your liked songs'
+                                }
                             </button>
                             <button onClick={onCloseMiniMenu}>
                                 Add to queue

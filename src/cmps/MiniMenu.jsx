@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react"
 
-export function MiniMenu({children, onCloseMiniMenu}) {
+export function MiniMenu({children, location = '', onCloseMiniMenu}) {
     const modalRef = useRef()
 
     useEffect(() => {
@@ -20,7 +20,7 @@ export function MiniMenu({children, onCloseMiniMenu}) {
     }
 
     return (
-        <div ref={modalRef} className="mini-menu">
+        <div ref={modalRef} className={`mini-menu ${location}`}>
             {children}
         </div>
     )

@@ -6,7 +6,7 @@ export const AppHeader = ({ setFilterBy }) => {
     const [text, setText] = useState('');
 
     useEffect(() => {
-        if (params.tab !== "search") {
+        if (params.tab === "search") {
             setText('');
             setFilterBy(prev => ({ ...prev, text: '' }));
         }

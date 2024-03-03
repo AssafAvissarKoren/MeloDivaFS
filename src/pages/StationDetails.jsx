@@ -31,7 +31,7 @@ export function StationDetails() {
 
     useEffect(() => {
         loadStation()
-    },[])
+    },[stationId])
 
     async function analyzeImage(imageURL) {
         try {
@@ -39,7 +39,6 @@ export function StationDetails() {
             // const mostCommonColor = await stationService.colorAnalysis(imageURL)
             const mostCommonColor = "red" 
             setGradientColor(mostCommonColor);
-            console.log('Most common color:', mostCommonColor);
         } catch (error) {
             console.error('Error analyzing image:', error);
         }
@@ -95,6 +94,7 @@ export function StationDetails() {
         // if you didn't remove the user then add them
         if(numOfLikedUsers === newLikedByUsers.length) newLikedByUsers.push(user)
         
+        onCloseMiniMenu()
         saveStation({...station, likedByUsers: newLikedByUsers})
         setStation(prevStation => ({...prevStation, likedByUsers: newLikedByUsers}))
     }
@@ -174,7 +174,7 @@ export function StationDetails() {
                 <p>{station.createdBy.fullname} - {station.tracks.length}</p>
             </div>
         </div>
-        <div className="station-content" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 5%, #121212 50%)` } : {}}>
+        <div className="station-content" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}>
             <div className="station-options">
                 <button className="station-play-btn" onClick={() => {}}>
                     <FontAwesomeIcon icon={faPlayCircle} />
@@ -187,7 +187,7 @@ export function StationDetails() {
                         <p>...</p>
                     </button>
                     {isMenu && 
-                        <MiniMenu onCloseMiniMenu={onCloseMiniMenu}>
+                        <MiniMenu location={'right bottom'} onCloseMiniMenu={onCloseMiniMenu}>
                             {stationByUser
                                 ?
                                 <button onClick={onDeleteStation}>
@@ -196,10 +196,11 @@ export function StationDetails() {
                                 :
                                 <button onClick={onToggleUserLiked}>
                                     {isLiked 
-                                    ? 
-                                    'Remove from your library'
-                                    :
-                                    'Add to your library'}
+                                        ? 
+                                        'Remove from your library'
+                                        :
+                                        'Add to your library'
+                                    }
                                 </button>
                             }
                             <button onClick={onCloseMiniMenu}>
