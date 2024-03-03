@@ -1,7 +1,7 @@
 .footer-player {
-    display: grid; /* Use grid layout */
-    grid-template-columns: auto 1fr auto; /* Define 3 columns: auto, flexible, auto */
-    gap: 10px; /* Add some spacing between columns */
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 10px;
     padding: 10px;
     background-color: #181818;
     color: #fff;
@@ -12,7 +12,7 @@
         align-items: center;
         grid-column: 1;
         grid-row: 1;
-    
+        width: 100%;
         
         .thumbnail {
             width: 80px;
@@ -43,6 +43,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        width: 100%;
 
         .player-action-buttons {
             display: flex;
@@ -57,7 +58,6 @@
             
             .previous{
                 font-size: 25px;
-
             }
 
             .play-pause {
@@ -70,30 +70,65 @@
 
             .next{
                 font-size: 25px;
-
             }
 
             .repeat{
                 font-size: 12px;
-
             }
         }
 
         .progress-section {
             display: flex;
             flex-direction: row;
+            align-items: center;
+
+            .MuiSlider-root.MuiSlider-colorPrimary {
+                color: white;
+                transition: color 0.2s;
+            }
+
+            &:hover .MuiSlider-root.MuiSlider-colorPrimary {
+                color: #1DB954;
+            }
 
             .current-time {
                 margin-right: 15px;
+                display: block;
             }
             
             .end-time {
                 margin-left: 15px;
+                display: block;
             }
 
             .progress-slider {
                 width: 400px;
                 margin: 0 auto;
+
+                .MuiSlider-rail {
+                    background-color: grey;
+                }
+
+                .MuiSlider-track {
+                    background-color: white;
+                    transition: background-color 0.2s;
+                }
+
+                .MuiSlider-thumb {
+                    background-color: white;
+                    visibility: hidden;
+                    transition: visibility 0.2s;
+                    width: 14px;
+                    height: 14px;
+                }
+
+                &:hover .MuiSlider-thumb {
+                    visibility: visible;
+                }
+
+                &:hover .MuiSlider-track {
+                    background-color: #1DB954;
+                }
             }
         }
     }
@@ -166,3 +201,4 @@
         }
     }
 }
+

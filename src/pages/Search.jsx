@@ -79,7 +79,7 @@ export function Search({ searchText, setCurrentCategory }) {
                     ))}
                 </>
             ) : (
-                <>
+                <div className="search-categories">
                     {categories.map(category => (
                         <CategoryDisplay 
                             key={category._id}
@@ -88,7 +88,7 @@ export function Search({ searchText, setCurrentCategory }) {
                             setCurrentCategory={setCurrentCategory}
                         />
                     ))}
-                </>
+                </div>
             )} // 
         </div>
     );

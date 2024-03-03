@@ -18,6 +18,13 @@ export const StationPreview = ({ station }) => {
 
     setFilterBy(newFilterBy);
   }
+
+  const shortenText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    }
+    return text;
+  };  
   
   const stationImgURL = station.imgUrl == "default_thumbnail_url" ? defaultImgUrl : station.imgUrl;
 
@@ -30,8 +37,8 @@ export const StationPreview = ({ station }) => {
         </button>
       </div>
       <div className="station-info">
-        <h3 className="station-name">{station.name}</h3>
-        <p className="creator-name">{station.createdBy.fullname}</p>
+        <h3 className="station-name">{shortenText(station.name, 17)}</h3>
+        <p className="creator-name">{shortenText(station.createdBy.fullname, 17)}</p>
       </div>
     </div>
   );
