@@ -13,13 +13,14 @@ import { faBook, faPlus } from '@fortawesome/free-solid-svg-icons';
 export function Library() {
     const { setFilterBy } = useContext(IndexContext)
     const stations = useSelector(storeState => storeState.stationModule.stations)
+    const userId = useSelector(storeState => storeState.userModule._id)
     // const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
 
     function getStationsInLibrary() {
         return stations.filter(station => {
             return (
-                station.createdBy._id === getBasicUser()._id ||
-                station.likedByUsers.filter(likedByUser => likedByUser._id === getBasicUser()._id).length !== 0
+                station.createdBy._id === userId ||
+                station.likedByUsers.filter(likedByUser => likedByUser._id === userId).length !== 0
             )
         })
     }
@@ -39,7 +40,7 @@ export function Library() {
         setFilterBy(newFilterBy)
     }
 
-    if (!stations) return <div>Loading...</div>
+    if (!stations || !getBasicUser()._id) return <div>Loading...</div>
     return (
         <div className="library">
             <div className="title">
