@@ -31,7 +31,7 @@ export function StationDetails() {
 
     useEffect(() => {
         loadStation()
-    },[])
+    },[stationId])
 
     async function analyzeImage(imageURL) {
         try {
@@ -39,7 +39,6 @@ export function StationDetails() {
             // const mostCommonColor = await stationService.colorAnalysis(imageURL)
             const mostCommonColor = "red" 
             setGradientColor(mostCommonColor);
-            console.log('Most common color:', mostCommonColor);
         } catch (error) {
             console.error('Error analyzing image:', error);
         }

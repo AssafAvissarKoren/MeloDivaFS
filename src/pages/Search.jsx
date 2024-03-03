@@ -11,9 +11,10 @@ import { utilService } from '../services/util.service.js';
 import { TrackPreview } from '../cmps/TrackPreview.jsx';
 
 
-export function Search({ stations, searchText, setCurrentCategory }) {
+export function Search({ searchText, setCurrentCategory }) {
     const [tracks, setTracks] = useState([]);
     const [categories, setCategories] = useState([]);
+    const stations = useSelector(storeState => storeState.stationModule.stations)
     const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
 
     useEffect(() => {

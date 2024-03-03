@@ -27,7 +27,6 @@ let maxNavWidth = window.innerWidth - 500 - 20 // px
 
 export const Index = () => {
     const params = useParams();
-    const [indexStationList, setIndexStationList] = useState(null);
     const [filterBy, setFilterBy] = useState(stationService.getDefaultFilter(params));
     const [currentCategory, setCurrentCategory] = useState(null);
     const selectedTrack = useSelector(storeState => storeState.queueModule.playedTracks)
@@ -36,14 +35,14 @@ export const Index = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {   
+
+    useEffect(() => {
         loadStationsLocal();
         initUser()
         categoryService.createCategories();
     }, []);
 
-    useEffect(() => {   
-        loadStationsLocal()
+    useEffect(() => {
         const filterURL = stationService.filterURL(filterBy);
         navigate(filterURL, { replace: true }) 
     }, [filterBy]);
@@ -64,11 +63,10 @@ export const Index = () => {
 
 
     async function loadStationsLocal() {
-        setIndexStationList(await loadStations());
+        await loadStations()
     }
 
     const mainViewComponentProps = {
-        stations: indexStationList,
         setCurrentCategory: setCurrentCategory,
     }; 
 
@@ -109,7 +107,6 @@ export const Index = () => {
             break;
     }
 
-    if (!indexStationList) return <div>Loading...</div>;
     // console.log("selectedTrack", selectedTrack)
     return (
         <IndexContext.Provider value={{ setFilterBy }}>

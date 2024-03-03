@@ -8,9 +8,9 @@ export const SideNav = ({ setFilterBy }) => {
     const params = useParams();
     const tab = params.tab
 
-    useEffect(() => {
-        setFilterBy(prev => ({ ...prev, tab }));
-    }, [tab, setFilterBy]);
+    // useEffect(() => {
+    //     setFilterBy(prev => ({ ...prev, tab }));
+    // }, [tab, setFilterBy]);
 
     const handleTabSelect = (selectedTab) => {
         setFilterBy(prev => ({ ...prev, tab: selectedTab , stationId: '' }));
