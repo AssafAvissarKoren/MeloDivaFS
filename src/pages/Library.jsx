@@ -5,13 +5,15 @@ import { stationService } from "../services/station.service"
 import { saveStation } from "../store/actions/station.actions"
 import { utilService } from "../services/util.service"
 import { IndexContext } from '../cmps/IndexContext.jsx'
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBook, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 
 export function Library() {
     const { setFilterBy } = useContext(IndexContext)
     const stations = useSelector(storeState => storeState.stationModule.stations)
-    const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
+    // const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
 
     function getStationsInLibrary() {
         return stations.filter(station => {
@@ -32,17 +34,18 @@ export function Library() {
             tab: 'station',
             stationId: newStation._id,
             text: '',
-          };
+        }
       
-        setFilterBy(newFilterBy);
+        setFilterBy(newFilterBy)
     }
 
+    if (!stations) return <div>Loading...</div>
     return (
         <div className="library">
             <div className="title">
-                <button onClick={createNewStation}>
-                    Create Playlist +
-                </button>
+                <FontAwesomeIcon icon={faBook} className="symbol" aria-hidden="true" />
+                <p>Library</p>
+                <FontAwesomeIcon icon={faPlus} className="symbol add-station-btn" aria-hidden="true" onClick={createNewStation}/>
             </div>
             <ul className="content">
                 <li>

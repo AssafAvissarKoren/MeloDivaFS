@@ -103,9 +103,6 @@ export const Index = () => {
             MainViewComponent = Search;
             mainViewComponentProps.searchText = filterBy.text;
             break;
-        case 'library':
-            MainViewComponent = Library;
-            break;
         case 'home':
         default:
             MainViewComponent = Home;
@@ -122,7 +119,10 @@ export const Index = () => {
                         setFilterBy={setFilterBy} 
                     />
                 </div>
-                <div className="index-side-bottom" style={{width: `${sideNavWidth}px`}}/>
+                <div className="index-side-bottom" style={{width: `${sideNavWidth}px`}}>
+
+                    <Library/>
+                </div>
                 <div className="index-main-view">
                     <AppHeader 
                         setFilterBy={setFilterBy}

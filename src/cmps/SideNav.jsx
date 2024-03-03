@@ -19,7 +19,6 @@ export const SideNav = ({ setFilterBy }) => {
     const tabData = {
         home: { name: "Home", icon: faHome, symbol: "" },
         search: { name: "Search", icon: faSearch, symbol: "" },
-        library: { name: "Library", icon: faBook, symbol: "||∖" }
     };
     
 
