@@ -20,7 +20,7 @@ export const StationPreview = ({ station }) => {
   }
 
   const shortenText = (text, maxLength) => {
-    if (text.length > maxLength) {
+    if (text?.length > maxLength) {
       return text.slice(0, maxLength) + '...';
     }
     return text;
