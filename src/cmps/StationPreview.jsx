@@ -31,14 +31,14 @@ export const StationPreview = ({ station }) => {
   return (
     <div className="station-preview">
       <div className="image-container">
-        <img src={stationImgURL} alt={station.name} />
+        <img className="img" src={stationImgURL} alt={station.name} />
         <button className="play-btn" onClick={() => handleOnClick(station._id)}>
           <FontAwesomeIcon icon={faPlayCircle} /> {/* Use Font Awesome icon */}
         </button>
       </div>
       <div className="station-info">
-        <h3 className="station-name">{shortenText(station.name, 17)}</h3>
-        <p className="creator-name">{shortenText(station.createdBy.fullname, 17)}</p>
+        <h3 className="station-name">{station.name}</h3>
+        <p className="creator-name">{station.createdBy.fullname}</p>
       </div>
     </div>
   );
