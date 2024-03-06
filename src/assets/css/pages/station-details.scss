@@ -22,6 +22,10 @@
             aspect-ratio: 1 / 1;
             object-fit: cover;
             margin-left: 3px;
+            background: unset;
+            border: 0;
+            padding: 0;
+            cursor: unset;
 
             & .station-head-img {
                 height: 100%;
@@ -39,6 +43,10 @@
             flex-direction: column;
             justify-content: flex-end;
             height: 100%;
+
+            & .station-btn {
+                cursor: pointer;
+            }
 
             & .station-name {
                 font-size: 3em;
