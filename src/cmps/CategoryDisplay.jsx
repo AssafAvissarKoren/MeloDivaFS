@@ -38,7 +38,10 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
       case "row":
         return (
           <div className="category-row">
-            <h2 onClick={() => handleOnClick(category)}>{category.name}</h2>
+            <div className="title">
+              <h2 onClick={() => handleOnClick(category)}>{category.name}</h2>
+              <p onClick={() => handleOnClick(category)}>Show all</p>
+            </div>
             <div className="row">{renderStations(categoryStations)}</div>
           </div>
         );
