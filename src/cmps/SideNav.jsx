@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faSearch, faBook } from '@fortawesome/free-solid-svg-icons';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { utilService } from '../services/util.service';
 
 export const SideNav = ({ setFilterBy }) => {
     const params = useParams();
@@ -16,27 +17,29 @@ export const SideNav = ({ setFilterBy }) => {
         setFilterBy(prev => ({ ...prev, tab: selectedTab , stationId: '' }));
     };
 
+    const baceUrl = "../assets/imgs/"
     const tabData = {
-        home: { name: "Home", icon: faHome, symbol: "" },
-        search: { name: "Search", icon: faSearch, symbol: "" },
+        home: { name: "Home", regular: `${baceUrl}home.svg`, active: `${baceUrl}homeSolid.svg` },
+        search: { name: "Search", regular: `${baceUrl}search.svg`, active: `${baceUrl}searchSolid.svg` },
     };
     
+    // utilService.getImgUrl
 
     return (
         <div className="side-nav">
-            {Object.entries(tabData).map(([key, { name, icon, symbol }]) => {
+            {Object.entries(tabData).map(([key, { name, regular, active }]) => {
                 return (
                     <div
                         key={key}
                         onClick={() => handleTabSelect(key)}
                         className={key === tab ? 'active' : ''}
                     >
-                        <span>
-                            {icon ? (
-                                <FontAwesomeIcon icon={icon} className="symbol" aria-hidden="true" />
-                            ) : (<span className="symbol">{symbol}</span>) }
-                            <span className="name-style">{name}</span>
-                        </span>
+                        <img
+                            className="symbol"
+                            src={key === tab ? utilService.getImgUrl(active) : utilService.getImgUrl(regular)}
+                            alt={`${name} svg`}
+                        />
+                        <span className="name-style">{name}</span>
                     </div>
                 );
             })}
