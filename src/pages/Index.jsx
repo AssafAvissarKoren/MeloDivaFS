@@ -22,7 +22,7 @@ import { trackService } from '../services/track.service.js';
 import { initUser } from '../store/actions/user.actions.js';
 
 const MIN_NAV_WIDTH = 280 // px
-let maxNavWidth = window.innerWidth - 500 - 20 // px
+const MAX_NAV_WIDTH = window.innerWidth - 500 - 20 // px
 
 export const Index = () => {
     const params = useParams();
@@ -30,6 +30,7 @@ export const Index = () => {
     const [currentCategory, setCurrentCategory] = useState(null);
     const selectedTrack = useSelector(storeState => storeState.queueModule.playedTracks)
     
+    const [isResizing, setIsResizing] = useState(false);
     const [sideNavWidth, setSideNavWidth] = useState(MIN_NAV_WIDTH)
 
     const navigate = useNavigate();
@@ -45,21 +46,53 @@ export const Index = () => {
         const filterURL = stationService.filterURL(filterBy);
         navigate(filterURL, { replace: true }) 
     }, [filterBy]);
+    //     const handleResize = () => {
+    //         maxNavWidth = window.innerWidth - 500 - 20
+    //         if(sideNavWidth < MIN_NAV_WIDTH) setSideNavWidth(MIN_NAV_WIDTH)
+    //         if(sideNavWidth > MAX_NAV_WIDTH) setSideNavWidth(MAX_NAV_WIDTH)
+    //     };
+    
+    //     window.addEventListener('resize', handleResize);
+    
+    //     return () => {
+    //       window.removeEventListener('resize', handleResize);
+    //     };
+    // }, [sideNavWidth]);
 
     useEffect(() => {
-        const handleResize = () => {
-            maxNavWidth = window.innerWidth - 500 - 20
-            if(sideNavWidth < MIN_NAV_WIDTH) setSideNavWidth(MIN_NAV_WIDTH)
-            if(sideNavWidth > maxNavWidth) setSideNavWidth(maxNavWidth)
-        };
-    
-        window.addEventListener('resize', handleResize);
+        if(isResizing) {
+            document.addEventListener('mousemove', handleMouseMove)
+            document.addEventListener('mouseup', handleMouseUp)
+        } else {
+            document.removeEventListener('mousemove', handleMouseMove)
+            document.removeEventListener('mouseup', handleMouseUp)
+        }
     
         return () => {
-          window.removeEventListener('resize', handleResize);
-        };
-    }, [sideNavWidth]);
+          document.removeEventListener('mousemove', handleMouseMove)
+          document.removeEventListener('mouseup', handleMouseUp)
+        }
+    }, [isResizing])
 
+    function startResize(ev) {
+        ev.preventDefault()
+        setIsResizing(true)
+    }
+
+    function handleMouseMove(ev){
+        if (isResizing) {
+          let newNavWidth
+          if(ev.clientX < MIN_NAV_WIDTH) newNavWidth = MIN_NAV_WIDTH
+          else if(ev.clientX > MAX_NAV_WIDTH) newNavWidth = MAX_NAV_WIDTH
+          else newNavWidth = ev.clientX
+
+          setSideNavWidth(newNavWidth)
+        }
+    }
+
+    function handleMouseUp(){
+        setIsResizing(false)
+    }
 
     async function loadStationsLocal() {
         await loadStations()
@@ -68,23 +101,6 @@ export const Index = () => {
     const mainViewComponentProps = {
         setCurrentCategory: setCurrentCategory,
     }; 
-
-    function startResize(ev) {
-        ev.preventDefault();
-
-        document.addEventListener('mousemove', handleMouseMove);
-        document.addEventListener('mouseup', stopResize);
-    }
-
-    function handleMouseMove(ev) {
-        if(ev.clientX >= MIN_NAV_WIDTH && ev.clientX <= maxNavWidth) 
-            setSideNavWidth(ev.clientX)
-    }
-
-    function stopResize() {
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', stopResize);
-    }
 
     let MainViewComponent;
     switch (params.tab) {
@@ -109,16 +125,14 @@ export const Index = () => {
     return (
         <IndexContext.Provider value={{ setFilterBy }}>
             <div className="index-container">
-                <div className="index-side-nav" style={{width: `${sideNavWidth}px`}}>
-                    <SideNav 
-                        setFilterBy={setFilterBy} 
-                    />
-                </div>
-                <div className="index-side-bottom" style={{width: `${sideNavWidth}px`}}>
-
+                <div className="index-side" style={{ width: `${sideNavWidth}px` }}>
+                    <SideNav setFilterBy={setFilterBy} />
                     <Library/>
                 </div>
-                <div className="index-main-view">
+                <div className="index-side-resizer" onMouseDown={startResize}>
+                    <div className={`resizer-line ${isResizing && "unhide"}`}/>
+                </div>
+                <div className="index-main">
                     <AppHeader 
                         setFilterBy={setFilterBy}
                     />
@@ -127,7 +141,6 @@ export const Index = () => {
                 {selectedTrack && <div className="index-footer-player">
                     <FooterPlayer video={trackService.trackToVideo(selectedTrack)} />
                 </div>}
-                <div className="index-side-resizer" style={{marginLeft: `${sideNavWidth - 10}px`}} onMouseDown={startResize}/>
             </div>
         </IndexContext.Provider>
     );
