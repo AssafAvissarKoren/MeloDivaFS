@@ -25,7 +25,7 @@ export async function initUser() {
 
 export function getLikedTracksAsStation() {
     const likedTracks = store.getState().userModule.likedTracks
-    const station = stationService.createStation('Liked Songs', getBasicUser(), utilService.getImgUrl('../assets/imgs/LikedSongs.jpeg'))
+    const station = stationService.createStation('Liked Songs', getBasicUser(), utilService.getImgUrl('../assets/imgs/LikedSongs.png'))
     station.tracks = Object.keys(likedTracks).map((key) => likedTracks[key])
     station._id = LIKED_TRACK_AS_STATION_ID
     return station
