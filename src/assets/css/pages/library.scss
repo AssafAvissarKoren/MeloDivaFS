@@ -1,26 +1,31 @@
 .library {
     width: 100%;
     height: 100%;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 10px 1fr 10px;
+    grid-template-rows: auto 1fr auto;
+    border-radius: 10px;
     overflow-y: auto;
     color: white;
-    padding: 10px;
-    padding-top: 0;
-    gap: 10px;
 
     & .title {
+        grid-column: 1 / -1;
+
         position: sticky;
-        display: flex;
+        display: grid;
+        grid-template-columns: auto auto 1fr auto;
         top: 0;
         background-color: #121212;
         z-index: 999;
-        padding: 18px 12px 8px 12px;
-        margin-top: -10px;
+        padding: 12px 12px 8px 22px;
         cursor: pointer;
-        font-size: 16px;
         color: grey;
         transition: background-color 0.3s, color 0.3s;
+        align-items: center;
+
+        & p {
+            font-weight: bold;
+        }
 
         & .symbol {
             font-weight: bold;
@@ -34,15 +39,25 @@
         }
         
         & .add-station-btn {
+            grid-column: -1;
+
+            font-size:  1em;
+            border-radius: 50%;
+            height: 1em;
+            width: 1em;
+            padding: 0.5em;
             
             &:hover {
                 color: white;
+                background-color: #1a1a1a;
             }
         }
         
     }
 
     & .content {
+        grid-column: 2;
+
         list-style: none;
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));

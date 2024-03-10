@@ -22,7 +22,7 @@ import { categoryService } from '../services/category.service.js';
 import { trackService } from '../services/track.service.js';
 import { initUser } from '../store/actions/user.actions.js';
 
-const MIN_NAV_WIDTH = 250 // px
+const MIN_NAV_WIDTH = 280 // px
 let maxNavWidth = window.innerWidth - 500 - 20 // px
 
 export const Index = () => {

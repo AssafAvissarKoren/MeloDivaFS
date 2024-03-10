@@ -25,7 +25,7 @@ export function StationDetails() {
     const { setFilterBy } = useContext(IndexContext)
     const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
     const [station, setStation] = useState()
-    const [isMenu, setIsMenu] = useState(false)
+    const [menu, setMenu] = useState(0)
     const [tracksWithDurations, setTracksWithDurations] = useState([])
     const [gradientColor, setGradientColor] = useState(null);
 
@@ -97,12 +97,8 @@ export function StationDetails() {
         setStation(prevStation => ({...prevStation, likedByUsers: newLikedByUsers}))
     }
 
-    function toggleMenu() {
-        setIsMenu(prevIsMenu => !prevIsMenu)
-    }
-
     function onCloseMiniMenu() {
-        setIsMenu(false)
+        setMenu(0)
     }
 
     async function deleteTrack(trackUrl) {
@@ -153,6 +149,7 @@ export function StationDetails() {
         }
     }
 
+
     if(!station) return <div>loading...</div>
 
     const likedTrackStation = stationId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
@@ -162,12 +159,30 @@ export function StationDetails() {
     return (
     <section className="station-container">
         <div className="station-head" style={gradientColor ? { background: gradientColor } : {}}>
-            <div className="station-head-img-container">
-                <img className="station-head-img" src={getImage()}/>
-            </div>
+            {stationByUser && !likedTrackStation ?
+                <button className="station-head-img-container" onClick={() => setMenu(1)}>
+                    <img className="station-head-img" src={getImage()}/>
+                </button>
+            :
+                <div className="station-head-img-container">
+                    <img className="station-head-img" src={getImage()}/>
+                </div>
+            }
+            {menu === 1 && 
+                <MiniMenu location={'center'} onCloseMiniMenu={onCloseMiniMenu}>
+                    <h1>Edit details</h1>
+                    <img src={getImage()}/>
+                    <p>name</p>
+                    <p>description</p>
+                </MiniMenu>
+            }
             <div className="station-head-info">
                 <p>Playlist</p>
-                <h1 className="station-name">{station.name}</h1>
+                {stationByUser && !likedTrackStation ?
+                    <h1 className="station-name station-btn" onClick={() => setMenu(1)}>{station.name}</h1>
+                :
+                    <h1 className="station-name">{station.name}</h1>
+                }
                 <p></p> {/* station description */}
                 <p>{station.createdBy.fullname} - {station.tracks.length}</p>
             </div>
@@ -181,10 +196,10 @@ export function StationDetails() {
                     <FontAwesomeIcon icon={isLiked ? heartSolid : heartLined} />
                 </button>
                 <div className={`station-more-btn ${likedTrackStation}`}>
-                    <button className="btn-more" onClick={toggleMenu}>
+                    <button className="btn-more" onClick={() => setMenu(2)}>
                         <p>...</p>
                     </button>
-                    {isMenu && 
+                    {menu === 2 && 
                         <MiniMenu location={'right bottom'} onCloseMiniMenu={onCloseMiniMenu}>
                             {stationByUser
                                 ?
