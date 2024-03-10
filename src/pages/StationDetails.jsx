@@ -35,9 +35,7 @@ export function StationDetails() {
 
     async function analyzeImage(imageURL) {
         try {
-            // imageService.saveImage(imageURL)
-            // const mostCommonColor = await stationService.colorAnalysis(imageURL)
-            const mostCommonColor = "red" 
+            const mostCommonColor = "red" // imageService.analyzeImage(imageURL)
             setGradientColor(mostCommonColor);
         } catch (error) {
             console.error('Error analyzing image:', error);

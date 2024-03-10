@@ -3,9 +3,12 @@ h2 {
   margin-bottom: 10px;
   text-align: left;
   padding-left: 1vh;
+  display: inline
 }
 
 .category-row {
+  text-align: left;
+
   h2:hover {
     text-decoration: underline;
   }
@@ -20,7 +23,6 @@ h2 {
     .station-preview {
       margin-bottom: 20px;
     }
-
   }
 }
   
