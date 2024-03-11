@@ -28,8 +28,8 @@ export function FooterPlayer({ video }) {
             modestbranding: 1,
             enablejsapi: 1,
         },
-    };
-
+    };  
+    
     useEffect(() => {
         let interval;
 
@@ -46,22 +46,6 @@ export function FooterPlayer({ video }) {
         };
     }, [isPlaying]);
 
-    const onReady = (event) => {
-        // Store the player reference when ready
-        playerRef.current = event.target;
-    };
-
-    const togglePlay = () => {
-        if (playerRef.current) {
-            if (isPlaying) {
-                playerRef.current.pauseVideo();
-            } else {
-                playerRef.current.playVideo();
-            }
-            setIsPlaying(!isPlaying);
-        }
-    };
-
     useEffect(() => {
         if (video && video.id.videoId) {
             const fetchVideoDuration = async () => {
@@ -75,8 +59,30 @@ export function FooterPlayer({ video }) {
                 }
             };
             fetchVideoDuration();
-        }
+        }    
     }, [video.id.videoId]);
+
+    const onReady = (event) => {
+        // Store the player reference when ready
+        playerRef.current = event.target;
+        setTimeout(() => {
+            if (playerRef.current && playerRef.current.playVideo) {
+                playerRef.current.playVideo();
+                setIsPlaying(true);
+            }
+        }, 2000);
+    };
+
+    const togglePlay = () => {
+        if (playerRef.current) {
+            if (isPlaying) {
+                playerRef.current.pauseVideo();
+            } else {
+                playerRef.current.playVideo();
+            }
+            setIsPlaying(!isPlaying);
+        }
+    };
 
     const formatTime = (timeInSeconds) => {
         const seconds = Math.floor(timeInSeconds % 60);

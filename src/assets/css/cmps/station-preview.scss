@@ -1,5 +1,12 @@
 .station-preview {
   aspect-ratio: 4 / 5;
+  display: flex;
+  flex-direction: column;
+  // flex-shrink: 0;
+  // max-height: 294px;
+  // min-height: 256px;
+  max-width: 212px;
+  min-width: 172px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s, background-color 0.3s;
@@ -20,13 +27,17 @@
   & .image-container {
     position: relative;
     aspect-ratio: 1 / 1;
-    object-fit: cover;
-    
+    max-height: 164px;
+    max-height: 164px;
+    overflow: hidden;
+
     & .img {
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-      border-radius: 6px;
+      height: 135%;
+      width: 135%;
+      object-fit: cover; /* Options: fill, contain, cover, none, scale-down */
+      border-radius: 10px;
+      margin-top: -30px;
+      margin-bottom: -30px;
     }
   }
   

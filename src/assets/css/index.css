@@ -5,7 +5,7 @@
 @import "basics/animations.css";
 
 /* Pages */
-@import "./pages/home.css";
+@import "./pages/home.scss";
 @import "./pages/library.scss";
 @import "./pages/search.scss";
 @import "./pages/station-details.scss";
@@ -21,3 +21,4 @@
 @import "./cmps/mini-menu.scss";
 @import "./cmps/mini-menu-options.scss";
 @import "./cmps/category-display.scss";
+@import "./cmps/skeleton.scss";

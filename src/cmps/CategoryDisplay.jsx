@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
+import shuffle from 'lodash/shuffle';
 
 import { StationPreview } from './StationPreview';
 import { IndexContext } from './IndexContext.jsx';
@@ -13,10 +14,12 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
 
   useEffect(() => {
       const fetchCategory = async () => {
-          if (category) {
-              const stations = await getStations();
-              const filteredStations = stations.filter(station => category.stationIds.includes(station._id));
-              setCategoryStations(filteredStations);
+        if (category && category.stationIds) {
+            console.log('category:', category);
+            const stations = await getStations();
+            console.log('stations:', stations.map(station => station._id));
+            const filteredStations = stations.filter(station => category.stationIds.includes(station._id));
+            setCategoryStations(filteredStations);
           }
       };
 
@@ -39,10 +42,10 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
         return (
           <div className="category-row">
             <div className="title">
-              <h2 onClick={() => handleOnClick(category)}>{category.name}</h2>
+              <h2 onClick={() => handleOnClick(category)}>{category.name} {categoryStations.length}</h2>
               <p onClick={() => handleOnClick(category)}>Show all</p>
             </div>
-            <div className="row">{renderStations(categoryStations)}</div>
+            <div className="row">{renderStations(categoryStations, true)}</div>
           </div>
         );
       case "cube":
@@ -58,7 +61,15 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
         return (
           <div className="category-results">
             <h2>{category.name}</h2>
-            <div className="grid">{renderStations(categoryStations)}</div>
+            <div className="grid">{renderStations(categoryStations, false)}</div>
+          </div>
+        );
+      case "test":
+        console.log('category test');
+        return (
+          <div className="category-test">
+            <h2>{category.name}</h2>
+            <div className="grid">{renderStations(null, false)}</div>
           </div>
         );
       default:
@@ -66,16 +77,28 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
     }
   };
  
-  const renderStations = (renderedStations) => {
-    if (renderedStations && renderedStations.length > 0) {
-      return renderedStations.map((station) => (
+  const renderStations = (renderedStations, randomFlag) => {
+    let stationsToRender = renderedStations;
+
+    if (randomFlag) {
+      stationsToRender = shuffle(stationsToRender);
+    }
+  
+    if (stationsToRender && stationsToRender.length > 0) {
+      return stationsToRender.map((station) => (
         <StationPreview 
           key={station._id} 
           station={station} 
         />
       ));
     } else {
-      return <p>No stations available.</p>;
+      // Mock StationPreview with null station (for skeleton screen)
+      return Array.from({ length: 10 }, (_, i) => (
+        <StationPreview 
+          key={i} 
+          station={null} 
+        />
+      ));
     }
   };
   

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faSearch, faBook } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faSearch, faBook, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { utilService } from '../services/util.service';
 
@@ -21,9 +21,9 @@ export const SideNav = ({ setFilterBy }) => {
     const tabData = {
         home: { name: "Home", regular: `${baceUrl}home.svg`, active: `${baceUrl}homeSolid.svg` },
         search: { name: "Search", regular: `${baceUrl}search.svg`, active: `${baceUrl}searchSolid.svg` },
+        test: { name: "Test", regular: `${baceUrl}plus.svg`, active: `${baceUrl}plus.svg` },
     };
-    
-    // utilService.getImgUrl
+
 
     return (
         <div className="side-nav">

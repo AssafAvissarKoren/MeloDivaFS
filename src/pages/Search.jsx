@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CategoryDisplay } from '../cmps/CategoryDisplay.jsx';
-import imgUrl from '../assets/imgs/MeloDiva.png';
 import { categoryService } from '../services/category.service';
-import { FooterPlayer } from '../cmps/FooterPlayer';
 import { dataService } from '../services/data.service.js';
 import { setQueueToTrack } from '../store/actions/queue.actions.js';
 import { trackService } from '../services/track.service.js';

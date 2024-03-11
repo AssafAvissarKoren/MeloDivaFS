@@ -6,6 +6,7 @@ import { Search } from './Search.jsx';
 import { Library } from './Library.jsx';
 import { Home } from './Home.jsx';
 import { StationDetails } from './StationDetails.jsx';
+import { Test } from './Test.jsx';
 
 import { IndexContext } from '../cmps/IndexContext.jsx';
 import { SideNav } from '../cmps/SideNav.jsx';
@@ -115,6 +116,9 @@ export const Index = () => {
         case 'search':
             MainViewComponent = Search;
             mainViewComponentProps.searchText = filterBy.text;
+            break;
+        case 'test':
+            MainViewComponent = Test;
             break;
         case 'home':
         default:

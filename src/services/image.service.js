@@ -1,11 +1,23 @@
 import { utilService } from './util.service.js';
+import { FastAverageColor } from 'fast-average-color';
 
 const IMAGE_STORAGE_KEY = 'imageDB';
 
 export const imageService = {
-    saveImage,
-    loadImage,
+    analyzeImage,
 };
+
+async function analyzeImage(imageURL) {
+    try {
+        const fac = new FastAverageColor();
+        const image = await fetch(imageURL);
+        const blob = await image.blob();
+        const result = await fac.getColorAsync(blob);
+        return result.hex;
+    } catch (error) {
+        console.error('Error analyzing image:', error);
+    }
+}
 
 function saveImage(imageUrl, serverUrl = 'http://localhost:5173') {
     return new Promise(async (resolve, reject) => {
@@ -29,3 +41,5 @@ function loadImage() {
     const dataURL = utilService.sessionStorage.getItem(IMAGE_STORAGE_KEY);
     return dataURL || null;
 }
+
+

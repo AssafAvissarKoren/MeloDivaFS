@@ -1,0 +1,34 @@
+.skeleton {
+  background-color: #272727;
+  position: relative;
+  overflow: hidden;
+
+  .img {
+    background-color: grey;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0; // Start at the left edge of the container
+    width: 0; // Initial width is 0
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent); // White line animation
+    animation: loading 1.5s infinite; // Animation properties
+  }
+}
+
+// Keyframes for animation
+@keyframes loading {
+  0% {
+    width: 0; // Start with width 0
+  }
+  50% {
+    width: 100%; // Reach full width halfway through animation
+  }
+  100% {
+    left: 100%; // Move to the end of the container
+    width: 0; // Reset width to 0 at the end
+  }
+}
