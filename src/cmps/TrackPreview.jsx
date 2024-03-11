@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { MiniMenu } from './MiniMenu'
 import { toggleLikedTrack } from '../store/actions/user.actions'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
+import { miniMenuOptions } from './MiniMenuOptions'
 
 
 export function TrackPreview({ layout = '', track = null, trackNum, isLiked, deleteTrack = null, duration, handleTrackClick}) {
@@ -81,28 +82,15 @@ export function TrackPreview({ layout = '', track = null, trackNum, isLiked, del
                 </button>
                 {isMenu && 
                         <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
-                            <button onClick={onCloseMiniMenu}>
-                                Add to playlist
-                            </button>
-                            { deleteTrack &&
-                                <button onClick={onDeleteTrack}>
-                                    Remove from this playlist
-                                </button>
+                            {miniMenuOptions.addToPlaylist(onCloseMiniMenu)}
+                            { deleteTrack &&  miniMenuOptions.removeFromPlaylist(onDeleteTrack) }
+                            {isLiked ? 
+                                miniMenuOptions.removeFromLikedSongs(onToggleLiked) :
+                                miniMenuOptions.addToLikedSongs(onToggleLiked)
                             }
-                            <button onClick={onToggleLiked}>
-                                {isLiked 
-                                    ? 
-                                    'Remove from your liked songs'
-                                    :
-                                    'Save to your liked songs'
-                                }
-                            </button>
-                            <button onClick={onCloseMiniMenu}>
-                                Add to queue
-                            </button>
-                            <button onClick={onCloseMiniMenu}>
-                                Share
-                            </button>
+                            {miniMenuOptions.addToQueue(onCloseMiniMenu)}
+                            {miniMenuOptions.hr()}
+                            {miniMenuOptions.share(onCloseMiniMenu)}
                         </MiniMenu> 
                     }
             </div>

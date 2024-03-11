@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import { useParams } from "react-router"
 import { useSelector } from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faList, faPlayCircle, faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons'
+import { faCircleCheck, faList, faPlayCircle, faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons'
 import { faClockFour, faHeart as heartLined } from '@fortawesome/free-regular-svg-icons'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 
@@ -19,6 +19,7 @@ import { setQueueToTrack, getCurrentTrackInQueue } from '../store/actions/queue.
 import { LIKED_TRACK_AS_STATION_ID, getBasicUser, getLikedTracksAsStation } from "../store/actions/user.actions.js"
 import { IndexContext } from '../cmps/IndexContext.jsx'
 import { MiniMenu } from "../cmps/MiniMenu.jsx"
+import { miniMenuOptions } from "../cmps/MiniMenuOptions.jsx"
 
 export function StationDetails() {
     const { stationId } =  useParams()
@@ -170,10 +171,11 @@ export function StationDetails() {
             }
             {menu === 1 && 
                 <MiniMenu location={'center'} onCloseMiniMenu={onCloseMiniMenu}>
-                    <h1>Edit details</h1>
+                    {miniMenuOptions.editStation(getImage(), station.name, '', onCloseMiniMenu, onCloseMiniMenu)}
+                    {/* <h1>Edit details</h1>
                     <img src={getImage()}/>
                     <p>name</p>
-                    <p>description</p>
+                    <p>description</p> */}
                 </MiniMenu>
             }
             <div className="station-head-info">
@@ -201,27 +203,16 @@ export function StationDetails() {
                     </button>
                     {menu === 2 && 
                         <MiniMenu location={'right bottom'} onCloseMiniMenu={onCloseMiniMenu}>
-                            {stationByUser
-                                ?
-                                <button onClick={onDeleteStation}>
-                                    Delete
-                                </button>
-                                :
-                                <button onClick={onToggleUserLiked}>
-                                    {isLiked 
-                                        ? 
-                                        'Remove from your library'
-                                        :
-                                        'Add to your library'
-                                    }
-                                </button>
+                            {!stationByUser && (isLiked ?
+                                miniMenuOptions.removeFromLibrary(onToggleUserLiked) :
+                                miniMenuOptions.addToLibrary(onToggleUserLiked))
                             }
-                            <button onClick={onCloseMiniMenu}>
-                                Add to queue
-                            </button>
-                            <button onClick={onCloseMiniMenu}>
-                                Share
-                            </button>
+                            {miniMenuOptions.addToQueue(onCloseMiniMenu)}
+                            {miniMenuOptions.hr()}
+                            {stationByUser && miniMenuOptions.editDetails(() => setMenu(1))}
+                            {stationByUser && miniMenuOptions.deleteObj(onDeleteStation)}
+                            {stationByUser && miniMenuOptions.hr()}
+                            {miniMenuOptions.share(onCloseMiniMenu)}
                         </MiniMenu> 
                     }
                 </div>

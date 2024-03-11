@@ -43,9 +43,19 @@ export function Library() {
     return (
         <div className="library">
             <div className="title">
-                <FontAwesomeIcon icon={faBook} className="symbol" aria-hidden="true" />
+                <img
+                    className="symbol"
+                    src={utilService.getImgUrl("../assets/imgs/library.svg")}
+                    alt="library svg"
+                />
                 <p>Your Library</p>
-                <FontAwesomeIcon icon={faPlus} className="symbol add-station-btn" aria-hidden="true" onClick={createNewStation}/>
+                <button className="add-station-btn" onClick={createNewStation}>
+                    <img
+                        className="symbol add-station-btn"
+                        src={utilService.getImgUrl("../assets/imgs/plus.svg")}
+                        alt=" add station svg"
+                    />
+                </button>
             </div>
             <ul className="content">
                 <li>
