@@ -13,43 +13,50 @@
 
         position: sticky;
         display: grid;
-        grid-template-columns: auto auto 1fr auto;
+        grid-template-columns: 40px auto 1fr auto;
         top: 0;
         background-color: #121212;
         z-index: 999;
-        padding: 12px 12px 8px 22px;
+        padding: 12px 12px 8px 17px;
         cursor: pointer;
-        color: grey;
+        color: #b3b3b3;
         transition: background-color 0.3s, color 0.3s;
         align-items: center;
 
         & p {
             font-weight: bold;
+            font-family: "Roboto", sans-serif;
+            margin-left: 2px;
         }
 
         & .symbol {
-            font-weight: bold;
-            width: 40px;
-            
-            &::after {
-                content: " "; /* Add a space as content */
-                width: 5px; /* Adjust the space width as needed */
-                display: inline-block;
-            }
+            justify-self: center;
+            width: 24px;
+            height: 24px;
+            // filter svg to #b3b3b3
+            filter: invert(84%) sepia(0%) saturate(15%) hue-rotate(205deg) brightness(84%) contrast(95%);
         }
         
         & .add-station-btn {
             grid-column: -1;
+            justify-self: center;
 
-            font-size:  1em;
+            display: grid;
+            align-content: center;
+            width: 32px;
+            height: 32px;
+            padding: 4px;
+            border: 0;
             border-radius: 50%;
-            height: 1em;
-            width: 1em;
-            padding: 0.5em;
+            background-color: unset;
             
             &:hover {
-                color: white;
                 background-color: #1a1a1a;
+
+                & > * {
+                    // filter svg to white
+                    filter: invert(100%) sepia(77%) saturate(0%) hue-rotate(175deg) brightness(105%) contrast(102%);
+                }
             }
         }
         
@@ -60,7 +67,7 @@
 
         list-style: none;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         margin: 0;
         padding: 0;
     }

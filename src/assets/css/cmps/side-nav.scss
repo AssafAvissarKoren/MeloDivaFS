@@ -1,22 +1,28 @@
 .side-nav {
     display: flex;
     flex-direction: column;
-    padding: 10px;
-    overflow-y: auto;
-    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+    padding: 8px 12px;
     font-family: 'Roboto', sans-serif;
 
-    div {
-        display: flex;
-        justify-content: space-between;
-        padding: 8px 12px;
-        margin: 4px 0;
-        border-radius: 4px;
+    & div {
+        display: grid;
+        grid-template-columns: 40px 1fr;
+        padding: 12px 4px;
         cursor: pointer;
-        font-size: 16px;
-        color: grey;
-        transition: background-color 0.3s, color 0.3s;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #b3b3b3;
+        position: relative;
+        text-decoration: none;
 
+        & .symbol {
+            justify-self: center;
+            width: 24px;
+            height: 24px;
+            // filter svg to #b3b3b3
+            filter: invert(84%) sepia(0%) saturate(15%) hue-rotate(205deg) brightness(84%) contrast(95%);
+        }
+        
         &:hover {
             color: white;
         }
@@ -33,20 +39,18 @@
         }
     }
 
-    .active {
-        background-color: #8080807f; 
-        color: white;
-        font-weight: bold;
+    & .name-style {
+        align-self: center;
     }
 
-    .symbol {
-        font-weight: bold;
-        width: 40px;
-        &::after {
-            content: " "; /* Add a space as content */
-            width: 5px; /* Adjust the space width as needed */
-            display: inline-block;
+    & .active {
+        color: white;
+
+        & .symbol {
+            // filter svg to white
+            filter: invert(100%) sepia(77%) saturate(0%) hue-rotate(175deg) brightness(105%) contrast(102%);
         }
     }
+
 }
   

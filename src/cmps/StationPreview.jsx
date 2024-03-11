@@ -51,7 +51,7 @@ export const StationPreview = ({ station }) => {
         </button>
       </div>
       <div className="station-info">
-        <h3 className="station-name">{station?.artist}</h3>
+        <h3 className="station-name">{station?.name}</h3> {/* station?.artist */}
         <p className="creator-name">{station?.createdBy?.fullname}</p>
       </div>
     </div>

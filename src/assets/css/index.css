@@ -19,6 +19,7 @@
 @import "./cmps/station-preview.scss";
 @import "./cmps/track-preview.scss";
 @import "./cmps/mini-menu.scss";
+@import "./cmps/mini-menu-options.scss";
 @import "./cmps/category-display.scss";
 @import "./cmps/skeleton.scss";
 @import "./cmps/button-wrapper.scss";
