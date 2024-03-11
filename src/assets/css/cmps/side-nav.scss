@@ -20,6 +20,17 @@
         &:hover {
             color: white;
         }
+        span{
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+
+            .icon-wrapper {
+                width: 20px;
+                height: 20px;
+                margin-right: 10px;
+            }            
+        }
     }
 
     .active {
@@ -36,8 +47,6 @@
             width: 5px; /* Adjust the space width as needed */
             display: inline-block;
         }
-    
     }
-
 }
   

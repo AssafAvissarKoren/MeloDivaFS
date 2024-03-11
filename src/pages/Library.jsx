@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSelector } from "react-redux"
 import { StationPreview } from "../cmps/StationPreview"
 import { getBasicUser, getLikedTracksAsStation } from "../store/actions/user.actions"
@@ -5,9 +6,10 @@ import { stationService } from "../services/station.service"
 import { saveStation } from "../store/actions/station.actions"
 import { utilService } from "../services/util.service"
 import { IndexContext } from '../cmps/IndexContext.jsx'
-import { useContext, useEffect } from "react"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBook, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { useContext } from "react"
+import { iconService } from '../services/buttons.service.jsx';
+import { generalBtnService } from '../services/buttons.service.jsx';
+
 
 export function Library() {
     const { setFilterBy } = useContext(IndexContext)
@@ -43,9 +45,9 @@ export function Library() {
     return (
         <div className="library">
             <div className="title">
-                <FontAwesomeIcon icon={faBook} className="symbol" aria-hidden="true" />
+                <span className="button-wrapper"> <iconService.YourLibrary /> </span>
                 <p>Your Library</p>
-                <FontAwesomeIcon icon={faPlus} className="symbol add-station-btn" aria-hidden="true" onClick={createNewStation}/>
+                <span className="button-wrapper"> <generalBtnService.ArrowRight /> </span>
             </div>
             <ul className="content">
                 <li>

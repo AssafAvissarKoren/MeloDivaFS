@@ -114,18 +114,13 @@ export const Index = () => {
         <IndexContext.Provider value={{ setFilterBy }}>
             <div className="index-container">
                 <div className="index-side-nav" style={{width: `${sideNavWidth}px`}}>
-                    <SideNav 
-                        setFilterBy={setFilterBy} 
-                    />
+                    <SideNav setFilterBy={setFilterBy} />
                 </div>
                 <div className="index-side-bottom" style={{width: `${sideNavWidth}px`}}>
-
                     <Library/>
                 </div>
                 <div className="index-main-view">
-                    <AppHeader 
-                        setFilterBy={setFilterBy}
-                    />
+                    <AppHeader setFilterBy={setFilterBy}/>
                     <MainViewComponent {...mainViewComponentProps} />
                 </div>
                 {selectedTrack && <div className="index-footer-player">

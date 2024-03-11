@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import YouTube from 'react-youtube';
 import { utilService } from '../services/util.service.js'
 import { dataService } from '../services/data.service.js'
+import { playerBtnService } from '../services/buttons.service.jsx';
 import { Slider } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle, faPauseCircle, faStepForward, faStepBackward, faRedo, faRandom, 
@@ -100,10 +101,12 @@ export function FooterPlayer({ video }) {
     };
 
     // Event handlers for player actions (not implemented in this example)
+    const jump15Back = () => { /* ... */ };
     const shuffleQueue = () => { /* ... */ };
     const playNext = () => { /* ... */ };
     const playPrev = () => { /* ... */ };
     const toggleRepeat = () => { /* ... */ };
+    const jump15Forward = () => { /* ... */ };
    
     return (
         <footer className="footer-player">
@@ -118,21 +121,37 @@ export function FooterPlayer({ video }) {
             </div>
             <div className="player-controls">
                 <div className="player-action-buttons">
+                    <button onClick={jump15Back} name="Jump15Back" className="action-button jump-15-back">
+                        <span className="action-button-wrapper"> <playerBtnService.Jump15SecondsBack />  </span>
+                    </button>
                     <button onClick={shuffleQueue} name="Shuffle" className="action-button shuffle">
-                        <FontAwesomeIcon icon={faRandom} />
+                        {/* <FontAwesomeIcon icon={faRandom} /> */}
+                        <span className="action-button-wrapper"> <playerBtnService.Shuffle />  </span>
                     </button>
                     <button onClick={playPrev} name="Previous" className="action-button previous">
-                        <FontAwesomeIcon icon={faStepBackward} />
+                        {/* <FontAwesomeIcon icon={faStepBackward} /> */}
+                        <span className="action-button-wrapper"> <playerBtnService.TrackPrev />  </span>
                     </button>
                     <button onClick={togglePlay} name={isPlaying ? "Pause" : "Play"} className="action-button play-pause">
-                        <FontAwesomeIcon icon={isPlaying ? faPauseCircle : faPlayCircle} />
+                        {/* <FontAwesomeIcon icon={isPlaying ? faPauseCircle : faPlayCircle} /> */}
+                        <span className="action-button-wrapper"> {isPlaying ? <playerBtnService.PlayerPlayButton /> : <playerBtnService.PlayerPauseButton />}  </span>
+
                     </button>
                     <button onClick={playNext} name="Next" className="action-button next">
-                        <FontAwesomeIcon icon={faStepForward} />
+                        {/* <FontAwesomeIcon icon={faStepForward} /> */}
+                        <span className="action-button-wrapper"> <playerBtnService.TrackNext />  </span>
                     </button>
-                    <button onClick={toggleRepeat} name="Repeat" className="action-button repeat">
+                    <button onClick={shuffleQueue} name="Repeat" className="action-button shuffle">
+                        {/* <FontAwesomeIcon icon={faRandom} /> */}
+                        <span className="action-button-wrapper"> <playerBtnService.Repeat />  </span>
+                    </button>
+                    <button onClick={jump15Back} name="Jump15Back" className="action-button jump-15-back">
+                        <span className="action-button-wrapper"> <playerBtnService.Jump15SecondsForward />  </span>
+                    </button>
+
+                    {/* <button onClick={toggleRepeat} name="Repeat" className="action-button repeat">
                         <FontAwesomeIcon icon={faRedo} />
-                    </button>
+                    </button> */}
                 </div>
                 <div className="progress-section">
                     <span className="current-time">{formatTime(currentTime)}</span>
@@ -154,18 +173,30 @@ export function FooterPlayer({ video }) {
             </div>
             <div className="volume-control">
                 <button onClick={shuffleQueue} name="Now playing view" className="action-button play-in-view">
-                    <FontAwesomeIcon icon={faPlay} />
+                    {/* <FontAwesomeIcon icon={faPlay} /> */}
+                    <span className="action-button-wrapper"> <playerBtnService.NowPlayingView />  </span>
                 </button>
                 <button onClick={shuffleQueue} name="Queue" className="action-button queue">
-                    <FontAwesomeIcon icon={faBars} />
+                    {/* <FontAwesomeIcon icon={faBars} /> */}
+                    <span className="action-button-wrapper"> <playerBtnService.Queue />  </span>
                 </button>
                 <button onClick={shuffleQueue} name="Connect to a device" className="action-button connect-to-device">
-                    <FontAwesomeIcon icon={faMusic} />
+                    {/* <FontAwesomeIcon icon={faMusic} /> */}
+                    <span className="action-button-wrapper"> <playerBtnService.ConnectToADevice />  </span>
                 </button>
                 <button onClick={shuffleQueue} name="Mute" className="action-button mute">
-                    {volume === 0 && <FontAwesomeIcon icon={faVolumeMute} />}
-                    {volume > 0 && volume <= 50 && <FontAwesomeIcon icon={faVolumeLow} />}
-                    {volume > 50 && <FontAwesomeIcon icon={faVolumeUp} />}                
+                    <span className="action-button-wrapper">
+                        {/* {volume === 0 && <FontAwesomeIcon icon={faVolumeMute} />} */}
+                        {volume === 0 && <playerBtnService.VolumeMute />}
+
+                        {/* {volume > 0 && volume <= 50 && <FontAwesomeIcon icon={faVolumeLow} />} */}
+                        {volume > 0 && volume <= 33 && <playerBtnService.VolumeLow />}
+
+                        {/* {volume > 50 && <FontAwesomeIcon icon={faVolumeUp} />} */}
+                        {volume > 33  && volume <= 66 && <playerBtnService.VolumeHalf />}                
+
+                        {volume > 66 && volume <= 100 && <playerBtnService.VolumeFull />}
+                    </span>
                 </button>
                 <Slider
                     className="volume-slider"
@@ -177,8 +208,13 @@ export function FooterPlayer({ video }) {
                     valueLabelFormat={(value) => `${value}%`}
                 />
                 <button onClick={shuffleQueue} name="Open Miniplayer" className="action-button open-miniplayer">
-                    <FontAwesomeIcon icon={faSquare} />
+                    {/* <FontAwesomeIcon icon={faSquare} /> */}
+                    <span className="action-button-wrapper"> <playerBtnService.OpenMiniplayer />  </span>
                 </button>
+                <button onClick={shuffleQueue} name="Full Screen" className="action-button full-screen">
+                    <span className="action-button-wrapper"> <playerBtnService.FullScreen />  </span>
+                </button>
+
 
             </div>
             <div className="youtube-container">

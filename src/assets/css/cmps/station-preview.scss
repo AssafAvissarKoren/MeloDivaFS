@@ -34,7 +34,7 @@
     & .img {
       height: 135%;
       width: 135%;
-      object-fit: cover; /* Options: fill, contain, cover, none, scale-down */
+      object-fit: cover;
       border-radius: 10px;
       margin-top: -30px;
       margin-bottom: -30px;
@@ -46,11 +46,10 @@
     bottom: 10px;
     right: 15px;
     transform: translate(15%, 15%);
-    width: 50px;
-    height: 50px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    background-color: black;
-    color: #1db954;
+    background-color: #1db954;
     font-size: 50px;
     border: none;
     cursor: pointer;
@@ -59,6 +58,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    sgv {
+      width: 24px;
+      height: 24px;
+    }
   }
 
   & .station-info {
@@ -86,6 +89,3 @@
     }
   }
 }
-
-
-// hebrew font CircularSp, CircularSp-Arab, CircularSp-Hebr, CircularSp-Cyrl, CircularSp-Grek, CircularSp-Deva, "Helvetica Neue", helvetica, arial, "Hiragino Kaku Gothic ProN", Meiryo, "MS Gothic"

@@ -1,30 +1,24 @@
-import { useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faSearch, faBook, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { iconService } from '../services/buttons.service.jsx';
 
 export const SideNav = ({ setFilterBy }) => {
     const params = useParams();
     const tab = params.tab
-
-    // useEffect(() => {
-    //     setFilterBy(prev => ({ ...prev, tab }));
-    // }, [tab, setFilterBy]);
 
     const handleTabSelect = (selectedTab) => {
         setFilterBy(prev => ({ ...prev, tab: selectedTab , stationId: '' }));
     };
 
     const tabData = {
-        home: { name: "Home", icon: faHome, symbol: "" },
-        search: { name: "Search", icon: faSearch, symbol: "" },
-        test: { name: "Test", icon: faCheck, symbol: "" },
+        home: { name: "Home", iconActive: <iconService.HomeActiveIcon />, icon: <iconService.HomeIcon /> },
+        search: { name: "Search", iconActive: <iconService.SearchActiveIcon />, icon: <iconService.SearchIcon /> },
+        test: { name: "Test", iconActive: <iconService.CheckIcon />, icon: <iconService.CheckIcon /> },
     };
 
     return (
         <div className="side-nav">
-            {Object.entries(tabData).map(([key, { name, icon, symbol }]) => {
+            {Object.entries(tabData).map(([key, { name, iconActive, icon }]) => {
                 return (
                     <div
                         key={key}
@@ -32,9 +26,9 @@ export const SideNav = ({ setFilterBy }) => {
                         className={key === tab ? 'active' : ''}
                     >
                         <span>
-                            {icon ? (
-                                <FontAwesomeIcon icon={icon} className="symbol" aria-hidden="true" />
-                            ) : (<span className="symbol">{symbol}</span>) }
+                            <span className={key === tab ? 'icon-wrapper active' : 'icon-wrapper'}>
+                                {key === tab ? React.cloneElement(iconActive) : React.cloneElement(icon)}
+                            </span>
                             <span className="name-style">{name}</span>
                         </span>
                     </div>

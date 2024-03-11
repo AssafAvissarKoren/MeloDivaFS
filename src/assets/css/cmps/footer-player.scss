@@ -66,7 +66,23 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-            }
+
+                .action-button-wrapper {
+                    width: 32px; /* Adjust the size as needed */
+                    height: 32px; /* Adjust the size as needed */
+                    border-radius: 50%;
+                    background-color: white;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for depth */
+              
+                    svg {
+                        width: 16px; /* Adjust the size of the SVG icon */
+                        height: 16px; /* Adjust the size of the SVG icon */
+                    }
+                }
+            }  
 
             .next{
                 font-size: 25px;
@@ -93,7 +109,6 @@
 
             .current-time {
                 margin-right: 15px;
-                display: block;
             }
             
             .end-time {
@@ -120,8 +135,9 @@
                     transition: visibility 0.2s;
                     width: 14px;
                     height: 14px;
+                    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
                 }
-
+                
                 &:hover .MuiSlider-thumb {
                     visibility: visible;
                 }
@@ -146,11 +162,47 @@
             width: 20px;
         }
 
+        .MuiSlider-root.MuiSlider-colorPrimary {
+            color: white;
+            transition: color 0.2s;
+        }
+
+        &:hover .MuiSlider-root.MuiSlider-colorPrimary {
+            color: #1DB954;
+        }
+
         .volume-slider {
             width: 90px;
             margin: 5px 0;
             margin-left: 15px;
             margin-right: 15px;
+
+            .MuiSlider-rail {
+                background-color: grey;
+            }
+
+            .MuiSlider-track {
+                background-color: white;
+                transition: background-color 0.2s;
+            }
+
+            .MuiSlider-thumb {
+                background-color: white;
+                visibility: hidden;
+                transition: visibility 0.2s;
+                width: 14px;
+                height: 14px;
+                box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+            }
+
+            &:hover .MuiSlider-thumb {
+                visibility: visible;
+            }
+
+            &:hover .MuiSlider-track {
+                background-color: #1DB954;
+            }
+
         }
 
         p {

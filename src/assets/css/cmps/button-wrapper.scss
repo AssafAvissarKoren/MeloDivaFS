@@ -1,0 +1,19 @@
+.button-wrapper {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.action-button-wrapper {
+    svg {
+        width: 16px; /* Adjust the size of the SVG icon */
+        height: 16px; /* Adjust the size of the SVG icon */
+    }
+}
+
+// import ArrowRight from '../assets/imgs/button/arrow-right.jsx';
+// import ChangeSpeed1 from '../assets/imgs/button/change-speed-1.jsx';
+// import ConnectToADevice from '../assets/imgs/button/connect-to-a-device.jsx';
+// import Jump15SecondsBack from '../assets/imgs/button/jump-15-seconds-back.jsx';
+// import Jump15SecondsForward from '../assets/imgs/button/jump-15-seconds-forward.jsx';

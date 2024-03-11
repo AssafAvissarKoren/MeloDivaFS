@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlayCircle } from '@fortawesome/free-solid-svg-icons';
 import defaultImgUrl from '../assets/imgs/MeloDiva.png';
 import { IndexContext } from '../cmps/IndexContext.jsx';
+import { playerBtnService } from '../services/buttons.service.jsx';
 
 export const StationPreview = ({ station }) => {
   const { setFilterBy } = useContext(IndexContext);
@@ -45,7 +46,8 @@ export const StationPreview = ({ station }) => {
       <div className="image-container">
         <img className="img" src={stationImgURL} alt={station?.artist} />
         <button className="play-btn" onClick={() => handleOnClick(station._id)}>
-          <FontAwesomeIcon icon={faPlayCircle} />
+          <playerBtnService.PlaylistPlayButton/>
+          {/* <FontAwesomeIcon icon={faPlayCircle} /> */}
         </button>
       </div>
       <div className="station-info">

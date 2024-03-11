@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import shuffle from 'lodash/shuffle';
 
 import { StationPreview } from './StationPreview';
 import { IndexContext } from './IndexContext.jsx';
@@ -15,9 +14,7 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
   useEffect(() => {
       const fetchCategory = async () => {
         if (category && category.stationIds) {
-            console.log('category:', category);
             const stations = await getStations();
-            console.log('stations:', stations.map(station => station._id));
             const filteredStations = stations.filter(station => category.stationIds.includes(station._id));
             setCategoryStations(filteredStations);
           }
@@ -41,8 +38,8 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
       case "row":
         return (
           <div className="category-row">
-            <h2 onClick={() => handleOnClick(category)}>{category.name} {categoryStations.length}</h2>
-            <div className="row">{renderStations(categoryStations, true)}</div>
+            <h2 onClick={() => handleOnClick(category)}>{category.name}</h2>
+            <div className="row">{renderStations(categoryStations)}</div>
           </div>
         );
       case "cube":
@@ -58,15 +55,14 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
         return (
           <div className="category-results">
             <h2>{category.name}</h2>
-            <div className="grid">{renderStations(categoryStations, false)}</div>
+            <div className="grid">{renderStations(categoryStations)}</div>
           </div>
         );
       case "test":
-        console.log('category test');
         return (
           <div className="category-test">
             <h2>{category.name}</h2>
-            <div className="grid">{renderStations(null, false)}</div>
+            <div className="grid">{renderStations(null)}</div>
           </div>
         );
       default:
@@ -74,12 +70,8 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
     }
   };
  
-  const renderStations = (renderedStations, randomFlag) => {
+  const renderStations = (renderedStations) => {
     let stationsToRender = renderedStations;
-
-    if (randomFlag) {
-      stationsToRender = shuffle(stationsToRender);
-    }
   
     if (stationsToRender && stationsToRender.length > 0) {
       return stationsToRender.map((station) => (
