@@ -3,12 +3,9 @@ h2 {
   margin-bottom: 10px;
   text-align: left;
   font-weight: bold;
-//   padding-left: 1vh;
-//   display: inline
 }
 
 .category-row {
-//   text-align: left;
 
   & .title {
     display: grid;
@@ -30,10 +27,6 @@ h2 {
       text-decoration: underline;
       text-decoration-thickness: 0.1rem;
     }
-    
-//     h2:hover {
-//       text-decoration: underline;
-//     }
   }
   
   .row {
