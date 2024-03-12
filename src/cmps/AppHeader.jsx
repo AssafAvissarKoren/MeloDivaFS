@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { utilService } from '../services/util.service.js';
 
 export const AppHeader = ({ setFilterBy }) => {
     const params = useParams();
@@ -25,18 +26,34 @@ export const AppHeader = ({ setFilterBy }) => {
 
     return (
         <header className="app-header">
+            <div className="arrow-options">
+                <button className="btn-arrow-container">
+                    <img
+                        className="svg"
+                        src={utilService.getImgUrl("../assets/imgs/arrowLeft.svg")}
+                    />
+                </button>
+                <button className="btn-arrow-container">
+                    <img
+                        className="svg"
+                        src={utilService.getImgUrl("../assets/imgs/arrowRight.svg")}
+                    />
+                </button>
+            </div>
             {params.tab == "search" &&
-                <div>
-                <label htmlFor="searchInput" className="visually-hidden">Search Playlists or Songs</label>
-                <input 
-                    id="searchInput"
-                    type="text" 
-                    placeholder="Playlists or Songs" 
-                    value={text} 
-                    onChange={handleTextChange}
-                    onKeyDown={handleKeyDown}
-                />
-                </div>
+                <label className="search-bar-container">
+                    <div className="search-img-contaner">
+                        <img className="search-img" src={utilService.getImgUrl("../assets/imgs/search.svg")} />
+                    </div>
+                    <input 
+                        className="search-bar"
+                        type="text" 
+                        placeholder="What do you want to play?" 
+                        value={text} 
+                        onChange={handleTextChange}
+                        onKeyDown={handleKeyDown}
+                    />
+                </label>
             }
         </header>
     );
