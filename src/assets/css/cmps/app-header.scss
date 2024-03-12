@@ -1,11 +1,71 @@
 .app-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    height: 64px;
+    padding-left: 23px;
+    align-items: center;
 
-    input[type="text"] {
-        margin-top: 10px;
-        width: 400px;
-        height: 40px;
-        border-radius: 16px;
-        padding-left: 10px; // Add padding on the left side
+    & .arrow-options {
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 8px;
+
+        & .btn-arrow-container {
+            display: grid;
+            width: 32px;
+            height: 32px;
+            border: 0;
+            border-radius: 999px;
+            background-color: black;
+            align-content: center;
+            justify-content: center;
+
+            & .svg {
+                width: 16px;
+                height: 16px;
+                // filter svg to #b3b3b3
+                filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+            }
+
+        }
+    }
+
+    & .search-bar-container {
+        background-color: #333333;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        width: 364px;
+        border: none;
+        border-radius: 999px;
+        padding: 7px;
+        margin-left: 9px;
+        align-items: center;
+
+        & .search-img-contaner {
+            margin-left: 4px;
+            width: 18px;
+            height: 18px;
+
+            & .search-img {
+                // filter svg to white
+                filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+            }
+        }
+
+        & .filter {
+            margin: 3px;
+            height: 27px;
+        }
+    }
+
+    & .search-bar {
+        background-color: unset;
+        border: none;
+        padding: 10px 0;
+
+        &:focus {
+            outline: none;
+        }
 
         // To ensure the placeholder text aligns with the new padding
         &::placeholder {
@@ -13,14 +73,4 @@
         }
     }
 
-    .visually-hidden {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        margin: -1px;
-        padding: 0;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        border: 0;
-    }
 }
