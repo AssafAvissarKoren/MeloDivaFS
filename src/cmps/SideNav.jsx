@@ -1,7 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { iconService } from '../services/buttons.service.jsx';
-import { utilService } from '../services/util.service';
+import { svgSvc } from '../services/svg.service.jsx';
 
 export const SideNav = ({ setFilterBy }) => {
     const params = useParams();
@@ -11,13 +10,11 @@ export const SideNav = ({ setFilterBy }) => {
         setFilterBy(prev => ({ ...prev, tab: selectedTab , stationId: '' }));
     };
 
-    const baceUrl = "../assets/imgs/"
     const tabData = {
-        home: { name: "Home", iconActive: <iconService.HomeActiveIcon />, icon: <iconService.HomeIcon /> },
-        search: { name: "Search", iconActive: <iconService.SearchActiveIcon />, icon: <iconService.SearchIcon /> },
-        test: { name: "Test", iconActive: <iconService.CheckIcon />, icon: <iconService.CheckIcon /> },
+        home: { name: "Home", iconActive: <svgSvc.icon.HomeActiveIcon />, icon: <svgSvc.icon.HomeIcon /> },
+        search: { name: "Search", iconActive: <svgSvc.icon.SearchActiveIcon />, icon: <svgSvc.icon.SearchIcon /> },
+        test: { name: "Test", iconActive: <svgSvc.icon.CheckIcon />, icon: <svgSvc.icon.CheckIcon /> },
     };
-
 
     return (
         <div className="side-nav">
@@ -30,7 +27,7 @@ export const SideNav = ({ setFilterBy }) => {
                     >
                         <span>
                             <span className={key === tab ? 'icon-wrapper active' : 'icon-wrapper'}>
-                                {key === tab ? React.cloneElement(iconActive) : React.cloneElement(icon)}
+                                {key === tab ? iconActive : icon}
                             </span>
                             <span className="name-style">{name}</span>
                         </span>

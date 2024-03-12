@@ -7,8 +7,7 @@ import { saveStation } from "../store/actions/station.actions"
 import { utilService } from "../services/util.service"
 import { IndexContext } from '../cmps/IndexContext.jsx'
 import { useContext } from "react"
-import { iconService } from '../services/buttons.service.jsx';
-import { generalBtnService } from '../services/buttons.service.jsx';
+import { svgSvc } from '../services/svg.service.jsx';
 
 
 export function Library() {
@@ -45,9 +44,9 @@ export function Library() {
     return (
         <div className="library">
             <div className="title">
-                <span className="button-wrapper"> <iconService.YourLibrary /> </span>
+                <span className="button-wrapper"> <svgSvc.icon.YourLibrary /> </span>
                 <p>Your Library</p>
-                <span className="button-wrapper"> <generalBtnService.ArrowRight /> </span>
+                <span className="button-wrapper"> <svgSvc.general.ArrowRight /> </span>
             </div>
             <ul className="content">
                 <li>

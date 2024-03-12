@@ -9,10 +9,10 @@
 @import "./pages/library.scss";
 @import "./pages/search.scss";
 @import "./pages/station-details.scss";
+@import "./pages/index.scss";
 
 /* Components */
 @import "./cmps/app-header.scss";
-@import "./cmps/index-container.scss";
 @import "./cmps/user-msg.scss";
 @import "./cmps/footer-player.scss";
 @import "./cmps/side-nav.scss";

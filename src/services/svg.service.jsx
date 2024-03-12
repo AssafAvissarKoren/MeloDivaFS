@@ -96,7 +96,7 @@ const FullScreen = (props) => (
   </svg>
 )
 
-const Jump15SecondsBack = (props) => (
+const Jump15SecBack = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
@@ -110,7 +110,7 @@ const Jump15SecondsBack = (props) => (
   </svg>
 )
 
-const Jump15SecondsForward = (props) => (
+const Jump15SecForward = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
@@ -165,7 +165,7 @@ const OpenMiniplayer = (props) => (
   </svg>
 )
 
-const PlayerPauseButton = (props) => (
+const PauseBtn = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
@@ -178,7 +178,7 @@ const PlayerPauseButton = (props) => (
   </svg>
 )
 
-const PlayerPlayButton = (props) => (
+const PlayBtn = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
@@ -410,42 +410,80 @@ const SearchIcon  = (props) => (
   </svg>
 )
 
-
-export const playerBtnService = {
-  ChangeSpeed1,
-  ConnectToADevice,
-  FullScreen,
-  Jump15SecondsBack,
-  Jump15SecondsForward,
-  NowPlayingView,
-  OpenMiniplayer,
-  PlayerPauseButton,
-  PlayerPlayButton,
-  PlaylistPlayButton,
-  Queue,
-  Repeat,
-  SaveToYourLibrary,
-  Shuffle,
-  TrackNext,
-  TrackPrev,
-  VolumeFull,
-  VolumeHalf,
-  VolumeLow,
-  VolumeMute,
+export const svgSvc = {
+  player: {
+    ChangeSpeed1,
+    ConnectToADevice,
+    FullScreen,
+    Jump15SecBack,
+    Jump15SecForward,
+    NowPlayingView,
+    OpenMiniplayer,
+    PauseBtn,
+    PlayBtn,
+    Queue,
+    Repeat,
+    SaveToYourLibrary,
+    Shuffle,
+    TrackNext,
+    TrackPrev,
+    VolumeFull,
+    VolumeHalf,
+    VolumeLow,
+    VolumeMute,
+  },
+  icon: {
+    CheckIcon,
+    HomeActiveIcon,
+    HomeIcon,
+    SearchActiveIcon,
+    SearchIcon,
+    YourLibrary,
+  },
+  general: {
+    ArrowRight,
+    DirectionLeft,
+    DirectionRight,
+    DirectionUp,
+    PlaylistPlayButton,
+  }
 }
 
-export const iconService = {
-  CheckIcon,
-  HomeActiveIcon,
-  HomeIcon,
-  SearchActiveIcon,
-  SearchIcon,
-  YourLibrary,
-}
+// export const playerBtnService = {
+//   ChangeSpeed1,
+//   ConnectToADevice,
+//   FullScreen,
+//   Jump15SecondsBack,
+//   Jump15SecondsForward,
+//   NowPlayingView,
+//   OpenMiniplayer,
+//   PlayerPauseButton,
+//   PlayerPlayButton,
+//   PlaylistPlayButton,
+//   Queue,
+//   Repeat,
+//   SaveToYourLibrary,
+//   Shuffle,
+//   TrackNext,
+//   TrackPrev,
+//   VolumeFull,
+//   VolumeHalf,
+//   VolumeLow,
+//   VolumeMute,
+// }
 
-export const generalBtnService = {
-  ArrowRight,
-  DirectionLeft,
-  DirectionRight,
-  DirectionUp,
-}
+// export const iconService = {
+//   CheckIcon,
+//   HomeActiveIcon,
+//   HomeIcon,
+//   SearchActiveIcon,
+//   SearchIcon,
+//   YourLibrary,
+// }
+
+// export const generalBtnService = {
+//   ArrowRight,
+//   DirectionLeft,
+//   DirectionRight,
+//   DirectionUp,
+// }

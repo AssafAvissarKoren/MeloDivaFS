@@ -47,6 +47,7 @@ export const Index = () => {
         const filterURL = stationService.filterURL(filterBy);
         navigate(filterURL, { replace: true }) 
     }, [filterBy]);
+    
     //     const handleResize = () => {
     //         maxNavWidth = window.innerWidth - 500 - 20
     //         if(sideNavWidth < MIN_NAV_WIDTH) setSideNavWidth(MIN_NAV_WIDTH)
@@ -76,6 +77,7 @@ export const Index = () => {
     }, [isResizing])
 
     function startResize(ev) {
+        console.log('startResize')
         ev.preventDefault()
         setIsResizing(true)
     }
