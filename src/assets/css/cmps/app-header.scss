@@ -4,6 +4,8 @@
     height: 64px;
     padding-left: 23px;
     align-items: center;
+    background-color: unset;
+    z-index: 999;
 
     & .arrow-options {
         display: grid;
@@ -62,14 +64,11 @@
         background-color: unset;
         border: none;
         padding: 10px 0;
+        color: white;
+        text-indent: 8px;
 
         &:focus {
             outline: none;
-        }
-
-        // To ensure the placeholder text aligns with the new padding
-        &::placeholder {
-            text-indent: 10px;
         }
     }
 
