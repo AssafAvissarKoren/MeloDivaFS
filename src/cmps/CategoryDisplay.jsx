@@ -73,16 +73,22 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
     }
   };
  
-  const renderStations = (renderedStations) => {
-    let stationsToRender = renderedStations;
+  const renderStations = (renderedStations) => { 
+    console.log('catName', category.name, 'catLen', renderedStations.length, 'catStart', category.startingPosition);
   
-    if (stationsToRender && stationsToRender.length > 0) {
-      return stationsToRender.map((station) => (
-        <StationPreview 
-          key={station._id} 
-          station={station} 
-        />
-      ));
+    if (renderedStations && renderedStations.length > 0) {
+      const startingPosition = category.startingPosition % renderedStations.length;
+
+      return renderedStations.map((station, index) => {
+        const mappedIndex = (index + startingPosition) % renderedStations.length;
+        console.log('mappedIndex', mappedIndex, "index", index, "startingPosition", startingPosition);
+        return (
+          <StationPreview 
+            key={renderedStations[mappedIndex]._id} 
+            station={renderedStations[mappedIndex]} 
+          />
+        );
+      });
     } else {
       // Mock StationPreview with null station (for skeleton screen)
       return Array.from({ length: 10 }, (_, i) => (
@@ -94,6 +100,10 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
     }
   };
   
+  
+  
+  
+    
   if (category) {
     return renderCategory();
   } else {

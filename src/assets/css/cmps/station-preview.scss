@@ -3,8 +3,8 @@
   display: flex;
   flex-direction: column;
   // flex-shrink: 0;
-  // max-height: 294px;
-  // min-height: 256px;
+  height: 310px;
+  width: 220px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s, background-color 0.3s;
@@ -31,7 +31,7 @@
     & .img {
       height: 135%;
       width: 135%;
-      object-fit: cover; /* Options: fill, contain, cover, none, scale-down */
+      object-fit: cover;
       margin-top: -18.5%;
       margin-bottom: -18.5%;
     }
