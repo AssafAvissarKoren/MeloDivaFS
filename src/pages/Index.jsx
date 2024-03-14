@@ -47,19 +47,6 @@ export const Index = () => {
         const filterURL = stationService.filterURL(filterBy);
         navigate(filterURL, { replace: true }) 
     }, [filterBy]);
-    
-    //     const handleResize = () => {
-    //         maxNavWidth = window.innerWidth - 500 - 20
-    //         if(sideNavWidth < MIN_NAV_WIDTH) setSideNavWidth(MIN_NAV_WIDTH)
-    //         if(sideNavWidth > MAX_NAV_WIDTH) setSideNavWidth(MAX_NAV_WIDTH)
-    //     };
-    
-    //     window.addEventListener('resize', handleResize);
-    
-    //     return () => {
-    //       window.removeEventListener('resize', handleResize);
-    //     };
-    // }, [sideNavWidth]);
 
     useEffect(() => {
         if(isResizing) {
@@ -131,11 +118,13 @@ export const Index = () => {
     return (
         <IndexContext.Provider value={{ setFilterBy }}>
             <div className="index-container">
-                <div className="index-side-nav" style={{width: `${sideNavWidth}px`}}>
-                    <SideNav setFilterBy={setFilterBy} />
-                </div>
-                <div className="index-side-bottom" style={{width: `${sideNavWidth}px`}}>
-                    <Library/>
+                <div className="index-side">
+                    <div className="index-side-nav" style={{width: `${sideNavWidth}px`}}>
+                        <SideNav setFilterBy={setFilterBy} />
+                    </div>
+                    <div className="index-side-bottom" style={{width: `${sideNavWidth}px`}}>
+                        <Library/>
+                    </div>
                 </div>
                 <div className="index-side-resizer" onMouseDown={startResize}>
                     <div className={`resizer-line ${isResizing && "unhide"}`}/>

@@ -46,7 +46,7 @@ export function Library() {
             <div className="title">
                 <span className="button-wrapper"> <svgSvc.icon.YourLibrary /> </span>
                 <p>Your Library</p>
-                <span className="button-wrapper"> <svgSvc.general.ArrowRight /> </span>
+                <span className="button-wrapper add-station-btn" onClick={createNewStation}> <svgSvc.general.ArrowRight /> </span>
             </div>
             <div className="library-search">
                 <span className="button-wrapper"> <svgSvc.general.LibrarySearch style = {{ width: '16px', height: '16px' }} /> </span>
