@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { useParams } from "react-router"
 import { useSelector } from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -28,25 +28,12 @@ export function StationDetails() {
     const [station, setStation] = useState()
     const [menu, setMenu] = useState(0)
     const [tracksWithDurations, setTracksWithDurations] = useState([])
-    const [gradientColor, setGradientColor] = useState(null);
+    const [gradientColor, setGradientColor] = useState(null)
+
 
     useEffect(() => {
         loadStation()
     },[stationId])
-
-    async function analyzeImage(imageURL) {
-        try {
-            const mostCommonColor = "red" // imageService.analyzeImage(imageURL)
-            setGradientColor(mostCommonColor);
-        } catch (error) {
-            console.error('Error analyzing image:', error);
-        }
-    }
-
-    useEffect(() => {
-        analyzeImage(getImage());
-    },[station])
-
 
     useEffect(() => {
         if(stationId === LIKED_TRACK_AS_STATION_ID) {
@@ -56,34 +43,44 @@ export function StationDetails() {
     },[likedTracks])
 
     useEffect(() => {
+        analyzeImage(getImage())
+
+        // add durations of tracks
         if (station && station.tracks) {
             const fetchAndSetDurations = async () => {
                 const durations = await fetchVideoDurations(station);
                 const updatedTracks = station.tracks.map((track, index) => ({
                     ...track,
                     duration: durations[index] || 'N/A'
-                }));
-                setTracksWithDurations(updatedTracks);
-            };
-    
-            fetchAndSetDurations();
+                }))
+                setTracksWithDurations(updatedTracks)
+            }
+            fetchAndSetDurations()
         }
-    }, [station]);
+    }, [station])
 
     async function loadStation() {
         if (stationId === LIKED_TRACK_AS_STATION_ID) {
-          const station = getLikedTracksAsStation();
-          setStation(station);
-        } else {
-          try {
-            const station = await getStationById(stationId);
+            const station = getLikedTracksAsStation();
             setStation(station);
-          } catch (err) {
-            eventBusService.showErrorMsg('failed to load station');
-          }
+        } else {
+            try {
+                const station = await getStationById(stationId);
+                setStation(station);
+            } catch (err) {
+                eventBusService.showErrorMsg('failed to load station');
+            }
         }
-      }
-      
+    }
+    
+    async function analyzeImage(imageURL) {
+        try {
+            const mostCommonColor = "red" // imageService.analyzeImage(imageURL)
+            setGradientColor(mostCommonColor)
+        } catch (error) {
+            console.error('Error analyzing image:', error)
+        }
+    }
 
     function onToggleUserLiked() {
         const user = getBasicUser()
@@ -150,7 +147,6 @@ export function StationDetails() {
         }
     }
 
-
     if(!station) return <div>loading...</div>
 
     const likedTrackStation = stationId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
@@ -159,7 +155,7 @@ export function StationDetails() {
 
     return (
     <section className="station-container">
-        <div className="station-head" style={gradientColor ? { background: gradientColor } : {}}>
+        <div className="station-head" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 175%)` } : {}}>
             {stationByUser && !likedTrackStation ?
                 <button className="station-head-img-container" onClick={() => setMenu(1)}>
                     <img className="station-head-img" src={getImage()}/>
@@ -189,7 +185,8 @@ export function StationDetails() {
                 <p>{station.createdBy.fullname} - {station.tracks.length}</p>
             </div>
         </div>
-        <div className="station-content" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}>
+        <div className="station-content-gradient" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}/>
+        <div className="station-content">
             <div className="station-options">
                 <button className="station-play-btn" onClick={() => {}}>
                     <FontAwesomeIcon icon={faPlayCircle} />
