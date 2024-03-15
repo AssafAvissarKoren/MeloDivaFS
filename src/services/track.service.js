@@ -5,14 +5,14 @@ export const trackService = {
     videoToTrack,
 }
 
-function trackToVideo(track, artist) {
+function trackToVideo(track) {
     return {
         id: {
             videoId: track.url
         },
         snippet: {
             title: track.title,
-            channelTitle: artist,
+            channelTitle: track.artist,
             thumbnails: {
                 default: {
                     url: track.imgUrl

@@ -6,10 +6,13 @@ export const dataService = {
     createLikedTracksData,
     searchYoutube,
     getDurations,
+    ajaxGetStationTracks, // for testing
+    fetchChannelData,
 }
 
 const API_KEY = 'AIzaSyD5_pPOj9mwAPQz41a1ymh9AuhbZxS6ySQ' // 'AIzaSyC3YOy0NUIShjRXdNxhZazirA58eiMbQDI' // 
 const STATION_API_URL = 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50'
+const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3/channels';
 
 async function createStationData(storageKey) {
     let stations = utilService.loadFromStorage(storageKey);
@@ -72,8 +75,9 @@ function createTrack(track, addedBy) {
 
     return {
         title: snippet.title || 'Unknown Title',
+        artist: snippet.channelTitle || 'Unknown Artist',
         url: resourceId.videoId || 'Unknown Video ID',
-        imgUrl: standard.url || 'default_thumbnail_url', // Replace with a default thumbnail URL
+        imgUrl: standard.url || 'default_thumbnail_url',
         addedBy: addedBy
     };
 }
@@ -87,6 +91,17 @@ async function ajaxGetStationTracks(stationId) {
         throw err
     }
 }
+
+async function fetchChannelData(videoOwnerChannelId) {
+    try {
+      const res = await axios.get(`${YOUTUBE_API_URL}?id=${videoOwnerChannelId}&part=snippet,contentDetails,statistics&key=${API_KEY}`);
+      return res.data.items[0];
+    } catch (err) {
+        console.error(err)
+        throw err
+    }
+  };
+
 
 async function searchYoutube(query) {
     return await axios.get(`https://www.googleapis.com/youtube/v3/search`, {

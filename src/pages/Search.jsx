@@ -34,13 +34,17 @@ export function Search({ searchText, setCurrentCategory }) {
         try {
             const response = await dataService.searchYoutube(query);
             const videos = response.data.items.map(video => ({...trackService.videoToTrack(video)}))
+            console.log('videos', videos)
             
             const videoIds = videos.map(video => {
-                // Assuming the URL contains the video ID at the end after '='
-                const urlParts = video.url.split('=');
-                return urlParts[urlParts.length - 1]
-            }).join(',')
-
+                if (video.url.includes('=')) {
+                    const urlParts = video.url.split('=');
+                    return urlParts[urlParts.length - 1];
+                } else {
+                    return video.url;
+                }
+            }).join(',');
+            
             const trackDurations =  await dataService.getDurations(videoIds)
             const tracks = response.data.items.map((video, index)=> {
                 return {
@@ -48,6 +52,7 @@ export function Search({ searchText, setCurrentCategory }) {
                     duration: trackDurations[index]
                 }
             })
+            console.log('tracks', tracks)
             setTracks(tracks)
         } catch (error) {
             console.error('Error fetching data from YouTube API', error);

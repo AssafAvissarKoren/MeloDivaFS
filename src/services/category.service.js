@@ -43,32 +43,35 @@ async function createCategories() {
     };
       
     let categories = [
-        {_id: "c101", name: "Soundtrack", stationTags: ["Soundtrack"], color: "#FF00FF"},
-        {_id: "c102", name: "Rock", stationTags: ["Rock"], color: "#FF00CC"},
-        {_id: "c103", name: "Electronic", stationTags: ["Electronic"], color: "#FF0099"},
-        {_id: "c104", name: "Blues", stationTags: ["Blues"], color: "#FF0066"},
-        {_id: "c105", name: "Psychedelic", stationTags: ["Psychedelic"], color: "#FF0033"},
-        {_id: "c106", name: "Jazz", stationTags: ["Jazz"], color: "#FF0000"},
-        {_id: "c107", name: "Pop", stationTags: ["Pop"], color: "#FF3300"},
-        {_id: "c108", name: "Dance", stationTags: ["Dance"], color: "#FF6600"},
-        {_id: "c109", name: "R&B", stationTags: ["R&B"], color: "#FF9900"},
-        {_id: "c110", name: "Soul", stationTags: ["Soul"], color: "#FFCC00"},
-        {_id: "c111", name: "Metal", stationTags: ["Metal"], color: "#FFFF00"},
-        {_id: "c112", name: "Comedy", stationTags: ["Comedy", "Show", "Animation"], color: "#CCFF00"},
-        {_id: "c113", name: "1960s", stationTags: ["1960s"], color: "#99FF00"},
-        {_id: "c114", name: "1970s", stationTags: ["1970s"], color: "#66FF00"},
-        {_id: "c115", name: "1980s", stationTags: ["1980s"], color: "#33FF00"},
-        {_id: "c116", name: "1990s", stationTags: ["1990s"], color: "#00FF00"},
-        {_id: "c117", name: "2000s", stationTags: ["2000s"], color: "#00FF33"},
-        {_id: "c118", name: "2010s", stationTags: ["2010s"], color: "#00FF66"},
-        {_id: "c119", name: "American", stationTags: ["American"], color: "#00FF99"},
-        {_id: "c120", name: "British", stationTags: ["British"], color: "#00FFCC"},
+        { _id: "c101", name: "Soundtrack", stationTags: ["Soundtrack"], color: "#FF00FF", startingPosition: 8 },
+        { _id: "c102", name: "Rock", stationTags: ["Rock"], color: "#99FF00", startingPosition: 2 },
+        { _id: "c103", name: "Electronic", stationTags: ["Electronic"], color: "#FF3300", startingPosition: 7 },
+        { _id: "c104", name: "Blues", stationTags: ["Blues"], color: "#00FF66", startingPosition: 4 },
+        { _id: "c105", name: "Psychedelic", stationTags: ["Psychedelic"], color: "#00FF99", startingPosition: 3 },
+        { _id: "c106", name: "Jazz", stationTags: ["Jazz"], color: "#FF0000", startingPosition: 5 },
+        { _id: "c107", name: "Pop", stationTags: ["Pop"], color: "#FF00CC", startingPosition: 6 },
+        { _id: "c108", name: "Dance", stationTags: ["Dance"], color: "#FF9900", startingPosition: 1 },
+        { _id: "c109", name: "R&B", stationTags: ["R&B"], color: "#FFCC00", startingPosition: 7 },
+        { _id: "c110", name: "Soul", stationTags: ["Soul"], color: "#FF00CC", startingPosition: 8 },
+        { _id: "c111", name: "Metal", stationTags: ["Metal"], color: "#00FF33", startingPosition: 4 },
+        { _id: "c112", name: "Comedy", stationTags: ["Comedy", "Show", "Animation"], color: "#00FF99", startingPosition: 3 },
+        { _id: "c113", name: "1960s", stationTags: ["1960s"], color: "#00FF66", startingPosition: 10 },
+        { _id: "c114", name: "1970s", stationTags: ["1970s"], color: "#FF3300", startingPosition: 8 },
+        { _id: "c115", name: "1980s", stationTags: ["1980s"], color: "#FF9900", startingPosition: 9 },
+        { _id: "c116", name: "1990s", stationTags: ["1990s"], color: "#FF0000", startingPosition: 6 },
+        { _id: "c117", name: "2000s", stationTags: ["2000s"], color: "#99FF00", startingPosition: 5 },
+        { _id: "c118", name: "2010s", stationTags: ["2010s"], color: "#FF00FF", startingPosition: 1 },
+        { _id: "c119", name: "American", stationTags: ["American"], color: "#CCFF00", startingPosition: 10 },
+        { _id: "c120", name: "British", stationTags: ["British"], color: "#00FFCC", startingPosition: 2 }
     ];
 
-    let categoriesArray = categories.flatMap(({ _id, name, stationTags, color }) => {
+    let categoriesArray = categories.flatMap(({ _id, name, stationTags, color, startingPosition }) => {
         const stationIds = mergeTags(stationTags);
         let matchingImageUrl = defaultImgUrl;
-        for (let i = 0; i < stationIds.length; i++) {
+
+        const index = startingPosition % stationIds.length;
+
+        for (let i = index; i < stationIds.length; i++) {
             const stationId = stationIds[i];
             const matchingStation = stations.find(station => station._id === stationId);
             if (matchingStation && matchingStation.imgUrl !== "default_thumbnail_url") {
@@ -76,7 +79,7 @@ async function createCategories() {
                 break;
             }
         }
-        return { _id ,name, stationIds: stationIds, color: color, image: matchingImageUrl };
+        return { _id ,name, stationIds: stationIds, color: color, image: matchingImageUrl, startingPosition: startingPosition };
     });
 
     

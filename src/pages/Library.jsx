@@ -48,6 +48,11 @@ export function Library() {
                 <p>Your Library</p>
                 <span className="button-wrapper add-station-btn" onClick={createNewStation}> <svgSvc.general.ArrowRight /> </span>
             </div>
+            <div className="library-search">
+                <span className="button-wrapper"> <svgSvc.general.LibrarySearch style = {{ width: '16px', height: '16px' }} /> </span>
+                <p>Recents</p>
+                <span className="button-wrapper"> <svgSvc.sortBy.List style = {{ width: '16px', height: '16px' }} /> </span>
+            </div>
             <ul className="content">
                 <li>
                 <StationPreview station={getLikedTracksAsStation()} />
