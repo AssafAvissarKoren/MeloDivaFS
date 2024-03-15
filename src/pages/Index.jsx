@@ -36,7 +36,6 @@ export const Index = () => {
 
     const navigate = useNavigate();
 
-
     useEffect(() => {
         loadStationsLocal();
         initUser()

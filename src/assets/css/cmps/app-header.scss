@@ -37,7 +37,7 @@
     & .search-bar-container {
         background-color: #333333;
         display: grid;
-        grid-template-columns: auto 1fr;
+        grid-template-columns: auto 1fr auto;
         width: 364px;
         border: none;
         border-radius: 999px;
@@ -45,12 +45,18 @@
         margin-left: 9px;
         align-items: center;
 
-        & .search-img-contaner {
+        & .img-contaner {
             margin-left: 4px;
+            margin-right: 4px;
             width: 18px;
             height: 18px;
 
             & .search-img {
+                // filter svg to white
+                filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+            }
+
+            & .ex-img {
                 // filter svg to white
                 filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
             }
@@ -67,7 +73,7 @@
         border: none;
         padding: 10px 0;
         color: white;
-        text-indent: 8px;
+        text-indent: 4px;
 
         &:focus {
             outline: none;

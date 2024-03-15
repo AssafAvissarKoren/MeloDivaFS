@@ -8,7 +8,7 @@ import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 import { miniMenuOptions } from './MiniMenuOptions'
 
 
-export function TrackPreview({ layout = '', track = null, trackNum, isLiked, deleteTrack = null, duration, handleTrackClick}) {
+export function TrackPreview({ layout = '', track = null, trackNum = null, isLiked, deleteTrack = null, duration, handleTrackClick, addToThisStation = null}) {
     const [isSelected, setSelected] = useState(false)
     const [isMenu, setIsMenu] = useState(false)
     const modalRef = useRef(track.url)
@@ -59,41 +59,49 @@ export function TrackPreview({ layout = '', track = null, trackNum, isLiked, del
     return (
         <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
             <div className='track-numder'>
-                <p className='track-num'>{trackNum}</p>
+                <p className='track-num'>{trackNum || ''}</p>
                 <button className="btn-track-play" onClick={() => handleTrackClick(track)}>
                     <FontAwesomeIcon icon={faPlay} />
                 </button>
             </div>
             <div className="track-preview-title">
-                <img src={trackImgURL} className="track-preview-img"/>
+                <div className="track-preview-img-container">
+                    <img src={trackImgURL} className="track-preview-img"/>
+                </div>
                 <p>{track.title}</p>
             </div>
-            <div className="track-preview-options">
-                <button className={`btn-like-track ${isLiked && 'green'}`} onClick={onToggleLiked}>
-                    {isLiked 
-                    ? 
-                    <FontAwesomeIcon icon={heartSolid} /> 
-                    :
-                    <FontAwesomeIcon icon={heartLined} />}
-                </button>
-                <p>{duration}</p>
-                <button className="btn-more" onClick={toggleMenu}>
-                    <p>...</p>
-                </button>
-                {isMenu && 
-                        <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
-                            {miniMenuOptions.addToPlaylist(onCloseMiniMenu)}
-                            { deleteTrack &&  miniMenuOptions.removeFromPlaylist(onDeleteTrack) }
-                            {isLiked ? 
-                                miniMenuOptions.removeFromLikedSongs(onToggleLiked) :
-                                miniMenuOptions.addToLikedSongs(onToggleLiked)
-                            }
-                            {miniMenuOptions.addToQueue(onCloseMiniMenu)}
-                            {miniMenuOptions.hr()}
-                            {miniMenuOptions.share(onCloseMiniMenu)}
-                        </MiniMenu> 
-                    }
-            </div>
+            {addToThisStation ?
+                <div>
+                    <button className="track-preview-add" onClick={() => addToThisStation(track)}>Add</button>
+                </div>
+            :
+                <div className="track-preview-options">
+                    <button className={`btn-like-track ${isLiked && 'green'}`} onClick={onToggleLiked}>
+                        {isLiked 
+                        ? 
+                        <FontAwesomeIcon icon={heartSolid} /> 
+                        :
+                        <FontAwesomeIcon icon={heartLined} />}
+                    </button>
+                    <p>{duration}</p>
+                    <button className="btn-more" onClick={toggleMenu}>
+                        <p>...</p>
+                    </button>
+                    {isMenu && 
+                            <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
+                                {miniMenuOptions.addToPlaylist(onCloseMiniMenu)}
+                                { deleteTrack &&  miniMenuOptions.removeFromPlaylist(onDeleteTrack) }
+                                {isLiked ? 
+                                    miniMenuOptions.removeFromLikedSongs(onToggleLiked) :
+                                    miniMenuOptions.addToLikedSongs(onToggleLiked)
+                                }
+                                {miniMenuOptions.addToQueue(onCloseMiniMenu)}
+                                {miniMenuOptions.hr()}
+                                {miniMenuOptions.share(onCloseMiniMenu)}
+                            </MiniMenu> 
+                        }
+                </div>
+            }
         </section>
     )
 }

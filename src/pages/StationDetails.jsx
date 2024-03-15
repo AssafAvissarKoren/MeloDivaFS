@@ -20,6 +20,7 @@ import { LIKED_TRACK_AS_STATION_ID, getBasicUser, getLikedTracksAsStation } from
 import { IndexContext } from '../cmps/IndexContext.jsx'
 import { MiniMenu } from "../cmps/MiniMenu.jsx"
 import { miniMenuOptions } from "../cmps/MiniMenuOptions.jsx"
+import { StationSearch } from "../cmps/StationSearch.jsx"
 
 export function StationDetails() {
     const { stationId } =  useParams()
@@ -30,7 +31,7 @@ export function StationDetails() {
     const [tracksWithDurations, setTracksWithDurations] = useState([])
     const [gradientColor, setGradientColor] = useState(null)
 
-
+    console.log("refresh")
     useEffect(() => {
         loadStation()
     },[stationId])
@@ -53,6 +54,7 @@ export function StationDetails() {
                     ...track,
                     duration: durations[index] || 'N/A'
                 }))
+                console.log(updatedTracks)
                 setTracksWithDurations(updatedTracks)
             }
             fetchAndSetDurations()
@@ -147,6 +149,18 @@ export function StationDetails() {
         }
     }
 
+    async function addTrackToStation(track) {
+        try {
+            const tracks = station.tracks
+            tracks.push(track)
+            await saveStation({...station, tracks: tracks})
+            setStation({...station, tracks: tracks})
+        } catch (err) {
+            eventBusService.showErrorMsg('faild to add track')
+            console.log(err)
+        }
+    }
+
     if(!station) return <div>loading...</div>
 
     const likedTrackStation = stationId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
@@ -168,10 +182,6 @@ export function StationDetails() {
             {menu === 1 && 
                 <MiniMenu location={'center'} onCloseMiniMenu={onCloseMiniMenu}>
                     {miniMenuOptions.editStation(getImage(), station.name, '', onCloseMiniMenu, onCloseMiniMenu)}
-                    {/* <h1>Edit details</h1>
-                    <img src={getImage()}/>
-                    <p>name</p>
-                    <p>description</p> */}
                 </MiniMenu>
             }
             <div className="station-head-info">
@@ -235,7 +245,7 @@ export function StationDetails() {
                                 track={track} 
                                 trackNum={++trackNum}
                                 isLiked={likedTracks[track.url] ? true : false}
-                                deleteTrack={deleteTrack}
+                                deleteTrack={(!stationByUser || likedTrackStation) ? null : deleteTrack}
                                 duration={utilService.formatDuration(track.duration)}
                                 handleTrackClick={handleTrackClick}
                             />
@@ -243,6 +253,10 @@ export function StationDetails() {
                     ))}
                 </ul>
             </div>
+            {stationByUser && !likedTrackStation && <div className="station-foot">
+                {tracksWithDurations?.length !== 0 && <div className="br"/>}
+                <StationSearch addTrackToStation={addTrackToStation}/>
+            </div>}
         </div>
     </section>
     )
