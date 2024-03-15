@@ -74,10 +74,34 @@
             color: white;
         }
 
-        & .track-preview-img {
-            height: 42px;
-            width: 42px;
-            object-fit: cover;
+        & .track-preview-img-container {
+            height: 40px;
+            width: 40px;
+            border-radius: 4px;
+            overflow: hidden;
+
+            & .track-preview-img {
+                height: 136%;
+                width: 136%;
+                object-fit: cover;
+                margin-top: -18.5%;
+                margin-bottom: -18.5%;
+            }
+        }
+    }
+
+    & .track-preview-add {
+        font-weight: bold;
+        padding: 7px 16px;
+        border: solid 1px;
+        border-color: #909090;
+        border-radius: 999;
+        background-color: unset;
+
+        &:hover {
+            border-color: white;
+            padding: 8px 17px;
+            margin-left: -1px;
         }
     }
 
@@ -86,8 +110,6 @@
         grid-template-columns: repeat(3, 1fr);
         align-items: center;
         justify-items: center;
-
-
     }
 
     & .btn-like-track {
