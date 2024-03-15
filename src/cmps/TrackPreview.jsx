@@ -52,6 +52,11 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
     function onDeleteTrack() {
         deleteTrack(track.url)
     }
+
+    function onPlayClicked(ev) {
+        ev.stopPropagation()
+        handleTrackClick(track)
+    }
     
     const trackImgURL = track.imgUrl == "default_thumbnail_url" ? defaultImgUrl : track.imgUrl;
 
@@ -60,7 +65,7 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
         <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
             <div className='track-numder'>
                 <p className='track-num'>{trackNum || ''}</p>
-                <button className="btn-track-play" onClick={() => handleTrackClick(track)}>
+                <button className="btn-track-play" onClick={onPlayClicked}>
                     <FontAwesomeIcon icon={faPlay} />
                 </button>
             </div>

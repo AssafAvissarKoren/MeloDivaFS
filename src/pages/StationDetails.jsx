@@ -15,7 +15,7 @@ import { imageService } from '../services/image.service.js'
 import { TrackPreview } from "../cmps/TrackPreview"
 
 import { getStationById, removeStation, saveStation } from "../store/actions/station.actions"
-import { setQueueToTrack, getCurrentTrackInQueue } from '../store/actions/queue.actions.js'
+import { setQueueToTrack, getCurrentTrackInQueue, setQueueToStation } from '../store/actions/queue.actions.js'
 import { LIKED_TRACK_AS_STATION_ID, getBasicUser, getLikedTracksAsStation } from "../store/actions/user.actions.js"
 import { IndexContext } from '../cmps/IndexContext.jsx'
 import { MiniMenu } from "../cmps/MiniMenu.jsx"
@@ -31,7 +31,6 @@ export function StationDetails() {
     const [tracksWithDurations, setTracksWithDurations] = useState([])
     const [gradientColor, setGradientColor] = useState(null)
 
-    console.log("refresh")
     useEffect(() => {
         loadStation()
     },[stationId])
@@ -139,8 +138,8 @@ export function StationDetails() {
         }
     };
     
-    const handleTrackClick = (track) => {
-        setQueueToTrack(track);
+    const handleTrackClick = (trackNum) => {
+        setQueueToStation(station, trackNum-1);
     };
 
     function getImage() {
@@ -198,12 +197,14 @@ export function StationDetails() {
         <div className="station-content-gradient" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}/>
         <div className="station-content">
             <div className="station-options">
-                <button className="station-play-btn" onClick={() => {}}>
+                <button className="station-play-btn" onClick={() => setQueueToStation(station)}>
                     <FontAwesomeIcon icon={faPlayCircle} />
                 </button>
-                <button className={`station-like-btn ${likedTrackStation} ${stationByUser} ${isLiked && 'green'}`} onClick={onToggleUserLiked}>
-                    <FontAwesomeIcon icon={isLiked ? heartSolid : heartLined} />
-                </button>
+                {!stationByUser && !likedTrackStation && 
+                    <button className={`station-like-btn ${likedTrackStation} ${stationByUser} ${isLiked && 'green'}`} onClick={onToggleUserLiked}>
+                        <FontAwesomeIcon icon={isLiked ? heartSolid : heartLined} />
+                    </button>
+                }
                 <div className={`station-more-btn ${likedTrackStation}`}>
                     <button className="btn-more" onClick={() => setMenu(2)}>
                         <p>...</p>
@@ -247,7 +248,7 @@ export function StationDetails() {
                                 isLiked={likedTracks[track.url] ? true : false}
                                 deleteTrack={(!stationByUser || likedTrackStation) ? null : deleteTrack}
                                 duration={utilService.formatDuration(track.duration)}
-                                handleTrackClick={handleTrackClick}
+                                handleTrackClick={() => handleTrackClick(trackNum)}
                             />
                         </li> 
                     ))}

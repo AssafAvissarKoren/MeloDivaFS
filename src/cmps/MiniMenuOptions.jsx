@@ -71,7 +71,7 @@ function addToPlaylist(func) {
                 className="svg"
                 src={utilService.getImgUrl("../assets/imgs/plus.svg")}
             />
-            <p>Add to your Playlist</p>
+            <p>Add to Playlist</p>
         </button> 
     )
 }

@@ -29,9 +29,9 @@ export async function setQueueToTrack(track) {
     try {
         const queue = {
             station: null,
-            playedTracks: track,
+            playedTracks: [],
             stationTracksToPlay: [],
-            tracksToPlay: [],
+            tracksToPlay: [track],
         }
         await queueService.saveQueue(queue)
         store.dispatch({ type: SET_QUEUE, queue })
@@ -53,7 +53,7 @@ export function getCurrentTrackInQueue() {
 
     if(tracksToPlay.length) return tracksToPlay[0]
     if(stationTracksToPlay.length) return stationTracksToPlay[0]
-    if(playedTracks) return playedTracks
+    if(playedTracks.length) return playedTracks[playedTracks.length-1]
     return null
 }
 
