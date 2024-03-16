@@ -6,6 +6,7 @@ import { MiniMenu } from './MiniMenu'
 import { toggleLikedTrack } from '../store/actions/user.actions'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 import { miniMenuOptions } from './MiniMenuOptions'
+import { svgSvc } from "../services/svg.service"
 
 
 export function TrackPreview({ layout = '', track = null, trackNum, isLiked, deleteTrack = null, duration, handleTrackClick}) {
@@ -61,7 +62,7 @@ export function TrackPreview({ layout = '', track = null, trackNum, isLiked, del
             <div className='track-numder'>
                 <p className='track-num'>{trackNum}</p>
                 <button className="btn-track-play" onClick={() => handleTrackClick(track)}>
-                    <FontAwesomeIcon icon={faPlay} />
+                    <span className="action-button-wrapper"> <svgSvc.player.PlayBtn color={"white"} /> </span>
                 </button>
             </div>
             <div className="track-preview-title">
@@ -72,27 +73,27 @@ export function TrackPreview({ layout = '', track = null, trackNum, isLiked, del
                 <button className={`btn-like-track ${isLiked && 'green'}`} onClick={onToggleLiked}>
                     {isLiked 
                     ? 
-                    <FontAwesomeIcon icon={heartSolid} /> 
+                    <span className="action-button-wrapper"> <svgSvc.track.HeartFilled/> </span>
                     :
-                    <FontAwesomeIcon icon={heartLined} />}
+                    <span className="action-button-wrapper"> <svgSvc.track.HeartBlank/> </span>}
                 </button>
                 <p>{duration}</p>
                 <button className="btn-more" onClick={toggleMenu}>
                     <p>...</p>
                 </button>
                 {isMenu && 
-                        <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
-                            {miniMenuOptions.addToPlaylist(onCloseMiniMenu)}
-                            { deleteTrack &&  miniMenuOptions.removeFromPlaylist(onDeleteTrack) }
-                            {isLiked ? 
-                                miniMenuOptions.removeFromLikedSongs(onToggleLiked) :
-                                miniMenuOptions.addToLikedSongs(onToggleLiked)
-                            }
-                            {miniMenuOptions.addToQueue(onCloseMiniMenu)}
-                            {miniMenuOptions.hr()}
-                            {miniMenuOptions.share(onCloseMiniMenu)}
-                        </MiniMenu> 
-                    }
+                    <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
+                        {miniMenuOptions.addToPlaylist(onCloseMiniMenu)}
+                        { deleteTrack &&  miniMenuOptions.removeFromPlaylist(onDeleteTrack) }
+                        {isLiked ? 
+                            miniMenuOptions.removeFromLikedSongs(onToggleLiked) :
+                            miniMenuOptions.addToLikedSongs(onToggleLiked)
+                        }
+                        {miniMenuOptions.addToQueue(onCloseMiniMenu)}
+                        {miniMenuOptions.hr()}
+                        {miniMenuOptions.share(onCloseMiniMenu)}
+                    </MiniMenu> 
+                }
             </div>
         </section>
     )

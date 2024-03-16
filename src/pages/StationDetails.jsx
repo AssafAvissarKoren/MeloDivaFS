@@ -20,6 +20,7 @@ import { LIKED_TRACK_AS_STATION_ID, getBasicUser, getLikedTracksAsStation } from
 import { IndexContext } from '../cmps/IndexContext.jsx'
 import { MiniMenu } from "../cmps/MiniMenu.jsx"
 import { miniMenuOptions } from "../cmps/MiniMenuOptions.jsx"
+import { svgSvc } from "../services/svg.service"
 
 export function StationDetails() {
     const { stationId } =  useParams()
@@ -192,10 +193,13 @@ export function StationDetails() {
         <div className="station-content" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}>
             <div className="station-options">
                 <button className="station-play-btn" onClick={() => {}}>
-                    <FontAwesomeIcon icon={faPlayCircle} />
+                    <svgSvc.general.PlaylistPlayBtn color={"black"}/>
+                    {/* <FontAwesomeIcon icon={faPlayCircle} /> */}
                 </button>
                 <button className={`station-like-btn ${likedTrackStation} ${stationByUser} ${isLiked && 'green'}`} onClick={onToggleUserLiked}>
-                    <FontAwesomeIcon icon={isLiked ? heartSolid : heartLined} />
+                    <span className="action-button-wrapper">
+                        {isLiked ? <svgSvc.track.HeartFilled style={{"width": "24px", "height": "24px"}}/> : <svgSvc.track.HeartBlank style={{"width": "24px", "height": "24px"}}/>} 
+                    </span>
                 </button>
                 <div className={`station-more-btn ${likedTrackStation}`}>
                     <button className="btn-more" onClick={() => setMenu(2)}>

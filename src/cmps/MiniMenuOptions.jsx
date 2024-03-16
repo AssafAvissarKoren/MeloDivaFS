@@ -1,7 +1,7 @@
 import { utilService } from "../services/util.service"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faMinus, faTrash, faCircleCheck, faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons'
-
+import { svgSvc } from "../services/svg.service"
 
 export const miniMenuOptions = {
     hr,
@@ -15,78 +15,86 @@ export const miniMenuOptions = {
     removeFromLikedSongs,
     deleteObj,
     editDetails,
-
     editStation,
 }
+
+// Add to playlist 
+// Remove from your Liked Songs 
+// Add to queue 
+// Go to song radio 
+// Go to artist 
+// Go to album 
+// Show credits 
+// Share 
+// Open in Desktop app 
+
 
 function hr() {
     return (
         <hr className="hr"/>
     )
 }
+
 function addToLibrary(func) {
     return (
         <button className="btn" onClick={func}>
-            <div className="circle">
-                <img
-                    className="svg"
-                    src={utilService.getImgUrl("../assets/imgs/plus.svg")}
-                />
-            </div>
+            <svgSvc.miniMenu.AddToYourLibrary/>
             <p>Add to your library</p>
         </button> 
     )
 }
+
 function removeFromLibrary(func) {
     return (
         <button className="btn" onClick={func}>
+            {/* <svgSvc.miniMenu.removeFromLibrary/> */}
             <FontAwesomeIcon icon={faCircleCheck} className="icon green"/>
             <p>Remove from your library</p>
         </button>
     )
 }
+
 function addToQueue(func) {
     return (
         <button className="btn" onClick={func}>
-            <img
-                className="svg"
-                src={utilService.getImgUrl("../assets/imgs/queue.svg")}
-            />
+            <svgSvc.miniMenu.AddToQueue />
             <p>Add to queue</p>
         </button> 
     )
 }
+
 function share(func) {
     return (
         <button className="btn" onClick={func}>
-            <FontAwesomeIcon icon={faArrowUpFromBracket} className="icon"/>
+            <svgSvc.miniMenu.Share/>
             <p>Share</p>
         </button> 
     )
 }
+
 function addToPlaylist(func) {
     return (
         <button className="btn" onClick={func}>
-            <img
-                className="svg"
-                src={utilService.getImgUrl("../assets/imgs/plus.svg")}
-            />
+            < svgSvc.miniMenu.AddToPlaylist />
             <p>Add to your Playlist</p>
         </button> 
     )
 }
+
 function removeFromPlaylist(func) {
     return (
         <button className="btn" onClick={func}>
-            <FontAwesomeIcon icon={faTrash} className="icon"/>
+            <svgSvc.miniMenu.RemoveFromPlaylist/>
             <p>Remove from this Playlist</p>
         </button>
     )
 }
+
 function addToLikedSongs(func) {
     return (
         <button className="btn" onClick={func}>
             <div className="circle">
+                {/* < svgSvc.miniMenu.AddToPlaylist /> */}
                 <img
                     className="svg"
                     src={utilService.getImgUrl("../assets/imgs/plus.svg")}
@@ -96,27 +104,32 @@ function addToLikedSongs(func) {
         </button> 
     )
 }
+
 function removeFromLikedSongs(func) {
     return (
         <button className="btn" onClick={func}>
-            <FontAwesomeIcon icon={faCircleCheck} className="icon green"/>
+            < svgSvc.miniMenu.RemoveFromYourLikedSongs />
             <p>Remove from your Liked Songs</p>
         </button>
     )
 }
+
 function deleteObj(func) {
     return (
         <button className="btn" onClick={func}>
             <div className="circle">
+                {/* < svgSvc.miniMenu.RemoveFromYourLikedSongs /> */}
                 <FontAwesomeIcon icon={faMinus} className="icon"/>
             </div>
             <p>Delete</p>
         </button>
     )
 }
+
 function editDetails(func) {
     return (
         <button className="btn" onClick={func}>
+            {/* < svgSvc.miniMenu. no idea what the icon is /> */}
             <FontAwesomeIcon icon={faPen} className="icon"/>
             <p>Edit details</p>
         </button>
@@ -129,6 +142,7 @@ function editStation(imgUrl, name, description, onSubmit, onClose ) {
             <div className="head">
                 <h2>Edit details</h2>
                 <button onClick={onClose}>
+                    {/* <svgSvc.miniMenu.Ex/> */}
                     <img
                         className="svg"
                         src={utilService.getImgUrl("../assets/imgs/ex.svg")}

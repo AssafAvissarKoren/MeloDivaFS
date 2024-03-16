@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { utilService } from '../services/util.service.js';
+import { svgSvc } from '../services/svg.service.jsx';
 
 export const AppHeader = ({ setFilterBy }) => {
     const params = useParams();
     const [text, setText] = useState('');
-
+    const typingTimeoutRef = useRef(null);
+    
     useEffect(() => {
         if (params.tab === "search") {
             setText('');
@@ -13,13 +15,18 @@ export const AppHeader = ({ setFilterBy }) => {
         }
     }, [params.tab]);
 
-
     const handleTextChange = (e) => {
-        setText(e.target.value);
+        const newText = e.target.value;
+        setText(newText);
+        clearTimeout(typingTimeoutRef.current); // Clear the previous typing timeout
+        typingTimeoutRef.current = setTimeout(() => {
+            setFilterBy(prev => ({ ...prev, text: newText }));
+        }, 3000); // Set a new typing timeout
     };
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
+            clearTimeout(typingTimeoutRef.current); // Clear the typing timeout if "Enter" is pressed
             setFilterBy(prev => ({ ...prev, text }));
         }
     };
@@ -28,22 +35,16 @@ export const AppHeader = ({ setFilterBy }) => {
         <header className="app-header">
             <div className="arrow-options">
                 <button className="btn-arrow-container">
-                    <img
-                        className="svg"
-                        src={utilService.getImgUrl("../assets/imgs/arrowLeft.svg")}
-                    />
+                    <span className="action-button-wrapper"> <svgSvc.general.DirectionLeft /> </span>
                 </button>
                 <button className="btn-arrow-container">
-                    <img
-                        className="svg"
-                        src={utilService.getImgUrl("../assets/imgs/arrowRight.svg")}
-                    />
+                    <span className="action-button-wrapper"> <svgSvc.general.DirectionRight /> </span>
                 </button>
             </div>
             {params.tab == "search" &&
                 <label className="search-bar-container">
                     <div className="search-img-contaner">
-                        <img className="search-img" src={utilService.getImgUrl("../assets/imgs/search.svg")} />
+                        <svgSvc.general.LibrarySearch />
                     </div>
                     <input 
                         className="search-bar"

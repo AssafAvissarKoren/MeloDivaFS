@@ -462,6 +462,127 @@ const LibrarySearch = ({ color = "white", ...props }) => (
   </svg>
 )
 
+const AddToPlaylist = ({ color = "white", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    className="Svg-sc-ytk21e-0 ewCuAY"
+    data-encore-id="icon"
+    viewBox="0 0 16 16"
+    {...props}
+  >
+    <path fill={color} d="M15.25 8a.75.75 0 0 1-.75.75H8.75v5.75a.75.75 0 0 1-1.5 0V8.75H1.5a.75.75 0 0 1 0-1.5h5.75V1.5a.75.75 0 0 1 1.5 0v5.75h5.75a.75.75 0 0 1 .75.75z" />
+  </svg>
+)
+
+const RemoveFromYourLikedSongs = ({ color = "#1ed760", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    className="Svg-sc-ytk21e-0 gacXSA"
+    data-encore-id="icon"
+    viewBox="0 0 16 16"
+    {...props}
+  >
+    <path fill={color} d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm11.748-1.97a.75.75 0 0 0-1.06-1.06l-4.47 4.47-1.405-1.406a.75.75 0 1 0-1.061 1.06l2.466 2.467 5.53-5.53z" />
+  </svg>
+)
+
+const RemoveFromPlaylist = ({ color = "white", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    className="Svg-sc-ytk21e-0 ewCuAY"
+    data-encore-id="icon"
+    viewBox="0 0 16 16"
+    {...props}
+  >
+    <path fill={color} d="M5.25 3v-.917C5.25.933 6.183 0 7.333 0h1.334c1.15 0 2.083.933 2.083 2.083V3h4.75v1.5h-.972l-1.257 9.544A2.25 2.25 0 0 1 11.041 16H4.96a2.25 2.25 0 0 1-2.23-1.956L1.472 4.5H.5V3h4.75zm1.5-.917V3h2.5v-.917a.583.583 0 0 0-.583-.583H7.333a.583.583 0 0 0-.583.583zM2.986 4.5l1.23 9.348a.75.75 0 0 0 .744.652h6.08a.75.75 0 0 0 .744-.652L13.015 4.5H2.985z" />
+  </svg>
+)
+
+const AddToQueue = ({ color = "white", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    className="Svg-sc-ytk21e-0 ewCuAY"
+    data-encore-id="icon"
+    viewBox="0 0 16 16"
+    {...props}
+  >
+    <path fill={color} d="M16 15H2v-1.5h14V15zm0-4.5H2V9h14v1.5zm-8.034-6A5.484 5.484 0 0 1 7.187 6H13.5a2.5 2.5 0 0 0 0-5H7.966c.159.474.255.978.278 1.5H13.5a1 1 0 1 1 0 2H7.966zM2 2V0h1.5v2h2v1.5h-2v2H2v-2H0V2h2z" />
+  </svg>
+)
+
+const Share = ({ color = "white", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    className="Svg-sc-ytk21e-0 ewCuAY"
+    data-encore-id="icon"
+    viewBox="0 0 16 16"
+    {...props}
+  >
+    <path fill={color} d="M1 5.75A.75.75 0 0 1 1.75 5H4v1.5H2.5v8h11v-8H12V5h2.25a.75.75 0 0 1 .75.75v9.5a.75.75 0 0 1-.75.75H1.75a.75.75 0 0 1-.75-.75v-9.5z" />
+    <path fill={color} d="M8 9.576a.75.75 0 0 0 .75-.75V2.903l1.454 1.454a.75.75 0 0 0 1.06-1.06L8 .03 4.735 3.296a.75.75 0 0 0 1.06 1.061L7.25 2.903v5.923c0 .414.336.75.75.75z" />
+  </svg>
+)
+
+
+const AddToYourLibrary = ({ color = "white", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    className="Svg-sc-ytk21e-0 ewCuAY"
+    data-encore-id="icon"
+    viewBox="0 0 16 16"
+    {...props}
+  >
+    <path fill={color} d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z" />
+    <path fill={color} d="M11.75 8a.75.75 0 0 1-.75.75H8.75V11a.75.75 0 0 1-1.5 0V8.75H5a.75.75 0 0 1 0-1.5h2.25V5a.75.75 0 0 1 1.5 0v2.25H11a.75.75 0 0 1 .75.75z" />
+  </svg>
+)
+
+const Ex = ({ color = "white", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    aria-label="Close"
+    className="Svg-sc-ytk21e-0 kcUFwU"
+    data-encore-id="icon"
+    viewBox="0 0 16 16"
+    {...props}
+  >
+    <path fill={color} d="M2.47 2.47a.75.75 0 0 1 1.06 0L8 6.94l4.47-4.47a.75.75 0 1 1 1.06 1.06L9.06 8l4.47 4.47a.75.75 0 1 1-1.06 1.06L8 9.06l-4.47 4.47a.75.75 0 0 1-1.06-1.06L6.94 8 2.47 3.53a.75.75 0 0 1 0-1.06Z" />
+  </svg>
+)
+
+const HeartFilled = ({ color = "#1ed760", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    className="Svg-sc-ytk21e-0 dYnaPI"
+    data-encore-id="icon"
+    viewBox="0 0 16 16"
+    {...props}
+  >
+    <path fill={color} d="M15.724 4.22A4.313 4.313 0 0 0 12.192.814a4.269 4.269 0 0 0-3.622 1.13.837.837 0 0 1-1.14 0 4.272 4.272 0 0 0-6.21 5.855l5.916 7.05a1.128 1.128 0 0 0 1.727 0l5.916-7.05a4.228 4.228 0 0 0 .945-3.577z" />
+  </svg>
+)
+
+const HeartBlank = ({ color = "white", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    className="Svg-sc-ytk21e-0 dYnaPI"
+    data-encore-id="icon"
+    viewBox="0 0 16 16"
+    {...props}
+  >
+    <path fill={color} d="M1.69 2A4.582 4.582 0 0 1 8 2.023 4.583 4.583 0 0 1 11.88.817h.002a4.618 4.618 0 0 1 3.782 3.65v.003a4.543 4.543 0 0 1-1.011 3.84L9.35 14.629a1.765 1.765 0 0 1-2.093.464 1.762 1.762 0 0 1-.605-.463L1.348 8.309A4.582 4.582 0 0 1 1.689 2zm3.158.252A3.082 3.082 0 0 0 2.49 7.337l.005.005L7.8 13.664a.264.264 0 0 0 .311.069.262.262 0 0 0 .09-.069l5.312-6.33a3.043 3.043 0 0 0 .68-2.573 3.118 3.118 0 0 0-2.551-2.463 3.079 3.079 0 0 0-2.612.816l-.007.007a1.501 1.501 0 0 1-2.045 0l-.009-.008a3.082 3.082 0 0 0-2.121-.861z" />
+  </svg>
+)
+
 export const svgSvc = {
   player: {
     ChangeSpeed1,
@@ -504,5 +625,18 @@ export const svgSvc = {
     List,
     Grid,
     Compact,
+  },
+  miniMenu: {
+    AddToPlaylist,
+    RemoveFromYourLikedSongs,
+    RemoveFromPlaylist,
+    AddToQueue,
+    Share,
+    AddToYourLibrary,
+    Ex,
+  },
+  track: {
+    HeartFilled,
+    HeartBlank,
   }
 }

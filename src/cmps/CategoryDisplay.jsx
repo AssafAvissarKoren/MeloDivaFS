@@ -74,14 +74,14 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
   };
  
   const renderStations = (renderedStations) => { 
-    console.log('catName', category.name, 'catLen', renderedStations.length, 'catStart', category.startingPosition);
+    // console.log('catName', category.name, 'catLen', renderedStations.length, 'catStart', category.startingPosition);
   
     if (renderedStations && renderedStations.length > 0) {
       const startingPosition = category.startingPosition % renderedStations.length;
 
       return renderedStations.map((station, index) => {
         const mappedIndex = (index + startingPosition) % renderedStations.length;
-        console.log('mappedIndex', mappedIndex, "index", index, "startingPosition", startingPosition);
+        // console.log('mappedIndex', mappedIndex, "index", index, "startingPosition", startingPosition);
         return (
           <StationPreview 
             key={renderedStations[mappedIndex]._id} 
