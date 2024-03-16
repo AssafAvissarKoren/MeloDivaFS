@@ -37,7 +37,6 @@ function loadFromSessionStorage(key) {
     sessionStorage.getItem(key);
 }
 
-
 function loadFromStorage(key, defaultValue = null) {
     var value = localStorage[key] || defaultValue;
     return JSON.parse(value);

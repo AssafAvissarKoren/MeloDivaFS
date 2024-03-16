@@ -20,6 +20,7 @@ import { LIKED_TRACK_AS_STATION_ID, getBasicUser, getLikedTracksAsStation } from
 import { IndexContext } from '../cmps/IndexContext.jsx'
 import { MiniMenu } from "../cmps/MiniMenu.jsx"
 import { miniMenuOptions } from "../cmps/MiniMenuOptions.jsx"
+import { svgSvc } from "../services/svg.service"
 import { StationSearch } from "../cmps/StationSearch.jsx"
 
 export function StationDetails() {
@@ -196,14 +197,15 @@ export function StationDetails() {
         <div className="station-content-gradient" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}/>
         <div className="station-content">
             <div className="station-options">
-                <button className="station-play-btn" onClick={() => setQueueToStation(station)}>
-                    <FontAwesomeIcon icon={faPlayCircle} />
+                <button className="station-play-btn" onClick={() => {}}>
+                    <svgSvc.general.PlaylistPlayBtn color={"black"}/>
+                    {/* <FontAwesomeIcon icon={faPlayCircle} /> */}
                 </button>
-                {!stationByUser && !likedTrackStation && 
-                    <button className={`station-like-btn ${likedTrackStation} ${stationByUser} ${isLiked && 'green'}`} onClick={onToggleUserLiked}>
-                        <FontAwesomeIcon icon={isLiked ? heartSolid : heartLined} />
-                    </button>
-                }
+                <button className={`station-like-btn ${likedTrackStation} ${stationByUser} ${isLiked && 'green'}`} onClick={onToggleUserLiked}>
+                    <span className="action-button-wrapper">
+                        {isLiked ? <svgSvc.track.HeartFilled style={{"width": "24px", "height": "24px"}}/> : <svgSvc.track.HeartBlank style={{"width": "24px", "height": "24px"}}/>} 
+                    </span>
+                </button>
                 <div className={`station-more-btn ${likedTrackStation}`}>
                     <button className="btn-more" onClick={() => setMenu(2)}>
                         <p>...</p>

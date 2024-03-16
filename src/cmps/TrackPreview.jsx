@@ -7,6 +7,7 @@ import { toggleLikedTrack } from '../store/actions/user.actions'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 import { miniMenuOptions } from './MiniMenuOptions'
 import { addTrackToQueue } from '../store/actions/queue.actions'
+import { svgSvc } from "../services/svg.service"
 
 
 export function TrackPreview({ layout = '', track = null, trackNum = null, isLiked, deleteTrack = null, duration, handleTrackClick, addToThisStation = null}) {
@@ -71,9 +72,9 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
     return (
         <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
             <div className='track-numder'>
-                <p className='track-num'>{trackNum || ''}</p>
-                <button className="btn-track-play" onClick={onPlayClicked}>
-                    <FontAwesomeIcon icon={faPlay} />
+                <p className='track-num'>{trackNum}</p>
+                <button className="btn-track-play" onClick={() => handleTrackClick(track)}>
+                    <span className="action-button-wrapper"> <svgSvc.player.PlayBtn color={"white"} /> </span>
                 </button>
             </div>
             <div className="track-preview-title">
@@ -91,27 +92,38 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
                     <button className={`btn-like-track ${isLiked && 'green'}`} onClick={onToggleLiked}>
                         {isLiked 
                         ? 
-                        <FontAwesomeIcon icon={heartSolid} /> 
+                        <span className="action-button-wrapper"> <svgSvc.track.HeartFilled/> </span>
                         :
-                        <FontAwesomeIcon icon={heartLined} />}
+                        <span className="action-button-wrapper"> <svgSvc.track.HeartBlank/> </span>}
                     </button>
                     <p>{duration}</p>
                     <button className="btn-more" onClick={toggleMenu}>
                         <p>...</p>
                     </button>
                     {isMenu && 
-                            <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
-                                {miniMenuOptions.addToPlaylist(onCloseMiniMenu)}
-                                { deleteTrack &&  miniMenuOptions.removeFromPlaylist(onDeleteTrack) }
-                                {isLiked ? 
-                                    miniMenuOptions.removeFromLikedSongs(onToggleLiked) :
-                                    miniMenuOptions.addToLikedSongs(onToggleLiked)
-                                }
-                                {miniMenuOptions.addToQueue(onAddToQueue)}
-                                {miniMenuOptions.hr()}
-                                {miniMenuOptions.share(onCloseMiniMenu)}
-                            </MiniMenu> 
-                        }
+//                             <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
+//                                 {miniMenuOptions.addToPlaylist(onCloseMiniMenu)}
+//                                 { deleteTrack &&  miniMenuOptions.removeFromPlaylist(onDeleteTrack) }
+//                                 {isLiked ? 
+//                                     miniMenuOptions.removeFromLikedSongs(onToggleLiked) :
+//                                     miniMenuOptions.addToLikedSongs(onToggleLiked)
+//                                 }
+//                                 {miniMenuOptions.addToQueue(onAddToQueue)}
+//                                 {miniMenuOptions.hr()}
+//                                 {miniMenuOptions.share(onCloseMiniMenu)}
+//                             </MiniMenu> 
+                        <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
+                            {miniMenuOptions.addToPlaylist(onCloseMiniMenu)}
+                            { deleteTrack &&  miniMenuOptions.removeFromPlaylist(onDeleteTrack) }
+                            {isLiked ? 
+                                miniMenuOptions.removeFromLikedSongs(onToggleLiked) :
+                                miniMenuOptions.addToLikedSongs(onToggleLiked)
+                            }
+                            {miniMenuOptions.addToQueue(onCloseMiniMenu)}
+                            {miniMenuOptions.hr()}
+                            {miniMenuOptions.share(onCloseMiniMenu)}
+                        </MiniMenu> 
+                    }
                 </div>
             }
         </section>
