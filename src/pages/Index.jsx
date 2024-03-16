@@ -29,13 +29,12 @@ export const Index = () => {
     const params = useParams();
     const [filterBy, setFilterBy] = useState(stationService.getDefaultFilter(params));
     const [currentCategory, setCurrentCategory] = useState(null);
-    const selectedTrack = useSelector(storeState => storeState.queueModule.playedTracks)
+    const TracksSelected = useSelector(storeState => storeState.queueModule)
     
     const [isResizing, setIsResizing] = useState(false);
     const [sideNavWidth, setSideNavWidth] = useState(MIN_NAV_WIDTH)
 
     const navigate = useNavigate();
-
 
     useEffect(() => {
         loadStationsLocal();
@@ -64,7 +63,6 @@ export const Index = () => {
     }, [isResizing])
 
     function startResize(ev) {
-        console.log('startResize')
         ev.preventDefault()
         setIsResizing(true)
     }
@@ -135,8 +133,8 @@ export const Index = () => {
                     <AppHeader setFilterBy={setFilterBy}/>
                     <MainViewComponent {...mainViewComponentProps} />
                 </div>
-                {selectedTrack && <div className="index-footer-player">
-                    <FooterPlayer video={trackService.trackToVideo(selectedTrack)} />
+                {getCurrentTrackInQueue() && <div className="index-footer-player">
+                    <FooterPlayer video={trackService.trackToVideo(getCurrentTrackInQueue())}/>
                 </div>}
             </div>
         </IndexContext.Provider>

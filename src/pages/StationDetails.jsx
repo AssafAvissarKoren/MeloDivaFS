@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { useParams } from "react-router"
 import { useSelector } from "react-redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -15,12 +15,13 @@ import { imageService } from '../services/image.service.js'
 import { TrackPreview } from "../cmps/TrackPreview"
 
 import { getStationById, removeStation, saveStation } from "../store/actions/station.actions"
-import { setQueueToTrack, getCurrentTrackInQueue } from '../store/actions/queue.actions.js'
+import { setQueueToTrack, getCurrentTrackInQueue, setQueueToStation } from '../store/actions/queue.actions.js'
 import { LIKED_TRACK_AS_STATION_ID, getBasicUser, getLikedTracksAsStation } from "../store/actions/user.actions.js"
 import { IndexContext } from '../cmps/IndexContext.jsx'
 import { MiniMenu } from "../cmps/MiniMenu.jsx"
 import { miniMenuOptions } from "../cmps/MiniMenuOptions.jsx"
 import { svgSvc } from "../services/svg.service"
+import { StationSearch } from "../cmps/StationSearch.jsx"
 
 export function StationDetails() {
     const { stationId } =  useParams()
@@ -29,25 +30,11 @@ export function StationDetails() {
     const [station, setStation] = useState()
     const [menu, setMenu] = useState(0)
     const [tracksWithDurations, setTracksWithDurations] = useState([])
-    const [gradientColor, setGradientColor] = useState(null);
+    const [gradientColor, setGradientColor] = useState(null)
 
     useEffect(() => {
         loadStation()
     },[stationId])
-
-    async function analyzeImage(imageURL) {
-        try {
-            const mostCommonColor = "red" // imageService.analyzeImage(imageURL)
-            setGradientColor(mostCommonColor);
-        } catch (error) {
-            console.error('Error analyzing image:', error);
-        }
-    }
-
-    useEffect(() => {
-        analyzeImage(getImage());
-    },[station])
-
 
     useEffect(() => {
         if(stationId === LIKED_TRACK_AS_STATION_ID) {
@@ -57,34 +44,45 @@ export function StationDetails() {
     },[likedTracks])
 
     useEffect(() => {
+        analyzeImage(getImage())
+
+        // add durations of tracks
         if (station && station.tracks) {
             const fetchAndSetDurations = async () => {
                 const durations = await fetchVideoDurations(station);
                 const updatedTracks = station.tracks.map((track, index) => ({
                     ...track,
                     duration: durations[index] || 'N/A'
-                }));
-                setTracksWithDurations(updatedTracks);
-            };
-    
-            fetchAndSetDurations();
+                }))
+                console.log(updatedTracks)
+                setTracksWithDurations(updatedTracks)
+            }
+            fetchAndSetDurations()
         }
-    }, [station]);
+    }, [station])
 
     async function loadStation() {
         if (stationId === LIKED_TRACK_AS_STATION_ID) {
-          const station = getLikedTracksAsStation();
-          setStation(station);
-        } else {
-          try {
-            const station = await getStationById(stationId);
+            const station = getLikedTracksAsStation();
             setStation(station);
-          } catch (err) {
-            eventBusService.showErrorMsg('failed to load station');
-          }
+        } else {
+            try {
+                const station = await getStationById(stationId);
+                setStation(station);
+            } catch (err) {
+                eventBusService.showErrorMsg('failed to load station');
+            }
         }
-      }
-      
+    }
+    
+    async function analyzeImage(imageURL) {
+        try {
+            const mostCommonColor = "red" // imageService.analyzeImage(imageURL)
+            setGradientColor(mostCommonColor)
+        } catch (error) {
+            console.error('Error analyzing image:', error)
+        }
+    }
 
     function onToggleUserLiked() {
         const user = getBasicUser()
@@ -141,8 +139,8 @@ export function StationDetails() {
         }
     };
     
-    const handleTrackClick = (track) => {
-        setQueueToTrack(track);
+    const handleTrackClick = (trackNum) => {
+        setQueueToStation(station, trackNum-1);
     };
 
     function getImage() {
@@ -151,6 +149,17 @@ export function StationDetails() {
         }
     }
 
+    async function addTrackToStation(track) {
+        try {
+            const tracks = station.tracks
+            tracks.push(track)
+            await saveStation({...station, tracks: tracks})
+            setStation({...station, tracks: tracks})
+        } catch (err) {
+            eventBusService.showErrorMsg('faild to add track')
+            console.log(err)
+        }
+    }
 
     if(!station) return <div>loading...</div>
 
@@ -160,7 +169,7 @@ export function StationDetails() {
 
     return (
     <section className="station-container">
-        <div className="station-head" style={gradientColor ? { background: gradientColor } : {}}>
+        <div className="station-head" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 175%)` } : {}}>
             {stationByUser && !likedTrackStation ?
                 <button className="station-head-img-container" onClick={() => setMenu(1)}>
                     <img className="station-head-img" src={getImage()}/>
@@ -173,10 +182,6 @@ export function StationDetails() {
             {menu === 1 && 
                 <MiniMenu location={'center'} onCloseMiniMenu={onCloseMiniMenu}>
                     {miniMenuOptions.editStation(getImage(), station.name, '', onCloseMiniMenu, onCloseMiniMenu)}
-                    {/* <h1>Edit details</h1>
-                    <img src={getImage()}/>
-                    <p>name</p>
-                    <p>description</p> */}
                 </MiniMenu>
             }
             <div className="station-head-info">
@@ -190,7 +195,8 @@ export function StationDetails() {
                 <p>{station.createdBy.fullname} - {station.tracks.length}</p>
             </div>
         </div>
-        <div className="station-content" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}>
+        <div className="station-content-gradient" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}/>
+        <div className="station-content">
             <div className="station-options">
                 <button className="station-play-btn" onClick={() => {}}>
                     <svgSvc.general.PlaylistPlayBtn color={"black"}/>
@@ -242,14 +248,18 @@ export function StationDetails() {
                                 track={track} 
                                 trackNum={++trackNum}
                                 isLiked={likedTracks[track.url] ? true : false}
-                                deleteTrack={deleteTrack}
+                                deleteTrack={(!stationByUser || likedTrackStation) ? null : deleteTrack}
                                 duration={utilService.formatDuration(track.duration)}
-                                handleTrackClick={handleTrackClick}
+                                handleTrackClick={() => handleTrackClick(trackNum)}
                             />
                         </li> 
                     ))}
                 </ul>
             </div>
+            {stationByUser && !likedTrackStation && <div className="station-foot">
+                {tracksWithDurations?.length !== 0 && <div className="br"/>}
+                <StationSearch addTrackToStation={addTrackToStation}/>
+            </div>}
         </div>
     </section>
     )

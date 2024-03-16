@@ -54,6 +54,11 @@ export const AppHeader = ({ setFilterBy }) => {
                         onChange={handleTextChange}
                         onKeyDown={handleKeyDown}
                     />
+                    {text &&
+                        <div className="img-contaner" onClick={() => setText('')}>
+                            <img className="ex-img" src={utilService.getImgUrl("../assets/imgs/ex.svg")} />
+                        </div>
+                    }
                 </label>
             }
         </header>
