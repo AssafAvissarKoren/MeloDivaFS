@@ -8,38 +8,7 @@
         font-weight: 16px;
         color: #b3b3b3;
     }
-
-    & .svg {
-        justify-self: center;
-        width: 16px;
-        height: 16px;
-        // filter svg to #b3b3b3
-        filter: invert(84%) sepia(0%) saturate(15%) hue-rotate(205deg) brightness(84%) contrast(95%);
-    }
-
-    & .circle {
-        justify-self: center;
-        display: grid;
-        height: 16px;
-        aspect-ratio: 1/1;
-        border: solid #b3b3b3;
-        border-radius: 50%;
-        align-content: center;
     
-        & .svg {
-            width: 10px;
-            height: 10px;
-        }
-        & .icon {
-            font-weight: 10px;
-        }
-    
-    }
-
-    & .green {
-        color: #1db954;
-    }
-
     & .txt {
         width: 100%;
     }
@@ -70,8 +39,6 @@
                 margin-right: -3px;
                 width: 16px;
                 height: 16px;
-                // filter svg to white
-                filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
             }
 
             &:hover {

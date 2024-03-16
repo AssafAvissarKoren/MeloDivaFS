@@ -475,7 +475,7 @@ const AddToPlaylist = ({ color = "white", ...props }) => (
   </svg>
 )
 
-const RemoveFromYourLikedSongs = ({ color = "#1ed760", ...props }) => (
+const RemoveFromLiked = ({ color = "#1ed760", ...props }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
@@ -529,7 +529,7 @@ const Share = ({ color = "white", ...props }) => (
 )
 
 
-const AddToYourLibrary = ({ color = "white", ...props }) => (
+const AddToLiked = ({ color = "white", ...props }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
@@ -628,11 +628,11 @@ export const svgSvc = {
   },
   miniMenu: {
     AddToPlaylist,
-    RemoveFromYourLikedSongs,
     RemoveFromPlaylist,
+    AddToLiked,
+    RemoveFromLiked,
     AddToQueue,
     Share,
-    AddToYourLibrary,
     Ex,
   },
   track: {

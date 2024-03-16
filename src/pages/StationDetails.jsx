@@ -201,11 +201,11 @@ export function StationDetails() {
                     <svgSvc.general.PlaylistPlayBtn color={"black"}/>
                     {/* <FontAwesomeIcon icon={faPlayCircle} /> */}
                 </button>
-                <button className={`station-like-btn ${likedTrackStation} ${stationByUser} ${isLiked && 'green'}`} onClick={onToggleUserLiked}>
-                    <span className="action-button-wrapper">
-                        {isLiked ? <svgSvc.track.HeartFilled style={{"width": "24px", "height": "24px"}}/> : <svgSvc.track.HeartBlank style={{"width": "24px", "height": "24px"}}/>} 
-                    </span>
-                </button>
+                { !likedTrackStation && !stationByUser && 
+                    <button className="station-like-btn" onClick={onToggleUserLiked}>
+                        {isLiked ? <svgSvc.track.HeartFilled/> : <svgSvc.track.HeartBlank/>} 
+                    </button>
+                }
                 <div className={`station-more-btn ${likedTrackStation}`}>
                     <button className="btn-more" onClick={() => setMenu(2)}>
                         <p>...</p>

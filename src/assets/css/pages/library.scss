@@ -19,7 +19,7 @@
         z-index: 999;
         padding: 12px 12px 8px 22px;
         cursor: pointer;
-        color: grey;
+        color: white;
         transition: background-color 0.3s, color 0.3s;
         align-items: center;
 
@@ -41,6 +41,13 @@
         & .add-station-btn {
             grid-column: -1;
             
+            display: grid;
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            align-content: center;
+            justify-content: center;
+
             &:hover {
                 color: white;
                 background-color: #1a1a1a;

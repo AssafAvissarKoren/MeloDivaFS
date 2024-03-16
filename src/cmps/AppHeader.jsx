@@ -21,7 +21,7 @@ export const AppHeader = ({ setFilterBy }) => {
         clearTimeout(typingTimeoutRef.current); // Clear the previous typing timeout
         typingTimeoutRef.current = setTimeout(() => {
             setFilterBy(prev => ({ ...prev, text: newText }));
-        }, 3000); // Set a new typing timeout
+        }, 1000); // Set a new typing timeout
     };
 
     const handleKeyDown = (e) => {

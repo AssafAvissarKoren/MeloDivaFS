@@ -33,12 +33,12 @@ function hr() {
     return (
         <hr className="hr"/>
     )
-}
+}   
 
 function addToLibrary(func) {
     return (
         <button className="btn" onClick={func}>
-            <svgSvc.miniMenu.AddToYourLibrary/>
+            <svgSvc.miniMenu.AddToLiked/>
             <p>Add to your library</p>
         </button> 
     )
@@ -47,8 +47,7 @@ function addToLibrary(func) {
 function removeFromLibrary(func) {
     return (
         <button className="btn" onClick={func}>
-            {/* <svgSvc.miniMenu.removeFromLibrary/> */}
-            <FontAwesomeIcon icon={faCircleCheck} className="icon green"/>
+            <svgSvc.miniMenu.RemoveFromLiked/>
             <p>Remove from your library</p>
         </button>
     )
@@ -93,13 +92,7 @@ function removeFromPlaylist(func) {
 function addToLikedSongs(func) {
     return (
         <button className="btn" onClick={func}>
-            <div className="circle">
-                {/* < svgSvc.miniMenu.AddToPlaylist /> */}
-                <img
-                    className="svg"
-                    src={utilService.getImgUrl("../assets/imgs/plus.svg")}
-                />
-            </div>
+                < svgSvc.miniMenu.AddToLiked />
             <p>Save to your Liked Songs</p>
         </button> 
     )
@@ -108,7 +101,7 @@ function addToLikedSongs(func) {
 function removeFromLikedSongs(func) {
     return (
         <button className="btn" onClick={func}>
-            < svgSvc.miniMenu.RemoveFromYourLikedSongs />
+            < svgSvc.miniMenu.RemoveFromLiked />
             <p>Remove from your Liked Songs</p>
         </button>
     )
@@ -142,11 +135,7 @@ function editStation(imgUrl, name, description, onSubmit, onClose ) {
             <div className="head">
                 <h2>Edit details</h2>
                 <button onClick={onClose}>
-                    {/* <svgSvc.miniMenu.Ex/> */}
-                    <img
-                        className="svg"
-                        src={utilService.getImgUrl("../assets/imgs/ex.svg")}
-                    />
+                    <svgSvc.miniMenu.Ex/>
                 </button>
             </div>
             <div className="body">
