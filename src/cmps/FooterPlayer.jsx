@@ -111,7 +111,7 @@ export function FooterPlayer({ video, setTrackToPlay }) {
     const shuffleQueue = () => { /* ... */ };
 
     const playNext = () => { 
-        console.log("nextVideo")//, nextVideo)
+        console.log("nextVideo")
         if (video) {
             const nextVideo = trackService.trackToVideo(nextTrackInQueue())
             setTrackToPlay(nextVideo)
@@ -119,17 +119,14 @@ export function FooterPlayer({ video, setTrackToPlay }) {
     };
     
      const playPrev = () => { 
-        console.log("prevVideo")//, prevVideo)
+        console.log("prevVideo")
         if (video) {
             const prevVideo = trackService.trackToVideo(prevTrackInQueue())
             setTrackToPlay(nextVideo)
         }
     };
     
-    // nextVideo={trackService.trackToVideo(nextTrackInQueue())}
-    // prevVideo={trackService.trackToVideo(prevTrackInQueue())}
-
-     const toggleRepeat = () => { /* ... */ };
+    const toggleRepeat = () => { /* ... */ };
     const jump15Forward = () => { /* ... */ };
     
     console.log('isPlaying', isPlaying)

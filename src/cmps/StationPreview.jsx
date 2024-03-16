@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import defaultImgUrl from '../assets/imgs/MeloDiva.png';
 import { IndexContext } from '../cmps/IndexContext.jsx';
 import { svgSvc } from '../services/svg.service.jsx';
+import { setQueueToStation } from '../store/actions/queue.actions.js';
 
 export const StationPreview = ({ station }) => {
   const { setFilterBy } = useContext(IndexContext);
@@ -14,6 +15,11 @@ export const StationPreview = ({ station }) => {
     };
 
     setFilterBy(newFilterBy);
+  }
+
+  function onPlayClicked(ev) {
+    ev.stopPropagation()
+    setQueueToStation(station)
   }
 
   const shortenText = (text, maxLength) => {
@@ -40,10 +46,10 @@ export const StationPreview = ({ station }) => {
   }
 
   return (
-    <div className="station-preview">
+    <div className="station-preview" onClick={() => handleOnClick(station._id)}>
       <div className="image-container">
         <img className="img" src={stationImgURL} alt={station?.artist} />
-        <button className="play-btn" onClick={() => handleOnClick(station._id)}>
+        <button className="play-btn" onClick={onPlayClicked}>
           <svgSvc.general.PlaylistPlayBtn/>
         </button>
       </div>

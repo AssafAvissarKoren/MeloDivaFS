@@ -31,7 +31,6 @@ export function Search({ searchText, setCurrentCategory }) {
     }, [searchText]);
 
     const searchVideos = async (query) => {
-        console.log("check the calls")
         try {
             const items = await dataService.searchYoutube(query);
             const videos = items.map(video => ({...trackService.videoToTrack(video)}))

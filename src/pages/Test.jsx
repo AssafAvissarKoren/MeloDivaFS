@@ -21,9 +21,7 @@ export const Test = ({ setCurrentCategory }) => {
     // const BASE_URL = '//localhost:3001'
 
     // async function colorMeCommon() {
-    //     console.log("flag1")
     //     const response = await axios.post(BASE_URL + '/api/getImageColors', { imagePaths: allCat[0].stationIds });
-    //     console.log("flag2")
     //     console.log(defaultStations[0])
     //     // Update stations with most common colors
     //     const updatedStations = testCategory.stationIds.map((stationId, index) => {
@@ -35,7 +33,6 @@ export const Test = ({ setCurrentCategory }) => {
     //     });
     //     console.log(updatedStations[0])
     //     await axios.post(BASE_URL + '/api/updateStations', { updatedStations });
-    //     console.log("flag4")
     // }        
 
     async function showAllStations() {

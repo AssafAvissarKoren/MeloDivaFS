@@ -110,10 +110,11 @@ async function fetchChannelData(videoOwnerChannelId) {
 
 
 async function searchYoutube(query) {
-    console.log("flag1", query)
     const foundQuery = await queryService.findQuery(query);
-    console.log("flag1.5", foundQuery)
-    if (foundQuery) return foundQuery;
+    if (foundQuery) {
+      console.log("Query found in DB!")
+      return foundQuery;
+    }
     const response = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
         params: {
             part: 'snippet',
@@ -122,9 +123,7 @@ async function searchYoutube(query) {
             key: API_KEY
         }
     });
-    console.log("flag2", response.data.items)
     await queryService.saveQuery(query, response.data.items);
-    console.log("flag3")
     return response.data.items;
 }
 

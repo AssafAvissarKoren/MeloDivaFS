@@ -118,8 +118,6 @@ export const Index = () => {
             break;
     }
 
-    console.log("filterBy", filterBy)
-
     return (
         <IndexContext.Provider value={{ setFilterBy }}>
             <div className="index-container">
