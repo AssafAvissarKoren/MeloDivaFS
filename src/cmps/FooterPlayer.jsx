@@ -4,9 +4,11 @@ import { utilService } from '../services/util.service.js'
 import { dataService } from '../services/data.service.js'
 import { svgSvc } from '../services/svg.service.jsx';
 import { Slider } from '@mui/material';
+import { prevTrackInQueue, nextTrackInQueue } from '../store/actions/queue.actions.js'
+import { trackService } from '../services/track.service.js'
 
 
-export function FooterPlayer({ video }) {
+export function FooterPlayer({ video, setTrackToPlay }) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [videoDuration, setVideoDuration] = useState("PT0M0S");
     const [currentTime, setCurrentTime] = useState(0);
@@ -107,9 +109,27 @@ export function FooterPlayer({ video }) {
     // Event handlers for player actions (not implemented in this example)
     const jump15Back = () => { /* ... */ };
     const shuffleQueue = () => { /* ... */ };
-    const playNext = () => { /* ... */ };
-    const playPrev = () => { /* ... */ };
-    const toggleRepeat = () => { /* ... */ };
+
+    const playNext = () => { 
+        console.log("nextVideo")//, nextVideo)
+        if (video) {
+            const nextVideo = trackService.trackToVideo(nextTrackInQueue())
+            setTrackToPlay(nextVideo)
+        }
+    };
+    
+     const playPrev = () => { 
+        console.log("prevVideo")//, prevVideo)
+        if (video) {
+            const prevVideo = trackService.trackToVideo(prevTrackInQueue())
+            setTrackToPlay(nextVideo)
+        }
+    };
+    
+    // nextVideo={trackService.trackToVideo(nextTrackInQueue())}
+    // prevVideo={trackService.trackToVideo(prevTrackInQueue())}
+
+     const toggleRepeat = () => { /* ... */ };
     const jump15Forward = () => { /* ... */ };
     
     console.log('isPlaying', isPlaying)

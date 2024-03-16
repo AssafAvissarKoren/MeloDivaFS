@@ -20,7 +20,7 @@ export const categoryService = {
     saveCategory,
 }
 
-const CATEGORIES_STORAGE_KEY = 'categoryDB'
+const CATEGORY_STORAGE_KEY = 'categoryDB'
 
 const defaultCategories = [
     { _id: "c101", name: "Soundtrack", stationTags: ["Soundtrack"], color: "#FF00FF", startingPosition: 8 },
@@ -47,7 +47,7 @@ const defaultCategories = [
 
 async function createCategories(categories = defaultCategories) {
     const categoriesArray = await processCategoryData(categories);
-    utilService.saveToStorage(CATEGORIES_STORAGE_KEY, categoriesArray);
+    utilService.saveToStorage(CATEGORY_STORAGE_KEY, categoriesArray);
 }
 
 async function processCategoryData(categories) {
@@ -92,7 +92,7 @@ async function processCategoryData(categories) {
 }
 
 async function getCategories(filterBy = null) {
-    let categories = await storageService.query(CATEGORIES_STORAGE_KEY) // add filter later
+    let categories = await storageService.query(CATEGORY_STORAGE_KEY) // add filter later
     if (!filterBy) return categories
 
     // apply filtering 

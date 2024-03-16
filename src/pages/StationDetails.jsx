@@ -54,7 +54,6 @@ export function StationDetails() {
                     ...track,
                     duration: durations[index] || 'N/A'
                 }))
-                console.log(updatedTracks)
                 setTracksWithDurations(updatedTracks)
             }
             fetchAndSetDurations()
@@ -140,6 +139,7 @@ export function StationDetails() {
     };
     
     const handleTrackClick = (trackNum) => {
+        console.log('handleTrackClick', trackNum)
         setQueueToStation(station, trackNum-1);
     };
 

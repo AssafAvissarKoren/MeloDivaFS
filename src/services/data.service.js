@@ -1,5 +1,6 @@
 import axios from "axios"
 import { utilService } from "./util.service"
+import { queryService } from "./query.service"
 
 export const dataService = {
     createStationData,
@@ -109,7 +110,11 @@ async function fetchChannelData(videoOwnerChannelId) {
 
 
 async function searchYoutube(query) {
-    return await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
+    console.log("flag1", query)
+    const foundQuery = await queryService.findQuery(query);
+    console.log("flag1.5", foundQuery)
+    if (foundQuery) return foundQuery;
+    const response = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
         params: {
             part: 'snippet',
             maxResults: 5,
@@ -117,6 +122,10 @@ async function searchYoutube(query) {
             key: API_KEY
         }
     });
+    console.log("flag2", response.data.items)
+    await queryService.saveQuery(query, response.data.items);
+    console.log("flag3")
+    return response.data.items;
 }
 
 async function getDurations(tracksIds) {

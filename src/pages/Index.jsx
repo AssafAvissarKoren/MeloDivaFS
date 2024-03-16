@@ -15,7 +15,7 @@ import { CategoryDisplay } from '../cmps/CategoryDisplay.jsx'
 import { FooterPlayer } from  '../cmps/FooterPlayer.jsx'
 
 import { loadStations } from '../store/actions/station.actions.js';
-import { getCurrentTrackInQueue } from '../store/actions/queue.actions.js';
+import { getCurrentTrackInQueue, nextTrackInQueue, prevTrackInQueue } from '../store/actions/queue.actions.js';
 
 import { stationService } from '../services/station.service.js';
 import { categoryService } from '../services/category.service.js';
@@ -33,6 +33,7 @@ export const Index = () => {
     
     const [isResizing, setIsResizing] = useState(false);
     const [sideNavWidth, setSideNavWidth] = useState(MIN_NAV_WIDTH)
+    const [trackToPlay, setTrackToPlay] = useState(null)
 
     const navigate = useNavigate();
 
@@ -41,6 +42,10 @@ export const Index = () => {
         initUser()
         categoryService.createCategories();
     }, []);
+
+    useEffect(() => {
+        setTrackToPlay(getCurrentTrackInQueue())
+    }, [getCurrentTrackInQueue()]);
 
     useEffect(() => {
         const filterURL = stationService.filterURL(filterBy);
@@ -133,8 +138,11 @@ export const Index = () => {
                     <AppHeader setFilterBy={setFilterBy}/>
                     <MainViewComponent {...mainViewComponentProps} />
                 </div>
-                {getCurrentTrackInQueue() && <div className="index-footer-player">
-                    <FooterPlayer video={trackService.trackToVideo(getCurrentTrackInQueue())}/>
+                {trackToPlay && <div className="index-footer-player">
+                    <FooterPlayer 
+                        video={trackService.trackToVideo(trackToPlay)}
+                        setTrackToPlay={setTrackToPlay}
+                    />
                 </div>}
             </div>
         </IndexContext.Provider>

@@ -33,8 +33,8 @@ export function Search({ searchText, setCurrentCategory }) {
     const searchVideos = async (query) => {
         console.log("check the calls")
         try {
-            const response = await dataService.searchYoutube(query);
-            const videos = response.data.items.map(video => ({...trackService.videoToTrack(video)}))
+            const items = await dataService.searchYoutube(query);
+            const videos = items.map(video => ({...trackService.videoToTrack(video)}))
             console.log('videos', videos)
             
             const videoIds = videos.map(video => {
@@ -47,7 +47,7 @@ export function Search({ searchText, setCurrentCategory }) {
             }).join(',');
             
             const trackDurations =  await dataService.getDurations(videoIds)
-            const tracks = response.data.items.map((video, index)=> {
+            const tracks = items.map((video, index)=> {
                 return {
                     ...trackService.videoToTrack(video), 
                     duration: trackDurations[index]
