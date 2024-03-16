@@ -54,7 +54,6 @@ export function StationDetails() {
                     ...track,
                     duration: durations[index] || 'N/A'
                 }))
-                console.log(updatedTracks)
                 setTracksWithDurations(updatedTracks)
             }
             fetchAndSetDurations()

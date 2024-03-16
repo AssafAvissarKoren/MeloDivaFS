@@ -11,14 +11,12 @@ export const SET_TRACKS_TO_PLAY = 'SET_TRACKS_TO_PLAY'
 export const ADD_TRACK_TO_PLAY = 'ADD_TRACK_TO_PLAY'
 export const REMOVE_TRACK_TO_PLAY = 'REMOVE_TRACK_TO_PLAY'
 
-export const SET_IS_LOADING = 'SET_IS_LOADING'
 
 const initialState = {
     station: null,
     playedTracks: [],
     stationTracksToPlay: [],
     tracksToPlay: [],
-    isLoading: false,
 }
 
 export function queueReducer(state = initialState, action = {}) {
@@ -69,12 +67,6 @@ export function queueReducer(state = initialState, action = {}) {
             return {
                 ...state,
                 tracksToPlay: state.tracksToPlay.filter(track => track.url !== action.track.url)
-            }
-
-        case SET_IS_LOADING:
-            return {
-                ...state,
-                isLoading: action.isLoading
             }
 
         default:

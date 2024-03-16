@@ -13,7 +13,7 @@ export const SideNav = ({ setFilterBy }) => {
     const tabData = {
         home: { name: "Home", iconActive: <svgSvc.icon.HomeActiveIcon />, icon: <svgSvc.icon.HomeIcon /> },
         search: { name: "Search", iconActive: <svgSvc.icon.SearchActiveIcon />, icon: <svgSvc.icon.SearchIcon /> },
-        test: { name: "Test", iconActive: <svgSvc.icon.CheckIcon />, icon: <svgSvc.icon.CheckIcon /> },
+        // test: { name: "Test", iconActive: <svgSvc.icon.CheckIcon />, icon: <svgSvc.icon.CheckIcon /> },
     };
 
     return (

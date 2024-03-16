@@ -6,6 +6,7 @@ import { MiniMenu } from './MiniMenu'
 import { toggleLikedTrack } from '../store/actions/user.actions'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 import { miniMenuOptions } from './MiniMenuOptions'
+import { addTrackToQueue } from '../store/actions/queue.actions'
 import { svgSvc } from "../services/svg.service"
 
 
@@ -40,6 +41,12 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
         ev.stopPropagation()
         setIsMenu(false)
         toggleLikedTrack(track)
+    }
+
+    function onAddToQueue(ev) {
+        ev.stopPropagation()
+        setIsMenu(false)
+        addTrackToQueue(track)
     }
 
     function toggleMenu() {
@@ -94,6 +101,17 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
                         <p>...</p>
                     </button>
                     {isMenu && 
+//                             <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
+//                                 {miniMenuOptions.addToPlaylist(onCloseMiniMenu)}
+//                                 { deleteTrack &&  miniMenuOptions.removeFromPlaylist(onDeleteTrack) }
+//                                 {isLiked ? 
+//                                     miniMenuOptions.removeFromLikedSongs(onToggleLiked) :
+//                                     miniMenuOptions.addToLikedSongs(onToggleLiked)
+//                                 }
+//                                 {miniMenuOptions.addToQueue(onAddToQueue)}
+//                                 {miniMenuOptions.hr()}
+//                                 {miniMenuOptions.share(onCloseMiniMenu)}
+//                             </MiniMenu> 
                         <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
                             {miniMenuOptions.addToPlaylist(onCloseMiniMenu)}
                             { deleteTrack &&  miniMenuOptions.removeFromPlaylist(onDeleteTrack) }
