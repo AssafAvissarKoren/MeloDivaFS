@@ -61,15 +61,20 @@
 
         display: grid;
         grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr auto;
+        grid-template-rows: auto 1fr;
         width: 100%;
         height: 100%;
         gap: 8px;
+        overflow-y: auto;
         overflow-y: hidden;
 
         & > * {
             background-color: #121212;
             border-radius: 8px;
+        }
+
+        & .index-side-bottom {
+            overflow: auto;
         }
     }
 
