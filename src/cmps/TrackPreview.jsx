@@ -101,17 +101,6 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
                         <p>...</p>
                     </button>
                     {isMenu && 
-//                             <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
-//                                 {miniMenuOptions.addToPlaylist(onCloseMiniMenu)}
-//                                 { deleteTrack &&  miniMenuOptions.removeFromPlaylist(onDeleteTrack) }
-//                                 {isLiked ? 
-//                                     miniMenuOptions.removeFromLikedSongs(onToggleLiked) :
-//                                     miniMenuOptions.addToLikedSongs(onToggleLiked)
-//                                 }
-//                                 {miniMenuOptions.addToQueue(onAddToQueue)}
-//                                 {miniMenuOptions.hr()}
-//                                 {miniMenuOptions.share(onCloseMiniMenu)}
-//                             </MiniMenu> 
                         <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
                             {miniMenuOptions.addToPlaylist(onCloseMiniMenu)}
                             { deleteTrack &&  miniMenuOptions.removeFromPlaylist(onDeleteTrack) }
@@ -119,7 +108,7 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
                                 miniMenuOptions.removeFromLikedSongs(onToggleLiked) :
                                 miniMenuOptions.addToLikedSongs(onToggleLiked)
                             }
-                            {miniMenuOptions.addToQueue(onCloseMiniMenu)}
+                            {miniMenuOptions.addToQueue(onAddToQueue)}
                             {miniMenuOptions.hr()}
                             {miniMenuOptions.share(onCloseMiniMenu)}
                         </MiniMenu> 

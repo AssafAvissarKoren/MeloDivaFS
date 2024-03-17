@@ -13,14 +13,19 @@ h2 {
     padding: 0 1.6vh;
     align-items: end;
 
+    & h2 {
+      cursor: pointer;
+    }
+    
     & p {
       grid-column: -1;
-
+      
       color: #a7a7a7;
       margin-bottom: 11px;
       text-align: right;
       font-weight: bold;
       font-size: small;
+      cursor: pointer;
     }
 
     & > *:hover {

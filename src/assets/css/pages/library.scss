@@ -3,7 +3,7 @@
     height: 100%;
     display: grid;
     grid-template-columns: 10px 1fr 10px;
-    grid-template-rows: auto auto 1fr auto;
+    grid-template-rows: auto 1fr auto;
     border-radius: 10px;
     overflow-y: auto;
     color: white;
@@ -19,28 +19,24 @@
         z-index: 999;
         padding: 12px 12px 8px 22px;
         cursor: pointer;
-        color: grey;
+        color: white;
         transition: background-color 0.3s, color 0.3s;
         align-items: center;
 
         & p {
             font-weight: bold;
         }
-
-        // & .symbol {
-        //     font-weight: bold;
-        //     width: 40px;
-            
-        //     &::after {
-        //         content: " "; /* Add a space as content */
-        //         width: 5px; /* Adjust the space width as needed */
-        //         display: inline-block;
-        //     }
-        // }
         
         & .add-station-btn {
             grid-column: -1;
             
+            display: grid;
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            align-content: center;
+            justify-content: center;
+
             &:hover {
                 color: white;
                 background-color: #1a1a1a;
@@ -72,7 +68,7 @@
 
     & .content {
         grid-column: 2;
-        grid-row: 3;
+        grid-row: -2;
 
         list-style: none;
         display: grid;
