@@ -15,7 +15,7 @@ export const StationPreview = ({ station }) => {
       text: '',
     };
 
-    setFilterBy(prevFilterBy => ({...stationService.updateHistoryList(prevFilterBy, newFilterBy)}))
+    setFilterBy(prevFilterBy => ({...stationService.filterByUpdateHistory(prevFilterBy, newFilterBy)}))
   }
 
   function onPlayClicked(ev) {

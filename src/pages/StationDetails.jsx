@@ -107,7 +107,7 @@ export function StationDetails() {
             text: '',
         };
     
-        setFilterBy(newFilterBy);
+        setFilterBy(prevFilterBy => ({...stationService.filterByUpdateHistory(prevFilterBy, newFilterBy)}))
     }
 
     const fetchVideoDurations = async (station) => {

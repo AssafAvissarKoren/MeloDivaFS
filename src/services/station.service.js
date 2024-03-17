@@ -10,7 +10,7 @@ export const stationService = {
     createStation,
     getDefaultFilter,
     filterURL,
-    updateHistoryList,
+    filterByUpdateHistory,
     removePreviousHistory,
     colorAnalysis,
 }
@@ -105,7 +105,7 @@ function filterURL(filterBy) {
     return url;
 }
 
-function updateHistoryList(prevFilterBy, newFilterBy) {
+function filterByUpdateHistory(prevFilterBy, newFilterBy) {
     const { tab, stationId } = newFilterBy
     var newTabHistoryItem
     if(tab.includes("station") || tab.includes("genre")) {

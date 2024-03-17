@@ -31,7 +31,7 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
       text: '',
     };
 
-    setFilterBy(prevFilterBy => ({...stationService.updateHistoryList(prevFilterBy, newFilterBy)}))
+    setFilterBy(prevFilterBy => ({...stationService.filterByUpdateHistory(prevFilterBy, newFilterBy)}))
     setCurrentCategory(category)
   }
 
