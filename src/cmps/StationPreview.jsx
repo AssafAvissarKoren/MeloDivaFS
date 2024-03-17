@@ -3,6 +3,7 @@ import defaultImgUrl from '../assets/imgs/MeloDiva.png';
 import { IndexContext } from '../cmps/IndexContext.jsx';
 import { svgSvc } from '../services/svg.service.jsx';
 import { setQueueToStation } from '../store/actions/queue.actions.js';
+import { stationService } from '../services/station.service.js';
 
 export const StationPreview = ({ station }) => {
   const { setFilterBy } = useContext(IndexContext);
@@ -14,7 +15,7 @@ export const StationPreview = ({ station }) => {
       text: '',
     };
 
-    setFilterBy(newFilterBy);
+    setFilterBy(prevFilterBy => ({...stationService.updateHistoryList(prevFilterBy, newFilterBy)}))
   }
 
   function onPlayClicked(ev) {

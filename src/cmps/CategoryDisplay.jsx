@@ -4,6 +4,7 @@ import { StationPreview } from './StationPreview';
 import { IndexContext } from './IndexContext.jsx';
 
 import { getStations } from '../store/actions/station.actions';
+import { stationService } from '../services/station.service.js';
 
 export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
   const { setFilterBy } = useContext(IndexContext);
@@ -29,7 +30,8 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
       stationId: category._id,
       text: '',
     };
-    setFilterBy(newFilterBy);
+
+    setFilterBy(prevFilterBy => ({...stationService.updateHistoryList(prevFilterBy, newFilterBy)}))
     setCurrentCategory(category)
   }
 

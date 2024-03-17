@@ -37,7 +37,7 @@ export function Library() {
             text: '',
         }
       
-        setFilterBy(newFilterBy)
+        setFilterBy(prevFilterBy => ({...stationService.updateHistoryList(prevFilterBy, newFilterBy)}))
     }
 
     if (!stations || !getBasicUser()._id) return <div>Loading...</div>
