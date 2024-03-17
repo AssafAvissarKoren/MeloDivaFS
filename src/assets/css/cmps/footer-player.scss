@@ -1,6 +1,6 @@
 .footer-player {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, minmax(200, 1fr));
     gap: 10px;
     padding: 10px;
     background-color: #181818;
@@ -8,23 +8,36 @@
     height: 100px;
 
     .video-info {
-        display: flex;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        grid-template-rows: auto;
         align-items: center;
         grid-column: 1;
         grid-row: 1;
         width: 100%;
         
         .thumbnail {
+            grid-area: 1 / 1 / -1 / 2;
             width: 80px;
             margin-right: 10px;
         }
 
         .title-and-channel {
+            grid-area: 1 / 2 / -1 / -1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             margin-right: 10px;
-
+            overflow: hidden;
+            > * {
+                overflow: hidden;
+                overflow-y: auto;
+                white-space: nowrap; /* Prevents wrapping */
+                display: -webkit-box;   
+                -webkit-line-clamp: 1; /* number of lines to show */
+                        line-clamp: 1; 
+                -webkit-box-orient: vertical;
+            }
             .video-name {
                 font-size: 16px;
                 margin-bottom: 5px;
@@ -33,6 +46,15 @@
             .channel-name {
                 font-size: 12px;
             }
+        }
+
+        .fade-out {
+            grid-area: 1 / 2 / -1 / -1;
+            justify-self: right;
+            z-index: 99;
+            width: 25px;
+            height: 100%;
+            background: linear-gradient(to right, rgba(24, 24, 24, 0), rgb(24, 24, 24) 100%);
         }
     }
 

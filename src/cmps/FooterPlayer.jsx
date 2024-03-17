@@ -140,6 +140,7 @@ export function FooterPlayer({ video, setTrackToPlay }) {
                     <div className="video-name">{video.snippet.title}</div>
                     <div className="channel-name">{video.snippet.channelTitle}</div>
                 </div>
+                <div className="fade-out"/>
             </div>
             <div className="player-controls">
                 <div className="player-action-buttons">
