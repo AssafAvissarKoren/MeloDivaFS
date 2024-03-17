@@ -197,7 +197,7 @@ export function StationDetails() {
         <div className="station-content-gradient" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}/>
         <div className="station-content">
             <div className="station-options">
-                <button className="station-play-btn" onClick={() => {}}>
+                <button className="station-play-btn" onClick={() => handleTrackClick(1)}>
                     <svgSvc.general.PlaylistPlayBtn color={"black"}/>
                     {/* <FontAwesomeIcon icon={faPlayCircle} /> */}
                 </button>
