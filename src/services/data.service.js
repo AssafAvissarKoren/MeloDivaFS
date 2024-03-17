@@ -26,9 +26,9 @@ async function createStationData(storageKey) {
     if (!stations || !stations.length) {
         stations = [];
         
-        for (const { id, name, artist, createdBy, tags, playlistId, mostCommonColor } of defaultStations) {
+        for (const { id, name, description, artist, createdBy, tags, playlistId, mostCommonColor } of defaultStations) {
             console.log(playlistId, playlistId)
-            const newStation = await createStation(id, name, artist, createdBy, tags, playlistId, mostCommonColor);
+            const newStation = await createStation(id, name, artist, description, createdBy, tags, playlistId, mostCommonColor);
             stations.push(newStation);
         }
 
@@ -41,7 +41,7 @@ async function createLikedTracksData(storageKey) {
     if (!stations || !stations.length) utilService.saveToStorage(storageKey, [{_id: 'l101'}]);
 }
 
-async function createStation(stationId, name, artist, createdBy, tags, playlistId, mostCommonColor) {
+async function createStation(stationId, name, description, artist, createdBy, tags, playlistId, mostCommonColor) {
     let tracks = await ajaxGetStationTracks(playlistId);
     tracks = tracks.map(track => createTrack(track, createdBy));
 
