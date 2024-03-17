@@ -25,6 +25,11 @@
         top: 53px;
     }
 
+    &:not(.center) {
+        max-width: 350px;
+        //min-width: 160px;
+        min-width: 220px;
+    }
     &:not(.center) > * {
         display: grid;
         grid-template-columns: 18px 1fr;
@@ -33,9 +38,10 @@
         background-color: unset;
         border: 0;
         border-radius: 2px;
+        width: 100%;
         color: white;
-        width: max-content;
-        cursor: pointer;
+        text-align: left;
+        cursor: default;
 
         &.hr {
             border-top: 1px solid #404040;
@@ -46,7 +52,7 @@
 
         &:hover {
             background-color: #404040;
-        }
+        }   
     }
 
     &.center {

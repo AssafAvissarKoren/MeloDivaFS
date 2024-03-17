@@ -15,7 +15,7 @@ export function Library() {
     const stations = useSelector(storeState => storeState.stationModule.stations)
     const userId = useSelector(storeState => storeState.userModule._id)
     // const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
-
+    
     function getStationsInLibrary() {
         return stations.filter(station => {
             return (
@@ -46,16 +46,16 @@ export function Library() {
             <div className="title">
                 <span className="button-wrapper"> <svgSvc.icon.YourLibrary /> </span>
                 <p>Your Library</p>
-                <span className="button-wrapper add-station-btn" onClick={createNewStation}> <svgSvc.general.ArrowRight /> </span>
+                <span className="action-button-wrapper add-station-btn" onClick={createNewStation}> <svgSvc.miniMenu.AddToPlaylist /> </span>
             </div>
-            <div className="library-search">
+            {/* <div className="library-search">
                 <span className="button-wrapper"> <svgSvc.general.LibrarySearch style = {{ width: '16px', height: '16px' }} /> </span>
                 <p>Recents</p>
                 <span className="button-wrapper"> <svgSvc.sortBy.List style = {{ width: '16px', height: '16px' }} /> </span>
-            </div>
+            </div> */}
             <ul className="content">
                 <li>
-                <StationPreview station={getLikedTracksAsStation()} />
+                    <StationPreview station={getLikedTracksAsStation()} />
                 </li>
                 {getStationsInLibrary().map(station => {
                     return <li key={`library${station._id}`}>

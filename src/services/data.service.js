@@ -26,9 +26,9 @@ async function createStationData(storageKey) {
     if (!stations || !stations.length) {
         stations = [];
         
-        for (const { id, name, artist, createdBy, tags, playlistId } of defaultStations) {
+        for (const { id, name, description, artist, createdBy, tags, playlistId } of defaultStations) {
             console.log(playlistId, playlistId)
-            const newStation = await createStation(id, name, artist, createdBy, tags, playlistId);
+            const newStation = await createStation(id, name, description, artist, createdBy, tags, playlistId);
             stations.push(newStation);
         }
 
@@ -41,7 +41,7 @@ async function createLikedTracksData(storageKey) {
     if (!stations || !stations.length) utilService.saveToStorage(storageKey, [{_id: 'l101'}]);
 }
 
-async function createStation(stationId, name, artist, createdBy, tags, playlistId) {
+async function createStation(stationId, name, description, artist, createdBy, tags, playlistId) {
     let tracks = await ajaxGetStationTracks(playlistId);
     tracks = tracks.map(track => createTrack(track, createdBy));
 
@@ -57,6 +57,7 @@ async function createStation(stationId, name, artist, createdBy, tags, playlistI
     return {
         _id: stationId,
         name,
+        description,
         artist,
         imgUrl,
         tags,
@@ -198,6 +199,7 @@ export const defaultStations = [
     {
       id: "s165",
       name: "The Matrix Soundtrack",
+      description: '',
       artist: "The Matrix",
       createdBy: Users.u15,
       tags: [
@@ -212,6 +214,7 @@ export const defaultStations = [
     {
       id: "s166",
       name: "Fight Club - Original Soundtrack by The Dust Brothers OST",
+      description: '',
       artist: "The Dust Brothers",
       createdBy: Users.u16,
       tags: [
@@ -228,6 +231,7 @@ export const defaultStations = [
     {
       id: "s167",
       name: "Pulp Fiction - Soundtrack (Collectors Edition)",
+      description: '',
       artist: "Pulp Fiction",
       createdBy: Users.u17,
       tags: [
@@ -244,6 +248,7 @@ export const defaultStations = [
     {
       id: "s168",
       name: "Guardians of the Galaxy - Awesome Mix Vol. 1",
+      description: '',
       artist: "Guardians of the Galaxy",
       createdBy: Users.u18,
       tags: [
@@ -260,6 +265,7 @@ export const defaultStations = [
     {
       id: "s169",
       name: "Various – Trainspotting (Music From The Motion Picture)",
+      description: '',
       artist: "Trainspotting",
       createdBy: Users.u19,
       tags: [
@@ -277,6 +283,7 @@ export const defaultStations = [
     {
       id: "s170",
       name: "The Complete Moulin Rouge Soundtrack",
+      description: '',
       artist: "Moulin Rouge",
       createdBy: Users.u20,
       tags: [
@@ -292,6 +299,7 @@ export const defaultStations = [
     {
       id: "s173",
       name: "Eminem - 8 Mile Soundtrack",
+      description: '',
       artist: "Eminem",
       createdBy: Users.u23,
       tags: [
@@ -306,6 +314,7 @@ export const defaultStations = [
     {
       id: "s175",
       name: "O Brother, Where Art Thou (2000) Soundtrack",
+      description: '',
       artist: "O Brother, Where Art Thou",
       createdBy: Users.u25,
       tags: [
@@ -320,6 +329,7 @@ export const defaultStations = [
     {
       id: "s176",
       name: "Titanic: Music from the Motion Picture",
+      description: '',
       artist: "Titanic",
       createdBy: Users.u26,
       tags: [
@@ -333,6 +343,7 @@ export const defaultStations = [
     {
       id: "s189",
       name: "Method Man & Redman - How High - The Soundtrack - So High",
+      description: '',
       artist: "Method Man & Redman",
       createdBy: Users.u39,
       tags: [
@@ -347,6 +358,7 @@ export const defaultStations = [
     {
       id: "s101",
       name: "DURAN DURAN - \"Rio\" Album",
+      description: '',
       artist: "Duran Duran",
       createdBy: Users.u01,
       tags: [
@@ -361,6 +373,7 @@ export const defaultStations = [
     {
       id: "s102",
       name: "12-The Beatles - Abbey road (full album)",
+      description: '',
       artist: "The Beatles",
       createdBy: Users.u02,
       tags: [
@@ -374,6 +387,7 @@ export const defaultStations = [
     {
       id: "s113",
       name: "Janis Joplin Mix 1",
+      description: '',
       artist: "Janis Joplin",
       createdBy: Users.u13,
       tags: [
@@ -389,6 +403,7 @@ export const defaultStations = [
     {
       id: "s117",
       name: "Jimi Hendrix playlist",
+      description: '',
       artist: "Jimi Hendrix",
       createdBy: Users.u17,
       tags: [
@@ -404,6 +419,7 @@ export const defaultStations = [
     {
       id: "s130",
       name: "Aerosmith- all songs",
+      description: '',
       artist: "Aerosmith",
       createdBy: Users.u30,
       tags: [
@@ -418,6 +434,7 @@ export const defaultStations = [
     {
       id: "s131",
       name: "Kiss Playlist",
+      description: '',
       artist: "Kiss",
       createdBy: Users.u31,
       tags: [
@@ -432,6 +449,7 @@ export const defaultStations = [
     {
       id: "s132",
       name: "Guns N' Roses Playlist",
+      description: '',
       artist: "Guns N' Roses",
       createdBy: Users.u32,
       tags: [
@@ -446,6 +464,7 @@ export const defaultStations = [
     {
       id: "s133",
       name: "Led Zeppelin Greatest Hits (Chronological Order)",
+      description: '',
       artist: "Led Zeppelin",
       createdBy: Users.u33,
       tags: [
@@ -461,6 +480,7 @@ export const defaultStations = [
     {
       id: "s134",
       name: "Very best of The Who",
+      description: '',
       artist: "The Who",
       createdBy: Users.u34,
       tags: [
@@ -476,6 +496,7 @@ export const defaultStations = [
     {
       id: "s135",
       name: "The Rolling Stones",
+      description: '',
       artist: "The Rolling Stones",
       createdBy: Users.u35,
       tags: [
@@ -491,6 +512,7 @@ export const defaultStations = [
     {
       id: "s136",
       name: "Queen & Freddie Mercury Best Songs (Official Videos)",
+      description: '',
       artist: "Queen",
       createdBy: Users.u36,
       tags: [
@@ -504,6 +526,7 @@ export const defaultStations = [
     {
       id: "s137",
       name: "ACDC ONLY Playlist",
+      description: '',
       artist: "AC/DC",
       createdBy: Users.u37,
       tags: [
@@ -519,6 +542,7 @@ export const defaultStations = [
     {
       id: "s138",
       name: "Pink Floyd greatest hits",
+      description: '',
       artist: "Pink Floyd",
       createdBy: Users.u38,
       tags: [
@@ -535,6 +559,7 @@ export const defaultStations = [
     {
       id: "s139",
       name: "Van Halen Ultimate Playlist",
+      description: '',
       artist: "Van Halen",
       createdBy: Users.u39,
       tags: [
@@ -548,6 +573,7 @@ export const defaultStations = [
     {
       id: "s140",
       name: "Best Metallica Playlist",
+      description: '',
       artist: "Metallica",
       createdBy: Users.u40,
       tags: [
@@ -562,6 +588,7 @@ export const defaultStations = [
     {
       id: "s141",
       name: "Complete Black Sabbath Playlist",
+      description: '',
       artist: "Black Sabbath",
       createdBy: Users.u41,
       tags: [
@@ -576,6 +603,7 @@ export const defaultStations = [
     {
       id: "s142",
       name: "The Very Best Of The Doors",
+      description: '',
       artist: "The Doors",
       createdBy: Users.u42,
       tags: [
@@ -593,6 +621,7 @@ export const defaultStations = [
     {
       id: "s143",
       name: "U2 Greatest Hits",
+      description: '',
       artist: "U2",
       createdBy: Users.u43,
       tags: [
@@ -607,6 +636,7 @@ export const defaultStations = [
     {
       id: "s144",
       name: "Iron Maiden Best Songs",
+      description: '',
       artist: "Iron Maiden",
       createdBy: Users.u44,
       tags: [
@@ -621,6 +651,7 @@ export const defaultStations = [
     {
       id: "s145",
       name: "Rage Against the Machine | Best Songs",
+      description: '',
       artist: "Rage Against the Machine",
       createdBy: Users.u45,
       tags: [
@@ -636,6 +667,7 @@ export const defaultStations = [
     {
       id: "s146",
       name: "nirvana playlist",
+      description: '',
       artist: "Nirvana",
       createdBy: Users.u46,
       tags: [
@@ -652,6 +684,7 @@ export const defaultStations = [
     {
       id: "s147",
       name: "Pearl Jam Greatest Hits",
+      description: '',
       artist: "Pearl Jam",
       createdBy: Users.u47,
       tags: [
@@ -666,6 +699,7 @@ export const defaultStations = [
     {
       id: "s148",
       name: "Best of Radiohead Studio",
+      description: '',
       artist: "Radiohead",
       createdBy: Users.u48,
       tags: [
@@ -681,6 +715,7 @@ export const defaultStations = [
     {
       id: "s149",
       name: "oasis playlist",
+      description: '',
       artist: "Oasis",
       createdBy: Users.u49,
       tags: [
@@ -695,6 +730,7 @@ export const defaultStations = [
     {
       id: "s150",
       name: "MAROON 5 - Top Tracks 🔥🔥 2022 Playlist",
+      description: '',
       artist: "Maroon 5",
       createdBy: Users.u50,
       tags: [
@@ -710,6 +746,7 @@ export const defaultStations = [
     {
       id: "s151",
       name: "Coldplay - Greatest Hits",
+      description: '',
       artist: "Coldplay",
       createdBy: Users.u01,
       tags: [
@@ -725,6 +762,7 @@ export const defaultStations = [
     {
       id: "s163",
       name: "Robbie Williams playlist - BEST songs",
+      description: '',
       artist: "Robbie Williams",
       createdBy: Users.u13,
       tags: [
@@ -741,6 +779,7 @@ export const defaultStations = [
     {
       id: "s164",
       name: "Phil Collins.greatest hits.",
+      description: '',
       artist: "Phil Collins",
       createdBy: Users.u14,
       tags: [
@@ -758,6 +797,7 @@ export const defaultStations = [
     {
       id: "s178",
       name: "The Very Best of Cream",
+      description: '',
       artist: "Cream",
       createdBy: Users.u28,
       tags: [
@@ -773,6 +813,7 @@ export const defaultStations = [
     {
       id: "s179",
       name: "The Best of The Velvet Underground",
+      description: '',
       artist: "The Velvet Underground",
       createdBy: Users.u29,
       tags: [
@@ -787,6 +828,7 @@ export const defaultStations = [
     {
       id: "s180",
       name: "13th Floor Elevators - Audio Playlist",
+      description: '',
       artist: "13th Floor Elevators",
       createdBy: Users.u30,
       tags: [
@@ -801,6 +843,7 @@ export const defaultStations = [
     {
       id: "s185",
       name: "David Bowie - 75 Official Playlist",
+      description: '',
       artist: "David Bowie",
       createdBy: Users.u35,
       tags: [
@@ -815,6 +858,7 @@ export const defaultStations = [
     {
       id: "s186",
       name: "Bruce Springsteen Playlist",
+      description: '',
       artist: "Bruce Springsteen",
       createdBy: Users.u36,
       tags: [
@@ -829,6 +873,7 @@ export const defaultStations = [
     {
       id: "s187",
       name: "Fleetwood Mac Playlist",
+      description: '',
       artist: "Fleetwood Mac",
       createdBy: Users.u37,
       tags: [
@@ -843,6 +888,7 @@ export const defaultStations = [
     {
       id: "s103",
       name: "Starset - Vessels [Full Album]",
+      description: '',
       artist: "Starset",
       createdBy: Users.u03,
       tags: [
@@ -859,6 +905,7 @@ export const defaultStations = [
     {
       id: "s106",
       name: "Kinect Star Wars: Galactic Dance Off",
+      description: '',
       artist: "Kinect Star Wars",
       createdBy: Users.u06,
       tags: [
@@ -876,6 +923,7 @@ export const defaultStations = [
     {
       id: "s152",
       name: "LADY GAGA ALL SONGS",
+      description: '',
       artist: "Lady Gaga",
       createdBy: Users.u02,
       tags: [
@@ -891,6 +939,7 @@ export const defaultStations = [
     {
       id: "s154",
       name: "Katy Perry - Greatest Hits, Grandes Exitos, Best Songs, Sus Mejores Canciones, Roar, Dark Horse, Bon Appetit, Firework, Hot N Cold, Last Friday Night",
+      description: '',
       artist: "Katy Perry",
       createdBy: Users.u04,
       tags: [
@@ -906,6 +955,7 @@ export const defaultStations = [
     {
       id: "s156",
       name: "Madonna Songs - Madonna Greatest Hits Playlist",
+      description: '',
       artist: "Madonna",
       createdBy: Users.u06,
       tags: [
@@ -921,6 +971,7 @@ export const defaultStations = [
     {
       id: "s160",
       name: "P!NK 2022 - 2023 Playlist - (PINK) Top Tracks - New Songs - Hits - Official Videos - All Songs",
+      description: '',
       artist: "P!NK",
       createdBy: Users.u10,
       tags: [
@@ -936,6 +987,7 @@ export const defaultStations = [
     {
       id: "s190",
       name: "Billie Eilish - All Songs",
+      description: '',
       artist: "Billie Eilish",
       createdBy: Users.u40,
       tags: [
@@ -951,6 +1003,7 @@ export const defaultStations = [
     {
       id: "s191",
       name: "Lorde's Greatest Hits",
+      description: '',
       artist: "Lorde",
       createdBy: Users.u41,
       tags: [
@@ -966,6 +1019,7 @@ export const defaultStations = [
     {
       id: "s192",
       name: "All Songs Halsey",
+      description: '',
       artist: "Halsey",
       createdBy: Users.u42,
       tags: [
@@ -981,6 +1035,7 @@ export const defaultStations = [
     {
       id: "s116",
       name: "Ray Charles Mix",
+      description: '',
       artist: "Ray Charles",
       createdBy: Users.u16,
       tags: [
@@ -996,6 +1051,7 @@ export const defaultStations = [
     {
       id: "s120",
       name: "Etta James mix",
+      description: '',
       artist: "Etta James",
       createdBy: Users.u20,
       tags: [
@@ -1011,6 +1067,7 @@ export const defaultStations = [
     {
       id: "s122",
       name: "Billie Holiday Playlist",
+      description: '',
       artist: "Billie Holiday",
       createdBy: Users.u22,
       tags: [
@@ -1026,6 +1083,7 @@ export const defaultStations = [
     {
       id: "s114",
       name: "Louis Armstrong mix",
+      description: '',
       artist: "Louis Armstrong",
       createdBy: Users.u14,
       tags: [
@@ -1041,6 +1099,7 @@ export const defaultStations = [
     {
       id: "s115",
       name: "nina simone playlist",
+      description: '',
       artist: "Nina Simone",
       createdBy: Users.u15,
       tags: [
@@ -1056,6 +1115,7 @@ export const defaultStations = [
     {
       id: "s118",
       name: "The Very Best of Ella Fitzgerald",
+      description: '',
       artist: "Ella Fitzgerald",
       createdBy: Users.u18,
       tags: [
@@ -1069,6 +1129,7 @@ export const defaultStations = [
     {
       id: "s121",
       name: "Miles Davis - 100 Masterpieces",
+      description: '',
       artist: "Miles Davis",
       createdBy: Users.u21,
       tags: [
@@ -1083,6 +1144,7 @@ export const defaultStations = [
     {
       id: "s123",
       name: "Charlie Parker Greatest Hits playlist",
+      description: '',
       artist: "Charlie Parker",
       createdBy: Users.u23,
       tags: [
@@ -1099,6 +1161,7 @@ export const defaultStations = [
     {
       id: "s124",
       name: "Dizzy Gillespie Playlist",
+      description: '',
       artist: "Dizzy Gillespie",
       createdBy: Users.u24,
       tags: [
@@ -1114,6 +1177,7 @@ export const defaultStations = [
     {
       id: "s125",
       name: "The best of Louis Armstrong",
+      description: '',
       artist: "Louis Armstrong",
       createdBy: Users.u25,
       tags: [
@@ -1129,6 +1193,7 @@ export const defaultStations = [
     {
       id: "s126",
       name: "Ornette Coleman - Of Human Feelings",
+      description: '',
       artist: "Ornette Coleman",
       createdBy: Users.u26,
       tags: [
@@ -1143,6 +1208,7 @@ export const defaultStations = [
     {
       id: "s127",
       name: "Miles Davis Playlist - The Best Playlist Ever",
+      description: '',
       artist: "Miles Davis",
       createdBy: Users.u27,
       tags: [
@@ -1159,6 +1225,7 @@ export const defaultStations = [
     {
       id: "s128",
       name: "DUKE ELLINGTON PLAYLIST...CLASSIC",
+      description: '',
       artist: "Duke Ellington",
       createdBy: Users.u28,
       tags: [
@@ -1174,6 +1241,7 @@ export const defaultStations = [
     {
       id: "s129",
       name: "Charles Mingus Playlist",
+      description: '',
       artist: "Charles Mingus",
       createdBy: Users.u29,
       tags: [
@@ -1189,6 +1257,7 @@ export const defaultStations = [
     {
       id: "s104",
       name: "Bruno Mars - Official Music Videos Playlist",
+      description: '',
       artist: "Bruno Mars",
       createdBy: Users.u04,
       tags: [
@@ -1205,6 +1274,7 @@ export const defaultStations = [
     {
       id: "s110",
       name: "Mix - Jason Derulo, Usher & Chris Brown ♫ 💛",
+      description: '',
       artist: "Jason Derulo, Usher & Chris Brown",
       createdBy: Users.u10,
       tags: [
@@ -1221,6 +1291,7 @@ export const defaultStations = [
     {
       id: "s112",
       name: "Backstreet Boys--Mix Songs",
+      description: '',
       artist: "Backstreet Boys",
       createdBy: Users.u12,
       tags: [
@@ -1236,6 +1307,7 @@ export const defaultStations = [
     {
       id: "s153",
       name: "All of Beyoncé's Music Videos",
+      description: '',
       artist: "Beyoncé",
       createdBy: Users.u03,
       tags: [
@@ -1252,6 +1324,7 @@ export const defaultStations = [
     {
       id: "s155",
       name: "Britney Spears All Songs",
+      description: '',
       artist: "Britney Spears",
       createdBy: Users.u05,
       tags: [
@@ -1266,6 +1339,7 @@ export const defaultStations = [
     {
       id: "s157",
       name: "Christina Aguilera - Music Videos",
+      description: '',
       artist: "Christina Aguilera",
       createdBy: Users.u07,
       tags: [
@@ -1281,6 +1355,7 @@ export const defaultStations = [
     {
       id: "s158",
       name: "Kylie Minogue | The Ultimate Greatest Hits 1987 - 2021",
+      description: '',
       artist: "Kylie Minogue",
       createdBy: Users.u08,
       tags: [
@@ -1295,6 +1370,7 @@ export const defaultStations = [
     {
       id: "s159",
       name: "Justin Timberlake - Mirrors / Music Playlist",
+      description: '',
       artist: "Justin Timberlake",
       createdBy: Users.u09,
       tags: [
@@ -1310,6 +1386,7 @@ export const defaultStations = [
     {
       id: "s161",
       name: "JENNIFER LOPEZ Greatest Hits",
+      description: '',
       artist: "Jennifer Lopez",
       createdBy: Users.u11,
       tags: [
@@ -1325,6 +1402,7 @@ export const defaultStations = [
     {
       id: "s162",
       name: "Gwen Stefani Playlist",
+      description: '',
       artist: "Gwen Stefani",
       createdBy: Users.u12,
       tags: [
@@ -1339,6 +1417,7 @@ export const defaultStations = [
     {
       id: "s107",
       name: "Habitual Line Crosser",
+      description: '',
       artist: "Habitual Line Crosser",
       createdBy: Users.u07,
       tags: [
@@ -1355,6 +1434,7 @@ export const defaultStations = [
     {
       id: "s108",
       name: "Pure's Futurama Playlist",
+      description: '',
       artist: "Futurama",
       createdBy: Users.u08,
       tags: [
@@ -1371,6 +1451,7 @@ export const defaultStations = [
     {
       id: "s109",
       name: "Best Clips | House M.D.",
+      description: '',
       artist: "House M.D.",
       createdBy: Users.u09,
       tags: [
@@ -1387,6 +1468,7 @@ export const defaultStations = [
     {
       id: "s111",
       name: "rick and morty remix playlist :)",
+      description: '',
       artist: "Rick and Morty",
       createdBy: Users.u11,
       tags: [
@@ -1403,6 +1485,7 @@ export const defaultStations = [
     {
       id: "s171",
       name: "Best Of Al Bundy | Married With Children",
+      description: '',
       artist: "Married With Children",
       createdBy: Users.u21,
       tags: [
@@ -1416,6 +1499,7 @@ export const defaultStations = [
     {
       id: "s172",
       name: "The Big Bang Theory Playlist",
+      description: '',
       artist: "The Big Bang Theory",
       createdBy: Users.u22,
       tags: [
@@ -1429,6 +1513,7 @@ export const defaultStations = [
     {
       id: "s181",
       name: "GEORGE CARLIN & FULL ROUTINE",
+      description: '',
       artist: "George Carlin",
       createdBy: Users.u31,
       tags: [
@@ -1444,6 +1529,7 @@ export const defaultStations = [
     {
       id: "s182",
       name: "Stand up- Chris Rock",
+      description: '',
       artist: "Chris Rock",
       createdBy: Users.u32,
       tags: [
@@ -1459,6 +1545,7 @@ export const defaultStations = [
     {
       id: "s183",
       name: "Bill Burr Playlist",
+      description: '',
       artist: "Bill Burr",
       createdBy: Users.u33,
       tags: [
@@ -1474,6 +1561,7 @@ export const defaultStations = [
     {
       id: "s184",
       name: "Jim Norton Stand Up",
+      description: '',
       artist: "Jim Norton",
       createdBy: Users.u34,
       tags: [
@@ -1489,6 +1577,7 @@ export const defaultStations = [
     {
       id: "s188",
       name: "Bob Marley's Greatest Hits",
+      description: '',
       artist: "Bob Marley",
       createdBy: Users.u38,
       tags: [
@@ -1503,6 +1592,7 @@ export const defaultStations = [
     {
       id: "s105",
       name: "New RTJ mix",
+      description: '',
       artist: "Run The Jewels",
       createdBy: Users.u05,
       tags: [
@@ -1519,6 +1609,7 @@ export const defaultStations = [
     {
       id: "s119",
       name: "chuck berry mix",
+      description: '',
       artist: "Chuck Berry",
       createdBy: Users.u19,
       tags: [

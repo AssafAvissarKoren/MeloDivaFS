@@ -67,6 +67,7 @@ function saveStation(station) {
 function createStation(name, createdBy, imgUrl = 'blank') {
     return {
         name: name,
+        description: '',
         tags: [],
         imgUrl: imgUrl,
         createdBy: createdBy,

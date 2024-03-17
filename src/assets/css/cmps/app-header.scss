@@ -23,12 +23,9 @@
             background-color: black;
             align-content: center;
             justify-content: center;
-
-            & .svg {
-                width: 16px;
+            
+            & > * {
                 height: 16px;
-                // filter svg to #b3b3b3
-                filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
             }
         }
     }

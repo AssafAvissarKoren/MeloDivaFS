@@ -161,6 +161,17 @@ export function StationDetails() {
         }
     }
 
+    async function onEditDetails(data) {
+        try {
+            onCloseMiniMenu()
+            await saveStation(({...station, ...data}))
+            setStation(prevStation => ({...prevStation, ...data}))
+        } catch (err) {
+            eventBusService.showErrorMsg('faild to save details')
+            console.log(err)
+        }
+    }
+
     if(!station) return <div>loading...</div>
 
     const likedTrackStation = stationId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
@@ -181,7 +192,7 @@ export function StationDetails() {
             }
             {menu === 1 && 
                 <MiniMenu location={'center'} onCloseMiniMenu={onCloseMiniMenu}>
-                    {miniMenuOptions.editStation(getImage(), station.name, '', onCloseMiniMenu, onCloseMiniMenu)}
+                    {miniMenuOptions.editStation(getImage(), station.name, station.description, onEditDetails, onCloseMiniMenu)}
                 </MiniMenu>
             }
             <div className="station-head-info">
@@ -191,7 +202,7 @@ export function StationDetails() {
                 :
                     <h1 className="station-name">{station.name}</h1>
                 }
-                <p></p> {/* station description */}
+                <p className="station-description">{station.description}</p>    
                 <p>{station.createdBy.fullname} - {station.tracks.length}</p>
             </div>
         </div>
@@ -202,11 +213,11 @@ export function StationDetails() {
                     <svgSvc.general.PlaylistPlayBtn color={"black"}/>
                     {/* <FontAwesomeIcon icon={faPlayCircle} /> */}
                 </button>
-                <button className={`station-like-btn ${likedTrackStation} ${stationByUser} ${isLiked && 'green'}`} onClick={onToggleUserLiked}>
-                    <span className="action-button-wrapper">
-                        {isLiked ? <svgSvc.track.HeartFilled style={{"width": "24px", "height": "24px"}}/> : <svgSvc.track.HeartBlank style={{"width": "24px", "height": "24px"}}/>} 
-                    </span>
-                </button>
+                { !likedTrackStation && !stationByUser && 
+                    <button className="station-like-btn" onClick={onToggleUserLiked}>
+                        {isLiked ? <svgSvc.track.HeartFilled/> : <svgSvc.track.HeartBlank/>} 
+                    </button>
+                }
                 <div className={`station-more-btn ${likedTrackStation}`}>
                     <button className="btn-more" onClick={() => setMenu(2)}>
                         <p>...</p>
