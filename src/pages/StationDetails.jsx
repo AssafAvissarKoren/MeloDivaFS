@@ -160,6 +160,17 @@ export function StationDetails() {
         }
     }
 
+    async function onEditDetails(data) {
+        try {
+            onCloseMiniMenu()
+            await saveStation(({...station, ...data}))
+            setStation(prevStation => ({...prevStation, ...data}))
+        } catch (err) {
+            eventBusService.showErrorMsg('faild to save details')
+            console.log(err)
+        }
+    }
+
     if(!station) return <div>loading...</div>
 
     const likedTrackStation = stationId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
@@ -180,7 +191,7 @@ export function StationDetails() {
             }
             {menu === 1 && 
                 <MiniMenu location={'center'} onCloseMiniMenu={onCloseMiniMenu}>
-                    {miniMenuOptions.editStation(getImage(), station.name, '', onCloseMiniMenu, onCloseMiniMenu)}
+                    {miniMenuOptions.editStation(getImage(), station.name, station.description, onEditDetails, onCloseMiniMenu)}
                 </MiniMenu>
             }
             <div className="station-head-info">
@@ -190,7 +201,7 @@ export function StationDetails() {
                 :
                     <h1 className="station-name">{station.name}</h1>
                 }
-                <p></p> {/* station description */}
+                <p className="station-description">{station.description}</p>    
                 <p>{station.createdBy.fullname} - {station.tracks.length}</p>
             </div>
         </div>

@@ -129,9 +129,28 @@ function editDetails(func) {
     )
 }
 
-function editStation(imgUrl, name, description, onSubmit, onClose ) {
+function editStation(imgUrl, name, description, submit, onClose ) {
+
+    function handleSubmit(ev) {
+        ev.preventDefault()
+        const data = new FormData(ev.target)
+        const dataObject = {}
+
+        for (const [name, value] of data.entries()) {
+          dataObject[name] = value
+        }
+        
+        submit(dataObject)
+    }
+
+      function handleKeyDown(ev) {
+        if (ev.key === 'Enter') {
+          ev.preventDefault();
+        }
+      }
+
     return (
-        <form className="edit-station" onSubmit={onSubmit}>
+        <form className="edit-station" onSubmit={handleSubmit}>
             <div className="head">
                 <h2>Edit details</h2>
                 <button onClick={onClose}>
@@ -144,10 +163,20 @@ function editStation(imgUrl, name, description, onSubmit, onClose ) {
                 </button>
                 <input className="input input-name" 
                     type="text" 
+                    name="name"
                     placeholder="Add a name"
+                    defaultValue={name}
+                    maxlength="100"
+                    onKeyDown={handleKeyDown}
+                    autocomplete="off"
                 />
                 <textarea className="input input-description" 
+                    name="description"
                     placeholder="Add an optional description"
+                    defaultValue={description}
+                    maxlength="300"
+                    onKeyDown={handleKeyDown}
+                    autocomplete="off"
                 />
                 <div className="save-container">
                     <input type="submit" className="btn-save" value="Save" />
