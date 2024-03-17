@@ -30,7 +30,6 @@ export function StationDetails() {
     const [station, setStation] = useState()
     const [menu, setMenu] = useState(0)
     const [tracksWithDurations, setTracksWithDurations] = useState([])
-    const [gradientColor, setGradientColor] = useState(null)
 
     useEffect(() => {
         loadStation()
@@ -44,9 +43,6 @@ export function StationDetails() {
     },[likedTracks])
 
     useEffect(() => {
-        analyzeImage(getImage())
-
-        // add durations of tracks
         if (station && station.tracks) {
             const fetchAndSetDurations = async () => {
                 const durations = await fetchVideoDurations(station);
@@ -74,15 +70,6 @@ export function StationDetails() {
         }
     }
     
-    async function analyzeImage(imageURL) {
-        try {
-            const mostCommonColor = "red" // imageService.analyzeImage(imageURL)
-            setGradientColor(mostCommonColor)
-        } catch (error) {
-            console.error('Error analyzing image:', error)
-        }
-    }
-
     function onToggleUserLiked() {
         const user = getBasicUser()
         const numOfLikedUsers = station.likedByUsers.length
@@ -166,6 +153,7 @@ export function StationDetails() {
     const likedTrackStation = stationId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
     const stationByUser = getBasicUser()._id === station.createdBy._id ? 'hiden' : ''
     const isLiked = station.likedByUsers && station.likedByUsers.filter(likedByUser => likedByUser && likedByUser._id === getBasicUser()._id).length !== 0;
+    const gradientColor = station.mostCommonColor
 
     return (
     <section className="station-container">

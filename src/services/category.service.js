@@ -26,7 +26,7 @@ const defaultCategories = [
     { _id: "c101", name: "Soundtrack", stationTags: ["Soundtrack"], color: "#FF00FF", startingPosition: 8 },
     { _id: "c102", name: "Rock", stationTags: ["Rock"], color: "#99FF00", startingPosition: 2 },
     { _id: "c103", name: "Electronic", stationTags: ["Electronic"], color: "#FF3300", startingPosition: 7 },
-    { _id: "c104", name: "Blues", stationTags: ["Blues"], color: "#00FF66", startingPosition: 4 },
+    { _id: "c104", name: "Blues", stationTags: ["Blues"], color: "#00FF66", startingPosition: 6 },
     { _id: "c105", name: "Psychedelic", stationTags: ["Psychedelic"], color: "#00FF99", startingPosition: 3 },
     { _id: "c106", name: "Jazz", stationTags: ["Jazz"], color: "#FF0000", startingPosition: 5 },
     { _id: "c107", name: "Pop", stationTags: ["Pop"], color: "#FF00CC", startingPosition: 6 },
@@ -41,7 +41,7 @@ const defaultCategories = [
     { _id: "c116", name: "1990s", stationTags: ["1990s"], color: "#FF0000", startingPosition: 6 },
     { _id: "c117", name: "2000s", stationTags: ["2000s"], color: "#99FF00", startingPosition: 5 },
     { _id: "c118", name: "2010s", stationTags: ["2010s"], color: "#FF00FF", startingPosition: 1 },
-    { _id: "c119", name: "American", stationTags: ["American"], color: "#CCFF00", startingPosition: 9 },
+    { _id: "c119", name: "American", stationTags: ["American"], color: "#CCFF00", startingPosition: 10 },
     { _id: "c120", name: "British", stationTags: ["British"], color: "#00FFCC", startingPosition: 2 }
 ];
 

@@ -99,10 +99,6 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
       ));
     }
   };
-  
-  
-  
-  
     
   if (category) {
     return renderCategory();
