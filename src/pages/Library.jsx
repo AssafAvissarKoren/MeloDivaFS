@@ -43,16 +43,18 @@ export function Library() {
     if (!stations || !getBasicUser()._id) return <div>Loading...</div>
     return (
         <div className="library">
-            <div className="title">
-                <span className="button-wrapper"> <svgSvc.icon.YourLibrary /> </span>
-                <p>Your Library</p>
-                <span className="action-button-wrapper add-station-btn" onClick={createNewStation}> <svgSvc.miniMenu.AddToPlaylist /> </span>
+            <div className="head">
+                <div className="title">
+                    <span className="button-wrapper"> <svgSvc.icon.YourLibrary /> </span>
+                    <p>Your Library</p>
+                    <span className="action-button-wrapper add-station-btn" onClick={createNewStation}> <svgSvc.miniMenu.AddToPlaylist /> </span>
+                </div>
+                <div className="library-search">
+                    <span className="button-wrapper"> <svgSvc.general.LibrarySearch style = {{ width: '16px', height: '16px' }} /> </span>
+                    <p>Recents</p>
+                    <span className="button-wrapper"> <svgSvc.sortBy.List style = {{ width: '16px', height: '16px' }} /> </span>
+                </div>
             </div>
-            {/* <div className="library-search">
-                <span className="button-wrapper"> <svgSvc.general.LibrarySearch style = {{ width: '16px', height: '16px' }} /> </span>
-                <p>Recents</p>
-                <span className="button-wrapper"> <svgSvc.sortBy.List style = {{ width: '16px', height: '16px' }} /> </span>
-            </div> */}
             <ul className="content">
                 <li>
                     <StationPreview station={getLikedTracksAsStation()} />
