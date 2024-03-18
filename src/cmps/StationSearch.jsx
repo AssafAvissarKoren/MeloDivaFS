@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { CategoryDisplay } from '../cmps/CategoryDisplay.jsx';
 import { categoryService } from '../services/category.service';
 import { dataService } from '../services/data.service.js';
@@ -12,45 +12,62 @@ import { TrackPreview } from '../cmps/TrackPreview.jsx';
 export function StationSearch({addTrackToStation}) {
     const [searchText, setSearchText] = useState('')
     const [tracks, setTracks] = useState([])
+    const typingTimeoutRef = useRef(null);
     const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
 
 
     const searchVideos = async (query) => {
         try {
-            const response = await dataService.searchYoutube(query)
-            const videos = response.data.items.map(video => ({...trackService.videoToTrack(video)}))
+            const items = await dataService.searchYoutube(query);
+            const videos = items.map(video => ({...trackService.videoToTrack(video)}))
+            console.log('videos', videos)
             
             const videoIds = videos.map(video => {
-                // Assuming the URL contains the video ID at the end after '='
-                const urlParts = video.url.split('=')
-                return urlParts[urlParts.length - 1]
-            }).join(',')
-
+                if (video.url.includes('=')) {
+                    const urlParts = video.url.split('=');
+                    return urlParts[urlParts.length - 1];
+                } else {
+                    return video.url;
+                }
+            }).join(',');
+            
             const trackDurations =  await dataService.getDurations(videoIds)
-            const tracks = response.data.items.map((video, index)=> {
+            const tracks = items.map((video, index)=> {
                 return {
                     ...trackService.videoToTrack(video), 
                     duration: trackDurations[index]
                 }
             })
+            console.log('tracks', tracks)
             setTracks(tracks)
         } catch (error) {
-            console.error('Error fetching data from YouTube API', error)
+            console.error('Error fetching data from YouTube API', error);
         }
-    }
+    };
 
     const handleTrackClick = (track) => { //here comes the boom
         setQueueToTrack(track)
     }
 
     const handleTextChange = (e) => {
-        setSearchText(e.target.value)
-    }
+        const newText = e.target.value;
+        setSearchText(newText);
+        clearTimeout(typingTimeoutRef.current); // Clear the previous typing timeout
+        typingTimeoutRef.current = setTimeout(() => {
+            searchVideos(searchText)
+        }, 1000); // Set a new typing timeout
+    };
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
+            clearTimeout(typingTimeoutRef.current); // Clear the typing timeout if "Enter" is pressed
             searchVideos(searchText)
         }
+    }
+
+    function clearSearch() {
+        setSearchText('')
+        setTracks([])
     }
     
     return (
@@ -69,7 +86,7 @@ export function StationSearch({addTrackToStation}) {
                     onKeyDown={handleKeyDown}
                 />  
                 {searchText &&
-                    <div className="img-contaner" onClick={() => setSearchText('')}>
+                    <div className="img-contaner" onClick={clearSearch}>
                         <img className="ex-img" src={utilService.getImgUrl("../assets/imgs/ex.svg")} />
                     </div>
                 }

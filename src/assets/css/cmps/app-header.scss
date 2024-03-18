@@ -35,7 +35,7 @@
     }
 
     & .search-bar-container {
-        background-color: #333333;
+        background-color: #242424;
         display: grid;
         grid-template-columns: auto 1fr auto;
         width: 364px;
@@ -45,39 +45,35 @@
         margin-left: 9px;
         align-items: center;
 
+        &:hover {
+            background-color: #2a2a2a;
+            border: solid 1px #3b3b3b;
+            margin: -1px -1px -1px 8px;
+        }
+
+        &:focus-within {
+            background-color: #2a2a2a;
+            border: solid 2px white;
+            margin: -2px -2px -2px 7px;
+        }
+
         & .img-contaner {
             margin-left: 4px;
             margin-right: 4px;
             width: 18px;
             height: 18px;
+        }   
 
-            & .search-img {
-                // filter svg to white
-                filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
+        & .search-bar {
+            background-color: unset;
+            border: none;
+            padding: 10px 0;
+            color: white;
+            text-indent: 4px;
+    
+            &:focus {
+                outline: none;
             }
-
-            & .ex-img {
-                // filter svg to white
-                filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(288deg) brightness(102%) contrast(102%);
-            }
-        }
-
-        & .filter {
-            margin: 3px;
-            height: 27px;
         }
     }
-
-    & .search-bar {
-        background-color: unset;
-        border: none;
-        padding: 10px 0;
-        color: white;
-        text-indent: 4px;
-
-        &:focus {
-            outline: none;
-        }
-    }
-
 }

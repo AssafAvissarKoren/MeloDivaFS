@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { utilService } from '../services/util.service.js';
 import { svgSvc } from '../services/svg.service.jsx';
 
@@ -7,8 +7,6 @@ export const AppHeader = ({ filterBy, setFilterBy }) => {
     const params = useParams();
     const [text, setText] = useState('');
     const typingTimeoutRef = useRef(null);
-
-    const navigate = useNavigate();
     
     useEffect(() => {
         if (params.tab === "search") {
@@ -32,6 +30,11 @@ export const AppHeader = ({ filterBy, setFilterBy }) => {
             setFilterBy(prev => ({ ...prev, text }));
         }
     };
+
+    function clearSearch() {
+        setText('')
+        setFilterBy(prev => ({ ...prev, text: '' }))
+    }
 
     function navigateBack() {
         let { tabHistory, tabHistoryLoc } = filterBy
@@ -85,7 +88,7 @@ export const AppHeader = ({ filterBy, setFilterBy }) => {
             </div>
             {params.tab == "search" &&
                 <label className="search-bar-container">
-                    <div className="search-img-contaner">
+                    <div className="img-contaner">
                         <svgSvc.general.LibrarySearch />
                     </div>
                     <input 
@@ -97,12 +100,12 @@ export const AppHeader = ({ filterBy, setFilterBy }) => {
                         onKeyDown={handleKeyDown}
                     />
                     {text &&
-                        <div className="img-contaner" onClick={() => setText('')}>
-                            <img className="ex-img" src={utilService.getImgUrl("../assets/imgs/ex.svg")} />
+                        <div className="img-contaner" onClick={clearSearch}>
+                            <svgSvc.miniMenu.Ex />
                         </div>
                     }
                 </label>
             }
         </header>
-    );
+    )
 };
