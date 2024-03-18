@@ -100,7 +100,7 @@ export function StationSearch({addTrackToStation}) {
                             isLiked={likedTracks[track.url] ? true : false}
                             duration={utilService.formatDuration(track.duration)}
                             handleTrackClick={handleTrackClick}
-                            addToThisStation={addTrackToStation}
+                            addTrackToStation={addTrackToStation}
                         />
                     </div>
                 ))}

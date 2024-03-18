@@ -25,4 +25,3 @@ export function MiniMenu({children, location = '', onCloseMiniMenu}) {
         </div>
     )
 }
-

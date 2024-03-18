@@ -8,9 +8,10 @@ import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 import { miniMenuOptions } from './MiniMenuOptions'
 import { addTrackToQueue } from '../store/actions/queue.actions'
 import { svgSvc } from "../services/svg.service"
+import { getStationById, saveStation } from '../store/actions/station.actions'
 
 
-export function TrackPreview({ layout = '', track = null, trackNum = null, isLiked, deleteTrack = null, duration, handleTrackClick, addToThisStation = null}) {
+export function TrackPreview({ layout = '', track = null, trackNum = null, isLiked, deleteTrack = null, duration, handleTrackClick, addTrackToStation}) {
     const [isSelected, setSelected] = useState(false)
     const [isMenu, setIsMenu] = useState(false)
     const modalRef = useRef(track.url)
@@ -49,6 +50,11 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
         addTrackToQueue(track)
     }
 
+    async function onAddToStation(stationId) {
+        setIsMenu(false)
+        addTrackToStation(track, stationId)
+    }
+
     function toggleMenu() {
         setIsMenu(prevIsMenu => !prevIsMenu)
     }
@@ -73,7 +79,7 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
         <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
             <div className='track-numder'>
                 <p className='track-num'>{trackNum}</p>
-                <button className="btn-track-play" onClick={() => handleTrackClick(track)}>
+                <button className="btn-track-play" onClick={onPlayClicked}>
                     <span className="action-button-wrapper"> <svgSvc.player.PlayBtn color={"white"} /> </span>
                 </button>
             </div>
@@ -83,9 +89,9 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
                 </div>
                 <p>{track.title}</p>
             </div>
-            {addToThisStation ?
+            {layout === 'station-search-track-layout' ?
                 <div>
-                    <button className="track-preview-add" onClick={() => addToThisStation(track)}>Add</button>
+                    <button className="track-preview-add" onClick={() => addTrackToStation(track)}>Add</button>
                 </div>
             :
                 <div className="track-preview-options">
@@ -102,7 +108,7 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
                     </button>
                     {isMenu && 
                         <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
-                            {miniMenuOptions.addToPlaylist(onCloseMiniMenu)}
+                            {miniMenuOptions.addToPlaylist(onAddToStation)}
                             { deleteTrack &&  miniMenuOptions.removeFromPlaylist(onDeleteTrack) }
                             {isLiked ? 
                                 miniMenuOptions.removeFromLikedSongs(onToggleLiked) :

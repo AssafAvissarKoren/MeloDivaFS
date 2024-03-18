@@ -136,14 +136,22 @@ export function StationDetails() {
         }
     }
 
-    async function addTrackToStation(track) {
+    async function addTrackToStation(track, stationId = station._id) {
         try {
-            const tracks = station.tracks
-            tracks.push(track)
-            await saveStation({...station, tracks: tracks})
-            setStation({...station, tracks: tracks})
+            if(station._id === stationId) {
+                const tracks = station.tracks
+                tracks.push(track)
+                await saveStation({...station, tracks: tracks})
+                setStation({...station, tracks: tracks})
+            } else {
+                const station = await getStationById(stationId)
+                const tracks = station.tracks
+                tracks.push(track)
+                await saveStation({...station, tracks: tracks})
+            }
+            eventBusService.showSuccessMsg(`Added to ${station.name}`)
         } catch (err) {
-            eventBusService.showErrorMsg('faild to add track')
+            eventBusService.showErrorMsg('faild to add track to station')
             console.log(err)
         }
     }
@@ -250,6 +258,7 @@ export function StationDetails() {
                                 deleteTrack={(!stationByUser || likedTrackStation) ? null : deleteTrack}
                                 duration={utilService.formatDuration(track.duration)}
                                 handleTrackClick={() => handleTrackClick(trackNum)}
+                                addTrackToStation={addTrackToStation}
                             />
                         </li> 
                     ))}

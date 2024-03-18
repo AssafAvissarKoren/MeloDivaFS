@@ -1,8 +1,28 @@
 .hr {
-    border-top: 1px solid #b3b3b3;
+    border: 0;
+    border-top: 1px solid #404040;
+    padding: 0;
+    margin: 0;
+    width: 100%;
 }
 
 .btn {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 12px;
+    padding: 12px 8px 12px 12px;
+    background-color: unset;
+    border: 0;
+    border-radius: 2px;
+    width: 100%;
+    color: white;
+    text-align: left;
+    cursor: default;
+
+    &:hover {
+        background-color: #404040;
+    }  
+
     & .icon {
         justify-self: center;
         font-weight: 16px;
@@ -11,6 +31,33 @@
     
     & .txt {
         width: 100%;
+    }
+}
+
+.extended-mini-menu-container {
+    position: relative;
+    display: inline-block;
+
+    & .extended-mini-menu {
+        display: none;
+        position: absolute;
+        padding: 4px;
+        background-color: #282828;
+        border-radius: 3px;
+        left: -150px;
+        top: 0;
+        width: 150px;
+        background-color: #282828;
+        box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, 0.1);
+
+        & .btn {
+            position: relative;
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &:hover .extended-mini-menu {
+        display: block;
     }
 }
 

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"
 import { StationPreview } from "../cmps/StationPreview"
 import { getBasicUser, getLikedTracksAsStation } from "../store/actions/user.actions"
 import { stationService } from "../services/station.service"
-import { saveStation } from "../store/actions/station.actions"
+import { getStationsInLibrary, saveStation } from "../store/actions/station.actions"
 import { utilService } from "../services/util.service"
 import { IndexContext } from '../cmps/IndexContext.jsx'
 import { useContext } from "react"
@@ -15,15 +15,6 @@ export function Library() {
     const stations = useSelector(storeState => storeState.stationModule.stations)
     const userId = useSelector(storeState => storeState.userModule._id)
     // const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
-    
-    function getStationsInLibrary() {
-        return stations.filter(station => {
-            return (
-                station.createdBy._id === userId ||
-                station.likedByUsers.filter(likedByUser => likedByUser._id === userId).length !== 0
-            )
-        })
-    }
 
     async function createNewStation() {
         const name = 'New Playlist'

@@ -2,6 +2,7 @@ import { stationService } from "../../services/station.service";
 import { ADD_STATION, REMOVE_STATION, SET_FILTER_BY, SET_IS_LOADING, SET_STATIONS, 
     UPDATE_STATION, } from "../reducers/station.reducer";
 import { store } from "../store";
+import { getBasicUser } from "./user.actions";
 
 
 export async function loadStations() {
@@ -69,4 +70,23 @@ export function setIsLoading(isLoading) {
 
 export async function getStations() {
     return await stationService.getStations()
+}
+
+export function getStationsInLibrary() {
+    const stations = store.getState().stationModule.stations
+    const userId = getBasicUser()._id
+    return stations.filter(station => {
+        return (
+            station.createdBy._id === userId ||
+            station.likedByUsers.filter(likedByUser => likedByUser._id === userId).length !== 0
+        )
+    })
+}
+
+export function getStationsByUser() {
+    const stations = store.getState().stationModule.stations
+    const userId = getBasicUser()._id
+    return stations.filter(station => {
+        return station.createdBy._id === userId
+    })
 }
