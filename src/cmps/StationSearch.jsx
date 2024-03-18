@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { CategoryDisplay } from '../cmps/CategoryDisplay.jsx';
-import { categoryService } from '../services/category.service';
+import React, { useState } from 'react';
 import { dataService } from '../services/data.service.js';
 import { setQueueToTrack } from '../store/actions/queue.actions.js';
 import { trackService } from '../services/track.service.js';
@@ -57,7 +55,7 @@ export function StationSearch({addTrackToStation}) {
         <div className="station-search">
             <h2 className="search-title">Let's find something for your playlist</h2>
             <label className="search-bar-container">
-                <div className="img-contaner">
+                <div className="img-container">
                     <img className="search-img" src={utilService.getImgUrl("../assets/imgs/search.svg")} />
                 </div>
                 <input 
@@ -69,7 +67,7 @@ export function StationSearch({addTrackToStation}) {
                     onKeyDown={handleKeyDown}
                 />  
                 {searchText &&
-                    <div className="img-contaner" onClick={() => setSearchText('')}>
+                    <div className="img-container" onClick={() => setSearchText('')}>
                         <img className="ex-img" src={utilService.getImgUrl("../assets/imgs/ex.svg")} />
                     </div>
                 }

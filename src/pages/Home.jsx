@@ -3,7 +3,7 @@ import { categoryService } from '../services/category.service';
 import { CategoryDisplay } from '../cmps/CategoryDisplay';
 import { useSelector } from 'react-redux';
 
-export function Home({ setCurrentCategory }) {
+export function Home({ }) {
     const [categories, setCategories] = useState([]);
     const stations = useSelector(storeState => storeState.stationModule.stations)
 
@@ -18,6 +18,7 @@ export function Home({ setCurrentCategory }) {
 
     if (!stations || !categories.length) return <div style={{ color: "white" }}>Loading...</div>;
     
+    console.log("Home")
     return (
         <section className="home">
             <div className='category-display'>
@@ -26,7 +27,6 @@ export function Home({ setCurrentCategory }) {
                         key={category._id}
                         category={category}
                         style={categoryService.Status.ROW}
-                        setCurrentCategory={setCurrentCategory}
                     />
                 ))}
             </div>

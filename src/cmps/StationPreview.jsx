@@ -7,10 +7,10 @@ import { setQueueToStation } from '../store/actions/queue.actions.js';
 export const StationPreview = ({ station }) => {
   const { setFilterBy } = useContext(IndexContext);
 
-  function handleOnClick(stationId) {
+  function handleOnClick(collectionId) {
     const newFilterBy = {
       tab: 'station',
-      stationId: stationId,
+      collectionId: collectionId,
       text: '',
     };
 
@@ -22,13 +22,6 @@ export const StationPreview = ({ station }) => {
     setQueueToStation(station)
   }
 
-  const shortenText = (text, maxLength) => {
-    if (text?.length > maxLength) {
-      return text.slice(0, maxLength) + '...';
-    }
-    return text;
-  };
-  
   const stationImgURL = station?.imgUrl === "default_thumbnail_url" ? defaultImgUrl : station?.imgUrl;
 
   if (!station) {

@@ -13,9 +13,11 @@
 }
 
 .icon-wrapper {
-    width: 20px;
-    height: 20px;
     margin-right: 10px;
+    svg {
+        width: 24px;
+        height: 24px;
+    }
 }
 
 

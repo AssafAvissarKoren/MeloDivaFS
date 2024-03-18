@@ -81,7 +81,7 @@ function getDefaultFilter(params) {
     return {
         tab: params.tab || "home",
         text: params.text || "",
-        stationId: params.stationId || "",
+        collectionId: params.collectionId || "",
     }
 }
 
@@ -92,8 +92,8 @@ function filterURL(filterBy) {
     if (filterBy.text) {
         queryParams.append('text', filterBy.text);
     }
-    if (filterBy.stationId) {
-        url += `/${filterBy.stationId}`;
+    if (filterBy.collectionId) {
+        url += `/${filterBy.collectionId}`;
     }
     if ([...queryParams].length) {
         url += `?${queryParams}`;

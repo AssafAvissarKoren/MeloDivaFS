@@ -1,7 +1,5 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart as heartLined } from '@fortawesome/free-regular-svg-icons'
-import { faPlay, faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useRef, useState } from 'react'
+import { useSelector } from 'react-redux';
 import { MiniMenu } from './MiniMenu'
 import { toggleLikedTrack } from '../store/actions/user.actions'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
@@ -14,6 +12,7 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
     const [isSelected, setSelected] = useState(false)
     const [isMenu, setIsMenu] = useState(false)
     const modalRef = useRef(track.url)
+    const isPlaying = useSelector(state => state.playerModule.isPlaying);
 
     useEffect(() => {
         if(isSelected) {
@@ -73,6 +72,15 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
         <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
             <div className='track-numder'>
                 <p className='track-num'>{trackNum}</p>
+                {/* <button 
+                    className={`btn-track-play ${isPlaying ? 'playing' : ''}`}
+                    onClick={(ev) => {
+                        ev.stopPropagation();
+                        handleTrackClick(track);
+                    }}
+                >
+                    <span className="action-button-wrapper"> <svgSvc.player.PlayBtn color={"white"} /> </span>
+                </button> */}
                 <button className="btn-track-play" onClick={() => handleTrackClick(track)}>
                     <span className="action-button-wrapper"> <svgSvc.player.PlayBtn color={"white"} /> </span>
                 </button>

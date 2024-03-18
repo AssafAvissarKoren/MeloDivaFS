@@ -15,11 +15,11 @@ export async function createCategories() {
     }
 }
 
-export async function getCategories(filter = null) {
+export async function getCategory(categoryId) {
     // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
     try {
-        const categories = await categoryService.getCategories(filter)
-        store.dispatch({ type: SET_CATEGORIES, categories })
+        const category = await categoryService.getCategories(categoryId)
+        store.dispatch({ type: SET_CATEGORIES, category })
     } catch (err) {
         console.log('Had issues loading categories', err);
         throw err

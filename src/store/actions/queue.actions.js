@@ -47,6 +47,28 @@ export async function addTrackToQueue(track) {
     }
 }
 
+export async function playNextTrack() {
+    await playAdjacentTrack(1)
+}
+
+export async function playPrevTrack() {
+    await playAdjacentTrack(-1)
+}
+
+export async function playAdjacentTrack(num) {
+    try {
+        const station = store.getState().queueModule.station
+        const stationTracksToPlay = store.getState().queueModule.stationTracksToPlay
+        const currQueue = store.getState().queueModule
+        const currTrackNum = currQueue.trackNum
+        const newTrackNum = (currTrackNum + num) % stationTracksToPlay.length;
+        setQueueToStation(station, newTrackNum)
+    } catch (err) {
+        console.log('Had issues getting the prev track index', err);
+        throw err
+    }
+}
+
 export function getCurrentTrackInQueue() {
     const stationTracksToPlay = store.getState().queueModule.stationTracksToPlay
     const tracksToPlay = store.getState().queueModule.tracksToPlay
@@ -69,6 +91,7 @@ export async function nextTrackInQueue() {
             store.dispatch({ type: REMOVE_TRACK_TO_PLAY, track })
         } else {
             track = stationTracksToPlay[0]
+            console.log('nextTrackInQueue', track)
             store.dispatch({ type: REMOVE_STATION_TRACK_TO_PLAY, track })
             store.dispatch({ type: ADD_PLAYED_TRACK, track })
         }
@@ -91,10 +114,10 @@ export async function prevTrackInQueue() {
         if(playedTracks.length) {
             const track = tracksToPlay[tracksToPlay.length - 1]
             const tracks = [track, ...stationTracksToPlay]
+            console.log('prevTrackInQueue', track)
             store.dispatch({ type: REMOVE_PLAYED_TRACK, track })
             store.dispatch({ type: SET_PLAYED_TRACKS, tracks })
         }
-        return getCurrentTrackInQueue()
         return getCurrentTrackInQueue()
     } catch (err) {
         console.log('Had issues Setting the queue', err);

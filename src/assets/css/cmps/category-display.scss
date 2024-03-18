@@ -74,9 +74,9 @@ h2 {
     width: 80px;
     height: 80px;
     overflow: hidden;
-    position: relative;
-    bottom: -45px;
-    right: -98px;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
     transform: rotate(25deg) scale(1.2);
 
     .cube-image {

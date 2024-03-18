@@ -40,8 +40,9 @@
         padding: 7px;
         margin-left: 9px;
         align-items: center;
+        // box-shadow: 0px 0px 0px 2px white; /* Add white line border at the bottom */
 
-        & .img-contaner {
+        & .img-container {
             margin-left: 4px;
             margin-right: 4px;
             width: 18px;
@@ -64,6 +65,10 @@
         }
     }
 
+    .search-bar-container:focus-within {
+        box-shadow: 0px 0px 0px 2px white;
+    }
+
     & .search-bar {
         background-color: unset;
         border: none;
@@ -75,5 +80,4 @@
             outline: none;
         }
     }
-
 }

@@ -10,7 +10,7 @@ export function App() {
                 <main className='container'>
                     <Routes>
                         <Route path="/" element={<Navigate to="/melodiva/home" replace />} />
-                        <Route path="/melodiva/:tab/:stationId?" element={<Index />} />
+                        <Route path="/melodiva/:tab/:collectionId?" element={<Index />} />
                     </Routes>
                 </main>
                 <UserMsg />

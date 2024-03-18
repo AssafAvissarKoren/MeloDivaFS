@@ -43,7 +43,7 @@ export const AppHeader = ({ setFilterBy }) => {
             </div>
             {params.tab == "search" &&
                 <label className="search-bar-container">
-                    <div className="search-img-contaner">
+                    <div className="search-img-container">
                         <svgSvc.general.LibrarySearch />
                     </div>
                     <input 
@@ -55,7 +55,7 @@ export const AppHeader = ({ setFilterBy }) => {
                         onKeyDown={handleKeyDown}
                     />
                     {text &&
-                        <div className="img-contaner" onClick={() => setText('')}>
+                        <div className="img-container" onClick={() => setText('')}>
                             <img className="ex-img" src={utilService.getImgUrl("../assets/imgs/ex.svg")} />
                         </div>
                     }

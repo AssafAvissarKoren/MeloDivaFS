@@ -9,7 +9,7 @@ import { utilService } from '../services/util.service.js';
 import { TrackPreview } from '../cmps/TrackPreview.jsx';
 
 
-export function Search({ searchText, setCurrentCategory }) {
+export function Search({ searchText }) {
     const [tracks, setTracks] = useState([]);
     const [categories, setCategories] = useState([]);
     const stations = useSelector(storeState => storeState.stationModule.stations)
@@ -67,6 +67,7 @@ export function Search({ searchText, setCurrentCategory }) {
     
     return (
         <div className="search">
+            <h1>Browse All</h1>
             {searchText ? (
                 <>
                     {tracks.map((track, index) => (
@@ -88,7 +89,6 @@ export function Search({ searchText, setCurrentCategory }) {
                             key={category._id}
                             category={category}
                             style={categoryService.Status.CUBE}
-                            setCurrentCategory={setCurrentCategory}
                         />
                     ))}
                 </div>

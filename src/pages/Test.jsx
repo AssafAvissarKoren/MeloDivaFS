@@ -108,14 +108,14 @@ export const Test = ({ setCurrentCategory }) => {
                     setCurrentCategory={setCurrentCategory}
                 />
             </div> */}
-            {testCategory && 
+            {/* {testCategory && 
                 <CategoryDisplay
                     key={testCategory._id}
                     category={testCategory}
                     style={categoryService.Status.RESULTS}
                     setCurrentCategory={setCurrentCategory}
                 />
-            }
+            } */}
         </div>
     );
 };

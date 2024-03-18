@@ -33,7 +33,7 @@ export function Library() {
 
         const newFilterBy = {
             tab: 'station',
-            stationId: newStation._id,
+            collectionId: newStation._id,
             text: '',
         }
       

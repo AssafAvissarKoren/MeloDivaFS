@@ -15,7 +15,7 @@ import { CategoryDisplay } from '../cmps/CategoryDisplay.jsx'
 import { FooterPlayer } from  '../cmps/FooterPlayer.jsx'
 
 import { loadStations } from '../store/actions/station.actions.js';
-import { getCurrentTrackInQueue, nextTrackInQueue, prevTrackInQueue } from '../store/actions/queue.actions.js';
+import { getCurrentTrackInQueue } from '../store/actions/queue.actions.js';
 
 import { stationService } from '../services/station.service.js';
 import { categoryService } from '../services/category.service.js';
@@ -119,7 +119,7 @@ export const Index = () => {
     }
 
     return (
-        <IndexContext.Provider value={{ setFilterBy }}>
+        <IndexContext.Provider value={{ setFilterBy ,setCurrentCategory }}>
             <div className="index-container">
                 <div className="index-side">
                     <div className="index-side-nav" style={{width: `${sideNavWidth}px`}}>
@@ -139,7 +139,6 @@ export const Index = () => {
                 {trackToPlay && <div className="index-footer-player">
                     <FooterPlayer 
                         video={trackService.trackToVideo(trackToPlay)}
-                        setTrackToPlay={setTrackToPlay}
                     />
                 </div>}
             </div>

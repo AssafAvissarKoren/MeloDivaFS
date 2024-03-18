@@ -24,19 +24,20 @@ import { svgSvc } from "../services/svg.service"
 import { StationSearch } from "../cmps/StationSearch.jsx"
 
 export function StationDetails() {
-    const { stationId } =  useParams()
+    const { collectionId } =  useParams()
     const { setFilterBy } = useContext(IndexContext)
     const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
     const [station, setStation] = useState()
     const [menu, setMenu] = useState(0)
     const [tracksWithDurations, setTracksWithDurations] = useState([])
+    const isPlaying = useSelector(state => state.playerModule.isPlaying);
 
     useEffect(() => {
         loadStation()
-    },[stationId])
+    },[collectionId])
 
     useEffect(() => {
-        if(stationId === LIKED_TRACK_AS_STATION_ID) {
+        if(collectionId === LIKED_TRACK_AS_STATION_ID) {
             const tracks = Object.keys(likedTracks).map((key) => likedTracks[key])
             setStation(prevStation => ({...prevStation, tracks: tracks}))
         }
@@ -57,12 +58,12 @@ export function StationDetails() {
     }, [station])
 
     async function loadStation() {
-        if (stationId === LIKED_TRACK_AS_STATION_ID) {
+        if (collectionId === LIKED_TRACK_AS_STATION_ID) {
             const station = getLikedTracksAsStation();
             setStation(station);
         } else {
             try {
-                const station = await getStationById(stationId);
+                const station = await getStationById(collectionId);
                 setStation(station);
             } catch (err) {
                 eventBusService.showErrorMsg('failed to load station');
@@ -99,11 +100,11 @@ export function StationDetails() {
     }
 
     function onDeleteStation() {
-        removeStation(stationId)
+        removeStation(collectionId)
 
         const newFilterBy = {
             tab: 'home',
-            stationId: '',
+            collectionId: '',
             text: '',
         };
     
@@ -161,7 +162,7 @@ export function StationDetails() {
 
     if(!station) return <div>loading...</div>
 
-    const likedTrackStation = stationId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
+    const likedTrackStation = collectionId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
     const stationByUser = getBasicUser()._id === station.createdBy._id ? 'hiden' : ''
     const isLiked = station.likedByUsers && station.likedByUsers.filter(likedByUser => likedByUser && likedByUser._id === getBasicUser()._id).length !== 0;
     const gradientColor = station.mostCommonColor
@@ -198,8 +199,7 @@ export function StationDetails() {
         <div className="station-content">
             <div className="station-options">
                 <button className="station-play-btn" onClick={() => {}}>
-                    <svgSvc.general.PlaylistPlayBtn color={"black"}/>
-                    {/* <FontAwesomeIcon icon={faPlayCircle} /> */}
+                    {isPlaying ? <svgSvc.general.PlaylistPauseBtn color={"black"}/> : <svgSvc.general.PlaylistPlayBtn color={"black"}/>}
                 </button>
                 { !likedTrackStation && !stationByUser && 
                     <button className="station-like-btn" onClick={onToggleUserLiked}>

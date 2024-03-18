@@ -1,32 +1,50 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
-
 import { StationPreview } from './StationPreview';
 import { IndexContext } from './IndexContext.jsx';
-
 import { getStations } from '../store/actions/station.actions';
+import { useParams } from 'react-router';
+import { categoryService} from '../services/category.service';
 
-export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
-  const { setFilterBy } = useContext(IndexContext);
+export const CategoryDisplay = ({ category, style }) => {
+  const { collectionId } = useParams();
+  const { setFilterBy, setCurrentCategory } = useContext(IndexContext);
   const [categoryStations, setCategoryStations] = useState([]);
-
-  if (!category) { return <div>Loading...</div>; }
+  const [ currCategory, setCurrCategory ] = useState(null);
+  const currStyle = useRef(style);
 
   useEffect(() => {
-      const fetchCategory = async () => {
-        if (category && category.stationIds) {
-            const stations = await getStations();
-            const filteredStations = stations.filter(station => category.stationIds.includes(station._id));
-            setCategoryStations(filteredStations);
-          }
-      };
-
-      fetchCategory();
+      fetchCategory(category);
   }, [category]);
+
+  useEffect(() => {
+    loadCategory();
+  }, []);
+
+  async function fetchCategory(category) {
+    if (category && category.stationIds) {
+        const stations = await getStations();
+        const filteredStations = stations.filter(station => category.stationIds.includes(station._id));
+        setCategoryStations(filteredStations);
+      }
+  };
+
+  async function loadCategory() {
+    if (category) {
+      console.log("CategoryDisplay: loadCategory yes", collectionId, category)
+      setCurrCategory(category);
+      fetchCategory(category)
+    } else {
+      const currCat = await categoryService.getCategory(collectionId);
+      console.log("CategoryDisplay: loadCategory no", collectionId, currCat)
+      setCurrCategory(currCat)
+      fetchCategory(currCat)
+    }
+  }
 
   function handleOnClick(category) {
     const newFilterBy = {
       tab: 'genre',
-      stationId: category._id,
+      collectionId: category._id,
       text: '',
     };
     setFilterBy(newFilterBy);
@@ -34,37 +52,38 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
   }
 
   const renderCategory = () => {
-    switch (style) {
+    console.log("renderCategory", currStyle.current)
+    switch (currStyle.current) {
       case "row":
         return (
           <div className="category-row">
             <div className="title">
-              <h2 onClick={() => handleOnClick(category)}>{category.name} {/*categoryStations.length*/}</h2>
-              <p onClick={() => handleOnClick(category)}>Show all</p>
+              <h2 onClick={() => handleOnClick(currCategory)}>{currCategory.name} </h2>
+              <p onClick={() => handleOnClick(currCategory)}>Show all</p>
             </div>
-            <div className="row">{renderStations(categoryStations, true)}</div>
+            <div className="row">{renderStations(categoryStations)}</div>
           </div>
         );
       case "cube":
         return (
-          <div className="category-cube" style={{ backgroundColor: category.color }}>
-            <h2 onClick={() => handleOnClick(category)}>{category.name}</h2>
+          <div className="category-cube" onClick={() => handleOnClick(currCategory)} style={{ backgroundColor: currCategory.color }}>
+            <h2>{currCategory.name}</h2>
             <div className="cube-image-container">
-              <img src={category.image} alt={category.name} className="cube-image" />
+              <img src={currCategory.image} alt={currCategory.name} className="cube-image" />
             </div>
           </div>
         );
       case "results":
         return (
           <div className="category-results">
-            <h2>{category.name}</h2>
+            <h2>{currCategory.name}</h2>
             <div className="grid">{renderStations(categoryStations)}</div>
           </div>
         );
       case "test":
         return (
           <div className="category-test">
-            <h2>{category.name}</h2>
+            <h2>{currCategory.name}</h2>
             <div className="grid">{renderStations(null)}</div>
           </div>
         );
@@ -74,14 +93,12 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
   };
  
   const renderStations = (renderedStations) => { 
-    // console.log('catName', category.name, 'catLen', renderedStations.length, 'catStart', category.startingPosition);
-  
+ 
     if (renderedStations && renderedStations.length > 0) {
-      const startingPosition = category.startingPosition % renderedStations.length;
+      const startingPosition = currCategory.startingPosition % renderedStations.length;
 
       return renderedStations.map((station, index) => {
         const mappedIndex = (index + startingPosition) % renderedStations.length;
-        // console.log('mappedIndex', mappedIndex, "index", index, "startingPosition", startingPosition);
         return (
           <StationPreview 
             key={renderedStations[mappedIndex]._id} 
@@ -99,10 +116,11 @@ export const CategoryDisplay = ({ category, style, setCurrentCategory }) => {
       ));
     }
   };
-    
-  if (category) {
+  
+  if (currCategory) {
     return renderCategory();
   } else {
+    console.log("Loading...", collectionId)
     return null;
   }  
 };

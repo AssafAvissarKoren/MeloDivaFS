@@ -16,6 +16,7 @@ export const categoryService = {
     createCategories,
     processCategoryData,
     getCategories,
+    getCategory,
     removeById,
     saveCategory,
 }
@@ -90,6 +91,12 @@ async function processCategoryData(categories) {
 
     return categoriesArray;
 }
+
+async function getCategory(categoryId) {
+    const categories = await storageService.query(CATEGORY_STORAGE_KEY);
+    return categories.find(category => category._id === categoryId);
+}
+
 
 async function getCategories(filterBy = null) {
     let categories = await storageService.query(CATEGORY_STORAGE_KEY) // add filter later

@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import YouTube from 'react-youtube';
+import { useSelector } from 'react-redux';
 import { utilService } from '../services/util.service.js'
 import { dataService } from '../services/data.service.js'
 import { svgSvc } from '../services/svg.service.jsx';
 import { Slider } from '@mui/material';
-import { prevTrackInQueue, nextTrackInQueue } from '../store/actions/queue.actions.js'
-import { trackService } from '../services/track.service.js'
+import { playNextTrack, playPrevTrack } from '../store/actions/queue.actions.js'
+import { setPlayState } from '../store/actions/player.actions'
 
-
-export function FooterPlayer({ video, setTrackToPlay }) {
-    const [isPlaying, setIsPlaying] = useState(false);
+export function FooterPlayer({ video }) {
     const [videoDuration, setVideoDuration] = useState("PT0M0S");
     const [currentTime, setCurrentTime] = useState(0);
     const [volume, setVolume] = useState(50);
     const [newTrack, setNewTrack] = useState(false);
     const playerRef = useRef(null);
     const thumbnailUrl = video.snippet.thumbnails.default.url;
+    const isPlaying = useSelector(state => state.playerModule.isPlaying);
 
     const opts = {
         height: '390',
@@ -69,16 +69,17 @@ export function FooterPlayer({ video, setTrackToPlay }) {
     };
 
     useEffect(() => {
-        setTimeout(() => {
+        setTimeout( async () => {
             if (playerRef.current && playerRef.current.playVideo) {
                 playerRef.current.pauseVideo();
                 playerRef.current.playVideo();
-                setIsPlaying(true);
+                await setPlayState(true);
+                // setIsPlaying(true);
             }
         }, 1000);
     }, [newTrack])
 
-    const togglePlay = () => {
+    const togglePlay = async () => {
         if (playerRef.current) {
             if (isPlaying) {
                 playerRef.current.pauseVideo();
@@ -87,7 +88,8 @@ export function FooterPlayer({ video, setTrackToPlay }) {
                 playerRef.current.playVideo();
                 console.log("vid playing!")
             }
-            setIsPlaying(!isPlaying);
+            await setPlayState(!isPlaying);
+            // setIsPlaying(!isPlaying);
         }
     };
 
@@ -110,21 +112,27 @@ export function FooterPlayer({ video, setTrackToPlay }) {
     const jump15Back = () => { /* ... */ };
     const shuffleQueue = () => { /* ... */ };
 
-    const playNext = () => { 
+    const playNext = async () => { 
         console.log("nextVideo")
         if (video) {
-            const nextVideo = trackService.trackToVideo(nextTrackInQueue())
-            setTrackToPlay(nextVideo)
+            await playNextTrack()
         }
     };
     
-     const playPrev = () => { 
+     const playPrev = async () => { 
         console.log("prevVideo")
         if (video) {
-            const prevVideo = trackService.trackToVideo(prevTrackInQueue())
-            setTrackToPlay(nextVideo)
+            await playPrevTrack()
         }
     };
+
+    const shortenText = (text, maxLength = 50) => {
+        if (text?.length > maxLength) {
+          return text.slice(0, maxLength) + '...';
+        }
+        return text;
+    };
+        
     
     const toggleRepeat = () => { /* ... */ };
     const jump15Forward = () => { /* ... */ };
@@ -137,7 +145,7 @@ export function FooterPlayer({ video, setTrackToPlay }) {
                     {thumbnailUrl && <img src={thumbnailUrl} alt={`${video.snippet.title} thumbnail`} />}
                 </div>
                 <div className="title-and-channel">
-                    <div className="video-name">{video.snippet.title}</div>
+                    <div className="video-name">{shortenText(video.snippet.title)}</div>
                     <div className="channel-name">{video.snippet.channelTitle}</div>
                 </div>
             </div>
