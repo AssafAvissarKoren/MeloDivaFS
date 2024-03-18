@@ -74,6 +74,7 @@
         grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
         margin: 0;
         padding: 0;
+        align-content: start;
         overflow-y: auto;
     }
 }

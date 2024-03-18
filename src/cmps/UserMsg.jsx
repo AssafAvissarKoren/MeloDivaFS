@@ -9,7 +9,7 @@ export function UserMsg() {
             setMsg(msg);
             setTimeout(() => {
                 onCloseMsg();
-            }, 3000);
+            }, 4000);
         });
 
         return unsubscribe;
@@ -24,7 +24,6 @@ export function UserMsg() {
     return (
         <div className={"user-msg " + msg.type}>
             <p dangerouslySetInnerHTML={{ __html: msg.txt }}></p>
-            <button onClick={onCloseMsg}>X</button>
         </div>
     );
 }

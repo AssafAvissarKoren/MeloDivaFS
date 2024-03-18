@@ -70,9 +70,9 @@ export function Search({ searchText, setCurrentCategory }) {
             const tracks = station.tracks
             tracks.push(track)
             await saveStation({...station, tracks: tracks})
-            eventBusService.showSuccessMsg(`Added to ${station.name}`)
+            eventBusService.showSuccessMsg(`Added to ${station.name}.`)
         } catch (err) {
-            eventBusService.showErrorMsg('faild to add track to station')
+            eventBusService.showErrorMsg('faild to add track to station.')
             console.log(err)
         }
     }
