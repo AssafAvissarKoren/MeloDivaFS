@@ -143,28 +143,30 @@ export function FooterPlayer({ video, setTrackToPlay }) {
                 <div className="fade-out"/>
             </div>
             <div className="player-controls">
-                <div className="player-action-buttons">
-                    <button onClick={jump15Back} name="Jump15Back" className="action-button jump-15-back">
-                        <span className="action-button-wrapper"> <svgSvc.player.Jump15SecBack />  </span>
-                    </button>
-                    <button onClick={shuffleQueue} name="Shuffle" className="action-button shuffle">
-                        <span className="action-button-wrapper"> <svgSvc.player.Shuffle />  </span>
-                    </button>
-                    <button onClick={playPrev} name="Previous" className="action-button previous">
-                        <span className="action-button-wrapper"> <svgSvc.player.TrackPrev />  </span>
-                    </button>
-                    <button onClick={togglePlay} name={isPlaying ? "Pause" : "Play"} className="action-button play-pause">
-                        <span className="action-button-wrapper"> {isPlaying ? <svgSvc.player.PauseBtn /> : <svgSvc.player.PlayBtn />}  </span>
-                    </button>
-                    <button onClick={playNext} name="Next" className="action-button next">
-                        <span className="action-button-wrapper"> <svgSvc.player.TrackNext />  </span>
-                    </button>
-                    <button onClick={toggleRepeat} name="Repeat" className="action-button repeat">
-                        <span className="action-button-wrapper"> <svgSvc.player.Repeat />  </span>
-                    </button>
-                    <button onClick={jump15Forward} name="Jump15Back" className="action-button jump-15-back">
-                        <span className="action-button-wrapper"> <svgSvc.player.Jump15SecForward />  </span>
-                    </button>
+                <div className="player-action-buttons-container">
+                    <div className="player-action-buttons">
+                        <button onClick={jump15Back} name="Jump15Back" className="action-button jump-15-back">
+                            <span className="action-button-wrapper"> <svgSvc.player.Jump15SecBack />  </span>
+                        </button>
+                        <button onClick={shuffleQueue} name="Shuffle" className="action-button shuffle">
+                            <span className="action-button-wrapper"> <svgSvc.player.Shuffle />  </span>
+                        </button>
+                        <button onClick={playPrev} name="Previous" className="action-button previous">
+                            <span className="action-button-wrapper"> <svgSvc.player.TrackPrev />  </span>
+                        </button>
+                        <button onClick={togglePlay} name={isPlaying ? "Pause" : "Play"} className="action-button play-pause">
+                            <span className="action-button-wrapper"> {isPlaying ? <svgSvc.player.PauseBtn /> : <svgSvc.player.PlayBtn />}  </span>
+                        </button>
+                        <button onClick={playNext} name="Next" className="action-button next">
+                            <span className="action-button-wrapper"> <svgSvc.player.TrackNext />  </span>
+                        </button>
+                        <button onClick={toggleRepeat} name="Repeat" className="action-button repeat">
+                            <span className="action-button-wrapper"> <svgSvc.player.Repeat />  </span>
+                        </button>
+                        <button onClick={jump15Forward} name="Jump15Back" className="action-button jump-15-back">
+                            <span className="action-button-wrapper"> <svgSvc.player.Jump15SecForward />  </span>
+                        </button>
+                    </div>
                 </div>
                 <div className="progress-section">
                     <span className="current-time">{formatTime(currentTime)}</span>

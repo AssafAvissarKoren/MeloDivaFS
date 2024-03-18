@@ -1,6 +1,6 @@
 .footer-player {
     display: grid;
-    grid-template-columns: repeat(3, minmax(200, 1fr));
+    grid-template-columns: repeat(3, minmax(200px, 1fr));
     gap: 10px;
     padding: 10px;
     background-color: #181818;
@@ -61,65 +61,73 @@
     .player-controls {
         grid-column: 2;
         grid-row: 1;
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
         align-items: center;
         justify-content: center;
         width: 100%;
+        max-width: 722px;
 
-        .player-action-buttons {
-            display: flex;
+        .player-action-buttons-container {
+            display: grid;  
+            grid-template-columns: auto minmax(auto, 300px) auto;
             justify-content: center;
-            gap: 10px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            align-items: center;
 
-            .shuffle{
-                font-size: 12px;
-            }
-            
-            .previous{
-                font-size: 25px;
-            }
-
-            .play-pause {
-                border-radius: 50%;
-                font-size: 37px;
+            .player-action-buttons {
+                grid-column: 2;
                 display: flex;
-                align-items: center;
-                justify-content: center;
-
-                .action-button-wrapper {
-                    width: 32px; /* Adjust the size as needed */
-                    height: 32px; /* Adjust the size as needed */
+                justify-content: space-between;
+                margin-bottom: 10px;
+                cursor: pointer;
+    
+                .shuffle{
+                    font-size: 12px;
+                }
+                
+                .previous{
+                    font-size: 25px;
+                }
+    
+                .play-pause {
                     border-radius: 50%;
-                    background-color: white;
+                    font-size: 37px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for depth */
-              
-                    svg {
-                        width: 16px; /* Adjust the size of the SVG icon */
-                        height: 16px; /* Adjust the size of the SVG icon */
+    
+                    .action-button-wrapper {
+                        width: 32px; /* Adjust the size as needed */
+                        height: 32px; /* Adjust the size as needed */
+                        border-radius: 50%;
+                        background-color: white;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for depth */
+                  
+                        svg {
+                            width: 16px; /* Adjust the size of the SVG icon */
+                            height: 16px; /* Adjust the size of the SVG icon */
+                        }
                     }
+                }  
+    
+                .next{
+                    font-size: 25px;
                 }
-            }  
-
-            .next{
-                font-size: 25px;
-            }
-
-            .repeat{
-                font-size: 12px;
+    
+                .repeat{
+                    font-size: 12px;
+                }
             }
         }
 
         .progress-section {
-            display: flex;
-            flex-direction: row;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
             align-items: center;
+            width: 100%;
 
             .MuiSlider-root.MuiSlider-colorPrimary {
                 color: white;
@@ -140,7 +148,7 @@
             }
 
             .progress-slider {
-                width: 400px;
+                width: 100%;
                 margin: 0 auto;
 
                 .MuiSlider-rail {
