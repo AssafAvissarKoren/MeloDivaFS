@@ -37,6 +37,7 @@ export const Index = () => {
 
     const navigate = useNavigate();
 
+
     useEffect(() => {
         loadStationsLocal();
         initUser()
@@ -133,7 +134,7 @@ export const Index = () => {
                     <div className={`resizer-line ${isResizing && "unhide"}`}/>
                 </div>
                 <div className="index-main">
-                    <AppHeader setFilterBy={setFilterBy}/>
+                    <AppHeader filterBy={filterBy} setFilterBy={setFilterBy}/>
                     <MainViewComponent {...mainViewComponentProps} />
                 </div>
                 {trackToPlay && <div className="index-footer-player">

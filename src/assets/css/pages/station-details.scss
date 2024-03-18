@@ -13,8 +13,8 @@
         padding-top: 30px;
 
         display: grid;
-        grid-template-columns: 21px minmax(100px, 233px) 1fr 21px;
-        align-items: center;
+        grid-template-columns: 21px minmax(128px, 232px) 1fr 21px;
+        align-items: end;
         gap: 23px;
         padding-bottom: 19px;
 
@@ -217,6 +217,7 @@
                 padding-top: 32px;
                 grid-column: 1 / -1;
                 color: #909090;
+                margin-bottom: 9px;
             }
     
             & .station-track-list { 
@@ -237,7 +238,6 @@
             display: block;
             height: 1px;
             background-color: #303030;
-            margin-top: 9px;
         }
     }
 

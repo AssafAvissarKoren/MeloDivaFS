@@ -115,6 +115,14 @@
         & p {
             font-weight: 600;
             color: white;
+            overflow: hidden;
+            overflow-wrap: break-word;
+            hyphens: manual;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* number of lines to show */
+                    line-clamp: 2; 
+            -webkit-box-orient: vertical;
         }
 
         & .track-preview-img-container {

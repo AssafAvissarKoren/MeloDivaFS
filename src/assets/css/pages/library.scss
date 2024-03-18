@@ -3,77 +3,78 @@
     height: 100%;
     display: grid;
     grid-template-columns: 10px 1fr 10px;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto 1fr;
     border-radius: 10px;
     overflow-y: auto;
     color: white;
+    position: relative;
 
-    & .title {
+    & .head {
         grid-column: 1 / -1;
-
         position: sticky;
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        top: 0;
-        background-color: #121212;
-        z-index: 999;
-        padding: 12px 12px 8px 22px;
-        cursor: pointer;
-        color: white;
-        transition: background-color 0.3s, color 0.3s;
-        align-items: center;
-
-        & p {
-            font-weight: bold;
-        }
         
-        & .add-station-btn {
-            grid-column: -1;
-            
+        & .title {
+    
             display: grid;
-            width: 32px;
-            height: 32px;
-            border-radius: 999px;
-            align-content: center;
-            justify-content: center;
-
-            &:hover {
-                color: white;
-                background-color: #1a1a1a;
+            grid-template-columns: auto 1fr auto;
+            top: 0;
+            background-color: #121212;
+            z-index: 999;
+            padding: 12px 12px 8px 22px;
+            cursor: pointer;
+            color: white;
+            transition: background-color 0.3s, color 0.3s;
+            align-items: center;
+    
+            & p {
+                font-weight: bold;
+            }
+            
+            & .add-station-btn {
+                grid-column: -1;
+                
+                display: grid;
+                width: 32px;
+                height: 32px;
+                border-radius: 999px;
+                align-content: center;
+                justify-content: center;
+    
+                &:hover {
+                    color: white;
+                    background-color: #1a1a1a;
+                }
+            }    
+        }
+    
+        & .library-search {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            top: 0;
+            background-color: #121212;
+            z-index: 999;
+            padding: 12px 12px 8px 22px;
+            cursor: pointer;
+            color: grey;
+            transition: background-color 0.3s, color 0.3s;
+            align-items: center;
+    
+            & p {
+                font-weight: bold;
             }
         }
-        
     }
-
-    & .library-search {
-        grid-column: 1 / -1;
-        grid-row: 2;
-        position: sticky;
-        display: grid;
-        grid-template-columns: auto 1fr auto;
-        top: 0;
-        background-color: #121212;
-        z-index: 999;
-        padding: 12px 12px 8px 22px;
-        cursor: pointer;
-        color: grey;
-        transition: background-color 0.3s, color 0.3s;
-        align-items: center;
-
-        & p {
-            font-weight: bold;
-        }
-    }
-
 
     & .content {
         grid-column: 2;
-        grid-row: -2;
+        grid-row: 2;
 
         list-style: none;
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
         margin: 0;
         padding: 0;
+        align-content: start;
+        overflow-y: auto;
     }
 }

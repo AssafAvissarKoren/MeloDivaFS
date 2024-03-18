@@ -2,6 +2,7 @@ import { utilService } from "../services/util.service"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faMinus, faTrash, faCircleCheck, faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { svgSvc } from "../services/svg.service"
+import { getStationsByUser, getStationsInLibrary } from "../store/actions/station.actions"
 
 export const miniMenuOptions = {
     hr,
@@ -73,10 +74,23 @@ function share(func) {
 
 function addToPlaylist(func) {
     return (
-        <button className="btn" onClick={func}>
-            < svgSvc.miniMenu.AddToPlaylist />
-            <p>Add to your Playlist</p>
-        </button> 
+        <div className="extended-mini-menu-container">
+            <button className="btn">
+                < svgSvc.miniMenu.AddToPlaylist />
+                <p>Add to your Playlist</p>
+            </button> 
+            <div className="extended-mini-menu">
+                {getStationsByUser().map(station => {
+                    return <button 
+                        key={`minimap${station._id}`} 
+                        className="btn" 
+                        onClick={() => func(station._id)}
+                        >
+                        {station.name}
+                    </button>
+                })}
+            </div>
+        </div>
     )
 }
 

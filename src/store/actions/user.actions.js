@@ -1,3 +1,4 @@
+import { eventBusService } from "../../services/event-bus.service";
 import { stationService } from "../../services/station.service";
 import { userService } from "../../services/user.service";
 import { utilService } from "../../services/util.service";
@@ -48,6 +49,7 @@ async function addLikedTrack(user, track) {
     try {
         userService.setUser({...user, likedTracks: {...user.likedTracks, [track.url]: track}})
         store.dispatch({ type: ADD_LIKED_TRACK, track })
+        eventBusService.showSuccessMsg('Added to Liked Songs.')
     } catch (err) {
         console.log('Had issues Adding station', err);
         throw err
@@ -63,6 +65,7 @@ async function removeLikedTrack(user, track) {
     try {
         userService.setUser({...user, likedTracks: likedTracks})
         store.dispatch({ type: REMOVE_LIKED_TRACK, track })
+        eventBusService.showSuccessMsg('Removed from Liked Songs.')
     } catch (err) {
         console.log('Had issues Removing station', err);
         throw err

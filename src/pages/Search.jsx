@@ -7,6 +7,7 @@ import { trackService } from '../services/track.service.js';
 import { useSelector } from 'react-redux';
 import { utilService } from '../services/util.service.js';
 import { TrackPreview } from '../cmps/TrackPreview.jsx';
+import { getStationById, saveStation } from '../store/actions/station.actions.js';
 
 
 export function Search({ searchText }) {
@@ -63,6 +64,19 @@ export function Search({ searchText }) {
         setQueueToTrack(track)
     };
 
+    async function addTrackToStation(track, stationId) {
+        try {
+            const station = await getStationById(stationId)
+            const tracks = station.tracks
+            tracks.push(track)
+            await saveStation({...station, tracks: tracks})
+            eventBusService.showSuccessMsg(`Added to ${station.name}.`)
+        } catch (err) {
+            eventBusService.showErrorMsg('faild to add track to station.')
+            console.log(err)
+        }
+    }
+
     if (!stations || !categories.length) return <div>Loading...</div>;
     
     return (
@@ -78,6 +92,7 @@ export function Search({ searchText }) {
                                 isLiked={likedTracks[track.url] ? true : false}
                                 duration={utilService.formatDuration(track.duration)}
                                 handleTrackClick={handleTrackClick}
+                                addTrackToStation={addTrackToStation}
                             />
                         </div>
                     ))}

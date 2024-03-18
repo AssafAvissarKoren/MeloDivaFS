@@ -1,13 +1,20 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { svgSvc } from '../services/svg.service.jsx';
+import { stationService } from '../services/station.service.js';
 
 export const SideNav = ({ setFilterBy }) => {
     const params = useParams();
     const tab = params.tab
 
     const handleTabSelect = (selectedTab) => {
-        setFilterBy(prev => ({ ...prev, tab: selectedTab , collectionId: '' }));
+        setFilterBy(prevFilterBy => ({
+            ...prevFilterBy, 
+            tab: selectedTab,
+            tabHistory: [...stationService.removePreviousHistory(prevFilterBy.tabHistory, prevFilterBy.tabHistoryLoc), selectedTab], 
+            tabHistoryLoc: prevFilterBy.tabHistoryLoc + 1, 
+            collectionId: '' 
+        }))
     };
 
     const tabData = {

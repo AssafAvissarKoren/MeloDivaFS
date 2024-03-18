@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { utilService } from '../services/util.service.js';
 import { svgSvc } from '../services/svg.service.jsx';
 
-export const AppHeader = ({ setFilterBy }) => {
+export const AppHeader = ({ filterBy, setFilterBy }) => {
     const params = useParams();
     const [text, setText] = useState('');
     const typingTimeoutRef = useRef(null);
@@ -31,19 +31,64 @@ export const AppHeader = ({ setFilterBy }) => {
         }
     };
 
+    function clearSearch() {
+        setText('')
+        setFilterBy(prev => ({ ...prev, text: '' }))
+    }
+
+    function navigateBack() {
+        let { tabHistory, tabHistoryLoc } = filterBy
+        var tab, stationId
+        tabHistoryLoc--
+        if(tabHistory[tabHistoryLoc].includes("station") || tabHistory[tabHistoryLoc].includes("genre")) {
+            [ tab, stationId ] =  tabHistory[tabHistoryLoc].split(' ')
+        } else {
+            tab = tabHistory[tabHistoryLoc]
+            stationId = ''
+        }
+        setFilterBy({
+            tab: tab,
+            stationId: stationId,
+            text: '',
+            tabHistory: [...tabHistory], 
+            tabHistoryLoc: tabHistoryLoc
+        })
+    }
+
+    function navigateForward() {
+        let { tabHistory, tabHistoryLoc } = filterBy
+        var tab, stationId
+        tabHistoryLoc++
+        if(tabHistory[tabHistoryLoc].includes("station") || tabHistory[tabHistoryLoc].includes("genre")) {
+            [ tab, stationId ] =  tabHistory[tabHistoryLoc].split(' ')
+        } else {
+            tab = tabHistory[tabHistoryLoc]
+            stationId = ''
+        }
+        setFilterBy({
+            tab: tab,
+            stationId: stationId,
+            text: '',
+            tabHistory: [...tabHistory], 
+            tabHistoryLoc: tabHistoryLoc
+        })
+    }
+
+    const isBackHistory = filterBy.tabHistoryLoc
+    const isForwardHistory = filterBy.tabHistoryLoc < filterBy.tabHistory.length - 1
     return (
         <header className="app-header">
             <div className="arrow-options">
-                <button className="btn-arrow-container">
+                <button className={`btn-arrow-container ${!isBackHistory && "disabled"}`} disabled={!isBackHistory} onClick={navigateBack}>
                     <span className="action-button-wrapper"> <svgSvc.general.DirectionLeft /> </span>
                 </button>
-                <button className="btn-arrow-container">
+                <button className={`btn-arrow-container ${!isForwardHistory && "disabled"}`} disabled={!isForwardHistory} onClick={navigateForward}>
                     <span className="action-button-wrapper"> <svgSvc.general.DirectionRight /> </span>
                 </button>
             </div>
             {params.tab == "search" &&
                 <label className="search-bar-container">
-                    <div className="search-img-container">
+                    <div className="img-contaner">
                         <svgSvc.general.LibrarySearch />
                     </div>
                     <input 
@@ -55,12 +100,12 @@ export const AppHeader = ({ setFilterBy }) => {
                         onKeyDown={handleKeyDown}
                     />
                     {text &&
-                        <div className="img-container" onClick={() => setText('')}>
-                            <img className="ex-img" src={utilService.getImgUrl("../assets/imgs/ex.svg")} />
+                        <div className="img-contaner" onClick={clearSearch}>
+                            <svgSvc.miniMenu.Ex />
                         </div>
                     }
                 </label>
             }
         </header>
-    );
+    )
 };

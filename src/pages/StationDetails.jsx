@@ -66,22 +66,33 @@ export function StationDetails() {
                 const station = await getStationById(collectionId);
                 setStation(station);
             } catch (err) {
-                eventBusService.showErrorMsg('failed to load station');
+                eventBusService.showErrorMsg('Failed to load station.');
             }
         }
     }
     
-    function onToggleUserLiked() {
+    async function onToggleUserLiked() {
         const user = getBasicUser()
         const numOfLikedUsers = station.likedByUsers.length
         var newLikedByUsers = station.likedByUsers.filter(likedByUser => likedByUser._id !== user._id)
+        const wasLiked = numOfLikedUsers !== newLikedByUsers.length
         
         // if you didn't remove the user then add them
-        if(numOfLikedUsers === newLikedByUsers.length) newLikedByUsers.push(user)
+        if(!wasLiked) newLikedByUsers.push(user)
         
-        onCloseMiniMenu()
-        saveStation({...station, likedByUsers: newLikedByUsers})
-        setStation(prevStation => ({...prevStation, likedByUsers: newLikedByUsers}))
+        try {
+            onCloseMiniMenu()
+            await saveStation({...station, likedByUsers: newLikedByUsers})
+
+            if(wasLiked) eventBusService.showErrorMsg('Remove from library.')
+            else eventBusService.showErrorMsg('Added to library.')
+
+            setStation(prevStation => ({...prevStation, likedByUsers: newLikedByUsers}))
+        } catch (err) {
+            if(wasLiked) eventBusService.showErrorMsg('Faild to remove from library.')
+            else eventBusService.showErrorMsg('Faild to add to library.')
+            console.log(err)
+        }
     }
 
     function onCloseMiniMenu() {
@@ -94,21 +105,23 @@ export function StationDetails() {
             await saveStation({...station, tracks: tracks})
             setStation({...station, tracks: tracks})
         } catch (err) {
-            eventBusService.showErrorMsg('faild to delete track')
+            eventBusService.showErrorMsg('Faild to delete track.')
             console.log(err)
         }
     }
 
-    function onDeleteStation() {
-        removeStation(collectionId)
-
-        const newFilterBy = {
-            tab: 'home',
-            collectionId: '',
-            text: '',
-        };
-    
-        setFilterBy(newFilterBy);
+    async function onDeleteStation() {
+        try {
+            await removeStation(collectionId)
+            const newFilterBy = {
+                tab: 'home',
+                collectionId: '',
+                text: '',
+            };
+            setFilterBy(prevFilterBy => ({...stationService.filterByUpdateHistory(prevFilterBy, newFilterBy)}))
+        } catch (err) {
+            eventBusService.showErrorMsg('Faild to delete station.')
+        }
     }
 
     const fetchVideoDurations = async (station) => {
@@ -137,14 +150,22 @@ export function StationDetails() {
         }
     }
 
-    async function addTrackToStation(track) {
+    async function addTrackToStation(track, stationId = station._id) {
         try {
-            const tracks = station.tracks
-            tracks.push(track)
-            await saveStation({...station, tracks: tracks})
-            setStation({...station, tracks: tracks})
+            if(station._id === stationId) {
+                const tracks = station.tracks
+                tracks.push(track)
+                await saveStation({...station, tracks: tracks})
+                setStation({...station, tracks: tracks})
+            } else {
+                const station = await getStationById(stationId)
+                const tracks = station.tracks
+                tracks.push(track)
+                await saveStation({...station, tracks: tracks})
+            }
+            eventBusService.showSuccessMsg(`Added to ${station.name}.`)
         } catch (err) {
-            eventBusService.showErrorMsg('faild to add track')
+            eventBusService.showErrorMsg('Faild to add track to station.')
             console.log(err)
         }
     }
@@ -155,7 +176,7 @@ export function StationDetails() {
             await saveStation(({...station, ...data}))
             setStation(prevStation => ({...prevStation, ...data}))
         } catch (err) {
-            eventBusService.showErrorMsg('faild to save details')
+            eventBusService.showErrorMsg('Faild to save details.')
             console.log(err)
         }
     }
@@ -198,7 +219,7 @@ export function StationDetails() {
         <div className="station-content-gradient" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}/>
         <div className="station-content">
             <div className="station-options">
-                <button className="station-play-btn" onClick={() => {}}>
+                <button className="station-play-btn" onClick={() => handleTrackClick(1)}>
                     {isPlaying ? <svgSvc.general.PlaylistPauseBtn color={"black"}/> : <svgSvc.general.PlaylistPlayBtn color={"black"}/>}
                 </button>
                 { !likedTrackStation && !stationByUser && 
@@ -250,6 +271,7 @@ export function StationDetails() {
                                 deleteTrack={(!stationByUser || likedTrackStation) ? null : deleteTrack}
                                 duration={utilService.formatDuration(track.duration)}
                                 handleTrackClick={() => handleTrackClick(trackNum)}
+                                addTrackToStation={addTrackToStation}
                             />
                         </li> 
                     ))}

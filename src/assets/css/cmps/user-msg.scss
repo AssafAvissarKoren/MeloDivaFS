@@ -1,32 +1,25 @@
 .user-msg {
     background-color: lightgray;
-    padding: 0.5em 1em;
+    padding: 12px;
     position: fixed;
-    bottom: 10px;
-    right: 10px;
-    color: white;
-    font-weight: bold;
-    border-radius: 2px;
-    display: flex;
-    flex-direction: column;
+    bottom: 20%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    color: black;
+    border-radius: 6px;
     align-items: center;
     text-align: center;
+    box-shadow: (0, 0, 0, 0.2) 0px 4px 12px 0px;
 
     &.success {
-        background-color: lightgreen;
+        background-color: white;
     }
 
     &.error {
-        background-color: pink;
+        background-color: rgb(255, 240, 240);
     }
 
     &.tba {
         background-color: #3498db;
-    }
-
-    button {
-        float: right;
-        margin: 1em;
-        width: fit-content;
     }
 }

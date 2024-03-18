@@ -4,6 +4,7 @@ import { IndexContext } from './IndexContext.jsx';
 import { getStations } from '../store/actions/station.actions';
 import { useParams } from 'react-router';
 import { categoryService} from '../services/category.service';
+import { stationService } from '../services/station.service.js';
 
 export const CategoryDisplay = ({ category, style }) => {
   const { collectionId } = useParams();
@@ -47,7 +48,8 @@ export const CategoryDisplay = ({ category, style }) => {
       collectionId: category._id,
       text: '',
     };
-    setFilterBy(newFilterBy);
+
+    setFilterBy(prevFilterBy => ({...stationService.filterByUpdateHistory(prevFilterBy, newFilterBy)}))
     setCurrentCategory(category)
   }
 

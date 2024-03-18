@@ -10,6 +10,8 @@ export const stationService = {
     createStation,
     getDefaultFilter,
     filterURL,
+    filterByUpdateHistory,
+    removePreviousHistory,
     colorAnalysis,
 }
 
@@ -82,6 +84,8 @@ function getDefaultFilter(params) {
         tab: params.tab || "home",
         text: params.text || "",
         collectionId: params.collectionId || "",
+        tabHistory: params.tab === "station" || params.tab === "genre" ? [`${params.tab} ${params.stationId}`] : [params.tab],
+        tabHistoryLoc: 0,
     }
 }
 
@@ -99,6 +103,30 @@ function filterURL(filterBy) {
         url += `?${queryParams}`;
     }
     return url;
+}
+
+function filterByUpdateHistory(prevFilterBy, newFilterBy) {
+    const { tab, stationId } = newFilterBy
+    var newTabHistoryItem
+    if(tab.includes("station") || tab.includes("genre")) {
+        newTabHistoryItem =  `${tab} ${stationId}`
+    } else {
+        newTabHistoryItem = tab
+    }
+
+    return {
+        ...newFilterBy, 
+        tabHistory: [...stationService.removePreviousHistory(prevFilterBy.tabHistory, prevFilterBy.tabHistoryLoc), newTabHistoryItem], 
+        tabHistoryLoc: prevFilterBy.tabHistoryLoc + 1
+    }
+}
+
+function removePreviousHistory(arr, loc) {
+    const elementsToRemove = arr.length - (loc + 1)
+
+    if (elementsToRemove > 0)
+        arr.splice(-elementsToRemove);
+    return arr
 }
 
 
