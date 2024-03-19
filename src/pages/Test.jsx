@@ -6,6 +6,7 @@ import { getStations } from '../store/actions/station.actions';
 
 import { dataService } from '../services/data.service';
 import { imageService } from '../services/image.service';
+import { PlayAnimation } from '../cmps/PlayAnimation.jsx';
 
 export const Test = ({ setCurrentCategory }) => {
     const [testCategory, setTestCategory] = useState(null);
@@ -87,6 +88,7 @@ export const Test = ({ setCurrentCategory }) => {
 
     return (
         <div style={{ overflowY: 'scroll' }}>
+            <PlayAnimation />
             
             <button onClick={() => showAllStations()}>AllStation1</button>
             <br />

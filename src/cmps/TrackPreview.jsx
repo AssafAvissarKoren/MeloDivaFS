@@ -7,7 +7,7 @@ import { miniMenuOptions } from './MiniMenuOptions'
 import { addTrackToQueue } from '../store/actions/queue.actions'
 import { svgSvc } from "../services/svg.service"
 import { getStationById, saveStation } from '../store/actions/station.actions'
-
+import { PlayAnimation } from './PlayAnimation'
 
 export function TrackPreview({ layout = '', track = null, trackNum = null, isLiked, deleteTrack = null, duration, handleTrackClick, addTrackToStation}) {
     const [isSelected, setSelected] = useState(false)
@@ -72,30 +72,24 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
     }
     
     const trackImgURL = track.imgUrl == "default_thumbnail_url" ? defaultImgUrl : track.imgUrl;
-
     const selected = isSelected ? 'selected' : ''
+
+    console.log('TrackPreview : isPlaying', isPlaying)
     return (
         <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
             <div className='track-numder'>
                 <p className='track-num'>{trackNum}</p>
-                {/* <button 
-                    className={`btn-track-play ${isPlaying ? 'playing' : ''}`}
-                    onClick={(ev) => {
-                        ev.stopPropagation();
-                        handleTrackClick(track);
-                    }}
-                >
-                    <span className="action-button-wrapper"> <svgSvc.player.PlayBtn color={"white"} /> </span>
-                </button> */}
                 <button className="btn-track-play" onClick={() => handleTrackClick(track)}>
-                    <span className="action-button-wrapper"> <svgSvc.player.PlayBtn color={"white"} /> </span>
+                    <span className="action-button-wrapper"> 
+                        {(isPlaying && selected) ? <PlayAnimation /> : <svgSvc.player.PlayBtn color={"white"} /> }
+                    </span>
                 </button>
             </div>
             <div className="track-preview-title">
                 <div className="track-preview-img-container">
                     <img src={trackImgURL} className="track-preview-img"/>
                 </div>
-                <p>{track.title}</p>
+                <p style={{"color": (isPlaying && selected) ? "#1ed760" : "white"}}>{track.title}</p>
             </div>
             {layout === 'station-search-track-layout' ?
                 <div>
@@ -104,11 +98,7 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
             :
                 <div className="track-preview-options">
                     <button className={`btn-like-track ${isLiked && 'green'}`} onClick={onToggleLiked}>
-                        {isLiked 
-                        ? 
-                        <span className="action-button-wrapper"> <svgSvc.track.HeartFilled/> </span>
-                        :
-                        <span className="action-button-wrapper"> <svgSvc.track.HeartBlank/> </span>}
+                        <span className="action-button-wrapper"> {isLiked ? <svgSvc.track.HeartFilled/> : <svgSvc.track.HeartBlank/>}  </span>
                     </button>
                     <p>{duration}</p>
                     <button className="btn-more" onClick={toggleMenu}>
