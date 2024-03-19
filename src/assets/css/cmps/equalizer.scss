@@ -4,10 +4,10 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  background-color: rgba(0, 0, 0, 0.5); // Set the background color to see through
+  background-color: unset;
   border-radius: 3px;
   overflow: hidden;
-}
+} 
 
 .line {
   width: 4px;

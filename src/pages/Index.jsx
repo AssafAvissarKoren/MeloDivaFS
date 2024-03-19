@@ -21,6 +21,7 @@ import { stationService } from '../services/station.service.js';
 import { categoryService } from '../services/category.service.js';
 import { trackService } from '../services/track.service.js';
 import { initUser } from '../store/actions/user.actions.js';
+import { store } from '../store/store.js';
 
 const MIN_NAV_WIDTH = 280 // px
 const MAX_NAV_WIDTH = window.innerWidth - 500 - 20 // px
@@ -29,11 +30,13 @@ export const Index = () => {
     const params = useParams();
     const [filterBy, setFilterBy] = useState(stationService.getDefaultFilter(params));
     const [currentCategory, setCurrentCategory] = useState(null);
-    const TracksSelected = useSelector(storeState => storeState.queueModule)
     
     const [isResizing, setIsResizing] = useState(false);
     const [sideNavWidth, setSideNavWidth] = useState(MIN_NAV_WIDTH)
     const [trackToPlay, setTrackToPlay] = useState(null)
+
+    const sttp = useSelector(state => state.queueModule.stationTracksToPlay)
+    const ttp = useSelector(state => state.queueModule.tracksToPlay)
 
     const navigate = useNavigate();
 
@@ -46,9 +49,10 @@ export const Index = () => {
 
     useEffect(() => {
         setTrackToPlay(getCurrentTrackInQueue())
-    }, [getCurrentTrackInQueue()]);
+    }, [ sttp, ttp ]);
 
     useEffect(() => {
+        console.log(filterBy)
         const filterURL = stationService.filterURL(filterBy);
         navigate(filterURL, { replace: true }) 
     }, [filterBy]);

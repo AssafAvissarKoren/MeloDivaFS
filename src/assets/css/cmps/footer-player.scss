@@ -18,8 +18,12 @@
         
         .thumbnail {
             grid-area: 1 / 1 / -1 / 2;
+            display: grid;
             width: 80px;
+            height: 80px;
             margin-right: 10px;
+            overflow: hidden;
+            align-items: center;
         }
 
         .title-and-channel {

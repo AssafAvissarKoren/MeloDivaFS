@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { CategoryDisplay } from '../cmps/CategoryDisplay.jsx';
 import { categoryService } from '../services/category.service';
 import { dataService } from '../services/data.service.js';
-import { setQueueToTrack } from '../store/actions/queue.actions.js';
+import { getCurrentTrackInQueue, setQueueToTrack } from '../store/actions/queue.actions.js';
 import { trackService } from '../services/track.service.js';
 import { useSelector } from 'react-redux';
 import { utilService } from '../services/util.service.js';
 import { TrackPreview } from '../cmps/TrackPreview.jsx';
 import { getStationById, saveStation } from '../store/actions/station.actions.js';
+import { getIsTrackPlaying } from '../store/actions/player.actions.js';
 
 
 export function Search({ searchText }) {
@@ -60,9 +61,13 @@ export function Search({ searchText }) {
         }
     };
 
-    const handleTrackClick = (track) => { //here comes the boom
-        setQueueToTrack(track)
-    };
+    const handleTrackClick = (track) => {
+        if(getCurrentTrackInQueue().url === track.url) {
+            getIsTrackPlaying() ? pause() : play()
+        } else {
+            setQueueToStation(station, trackNum-1);
+        }
+    }
 
     async function addTrackToStation(track, stationId) {
         try {

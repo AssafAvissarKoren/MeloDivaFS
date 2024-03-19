@@ -15,13 +15,14 @@ import { imageService } from '../services/image.service.js'
 import { TrackPreview } from "../cmps/TrackPreview"
 
 import { getStationById, removeStation, saveStation } from "../store/actions/station.actions"
-import { setQueueToTrack, getCurrentTrackInQueue, setQueueToStation } from '../store/actions/queue.actions.js'
+import { getCurrentTrackInQueue, setQueueToStation } from '../store/actions/queue.actions.js'
 import { LIKED_TRACK_AS_STATION_ID, getBasicUser, getLikedTracksAsStation } from "../store/actions/user.actions.js"
 import { IndexContext } from '../cmps/IndexContext.jsx'
 import { MiniMenu } from "../cmps/MiniMenu.jsx"
 import { miniMenuOptions } from "../cmps/MiniMenuOptions.jsx"
 import { svgSvc } from "../services/svg.service"
 import { StationSearch } from "../cmps/StationSearch.jsx"
+import { pause, play } from "../store/actions/player.actions.js"
 
 export function StationDetails() {
     const { collectionId } =  useParams()
@@ -140,8 +141,11 @@ export function StationDetails() {
     };
     
     const handleTrackClick = (trackNum) => {
-        console.log('handleTrackClick', trackNum)
-        setQueueToStation(station, trackNum-1);
+        if(getCurrentTrackInQueue().url === station.tracks[trackNum-1].url) {
+            isPlaying ? pause() : play()
+        } else {
+            setQueueToStation(station, trackNum-1);
+        }
     };
 
     function getImage() {

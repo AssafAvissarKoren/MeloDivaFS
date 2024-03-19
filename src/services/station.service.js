@@ -84,7 +84,7 @@ function getDefaultFilter(params) {
         tab: params.tab || "home",
         text: params.text || "",
         collectionId: params.collectionId || "",
-        tabHistory: params.tab === "station" || params.tab === "genre" ? [`${params.tab} ${params.stationId}`] : [params.tab],
+        tabHistory: params.tab === "station" || params.tab === "genre" ? [`${params.tab} ${params.collectionId}`] : [params.tab],
         tabHistoryLoc: 0,
     }
 }
@@ -106,10 +106,10 @@ function filterURL(filterBy) {
 }
 
 function filterByUpdateHistory(prevFilterBy, newFilterBy) {
-    const { tab, stationId } = newFilterBy
+    const { tab, collectionId } = newFilterBy
     var newTabHistoryItem
     if(tab.includes("station") || tab.includes("genre")) {
-        newTabHistoryItem =  `${tab} ${stationId}`
+        newTabHistoryItem =  `${tab} ${collectionId}`
     } else {
         newTabHistoryItem = tab
     }

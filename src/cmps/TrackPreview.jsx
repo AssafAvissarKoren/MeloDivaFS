@@ -4,12 +4,22 @@ import { MiniMenu } from './MiniMenu'
 import { toggleLikedTrack } from '../store/actions/user.actions'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 import { miniMenuOptions } from './MiniMenuOptions'
-import { addTrackToQueue } from '../store/actions/queue.actions'
+import { addTrackToQueue, getCurrentTrackInQueue } from '../store/actions/queue.actions'
 import { svgSvc } from "../services/svg.service"
 import { getStationById, saveStation } from '../store/actions/station.actions'
 import { PlayAnimation } from './PlayAnimation'
 
-export function TrackPreview({ layout = '', track = null, trackNum = null, isLiked, deleteTrack = null, duration, handleTrackClick, addTrackToStation}) {
+export function TrackPreview(
+    { 
+        layout = '', 
+        track = null, 
+        trackNum = null, 
+        isLiked, 
+        deleteTrack = null, 
+        duration, 
+        handleTrackClick, 
+        addTrackToStation
+    }) {
     const [isSelected, setSelected] = useState(false)
     const [isMenu, setIsMenu] = useState(false)
     const modalRef = useRef(track.url)
@@ -73,15 +83,23 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
     
     const trackImgURL = track.imgUrl == "default_thumbnail_url" ? defaultImgUrl : track.imgUrl;
     const selected = isSelected ? 'selected' : ''
+    const currentTrackInQueue = getCurrentTrackInQueue().url === track.url ? "current-track-in-queue" : ''
+    const isThisPlaying = isPlaying && currentTrackInQueue
 
     console.log('TrackPreview : isPlaying', isPlaying)
     return (
-        <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
+        <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onDoubleClick={onPlayClicked} onClick={onToggleSelected}>
             <div className='track-numder'>
-                <p className='track-num'>{trackNum}</p>
-                <button className="btn-track-play" onClick={() => handleTrackClick(track)}>
+                {isThisPlaying ?
+                    <span className="action-button-wrapper track-num"> 
+                        <PlayAnimation />
+                    </span> 
+                    :
+                    <p className={`track-num ${currentTrackInQueue}`}>{trackNum}</p>
+                }
+                <button className="btn-track-play" onClick={onPlayClicked}>
                     <span className="action-button-wrapper"> 
-                        {(isPlaying && selected) ? <PlayAnimation /> : <svgSvc.player.PlayBtn color={"white"} /> }
+                        {(isThisPlaying) ? <svgSvc.player.PauseBtn color={"white"} /> : <svgSvc.player.PlayBtn color={"white"} /> }
                     </span>
                 </button>
             </div>
@@ -89,7 +107,7 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
                 <div className="track-preview-img-container">
                     <img src={trackImgURL} className="track-preview-img"/>
                 </div>
-                <p style={{"color": (isPlaying && selected) ? "#1ed760" : "white"}}>{track.title}</p>
+                <p className={`${currentTrackInQueue}`}>{track.title}</p>
             </div>
             {layout === 'station-search-track-layout' ?
                 <div>
