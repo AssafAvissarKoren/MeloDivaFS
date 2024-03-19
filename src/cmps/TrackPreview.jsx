@@ -83,7 +83,7 @@ export function TrackPreview(
     
     const trackImgURL = track.imgUrl == "default_thumbnail_url" ? defaultImgUrl : track.imgUrl;
     const selected = isSelected ? 'selected' : ''
-    const currentTrackInQueue = getCurrentTrackInQueue().url === track.url ? "current-track-in-queue" : ''
+    const currentTrackInQueue = getCurrentTrackInQueue()?.url === track.url ? "current-track-in-queue" : ''
     const isThisPlaying = isPlaying && currentTrackInQueue
 
     console.log('TrackPreview : isPlaying', isPlaying)

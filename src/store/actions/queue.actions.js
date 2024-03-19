@@ -80,6 +80,11 @@ export function getCurrentTrackInQueue() {
     return null
 }
 
+export function getQueuedStaion() {
+    const queuedStation = store.getState().queueModule.station
+    return queuedStation
+}
+
 export async function nextTrackInQueue() {
     // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
     const stationTracksToPlay = store.getState().queueModule.stationTracksToPlay

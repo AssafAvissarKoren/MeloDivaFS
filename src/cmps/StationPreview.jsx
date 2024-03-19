@@ -4,13 +4,12 @@ import { IndexContext } from '../cmps/IndexContext.jsx';
 import { svgSvc } from '../services/svg.service.jsx';
 import { setQueueToStation } from '../store/actions/queue.actions.js';
 import { stationService } from '../services/station.service.js';
-import { store } from '../store/store.js';
-import { getIsTrackPlaying } from '../store/actions/player.actions.js';
+import { getIsTrackPlaying, pause, play } from '../store/actions/player.actions.js';
 import { useSelector } from 'react-redux';
 
 export const StationPreview = ({ station }) => {
   const { setFilterBy } = useContext(IndexContext);
-  const queuedStationId = store.getState().queueModule.station?._id
+  const queuedStationId = useSelector(state => state.queueModule.station?._id)
   const isPlaying = useSelector(state => state.playerModule.isPlaying);
 
   function handleOnClick(collectionId) {
@@ -25,7 +24,11 @@ export const StationPreview = ({ station }) => {
 
   function onPlayClicked(ev) {
     ev.stopPropagation()
-    setQueueToStation(station)
+    if( queuedStationId === station._id) {
+      isPlaying ? pause() : play()
+    } else {
+        setQueueToStation(station)
+    }
   }
 
   const stationImgURL = station?.imgUrl === "default_thumbnail_url" ? defaultImgUrl : station?.imgUrl;
@@ -60,7 +63,7 @@ export const StationPreview = ({ station }) => {
         }
       </div>
       <div className="station-info">
-        <h3 className="station-name">{station?.name}</h3> {/* station?.artist */}
+        <h3 className={`station-name ${queuedStationId === station._id && "green"}`}>{station?.name}</h3> {/* station?.artist */}
         <p className="creator-name">{station?.createdBy?.fullname}</p>
       </div>
     </div>

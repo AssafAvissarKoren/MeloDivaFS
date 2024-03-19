@@ -6,7 +6,7 @@ import { dataService } from '../services/data.service.js'
 import { svgSvc } from '../services/svg.service.jsx';
 import { Slider } from '@mui/material';
 import { playNextTrack, playPrevTrack } from '../store/actions/queue.actions.js'
-import { setPlayState } from '../store/actions/player.actions'
+import { pause, play, setPlayState } from '../store/actions/player.actions'
 
 export function FooterPlayer({ video }) {
     const [videoDuration, setVideoDuration] = useState("PT0M0S");
@@ -33,6 +33,16 @@ export function FooterPlayer({ video }) {
     
     useEffect(() => {
         let interval;
+
+        if (playerRef.current) {
+            if (isPlaying) {
+                playerRef.current.playVideo();
+                console.log("vid playing!")
+            } else {
+                playerRef.current.pauseVideo();
+                console.log("vid paused!")
+            }
+        }
 
         if (isPlaying) {
             interval = setInterval(() => {
@@ -80,17 +90,8 @@ export function FooterPlayer({ video }) {
     }, [newTrack])
 
     const togglePlay = async () => {
-        if (playerRef.current) {
-            if (isPlaying) {
-                playerRef.current.pauseVideo();
-                console.log("vid paused!")
-            } else {
-                playerRef.current.playVideo();
-                console.log("vid playing!")
-            }
-            await setPlayState(!isPlaying);
-            // setIsPlaying(!isPlaying);
-        }
+        if(isPlaying) pause()
+        else play()
     };
 
     const formatTime = (timeInSeconds) => {
