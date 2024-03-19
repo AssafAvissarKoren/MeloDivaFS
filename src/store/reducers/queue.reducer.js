@@ -1,4 +1,5 @@
 export const SET_QUEUE = 'SET_QUEUE'
+export const SET_CURRENT_TRACK = 'SET_CURRENT_TRACK'
 
 export const SET_PLAYED_TRACKS = 'SET_PLAYED_TRACKS'
 export const ADD_PLAYED_TRACK = 'ADD_PLAYED_TRACK'
@@ -14,6 +15,7 @@ export const REMOVE_TRACK_TO_PLAY = 'REMOVE_TRACK_TO_PLAY'
 
 const initialState = {
     station: null,
+    currentTrack: {}, // {track: track, isStationSource: (true / false)}
     playedTracks: [],
     stationTracksToPlay: [],
     tracksToPlay: [],
@@ -24,6 +26,11 @@ export function queueReducer(state = initialState, action = {}) {
         case SET_QUEUE:
             return {
                 ...state, ...action.queue
+            }
+        case SET_CURRENT_TRACK:
+            return {
+                ...state,
+                currentTrack: action.currentTrack
             }
 
         case SET_PLAYED_TRACKS:

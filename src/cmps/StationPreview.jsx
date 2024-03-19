@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import defaultImgUrl from '../assets/imgs/MeloDiva.png';
 import { IndexContext } from '../cmps/IndexContext.jsx';
 import { svgSvc } from '../services/svg.service.jsx';
-import { setQueueToStation } from '../store/actions/queue.actions.js';
+import { getQueuedStaion, setQueueToStation } from '../store/actions/queue.actions.js';
 import { stationService } from '../services/station.service.js';
 import { getIsTrackPlaying, pause, play } from '../store/actions/player.actions.js';
 import { useSelector } from 'react-redux';
@@ -24,7 +24,7 @@ export const StationPreview = ({ station }) => {
 
   function onPlayClicked(ev) {
     ev.stopPropagation()
-    if( queuedStationId === station._id) {
+    if( getQueuedStaion()._id === station._id) {
       isPlaying ? pause() : play()
     } else {
         setQueueToStation(station)

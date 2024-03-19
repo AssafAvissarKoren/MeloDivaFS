@@ -35,8 +35,7 @@ export const Index = () => {
     const [sideNavWidth, setSideNavWidth] = useState(MIN_NAV_WIDTH)
     const [trackToPlay, setTrackToPlay] = useState(null)
 
-    const sttp = useSelector(state => state.queueModule.stationTracksToPlay)
-    const ttp = useSelector(state => state.queueModule.tracksToPlay)
+    const currentTrack = useSelector(state => state.queueModule.currentTrack.track)
 
     const navigate = useNavigate();
 
@@ -49,7 +48,7 @@ export const Index = () => {
 
     useEffect(() => {
         setTrackToPlay(getCurrentTrackInQueue())
-    }, [ sttp, ttp ]);
+    }, [ currentTrack ]);
 
     useEffect(() => {
         console.log(filterBy)
