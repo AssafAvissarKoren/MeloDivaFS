@@ -38,17 +38,17 @@ export const AppHeader = ({ filterBy, setFilterBy }) => {
 
     function navigateBack() {
         let { tabHistory, tabHistoryLoc } = filterBy
-        var tab, stationId
+        var tab, collectionId
         tabHistoryLoc--
         if(tabHistory[tabHistoryLoc].includes("station") || tabHistory[tabHistoryLoc].includes("genre")) {
-            [ tab, stationId ] =  tabHistory[tabHistoryLoc].split(' ')
+            [ tab, collectionId ] =  tabHistory[tabHistoryLoc].split(' ')
         } else {
             tab = tabHistory[tabHistoryLoc]
-            stationId = ''
+            collectionId = ''
         }
         setFilterBy({
             tab: tab,
-            stationId: stationId,
+            collectionId: collectionId,
             text: '',
             tabHistory: [...tabHistory], 
             tabHistoryLoc: tabHistoryLoc
@@ -57,17 +57,17 @@ export const AppHeader = ({ filterBy, setFilterBy }) => {
 
     function navigateForward() {
         let { tabHistory, tabHistoryLoc } = filterBy
-        var tab, stationId
+        var tab, collectionId
         tabHistoryLoc++
         if(tabHistory[tabHistoryLoc].includes("station") || tabHistory[tabHistoryLoc].includes("genre")) {
-            [ tab, stationId ] =  tabHistory[tabHistoryLoc].split(' ')
+            [ tab, collectionId ] =  tabHistory[tabHistoryLoc].split(' ')
         } else {
             tab = tabHistory[tabHistoryLoc]
-            stationId = ''
+            collectionId = ''
         }
         setFilterBy({
             tab: tab,
-            stationId: stationId,
+            collectionId: collectionId,
             text: '',
             tabHistory: [...tabHistory], 
             tabHistoryLoc: tabHistoryLoc
@@ -88,7 +88,7 @@ export const AppHeader = ({ filterBy, setFilterBy }) => {
             </div>
             {params.tab == "search" &&
                 <label className="search-bar-container">
-                    <div className="img-contaner">
+                    <div className="img-container">
                         <svgSvc.general.LibrarySearch />
                     </div>
                     <input 
@@ -100,7 +100,7 @@ export const AppHeader = ({ filterBy, setFilterBy }) => {
                         onKeyDown={handleKeyDown}
                     />
                     {text &&
-                        <div className="img-contaner" onClick={clearSearch}>
+                        <div className="img-container" onClick={clearSearch}>
                             <svgSvc.miniMenu.Ex />
                         </div>
                     }

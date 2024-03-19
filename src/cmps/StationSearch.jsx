@@ -84,7 +84,7 @@ export function StationSearch({addTrackToStation}) {
                     onKeyDown={handleKeyDown}
                 />  
                 {searchText &&
-                    <div className="img-contaner" onClick={clearSearch}>
+                    <div className="img-container" onClick={clearSearch}>
                         <img className="ex-img" src={utilService.getImgUrl("../assets/imgs/ex.svg")} />
                     </div>
                 }
