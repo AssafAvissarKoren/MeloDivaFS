@@ -52,6 +52,7 @@
             display: block;
             color: #909090;
         }
+        
         & .btn-track-play {
             display: none;
             background-color: unset;
@@ -60,6 +61,10 @@
             border-radius: 50%;
             padding: 0;
             cursor: unset;
+        }
+
+        & .current-track-in-queue {
+            color: #1ed760;
         }
     }
 
@@ -82,6 +87,7 @@
             -webkit-box-orient: vertical;
         }
 
+
         & .track-preview-img-container {
             height: 40px;
             width: 40px;
@@ -95,6 +101,10 @@
                 margin-top: -18.5%;
                 margin-bottom: -18.5%;
             }
+        }
+
+        & .current-track-in-queue {
+            color: #1ed760;
         }
     }
 

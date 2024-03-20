@@ -15,13 +15,14 @@ import { imageService } from '../services/image.service.js'
 import { TrackPreview } from "../cmps/TrackPreview"
 
 import { getStationById, removeStation, saveStation } from "../store/actions/station.actions"
-import { setQueueToTrack, getCurrentTrackInQueue, setQueueToStation } from '../store/actions/queue.actions.js'
+import { getCurrentTrackInQueue, getQueuedStaion, setQueueToStation } from '../store/actions/queue.actions.js'
 import { LIKED_TRACK_AS_STATION_ID, getBasicUser, getLikedTracksAsStation } from "../store/actions/user.actions.js"
 import { IndexContext } from '../cmps/IndexContext.jsx'
 import { MiniMenu } from "../cmps/MiniMenu.jsx"
 import { miniMenuOptions } from "../cmps/MiniMenuOptions.jsx"
 import { svgSvc } from "../services/svg.service"
 import { StationSearch } from "../cmps/StationSearch.jsx"
+import { pause, play } from "../store/actions/player.actions.js"
 
 export function StationDetails() {
     const { collectionId } =  useParams()
@@ -30,7 +31,7 @@ export function StationDetails() {
     const [station, setStation] = useState()
     const [menu, setMenu] = useState(0)
     const [tracksWithDurations, setTracksWithDurations] = useState([])
-    const isPlaying = useSelector(state => state.playerModule.isPlaying);
+    const isPlaying = useSelector(state => state.playerModule.isPlaying)
 
     useEffect(() => {
         loadStation()
@@ -125,10 +126,21 @@ export function StationDetails() {
         }
     }    
     
+    const handlePlayClick = () => {
+        if(getQueuedStaion()?._id === station._id) {
+            isPlaying ? pause() : play()
+        } else {
+            setQueueToStation(station)
+        }
+    }
+
     const handleTrackClick = (trackNum) => {
-        console.log('handleTrackClick', trackNum)
-        setQueueToStation(station, trackNum-1);
-    };
+        if(getCurrentTrackInQueue()?.url === station.tracks[trackNum-1].url) {
+            isPlaying ? pause() : play()
+        } else {
+            setQueueToStation(station, trackNum-1)
+        }
+    }
 
     function getImage() {
         if (station) {
@@ -205,8 +217,8 @@ export function StationDetails() {
         <div className="station-content-gradient" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}/>
         <div className="station-content">
             <div className="station-options">
-                <button className="station-play-btn" onClick={() => handleTrackClick(1)}>
-                    {isPlaying ? <svgSvc.general.PlaylistPauseBtn color={"black"}/> : <svgSvc.general.PlaylistPlayBtn color={"black"}/>}
+                <button className="station-play-btn" onClick={handlePlayClick}>
+                    {isPlaying && getQueuedStaion()?._id === station._id ? <svgSvc.general.PlaylistPauseBtn color={"black"}/> : <svgSvc.general.PlaylistPlayBtn color={"black"}/>}
                 </button>
                 { !likedTrackStation && !stationByUser && 
                     <button className="station-like-btn" onClick={onToggleUserLiked}>

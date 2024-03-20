@@ -21,6 +21,7 @@ import { stationService } from '../services/station.service.js';
 import { categoryService } from '../services/category.service.js';
 import { trackService } from '../services/track.service.js';
 import { initUser } from '../store/actions/user.actions.js';
+import { store } from '../store/store.js';
 
 const MIN_NAV_WIDTH = 280 // px
 const MAX_NAV_WIDTH = window.innerWidth - 500 - 20 // px
@@ -37,6 +38,8 @@ export const Index = () => {
     // console.log("Index queue", queue)
     const [trackToPlay, setTrackToPlay] = useState(null)
 
+    const currentTrack = useSelector(state => state.queueModule.currentTrack.track)
+
     const navigate = useNavigate();
 
 
@@ -52,6 +55,7 @@ export const Index = () => {
     }, [selectedTrack]);
 
     useEffect(() => {
+        console.log(filterBy)
         const filterURL = stationService.filterURL(filterBy);
         navigate(filterURL, { replace: true }) 
     }, [filterBy]);

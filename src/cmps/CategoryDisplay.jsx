@@ -31,12 +31,10 @@ export const CategoryDisplay = ({ category, style }) => {
 
   async function loadCategory() {
     if (category) {
-      // console.log("CategoryDisplay: loadCategory yes", collectionId, category)
       setCurrCategory(category);
       fetchCategory(category)
     } else {
       const currCat = await categoryService.getCategory(collectionId);
-      // console.log("CategoryDisplay: loadCategory no", collectionId, currCat)
       setCurrCategory(currCat)
       fetchCategory(currCat)
     }
@@ -54,7 +52,6 @@ export const CategoryDisplay = ({ category, style }) => {
   }
 
   const renderCategory = () => {
-    // console.log("renderCategory", currStyle.current)
     switch (currStyle.current) {
       case "row":
         return (
@@ -122,7 +119,6 @@ export const CategoryDisplay = ({ category, style }) => {
   if (currCategory) {
     return renderCategory();
   } else {
-    console.log("Loading...", collectionId)
     return null;
   }  
 };

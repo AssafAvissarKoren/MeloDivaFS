@@ -41,3 +41,8 @@ export async function setPlayState(playStatus) {
         throw err
     }
 }
+
+export function getIsTrackPlaying() {
+    const isPlaying = store.getState().playerModule.isPlaying
+    return isPlaying
+}

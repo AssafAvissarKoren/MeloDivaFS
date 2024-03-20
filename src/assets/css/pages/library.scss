@@ -5,13 +5,12 @@
     grid-template-columns: 10px 1fr 10px;
     grid-template-rows: auto 1fr;
     border-radius: 10px;
-    overflow-y: auto;
+    overflow-y: hidden;
     color: white;
     position: relative;
 
     & .head {
         grid-column: 1 / -1;
-        position: sticky;
         
         & .title {
     
@@ -71,7 +70,7 @@
 
         list-style: none;
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(94px, 1fr));
         margin: 0;
         padding: 0;
         align-content: start;
