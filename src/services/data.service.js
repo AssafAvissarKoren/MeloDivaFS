@@ -1,6 +1,7 @@
 import axios from "axios"
 import { utilService } from "./util.service"
 import { queryService } from "./query.service"
+import { userService } from "./user.service"
 
 export const dataService = {
     createStationData,
@@ -27,10 +28,10 @@ async function createStationData(storageKey) {
 
     if (!stations || !stations.length) {
         stations = [];
-        
+        var likedByUser = 1
         for (const { id, name, description, artist, createdBy, tags, playlistId, mostCommonColor } of defaultStations) {
             console.log(name, playlistId)
-            const newStation = await createStation(id, name, description, artist, createdBy, tags, playlistId, mostCommonColor);
+            const newStation = await createStation(likedByUser++, id, name, description, artist, createdBy, tags, playlistId, mostCommonColor);
             const newStationWithDurations = await dataService.setVideoDurations(newStation)
             stations.push(newStationWithDurations);
         }
@@ -44,7 +45,7 @@ async function createLikedTracksData(storageKey) {
     if (!stations || !stations.length) utilService.saveToStorage(storageKey, [{_id: 'l101'}]);
 }
 
-async function createStation(stationId, name, description, artist, createdBy, tags, playlistId, mostCommonColor) {
+async function createStation(likedByUser, stationId, name, description, artist, createdBy, tags, playlistId, mostCommonColor) {
     let tracks = await ajaxGetStationTracks(playlistId);
     tracks = tracks.map(track => createTrack(track, createdBy));
 
@@ -65,7 +66,7 @@ async function createStation(stationId, name, description, artist, createdBy, ta
         imgUrl,
         tags,
         createdBy,
-        likedByUsers: [Users.u02, Users.u03],
+        likedByUsers: likedByUser % 15 === 0 ? [await userService.getUser(), Users.u02, Users.u03] : [Users.u02, Users.u03],
         tracks,
         mostCommonColor,
         msgs: [

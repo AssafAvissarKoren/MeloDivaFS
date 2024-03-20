@@ -6,18 +6,18 @@ import { dataService } from '../services/data.service.js'
 import { svgSvc } from '../services/svg.service.jsx';
 import { Slider } from '@mui/material';
 import { playNextTrack, playPrevTrack } from '../store/actions/queue.actions.js'
-import { pause, play, setPlayState } from '../store/actions/player.actions'
+import { pause, play, toggleLooping, toggleShuffle } from '../store/actions/player.actions'
 
 export function FooterPlayer({ video }) {
     const [videoDuration, setVideoDuration] = useState("PT0M0S");
     const [currentTime, setCurrentTime] = useState(0);
     const [volume, setVolume] = useState(50);
     const [newTrack, setNewTrack] = useState(false);
-    const [isRepeating, setIsRepeating] = useState(false);
-    const [isShuffling, setIsShuffling] = useState(false);
     const playerRef = useRef(null);
     const thumbnailUrl = video.snippet.thumbnails.default.url;
     const isPlaying = useSelector(state => state.playerModule.isPlaying);
+    const isShuffle = useSelector(state => state.playerModule.isShuffle);
+    const isLooping = useSelector(state => state.playerModule.isLooping);
 
     const opts = {
         height: '390',
@@ -61,41 +61,30 @@ export function FooterPlayer({ video }) {
 
     useEffect(() => {
         if (video && video.id.videoId) {
-            // const fetchVideoDuration = async () => {
-            //     try {
-            //         const durations = await dataService.getDurations(video.id.videoId);
-            //         if (durations) {
-            //             setVideoDuration(durations[0]);
-            //         }
-            //     } catch (error) {
-            //         console.error('Error fetching video duration', error);
-            //     }
-            // };
-            // fetchVideoDuration();
             setVideoDuration(video.snippet.duration);
         }    
     }, [video.id.videoId]);
 
     useEffect(() => {
         const playNextAsync = async () => {
-            console.log('currentTime', currentTime, 'videoDuration', utilService.durationInSeconds(videoDuration) - 1, "isShuffling", isShuffling, "isPlaying", isPlaying);
+            console.log('currentTime', currentTime, 'videoDuration', utilService.durationInSeconds(videoDuration) - 1, "isShuffling", isShuffle, "isPlaying", isPlaying);
             if (currentTime === (utilService.durationInSeconds(videoDuration) - 1)) {
                 if (video) {
-                    await playNextTrack(isShuffling)
+                    await playNextTrack()
                 }
                 // Alternatively, if you want to use playNextTrack, you can await it too
                 // await playNextTrack(isShuffling);
             }
         };
         playNextAsync();
-    }, [currentTime, videoDuration, isShuffling]);
+    }, [currentTime, videoDuration]);
         
     useEffect(() => {
         setTimeout( async () => {
             if (playerRef.current && playerRef.current.playVideo) {
                 playerRef.current.pauseVideo();
                 playerRef.current.playVideo();
-                await setPlayState(true);
+                await play();
                 // setIsPlaying(true);
             }
         }, 1000);
@@ -126,28 +115,23 @@ export function FooterPlayer({ video }) {
         }
     };
 
-    // Event handlers for player actions (not implemented in this example)
-    const shuffleQueue = () => {
-        setIsShuffling(!isShuffling);
-    };
-
     const playNext = async () => { 
         console.log("nextVideo")
         if (video) {
-            await playNextTrack(isShuffling)
+            await playNextTrack()
             playerRef.current.pauseVideo();
             playerRef.current.playVideo();
-            await setPlayState(true);
+            await play();
         }
     };
     
     const playPrev = async () => { 
         console.log("prevVideo")
         if (video) {
-            await playPrevTrack(isShuffling)
+            await playPrevTrack()
             playerRef.current.pauseVideo();
             playerRef.current.playVideo();
-            await setPlayState(true);
+            await play();
         }
     };
 
@@ -156,11 +140,6 @@ export function FooterPlayer({ video }) {
           return text.slice(0, maxLength) + '...';
         }
         return text;
-    };
-        
-    
-    const toggleRepeat = () => {
-        setIsRepeating(!isRepeating);
     };
 
     const jump15Back = () => {
@@ -190,8 +169,8 @@ export function FooterPlayer({ video }) {
                         {/* <button onClick={jump15Back} name="Jump15Back" className="jump-15-back">
                             <span className="action-button-wrapper"> <svgSvc.player.Jump15SecBack />  </span>
                         </button> */}
-                        <button onClick={shuffleQueue} name="Shuffle" className="shuffle">
-                            <span className="action-button-wrapper"> <svgSvc.player.Shuffle color={isShuffling ? "#1ed760" : "white"}/>  </span>
+                        <button onClick={toggleShuffle} name="Shuffle" className="shuffle">
+                            <span className="action-button-wrapper"> <svgSvc.player.Shuffle color={isShuffle ? "#1ed760" : "white"}/>  </span>
                         </button>
                         <button onClick={playPrev} name="Previous" className="previous">
                             <span className="action-button-wrapper"> <svgSvc.player.TrackPrev />  </span>
@@ -202,17 +181,17 @@ export function FooterPlayer({ video }) {
                         <button onClick={playNext} name="Next" className="next">
                             <span className="action-button-wrapper"> <svgSvc.player.TrackNext />  </span>
                         </button>
-                        <button onClick={toggleRepeat} name="Repeat" className="repeat">
-                            <span className="action-button-wrapper"> <svgSvc.player.Repeat color={isRepeating ? "#1ed760" : "white"}/>  </span>
+                        <button onClick={toggleLooping} name="Repeat" className="repeat">
+                            <span className="action-button-wrapper"> <svgSvc.player.Repeat color={isLooping ? "#1ed760" : "white"}/>  </span>
                         </button>
                         {/* <button onClick={jump15Forward} name="Jump15Back" className="jump-15-back">
                         </button> */}
                     </div>
-                    <div className="player-action-buttons" style={{ "height": "3px"}} >
-                        {/* <button onClick={jump15Back} name="Jump15Back" className="jump-15-back">
-                        </button> */}
-                        <button onClick={shuffleQueue} name="Shuffle" className="shuffle">
-                            {isShuffling && <span className="action-button-wrapper"> <svgSvc.player.ActivationDot/>  </span>}
+                    {/* <div className="player-action-buttons" style={{ "height": "3px"}} >
+                        <button onClick={jump15Back} name="Jump15Back" className="jump-15-back">
+                        </button> *
+                        <button onClick={toggleShuffle} name="Shuffle" className="shuffle">
+                            {isShuffle && <span className="action-button-wrapper"> <svgSvc.player.ActivationDot/>  </span>}
                         </button>
                         <button onClick={playPrev} name="Previous" className="previous">
                         </button>
@@ -220,12 +199,12 @@ export function FooterPlayer({ video }) {
                         </button>
                         <button onClick={playNext} name="Next" className="next">
                         </button>
-                        <button onClick={toggleRepeat} name="Repeat" className="repeat">
-                            {isRepeating && <span className="action-button-wrapper"> <svgSvc.player.ActivationDot/>  </span>}
+                        <button onClick={toggleLooping} name="Repeat" className="repeat">
+                            {isLooping && <span className="action-button-wrapper"> <svgSvc.player.ActivationDot/>  </span>}
                         </button>
-                        {/* <button onClick={jump15Forward} name="Jump15Back" className="jump-15-back">
-                        </button> */}
-                    </div>
+                        <button onClick={jump15Forward} name="Jump15Back" className="jump-15-back">
+                        </button> 
+                    </div> */}
 
                 </div>
                 <div className="progress-section">
@@ -247,16 +226,16 @@ export function FooterPlayer({ video }) {
                 </div>
             </div>
             <div className="volume-control">
-                <button onClick={shuffleQueue} name="Now playing view" className="action-button play-in-view">
+                <button onClick={() => {}} name="Now playing view" className="action-button play-in-view">
                     <span className="action-button-wrapper"> <svgSvc.player.NowPlayingView />  </span>
                 </button>
-                <button onClick={shuffleQueue} name="Queue" className="action-button queue">
+                <button onClick={() => {}} name="Queue" className="action-button queue">
                     <span className="action-button-wrapper"> <svgSvc.player.Queue />  </span>
                 </button>
-                <button onClick={shuffleQueue} name="Connect to a device" className="action-button connect-to-device">
+                <button onClick={() => {}} name="Connect to a device" className="action-button connect-to-device">
                     <span className="action-button-wrapper"> <svgSvc.player.ConnectToADevice />  </span>
                 </button>
-                <button onClick={shuffleQueue} name="Mute" className="action-button mute">
+                <button onClick={() => {}} name="Mute" className="action-button mute">
                     <span className="action-button-wrapper">
                         {volume === 0 && <svgSvc.player.VolumeMute />}
                         {volume > 0 && volume <= 33 && <svgSvc.player.VolumeLow />}
@@ -273,10 +252,10 @@ export function FooterPlayer({ video }) {
                     valueLabelDisplay="auto"
                     valueLabelFormat={(value) => `${value}%`}
                 />
-                <button onClick={shuffleQueue} name="Open Miniplayer" className="action-button open-miniplayer">
+                <button onClick={() => {}} name="Open Miniplayer" className="action-button open-miniplayer">
                     <span className="action-button-wrapper"> <svgSvc.player.OpenMiniplayer />  </span>
                 </button>
-                <button onClick={shuffleQueue} name="Full Screen" className="action-button full-screen">
+                <button onClick={() => {}} name="Full Screen" className="action-button full-screen">
                     <span className="action-button-wrapper"> <svgSvc.player.FullScreen />  </span>
                 </button>
             </div>

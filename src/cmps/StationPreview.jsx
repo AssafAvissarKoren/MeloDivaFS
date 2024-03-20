@@ -24,7 +24,7 @@ export const StationPreview = ({ station }) => {
 
   function onPlayClicked(ev) {
     ev.stopPropagation()
-    if( getQueuedStaion()._id === station._id) {
+    if( getQueuedStaion()?._id === station._id) {
       isPlaying ? pause() : play()
     } else {
         setQueueToStation(station)

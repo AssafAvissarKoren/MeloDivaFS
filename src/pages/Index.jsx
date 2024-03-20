@@ -22,6 +22,7 @@ import { categoryService } from '../services/category.service.js';
 import { trackService } from '../services/track.service.js';
 import { initUser } from '../store/actions/user.actions.js';
 import { store } from '../store/store.js';
+import { playerService } from '../services/player.service.js';
 
 const MIN_NAV_WIDTH = 280 // px
 const MAX_NAV_WIDTH = window.innerWidth - 500 - 20 // px
@@ -33,10 +34,6 @@ export const Index = () => {
     
     const [isResizing, setIsResizing] = useState(false);
     const [sideNavWidth, setSideNavWidth] = useState(MIN_NAV_WIDTH)
-    const selectedTrack = useSelector(storeState => storeState.queueModule.currentTrack)
-    // const queue = useSelector(storeState => storeState.queueModule)
-    // console.log("Index queue", queue)
-    const [trackToPlay, setTrackToPlay] = useState(null)
 
     const currentTrack = useSelector(state => state.queueModule.currentTrack.track)
 
@@ -46,13 +43,9 @@ export const Index = () => {
     useEffect(() => {
         loadStationsLocal();
         initUser()
+        playerService.initPlayState()
         categoryService.createCategories();
     }, []);
-
-    useEffect(() => {
-        setTrackToPlay(selectedTrack)
-        console.log("getCurrentTrackInQueue", selectedTrack)
-    }, [selectedTrack]);
 
     useEffect(() => {
         console.log(filterBy)
@@ -126,7 +119,6 @@ export const Index = () => {
             break;
     }
 
-    console.log("selectedTrack", selectedTrack)
     return (
         <IndexContext.Provider value={{ setFilterBy ,setCurrentCategory }}>
             <div className="index-container">
@@ -145,9 +137,9 @@ export const Index = () => {
                     <AppHeader filterBy={filterBy} setFilterBy={setFilterBy}/>
                     <MainViewComponent {...mainViewComponentProps} />
                 </div>
-                {trackToPlay && <div className="index-footer-player">
+                {currentTrack && <div className="index-footer-player">
                     <FooterPlayer 
-                        video={trackService.trackToVideo(trackToPlay)}
+                        video={trackService.trackToVideo(currentTrack)}
                     />
                 </div>}
             </div>
