@@ -77,7 +77,7 @@ export const AppHeader = ({ filterBy, setFilterBy }) => {
     const isBackHistory = filterBy.tabHistoryLoc
     const isForwardHistory = filterBy.tabHistoryLoc < filterBy.tabHistory.length - 1
     return (
-        <header className="app-header">
+        <header className="app-header" data-tab={params.tab}>
             <div className="arrow-options">
                 <button className={`btn-arrow-container ${!isBackHistory && "disabled"}`} disabled={!isBackHistory} onClick={navigateBack}>
                     <span className="action-button-wrapper"> <svgSvc.general.DirectionLeft /> </span>
@@ -106,6 +106,7 @@ export const AppHeader = ({ filterBy, setFilterBy }) => {
                     }
                 </label>
             }
+            <div className="login-btn">Login</div>
         </header>
     )
 };

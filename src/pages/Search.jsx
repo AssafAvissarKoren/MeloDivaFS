@@ -35,7 +35,8 @@ export function Search({ searchText }) {
     const searchVideos = async (query) => {
         try {
             const items = await dataService.searchYoutube(query);
-            const videos = items.map(video => ({...trackService.videoToTrack(video)}))
+            const validItems = items.filter(video => video.id.videoId); // Filter out items with undefined video.url
+            const videos = validItems.map(video => ({...trackService.videoToTrack(video)}))
             console.log('videos', videos)
             
             const videoIds = videos.map(video => {
@@ -48,7 +49,7 @@ export function Search({ searchText }) {
             }).join(',');
             
             const trackDurations =  await dataService.getDurations(videoIds)
-            const tracks = items.map((video, index)=> {
+            const tracks = validItems.map((video, index)=> {
                 return {
                     ...trackService.videoToTrack(video), 
                     duration: trackDurations[index]
@@ -82,37 +83,39 @@ export function Search({ searchText }) {
         }
     }
 
-    if (!stations || !categories.length) return <div>Loading...</div>;
-    
-    return (
-        <div className="search">
-            <h1>Browse All</h1>
-            {searchText ? (
-                <>
-                    {tracks.map((track, index) => (
-                        <div key={track.url || index}>
-                            <TrackPreview 
-                                layout={'search-track-layout'}
-                                track={track} 
-                                isLiked={likedTracks[track.url] ? true : false}
-                                duration={utilService.formatDuration(track.duration)}
-                                handleTrackClick={handleTrackClick}
-                                addTrackToStation={addTrackToStation}
+    if (!stations || !categories.length) {
+        return <div></div> //Loading...
+    } else {
+        return (
+            <div className="search">
+                <h1>Browse All</h1>
+                {searchText ? (
+                    <>
+                        {tracks.map((track, index) => (
+                            <div key={track.url || index}>
+                                <TrackPreview 
+                                    layout={'search-track-layout'}
+                                    track={track} 
+                                    isLiked={likedTracks[track.url] ? true : false}
+                                    duration={utilService.formatDuration(track.duration)}
+                                    handleTrackClick={handleTrackClick}
+                                    addTrackToStation={addTrackToStation}
+                                />
+                            </div>
+                        ))}
+                    </>
+                ) : (
+                    <div className="search-categories">
+                        {categories.map(category => (
+                            <CategoryDisplay 
+                                key={category._id}
+                                category={category}
+                                style={categoryService.Status.CUBE}
                             />
-                        </div>
-                    ))}
-                </>
-            ) : (
-                <div className="search-categories">
-                    {categories.map(category => (
-                        <CategoryDisplay 
-                            key={category._id}
-                            category={category}
-                            style={categoryService.Status.CUBE}
-                        />
-                    ))}
-                </div>
-            )} // 
-        </div>
-    );
+                        ))}
+                    </div>
+                )} // 
+            </div>
+        );
+    }
 }

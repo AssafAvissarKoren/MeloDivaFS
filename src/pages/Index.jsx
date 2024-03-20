@@ -51,7 +51,7 @@ export const Index = () => {
 
     useEffect(() => {
         setTrackToPlay(selectedTrack)
-        console.log("getCurrentTrackInQueue", selectedTrack)
+        // console.log("getCurrentTrackInQueue", selectedTrack)
     }, [selectedTrack]);
 
     useEffect(() => {
@@ -126,7 +126,7 @@ export const Index = () => {
             break;
     }
 
-    console.log("selectedTrack", selectedTrack)
+    // console.log("selectedTrack", selectedTrack)
     return (
         <IndexContext.Provider value={{ setFilterBy ,setCurrentCategory }}>
             <div className="index-container">

@@ -4,22 +4,12 @@ import { useParams } from 'react-router-dom';
 import { MiniMenu } from './MiniMenu'
 import { toggleLikedTrack } from '../store/actions/user.actions'
 import { miniMenuOptions } from './MiniMenuOptions'
-import { addTrackToQueue, getCurrentTrackInQueue } from '../store/actions/queue.actions'
+import { addTrackToQueue } from '../store/actions/queue.actions'
 import { svgSvc } from "../services/svg.service"
 import { PlayAnimation } from './PlayAnimation'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 
-export function TrackPreview(
-    { 
-        layout = '', 
-        track = null, 
-        trackNum = null, 
-        isLiked, 
-        deleteTrack = null, 
-        duration, 
-        handleTrackClick, 
-        addTrackToStation
-    }) {
+export function TrackPreview({ layout = '', track = null, trackNum = null, isLiked, deleteTrack = null, duration, handleTrackClick, addTrackToStation}) {
     const [isSelected, setSelected] = useState(false)
     const [isMenu, setIsMenu] = useState(false)
     const modalRef = useRef(track.url)
@@ -86,22 +76,18 @@ export function TrackPreview(
     
     const trackImgURL = track.imgUrl == "default_thumbnail_url" ? defaultImgUrl : track.imgUrl;
     const selected = (isSelected || (queueTrackNum === (trackNum - 1) && queueStationId === collectionId)) ? 'selected' : ''
-    const currentTrackInQueue = getCurrentTrackInQueue()?.url === track.url ? "current-track-in-queue" : ''
-    const isThisPlaying = isPlaying && currentTrackInQueue
 
+    if(selected) {
+        console.log(trackNum)
+    }
+    
     return (
-        <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onDoubleClick={onPlayClicked} onClick={onToggleSelected}>
-            <div className='track-numder'>
-                {isThisPlaying ?
-                    <span className="action-button-wrapper track-num"> 
-                        <PlayAnimation />
-                    </span> 
-                    :
-                    <p className={`track-num ${currentTrackInQueue}`}>{trackNum}</p>
-                }
-                <button className="btn-track-play" onClick={onPlayClicked}>
+        <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
+            <div className='track-number'>
+                <p className='track-num'>{trackNum}</p>
+                <button className="btn-track-play" onClick={() => handleTrackClick(track)}>
                     <span className="action-button-wrapper"> 
-                        {(isThisPlaying) ? <svgSvc.player.PauseBtn color={"white"} /> : <svgSvc.player.PlayBtn color={"white"} /> }
+                        {(isPlaying && selected) ? <PlayAnimation /> : <svgSvc.player.PlayBtn color={"white"} /> }
                     </span>
                 </button>
             </div>
@@ -109,7 +95,7 @@ export function TrackPreview(
                 <div className="track-preview-img-container">
                     <img src={trackImgURL} className="track-preview-img"/>
                 </div>
-                <p className={`${currentTrackInQueue}`}>{track.title}</p>
+                <p style={{"color": (isPlaying && selected) ? "#1ed760" : "white"}}>{track.title}</p>
             </div>
             {layout === 'station-search-track-layout' ?
                 <div>
@@ -142,3 +128,28 @@ export function TrackPreview(
         </section>
     )
 }
+
+// const trackImgURL = track.imgUrl == "default_thumbnail_url" ? defaultImgUrl : track.imgUrl;
+// const selected = isSelected ? 'selected' : '' // (isSelected || (queueTrackNum === (trackNum - 1) && queueStationId === collectionId)) ? 'selected' : ''
+// const currentTrackInQueue = getCurrentTrackInQueue()?.url === track.url ? "current-track-in-queue" : ''
+// const isThisPlaying = isPlaying && currentTrackInQueue
+
+// if (queueTrackNum === (trackNum - 1))
+//     console.log("trackNum", trackNum, "isSelected", isSelected, "isPlaying", isPlaying, "selected", selected, "currentTrackInQueue", currentTrackInQueue)
+
+// return ( // onDoubleClick={onPlayClicked}
+//     <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected}> 
+//         <div className='track-number'>
+//             {isThisPlaying ?
+//                 <span className="action-button-wrapper track-num"> 
+//                     <PlayAnimation />
+//                 </span> 
+//                 :
+//                 <p className={`track-num ${currentTrackInQueue}`}>{trackNum}</p>
+//             }
+//             <button className="btn-track-play" onClick={onPlayClicked}>
+//                 <span className="action-button-wrapper"> 
+//                     {(isThisPlaying) ? <svgSvc.player.PauseBtn color={"white"} /> : <svgSvc.player.PlayBtn color={"white"} /> }
+//                 </span>
+//             </button>
+//         </div>

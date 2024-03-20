@@ -7,13 +7,12 @@
     &:hover {
         background-color: #303030;
 
-        &
-        .btn-like-track,
+        & .btn-like-track,
         .btn-more {
             opacity: 1;
         }
 
-        & .track-numder {
+        & .track-number {
             & .track-num {
                 display: none;
                 width: 0;
@@ -25,7 +24,7 @@
     }
 
     &.selected {
-        background-color: #555555;
+        // background-color: #555555;
 
         &
         .btn-like-track,
@@ -33,7 +32,7 @@
             opacity: 1;
         }
 
-        & .track-numder {
+        & .track-number {
             & .track-num {
                 display: none;
                 width: 0;
@@ -44,7 +43,7 @@
         }
     }
 
-    & .track-numder {
+    & .track-number {
         display: flex;
         flex-direction: row-reverse;
 

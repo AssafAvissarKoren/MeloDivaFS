@@ -1,13 +1,14 @@
 .app-header {
     position: sticky;
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto 1fr auto;
+    justify-content: space-between;
     height: 64px;
     padding-left: 23px;
     align-items: center;
     // background-color: unset;
     background-color: #121212;
-    z-index: 999;
+    z-index: 999;    
 
     & .arrow-options {
         display: grid;
@@ -95,4 +96,18 @@
             outline: none;
         }
     }
+}
+
+.app-header:not([data-tab="search"]) {
+    grid-template-columns: auto auto;
+}
+
+.login-btn {
+    background-color: white;
+    color: black;
+    border-radius: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 20px; /* Adjust the margin as needed */
 }

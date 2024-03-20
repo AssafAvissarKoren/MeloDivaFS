@@ -61,17 +61,6 @@ export function FooterPlayer({ video }) {
 
     useEffect(() => {
         if (video && video.id.videoId) {
-            // const fetchVideoDuration = async () => {
-            //     try {
-            //         const durations = await dataService.getDurations(video.id.videoId);
-            //         if (durations) {
-            //             setVideoDuration(durations[0]);
-            //         }
-            //     } catch (error) {
-            //         console.error('Error fetching video duration', error);
-            //     }
-            // };
-            // fetchVideoDuration();
             setVideoDuration(video.snippet.duration);
         }    
     }, [video.id.videoId]);

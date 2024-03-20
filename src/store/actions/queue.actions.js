@@ -32,7 +32,7 @@ export async function setQueueToStation(station, trackNum = 0) {
         }
         queueService.saveQueue(queue)
         store.dispatch({ type: SET_QUEUE, queue })
-        console.log('setQueueToStation', store.getState().queueModule.currentTrack)
+        // console.log('setQueueToStation', store.getState().queueModule.currentTrack)
         return store.getState().queueModule.currentTrack
     } catch (err) {
         console.log('Had issues Setting the queue', err);
@@ -102,14 +102,23 @@ export async function addTrackToQueue(track) {
     }
 }
 
-export async function playNextTrack(random = false) {
-    console.log('playNextTrack', random)
-    await _playAdjacentTrack(1, random)
+export async function playNextTrack(shuffle = false, repeat = false) {
+    console.log('playNextTrack', shuffle)
+    if(repeat) {
+        await _playAdjacentTrack(0, false)
+    } else {
+        await _playAdjacentTrack(1, shuffle)
+    }
+
 }
 
-export async function playPrevTrack(random = false) {
-    // console.log('playNextTrack', random)
-    await _playAdjacentTrack(-1, random)
+export async function playPrevTrack(shuffle = false, repeat = false) {
+    console.log('playPrevTrack', shuffle)
+    if(repeat) {
+        await _playAdjacentTrack(0, false)
+    } else {
+        await _playAdjacentTrack(-1, shuffle)
+    }
 }
 
 export async function _playAdjacentTrack(num, random) {
@@ -129,19 +138,7 @@ export async function _playAdjacentTrack(num, random) {
     }
 }
 
-export function getCurrentTrackInQueue() {
-    const stationTracksToPlay = store.getState().queueModule.stationTracksToPlay
-    const tracksToPlay = store.getState().queueModule.tracksToPlay
-    const playedTracks = store.getState().queueModule.playedTracks
-
-    if(tracksToPlay.length) return tracksToPlay[0]
-    if(stationTracksToPlay.length) return stationTracksToPlay[0]
-    if(playedTracks.length) return playedTracks[playedTracks.length-1]
-    return null
-}
-
 export async function nextTrackInQueue() {
-    // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
     const stationTracksToPlay = store.getState().queueModule.stationTracksToPlay
     const tracksToPlay = store.getState().queueModule.tracksToPlay
     let track
@@ -162,28 +159,6 @@ export async function nextTrackInQueue() {
     }
 }
 
-export async function playPrevTrack() {
-    const queue = store.getState().queueModule
-    try {
-        if (!queue.playedTracks.length) return null
-
-        const newQueue = {
-            station: queue.station,
-            currentTrack: { track: queue.playedTracks[queue.playedTracks.length-1], isStationSource: true },
-            playedTracks: queue.playedTracks.slice(0, queue.playedTracks.length-2) || [],
-            stationTracksToPlay: queue.currentTrack.isStationSource ? [queue.currentTrack.track, ...queue.stationTracksToPlay] : queue.stationTracksToPlay,
-            tracksToPlay: queue.tracksToPlay,
-        }
-
-        console.log(queue)
-        await queueService.saveQueue(newQueue)
-        store.dispatch({ type: SET_QUEUE, queue: newQueue })
-        return getCurrentTrackInQueue()
-    } catch (err) {
-        console.log('Had issues Setting the queue', err);
-        throw err
-    }
-}
 
 export function getCurrentTrackInQueue() {
     const currentTrack = store.getState().queueModule?.currentTrack.track
@@ -217,4 +192,38 @@ export function getQueuedStaion() {
 //         console.log('Had issues getting the prev track index', err);
 //         throw err
 //     }
+// }
+
+// export async function playPrevTrack() {
+//     const queue = store.getState().queueModule
+//     try {
+//         if (!queue.playedTracks.length) return null
+
+//         const newQueue = {
+//             station: queue.station,
+//             currentTrack: { track: queue.playedTracks[queue.playedTracks.length-1], isStationSource: true },
+//             playedTracks: queue.playedTracks.slice(0, queue.playedTracks.length-2) || [],
+//             stationTracksToPlay: queue.currentTrack.isStationSource ? [queue.currentTrack.track, ...queue.stationTracksToPlay] : queue.stationTracksToPlay,
+//             tracksToPlay: queue.tracksToPlay,
+//         }
+
+//         console.log(queue)
+//         await queueService.saveQueue(newQueue)
+//         store.dispatch({ type: SET_QUEUE, queue: newQueue })
+//         return getCurrentTrackInQueue()
+//     } catch (err) {
+//         console.log('Had issues Setting the queue', err);
+//         throw err
+//     }
+// }
+
+// export function getCurrentTrackInQueue() {
+//     const stationTracksToPlay = store.getState().queueModule.stationTracksToPlay
+//     const tracksToPlay = store.getState().queueModule.tracksToPlay
+//     const playedTracks = store.getState().queueModule.playedTracks
+
+//     if(tracksToPlay.length) return tracksToPlay[0]
+//     if(stationTracksToPlay.length) return stationTracksToPlay[0]
+//     if(playedTracks.length) return playedTracks[playedTracks.length-1]
+//     return null
 // }

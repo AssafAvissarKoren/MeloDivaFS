@@ -179,107 +179,111 @@ export function StationDetails() {
         }
     }
 
-    if(!station) return <div>loading...</div>
-
-    const likedTrackStation = collectionId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
-    const stationByUser = getBasicUser()._id === station.createdBy._id ? 'hiden' : ''
-    const isLiked = station.likedByUsers && station.likedByUsers.filter(likedByUser => likedByUser && likedByUser._id === getBasicUser()._id).length !== 0;
-    const gradientColor = station.mostCommonColor
-
-    return (
-    <section className="station-container">
-        <div className="station-head" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 175%)` } : {}}>
-            {stationByUser && !likedTrackStation ?
-                <button className="station-head-img-container" onClick={() => setMenu(1)}>
-                    <img className="station-head-img" src={getImage()}/>
-                </button>
-            :
-                <div className="station-head-img-container">
-                    <img className="station-head-img" src={getImage()}/>
-                </div>
-            }
-            {menu === 1 && 
-                <MiniMenu location={'center'} onCloseMiniMenu={onCloseMiniMenu}>
-                    {miniMenuOptions.editStation(getImage(), station.name, station.description, onEditDetails, onCloseMiniMenu)}
-                </MiniMenu>
-            }
-            <div className="station-head-info">
-                <p>Playlist</p>
+    if(!station) {
+        return <div></div> //loading...
+    } else {
+        const likedTrackStation = collectionId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
+        // const stationByUser = getBasicUser()._id === station.createdBy._id ? 'hiden' : ''
+        const stationByUser = getBasicUser()?._id === station?.createdBy?._id ? 'hiden' : '';
+        // const isLiked = station.likedByUsers && station.likedByUsers.filter(likedByUser => likedByUser && likedByUser._id === getBasicUser()._id).length !== 0;
+        const isLiked = station?.likedByUsers?.filter(likedByUser => likedByUser && likedByUser._id === getBasicUser()?._id)?.length !== 0;
+        const gradientColor = station.mostCommonColor
+   
+        return (
+        <section className="station-container">
+            <div className="station-head" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 175%)` } : {}}>
                 {stationByUser && !likedTrackStation ?
-                    <h1 className="station-name station-btn" onClick={() => setMenu(1)}>{station.name}</h1>
+                    <button className="station-head-img-container" onClick={() => setMenu(1)}>
+                        <img className="station-head-img" src={getImage()}/>
+                    </button>
                 :
-                    <h1 className="station-name">{station.name}</h1>
-                }
-                <p className="station-description">{station.description}</p>    
-                <p>{station.createdBy.fullname} - {station.tracks.length}</p>
-            </div>
-        </div>
-        <div className="station-content-gradient" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}/>
-        <div className="station-content">
-            <div className="station-options">
-                <button className="station-play-btn" onClick={handlePlayClick}>
-                    {isPlaying && getQueuedStaion()?._id === station._id ? <svgSvc.general.PlaylistPauseBtn color={"black"}/> : <svgSvc.general.PlaylistPlayBtn color={"black"}/>}
-                </button>
-                { !likedTrackStation && !stationByUser && 
-                    <button className="station-like-btn" onClick={onToggleUserLiked}>
-                        {isLiked ? <svgSvc.track.HeartFilled/> : <svgSvc.track.HeartBlank/>} 
-                    </button>
-                }
-                <div className={`station-more-btn ${likedTrackStation}`}>
-                    <button className="btn-more" onClick={() => setMenu(2)}>
-                        <p>...</p>
-                    </button>
-                    {menu === 2 && 
-                        <MiniMenu location={'right bottom'} onCloseMiniMenu={onCloseMiniMenu}>
-                            {!stationByUser && (isLiked ?
-                                miniMenuOptions.removeFromLibrary(onToggleUserLiked) :
-                                miniMenuOptions.addToLibrary(onToggleUserLiked))
-                            }
-                            {miniMenuOptions.addToQueue(onCloseMiniMenu)}
-                            {miniMenuOptions.hr()}
-                            {stationByUser && miniMenuOptions.editDetails(() => setMenu(1))}
-                            {stationByUser && miniMenuOptions.deleteObj(onDeleteStation)}
-                            {stationByUser && miniMenuOptions.hr()}
-                            {miniMenuOptions.share(onCloseMiniMenu)}
-                        </MiniMenu> 
-                    }
-                </div>
-                <button className="station-sort-btn" onClick={() => {}}>
-                    <p>List</p>
-                    <FontAwesomeIcon icon={faList} />
-                </button>
-            </div>
-            <div className="station-list">
-                <div className="station-list-head station-content-layout">
-                    <p className="track-numder">#</p>
-                    <p>Title</p>
-                    <div className="track-time">
-                        <FontAwesomeIcon icon={faClockFour} />
+                    <div className="station-head-img-container">
+                        <img className="station-head-img" src={getImage()}/>
                     </div>
+                }
+                {menu === 1 && 
+                    <MiniMenu location={'center'} onCloseMiniMenu={onCloseMiniMenu}>
+                        {miniMenuOptions.editStation(getImage(), station.name, station.description, onEditDetails, onCloseMiniMenu)}
+                    </MiniMenu>
+                }
+                <div className="station-head-info">
+                    <p>Playlist</p>
+                    {stationByUser && !likedTrackStation ?
+                        <h1 className="station-name station-btn" onClick={() => setMenu(1)}>{station.name}</h1>
+                    :
+                        <h1 className="station-name">{station.name}</h1>
+                    }
+                    <p className="station-description">{station.description}</p>    
+                    <p>{station.createdBy.fullname} - {station.tracks.length}</p>
                 </div>
-                <div className="br"/>
-                <ul className="station-track-list">
-                    {tracksWithDurations.map((track, trackNum) => (
-                        <li key={track.imgUrl}>
-                            <TrackPreview 
-                                layout={"station-content-layout"}
-                                track={track} 
-                                trackNum={++trackNum}
-                                isLiked={likedTracks[track.url] ? true : false}
-                                deleteTrack={(!stationByUser || likedTrackStation) ? null : deleteTrack}
-                                duration={utilService.formatDuration(track.duration)}
-                                handleTrackClick={() => handleTrackClick(trackNum)}
-                                addTrackToStation={addTrackToStation}
-                            />
-                        </li> 
-                    ))}
-                </ul>
             </div>
-            {stationByUser && !likedTrackStation && <div className="station-foot">
-                {tracksWithDurations?.length !== 0 && <div className="br"/>}
-                <StationSearch addTrackToStation={addTrackToStation}/>
-            </div>}
-        </div>
-    </section>
-    )
+            <div className="station-content-gradient" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}/>
+            <div className="station-content">
+                <div className="station-options">
+                    <button className="station-play-btn" onClick={handlePlayClick}>
+                        {isPlaying ? <svgSvc.general.PlaylistPauseBtn color={"black"}/> : <svgSvc.general.PlaylistPlayBtn color={"black"}/>}
+                    </button>
+                    { !likedTrackStation && !stationByUser && 
+                        <button className="station-like-btn" onClick={onToggleUserLiked}>
+                            {isLiked ? <svgSvc.track.HeartFilled/> : <svgSvc.track.HeartBlank/>} 
+                        </button>
+                    }
+                    <div className={`station-more-btn ${likedTrackStation}`}>
+                        <button className="btn-more" onClick={() => setMenu(2)}>
+                            <p>...</p>
+                        </button>
+                        {menu === 2 && 
+                            <MiniMenu location={'right bottom'} onCloseMiniMenu={onCloseMiniMenu}>
+                                {!stationByUser && (isLiked ?
+                                    miniMenuOptions.removeFromLibrary(onToggleUserLiked) :
+                                    miniMenuOptions.addToLibrary(onToggleUserLiked))
+                                }
+                                {miniMenuOptions.addToQueue(onCloseMiniMenu)}
+                                {miniMenuOptions.hr()}
+                                {stationByUser && miniMenuOptions.editDetails(() => setMenu(1))}
+                                {stationByUser && miniMenuOptions.deleteObj(onDeleteStation)}
+                                {stationByUser && miniMenuOptions.hr()}
+                                {miniMenuOptions.share(onCloseMiniMenu)}
+                            </MiniMenu> 
+                        }
+                    </div>
+                    <button className="station-sort-btn" onClick={() => {}}>
+                        <p>List</p>
+                        <FontAwesomeIcon icon={faList} />
+                    </button>
+                </div>
+                <div className="station-list">
+                    <div className="station-list-head station-content-layout">
+                        <p className="track-number">#</p>
+                        <p>Title</p>
+                        <div className="track-time">
+                            <FontAwesomeIcon icon={faClockFour} />
+                        </div>
+                    </div>
+                    <div className="br"/>
+                    <ul className="station-track-list">
+                        {tracksWithDurations.map((track, trackNum) => (
+                            <li key={track.imgUrl}>
+                                <TrackPreview 
+                                    layout={"station-content-layout"}
+                                    track={track} 
+                                    trackNum={++trackNum}
+                                    isLiked={likedTracks[track.url] ? true : false}
+                                    deleteTrack={(!stationByUser || likedTrackStation) ? null : deleteTrack}
+                                    duration={utilService.formatDuration(track.duration)}
+                                    handleTrackClick={() => handleTrackClick(trackNum)}
+                                    addTrackToStation={addTrackToStation}
+                                />
+                            </li> 
+                        ))}
+                    </ul>
+                </div>
+                {stationByUser && !likedTrackStation && <div className="station-foot">
+                    {tracksWithDurations?.length !== 0 && <div className="br"/>}
+                    <StationSearch addTrackToStation={addTrackToStation}/>
+                </div>}
+            </div>
+        </section>
+        )
+    }
 }

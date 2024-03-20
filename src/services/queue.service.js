@@ -8,13 +8,13 @@ export const queueService = {
 const QUEUE_STORAGE_KEY = 'queueDB'
 
 function saveQueue(queue) {
-    console.log('saveQueue', queue)
+    // console.log('saveQueue', queue)
     utilService.saveToSessionStorage(QUEUE_STORAGE_KEY, queue);
 }
 
 function getQueue() {
     const queue = utilService.loadFromSessionStorage(QUEUE_STORAGE_KEY);
-    console.log('getQueue', queue)
+    // console.log('getQueue', queue)
     return queue
 }
 

@@ -15,21 +15,23 @@ export function Home({ }) {
 
         fetchCategories();
     }, []);
-
-    if (!stations || !categories.length) return <div style={{ color: "white" }}>Loading...</div>;
     
-    console.log("Home")
-    return (
-        <section className="home">
-            <div className='category-display'>
-                {categories.map(category => (
-                    <CategoryDisplay 
-                        key={category._id}
-                        category={category}
-                        style={categoryService.Status.ROW}
-                    />
-                ))}
-            </div>
-        </section>
-    );
+
+    if (!stations || !categories.length) {
+        return <div></div>; //Loading...
+    } else {
+            return (
+            <section className="home">
+                <div className='category-display'>
+                    {categories.map(category => (
+                        <CategoryDisplay 
+                            key={category._id}
+                            category={category}
+                            style={categoryService.Status.ROW}
+                        />
+                    ))}
+                </div>
+            </section>
+        );
+    }
 }

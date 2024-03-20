@@ -18,7 +18,8 @@ export function StationSearch({addTrackToStation}) {
     const searchVideos = async (query) => {
         try {
             const items = await dataService.searchYoutube(query);
-            const videos = items.map(video => ({...trackService.videoToTrack(video)}))
+            const validItems = items.filter(video => video.id.videoId); // Filter out items with undefined video.url
+            const videos = validItems.map(video => ({...trackService.videoToTrack(video)}))
             console.log('videos', videos)
             
             const videoIds = videos.map(video => {
@@ -31,7 +32,7 @@ export function StationSearch({addTrackToStation}) {
             }).join(',');
             
             const trackDurations =  await dataService.getDurations(videoIds)
-            const tracks = items.map((video, index)=> {
+            const tracks = validItems.map((video, index)=> {
                 return {
                     ...trackService.videoToTrack(video), 
                     duration: trackDurations[index]
