@@ -29,10 +29,12 @@ export const Index = () => {
     const params = useParams();
     const [filterBy, setFilterBy] = useState(stationService.getDefaultFilter(params));
     const [currentCategory, setCurrentCategory] = useState(null);
-    const TracksSelected = useSelector(storeState => storeState.queueModule)
     
     const [isResizing, setIsResizing] = useState(false);
     const [sideNavWidth, setSideNavWidth] = useState(MIN_NAV_WIDTH)
+    const selectedTrack = useSelector(storeState => storeState.queueModule.currentTrack)
+    // const queue = useSelector(storeState => storeState.queueModule)
+    // console.log("Index queue", queue)
     const [trackToPlay, setTrackToPlay] = useState(null)
 
     const navigate = useNavigate();
@@ -45,8 +47,9 @@ export const Index = () => {
     }, []);
 
     useEffect(() => {
-        setTrackToPlay(getCurrentTrackInQueue())
-    }, [getCurrentTrackInQueue()]);
+        setTrackToPlay(selectedTrack)
+        console.log("getCurrentTrackInQueue", selectedTrack)
+    }, [selectedTrack]);
 
     useEffect(() => {
         const filterURL = stationService.filterURL(filterBy);
@@ -119,6 +122,7 @@ export const Index = () => {
             break;
     }
 
+    console.log("selectedTrack", selectedTrack)
     return (
         <IndexContext.Provider value={{ setFilterBy ,setCurrentCategory }}>
             <div className="index-container">

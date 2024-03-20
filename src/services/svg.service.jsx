@@ -617,8 +617,24 @@ const PlaylistPauseBtn = ({ color = "white", ...props }) => (
   </svg>
 )
 
+const ActivationDot = ({ color = "#1ed760", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={16}
+    height={16}
+    aria-hidden="true"
+    className="kwTbLplLLsW6T_LrtR7_"
+    viewBox="0 0 24 24"
+    {...props}
+  >
+    <circle cx="50%" cy="50%" r={3} fill={color} />
+  </svg>
+)
+
+
 export const svgSvc = {
   player: {
+    ActivationDot,
     ChangeSpeed1,
     ConnectToADevice,
     FullScreen,

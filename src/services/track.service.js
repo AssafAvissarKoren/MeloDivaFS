@@ -13,6 +13,7 @@ function trackToVideo(track) {
         snippet: {
             title: track.title,
             channelTitle: track.artist,
+            duration: track.duration,
             thumbnails: {
                 default: {
                     url: track.imgUrl
@@ -27,7 +28,8 @@ function videoToTrack(video) {
         url: video.id.videoId,
         title: video.snippet.title,
         artist: video.snippet.channelTitle,
-        imgUrl: video.snippet.thumbnails.default.url
+        imgUrl: video.snippet.thumbnails.default.url,
+        duration: video.snippet.duration
     };
 }
 

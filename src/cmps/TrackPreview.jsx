@@ -1,19 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { MiniMenu } from './MiniMenu'
 import { toggleLikedTrack } from '../store/actions/user.actions'
-import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 import { miniMenuOptions } from './MiniMenuOptions'
 import { addTrackToQueue } from '../store/actions/queue.actions'
 import { svgSvc } from "../services/svg.service"
-import { getStationById, saveStation } from '../store/actions/station.actions'
 import { PlayAnimation } from './PlayAnimation'
+import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 
 export function TrackPreview({ layout = '', track = null, trackNum = null, isLiked, deleteTrack = null, duration, handleTrackClick, addTrackToStation}) {
     const [isSelected, setSelected] = useState(false)
     const [isMenu, setIsMenu] = useState(false)
     const modalRef = useRef(track.url)
     const isPlaying = useSelector(state => state.playerModule.isPlaying);
+    const queueTrackNum = useSelector(state => state.queueModule.trackNum);
+    const queueStationId = useSelector(state => state.queueModule.station?._id);
+    const { collectionId } = useParams()
 
     useEffect(() => {
         if(isSelected) {
@@ -72,9 +75,8 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
     }
     
     const trackImgURL = track.imgUrl == "default_thumbnail_url" ? defaultImgUrl : track.imgUrl;
-    const selected = isSelected ? 'selected' : ''
+    const selected = (isSelected || (queueTrackNum === (trackNum - 1) && queueStationId === collectionId)) ? 'selected' : ''
 
-    console.log('TrackPreview : isPlaying', isPlaying)
     return (
         <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
             <div className='track-numder'>

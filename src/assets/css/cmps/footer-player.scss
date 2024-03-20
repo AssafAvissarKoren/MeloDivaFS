@@ -64,8 +64,6 @@
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: auto auto;
-        align-items: center;
-        justify-content: center;
         width: 100%;
         max-width: 722px;
 
@@ -75,30 +73,76 @@
             justify-content: center;
 
             .player-action-buttons {
-                grid-column: 2;
                 display: flex;
+                grid-column: 2;
                 justify-content: space-between;
-                margin-bottom: 10px;
+                // justify-content: flex-start;
+                // margin-bottom: 10px;
+                // gap: 1vh;
+                // margin-left: 1vh;
+                align-items: center;
                 cursor: pointer;
     
+                & > button {
+                    border: none;
+                    background: transparent;
+                    cursor: pointer;
+                    // padding: 5px;
+                    font-size: 32px;
+                    position: relative;
+                    // width: 32px;
+                    // height: 32px;
+            
+                    &:hover {
+                        &::after {
+                            content: attr(name);
+                            text-transform: capitalize; // Capitalize the title
+                            color: white; // White text
+                            background: rgba(0, 0, 0, 0.7); // Semi-transparent black background
+                            border-radius: 5px; // Rounded corners for title box
+                            position: absolute;
+                            top: 100%; // Position the title box under the button
+                            left: 50%;
+                            transform: translateX(-50%);
+                            padding: 5px 10px; // Adjust padding for better visuals
+                            font-size: 12px;
+                            white-space: nowrap;
+                            z-index: 2; // Ensure title box is above the grey circle
+                        }
+            
+                        // &::before {
+                        //     content: '';
+                        //     position: absolute;
+                        //     top: 50%;
+                        //     left: 50%;
+                        //     transform: translate(-50%, -50%);
+                        //     width: 100%; // Full width of the button
+                        //     height: 100%; // Full height of the button
+                        //     background-color: rgba(128, 128, 128, 0.5); // Semi-transparent grey circle
+                        //     border-radius: 50%; // Make it a circle
+                        //     z-index: 1; // Below the title box
+                        // }
+                    }
+                }
+
                 .shuffle{
-                    font-size: 12px;
+                    font-size: 20px;
                 }
                 
                 .previous{
-                    font-size: 25px;
+                    font-size: 20px;
                 }
     
                 .play-pause {
                     border-radius: 50%;
-                    font-size: 37px;
+                    font-size: 20px;
                     display: flex;
                     align-items: center;
                     justify-content: center;
     
                     .action-button-wrapper {
-                        width: 32px; /* Adjust the size as needed */
-                        height: 32px; /* Adjust the size as needed */
+                        width: 32px;
+                        height: 32px;
                         border-radius: 50%;
                         background-color: white;
                         display: flex;
@@ -107,18 +151,18 @@
                         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for depth */
                   
                         svg {
-                            width: 16px; /* Adjust the size of the SVG icon */
-                            height: 16px; /* Adjust the size of the SVG icon */
+                            width: 16px;
+                            height: 16px;
                         }
                     }
                 }  
     
                 .next{
-                    font-size: 25px;
+                    font-size: 20px;
                 }
     
                 .repeat{
-                    font-size: 12px;
+                    font-size: 20px;
                 }
             }
         }

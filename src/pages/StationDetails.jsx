@@ -45,15 +45,16 @@ export function StationDetails() {
 
     useEffect(() => {
         if (station && station.tracks) {
-            const fetchAndSetDurations = async () => {
-                const durations = await fetchVideoDurations(station);
-                const updatedTracks = station.tracks.map((track, index) => ({
-                    ...track,
-                    duration: durations[index] || 'N/A'
-                }))
-                setTracksWithDurations(updatedTracks)
-            }
-            fetchAndSetDurations()
+            // const fetchAndSetDurations = async () => {
+            //     const durations = await dataService.fetchVideoDurations(station);
+            //     const updatedTracks = station.tracks.map((track, index) => ({
+            //         ...track,
+            //         duration: durations[index] || 'N/A'
+            //     }))
+            //     setTracksWithDurations(updatedTracks)
+            // }
+            // fetchAndSetDurations()
+            setTracksWithDurations(station.tracks)
         }
     }, [station])
 
@@ -122,22 +123,7 @@ export function StationDetails() {
         } catch (err) {
             eventBusService.showErrorMsg('Faild to delete station.')
         }
-    }
-
-    const fetchVideoDurations = async (station) => {
-        try {
-            // Extract the video IDs from the track URLs
-            const tracksIds = station.tracks.map(track => {
-                // Assuming the URL contains the video ID at the end after '='
-                const urlParts = track.url.split('=');
-                return urlParts[urlParts.length - 1];
-            }).join(',');
-            return await dataService.getDurations(tracksIds)
-        } catch (error) {
-            console.error('Error fetching video durations', error);
-            return []; // Return an empty array in case of an error
-        }
-    };
+    }    
     
     const handleTrackClick = (trackNum) => {
         console.log('handleTrackClick', trackNum)

@@ -10,6 +10,8 @@ export const dataService = {
     ajaxGetStationTracks,
     fetchChannelData,
     getDefaultStations,
+    fetchVideoDurations,
+    setVideoDurations,
 }
 
 const API_KEY = 'AIzaSyD5_pPOj9mwAPQz41a1ymh9AuhbZxS6ySQ' // 'AIzaSyC3YOy0NUIShjRXdNxhZazirA58eiMbQDI' // 
@@ -27,9 +29,10 @@ async function createStationData(storageKey) {
         stations = [];
         
         for (const { id, name, description, artist, createdBy, tags, playlistId, mostCommonColor } of defaultStations) {
-            console.log(playlistId, playlistId)
-            const newStation = await createStation(id, name, artist, description, createdBy, tags, playlistId, mostCommonColor);
-            stations.push(newStation);
+            console.log(name, playlistId)
+            const newStation = await createStation(id, name, description, artist, createdBy, tags, playlistId, mostCommonColor);
+            const newStationWithDurations = await dataService.setVideoDurations(newStation)
+            stations.push(newStationWithDurations);
         }
 
         utilService.saveToStorage(storageKey, stations);
@@ -142,6 +145,46 @@ async function getDurations(tracksIds) {
     // console.log("getDurations", durations.map(duration => utilService.formatDuration(duration)))
     return durations;
 }
+
+async function fetchVideoDurations(station) {
+  try {
+      // Extract the video IDs from the track URLs
+      const tracksIds = station.tracks.map(track => {
+          // Assuming the URL contains the video ID at the end after '='
+          const urlParts = track.url.split('=');
+          return urlParts[urlParts.length - 1];
+      }).join(',');
+      return await getDurations(tracksIds)
+  } catch (error) {
+      console.error('Error fetching video durations', error);
+      return []; // Return an empty array in case of an error
+  }
+};
+
+async function setVideoDurations(station) {
+  try {
+      // Fetch video durations for the station's tracks
+      const durations = await fetchVideoDurations(station);
+      
+      // Update each track with its corresponding duration
+      const updatedTracks = station.tracks.map((track, index) => {
+          return {
+              ...track,
+              duration: durations[index] // Assuming durations are in the same order as tracks
+          };
+      });
+
+      // Return the station object with updated track durations
+      return {
+          ...station,
+          tracks: updatedTracks
+      };
+  } catch (error) {
+      console.error('Error setting video durations', error);
+      return station; // Return the original station object in case of an error
+  }
+}
+
 
 const Users = {
     u01: { _id: "u101", fullname: "John Smith", imgUrl: "http://some-photo/" },

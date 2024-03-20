@@ -1,6 +1,4 @@
-import { dataService } from './data.service.js';
 import { utilService } from './util.service.js';
-import { storageService } from './async-storage.service.js'
 
 export const queueService = {
     saveQueue,
@@ -9,11 +7,26 @@ export const queueService = {
 
 const QUEUE_STORAGE_KEY = 'queueDB'
 
-async function saveQueue(queue) {
+function saveQueue(queue) {
     console.log('saveQueue', queue)
     utilService.saveToSessionStorage(QUEUE_STORAGE_KEY, queue);
 }
 
-async function getQueue() {
-    utilService.loadFromSessionStorage(QUEUE_STORAGE_KEY);
+function getQueue() {
+    const queue = utilService.loadFromSessionStorage(QUEUE_STORAGE_KEY);
+    console.log('getQueue', queue)
+    return queue
 }
+
+// import { storageService } from './async-storage.service.js'
+
+// async function getQueue() {
+//     const playState = await storageService.query(QUEUE_STORAGE_KEY)
+//     console.log('getQueue', queue)
+//     return queue
+// }
+
+// function saveQueue(queue) {
+//     localStorage.setItem(QUEUE_STORAGE_KEY, JSON.stringify(queue));
+//     return queue
+// }

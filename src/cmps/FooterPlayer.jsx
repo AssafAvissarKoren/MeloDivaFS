@@ -13,6 +13,8 @@ export function FooterPlayer({ video }) {
     const [currentTime, setCurrentTime] = useState(0);
     const [volume, setVolume] = useState(50);
     const [newTrack, setNewTrack] = useState(false);
+    const [isRepeating, setIsRepeating] = useState(false);
+    const [isShuffling, setIsShuffling] = useState(false);
     const playerRef = useRef(null);
     const thumbnailUrl = video.snippet.thumbnails.default.url;
     const isPlaying = useSelector(state => state.playerModule.isPlaying);
@@ -37,7 +39,7 @@ export function FooterPlayer({ video }) {
         if (isPlaying) {
             interval = setInterval(() => {
                 if (playerRef.current && playerRef.current.getCurrentTime) {
-                    setCurrentTime(playerRef.current.getCurrentTime());
+                    setCurrentTime(Math.round(playerRef.current.getCurrentTime()));
                 }
             }, 1000); // Update every second
         }
@@ -49,25 +51,35 @@ export function FooterPlayer({ video }) {
 
     useEffect(() => {
         if (video && video.id.videoId) {
-            const fetchVideoDuration = async () => {
-                try {
-                    const durations = await dataService.getDurations(video.id.videoId);
-                    if (durations) {
-                        setVideoDuration(durations[0]);
-                    }
-                } catch (error) {
-                    console.error('Error fetching video duration', error);
-                }
-            };
-            fetchVideoDuration();
+            // const fetchVideoDuration = async () => {
+            //     try {
+            //         const durations = await dataService.getDurations(video.id.videoId);
+            //         if (durations) {
+            //             setVideoDuration(durations[0]);
+            //         }
+            //     } catch (error) {
+            //         console.error('Error fetching video duration', error);
+            //     }
+            // };
+            // fetchVideoDuration();
+            setVideoDuration(video.snippet.duration);
         }    
     }, [video.id.videoId]);
 
-    const onReady = (event) => {
-        playerRef.current = event.target;
-        setNewTrack(!newTrack)
-    };
-
+    useEffect(() => {
+        const playNextAsync = async () => {
+            console.log('currentTime', currentTime, 'videoDuration', utilService.durationInSeconds(videoDuration) - 1, "isShuffling", isShuffling, "isPlaying", isPlaying);
+            if (currentTime === (utilService.durationInSeconds(videoDuration) - 1)) {
+                if (video) {
+                    await playNextTrack(isShuffling)
+                }
+                // Alternatively, if you want to use playNextTrack, you can await it too
+                // await playNextTrack(isShuffling);
+            }
+        };
+        playNextAsync();
+    }, [currentTime, videoDuration, isShuffling]);
+        
     useEffect(() => {
         setTimeout( async () => {
             if (playerRef.current && playerRef.current.playVideo) {
@@ -99,6 +111,11 @@ export function FooterPlayer({ video }) {
         return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
     };
 
+    const onReady = (event) => {
+        playerRef.current = event.target;
+        setNewTrack(!newTrack)
+    };
+
     const changeVolume = (newVolume) => {
         if (playerRef.current) {
             // Ensure the volume is within the valid range (0-100)
@@ -109,20 +126,27 @@ export function FooterPlayer({ video }) {
     };
 
     // Event handlers for player actions (not implemented in this example)
-    const jump15Back = () => { /* ... */ };
-    const shuffleQueue = () => { /* ... */ };
+    const shuffleQueue = () => {
+        setIsShuffling(!isShuffling);
+    };
 
     const playNext = async () => { 
         console.log("nextVideo")
         if (video) {
-            await playNextTrack()
+            await playNextTrack(isShuffling)
+            playerRef.current.pauseVideo();
+            playerRef.current.playVideo();
+            await setPlayState(true);
         }
     };
     
-     const playPrev = async () => { 
+    const playPrev = async () => { 
         console.log("prevVideo")
         if (video) {
-            await playPrevTrack()
+            await playPrevTrack(isShuffling)
+            playerRef.current.pauseVideo();
+            playerRef.current.playVideo();
+            await setPlayState(true);
         }
     };
 
@@ -134,10 +158,19 @@ export function FooterPlayer({ video }) {
     };
         
     
-    const toggleRepeat = () => { /* ... */ };
-    const jump15Forward = () => { /* ... */ };
+    const toggleRepeat = () => {
+        setIsRepeating(!isRepeating);
+    };
+
+    const jump15Back = () => {
+        setCurrentTime(Math.round(Math.max(0, currentTime - 15)));
+    };
     
-    console.log('isPlaying', isPlaying)
+    const jump15Forward = () => {
+        const maxTime = utilService.durationInSeconds(videoDuration);
+        setCurrentTime(Math.round(Math.min(maxTime, currentTime + 15)));
+    };
+    
     return (
         <footer className="footer-player">
             <div className="video-info">
@@ -153,28 +186,46 @@ export function FooterPlayer({ video }) {
             <div className="player-controls">
                 <div className="player-action-buttons-container">
                     <div className="player-action-buttons">
-                        <button onClick={jump15Back} name="Jump15Back" className="action-button jump-15-back">
+                        {/* <button onClick={jump15Back} name="Jump15Back" className="jump-15-back">
                             <span className="action-button-wrapper"> <svgSvc.player.Jump15SecBack />  </span>
+                        </button> */}
+                        <button onClick={shuffleQueue} name="Shuffle" className="shuffle">
+                            <span className="action-button-wrapper"> <svgSvc.player.Shuffle color={isShuffling ? "#1ed760" : "white"}/>  </span>
                         </button>
-                        <button onClick={shuffleQueue} name="Shuffle" className="action-button shuffle">
-                            <span className="action-button-wrapper"> <svgSvc.player.Shuffle />  </span>
-                        </button>
-                        <button onClick={playPrev} name="Previous" className="action-button previous">
+                        <button onClick={playPrev} name="Previous" className="previous">
                             <span className="action-button-wrapper"> <svgSvc.player.TrackPrev />  </span>
                         </button>
-                        <button onClick={togglePlay} name={isPlaying ? "Pause" : "Play"} className="action-button play-pause">
+                        <button onClick={togglePlay} name={isPlaying ? "Pause" : "Play"} className="play-pause">
                             <span className="action-button-wrapper"> {isPlaying ? <svgSvc.player.PauseBtn /> : <svgSvc.player.PlayBtn />}  </span>
                         </button>
-                        <button onClick={playNext} name="Next" className="action-button next">
+                        <button onClick={playNext} name="Next" className="next">
                             <span className="action-button-wrapper"> <svgSvc.player.TrackNext />  </span>
                         </button>
-                        <button onClick={toggleRepeat} name="Repeat" className="action-button repeat">
-                            <span className="action-button-wrapper"> <svgSvc.player.Repeat />  </span>
+                        <button onClick={toggleRepeat} name="Repeat" className="repeat">
+                            <span className="action-button-wrapper"> <svgSvc.player.Repeat color={isRepeating ? "#1ed760" : "white"}/>  </span>
                         </button>
-                        <button onClick={jump15Forward} name="Jump15Back" className="action-button jump-15-back">
-                            <span className="action-button-wrapper"> <svgSvc.player.Jump15SecForward />  </span>
-                        </button>
+                        {/* <button onClick={jump15Forward} name="Jump15Back" className="jump-15-back">
+                        </button> */}
                     </div>
+                    <div className="player-action-buttons" style={{ "height": "3px"}} >
+                        {/* <button onClick={jump15Back} name="Jump15Back" className="jump-15-back">
+                        </button> */}
+                        <button onClick={shuffleQueue} name="Shuffle" className="shuffle">
+                            {isShuffling && <span className="action-button-wrapper"> <svgSvc.player.ActivationDot/>  </span>}
+                        </button>
+                        <button onClick={playPrev} name="Previous" className="previous">
+                        </button>
+                        <button onClick={togglePlay} name={isPlaying ? "Pause" : "Play"} className="play-pause">
+                        </button>
+                        <button onClick={playNext} name="Next" className="next">
+                        </button>
+                        <button onClick={toggleRepeat} name="Repeat" className="repeat">
+                            {isRepeating && <span className="action-button-wrapper"> <svgSvc.player.ActivationDot/>  </span>}
+                        </button>
+                        {/* <button onClick={jump15Forward} name="Jump15Back" className="jump-15-back">
+                        </button> */}
+                    </div>
+
                 </div>
                 <div className="progress-section">
                     <span className="current-time">{formatTime(currentTime)}</span>
@@ -183,8 +234,8 @@ export function FooterPlayer({ video }) {
                         value={currentTime}
                         max={utilService.durationInSeconds(videoDuration)}
                         onChange={(event, newValue) => {
-                            setCurrentTime(newValue);
-                            if (playerRef.current) {
+                            if (playerRef.current && playerRef.current.getCurrentTime) {
+                                setCurrentTime(Math.round(newValue));
                                 playerRef.current.seekTo(newValue);
                             }
                         }}                    

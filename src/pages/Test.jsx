@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { CategoryDisplay } from '../cmps/CategoryDisplay';
 import { categoryService } from '../services/category.service';
@@ -7,6 +8,7 @@ import { getStations } from '../store/actions/station.actions';
 import { dataService } from '../services/data.service';
 import { imageService } from '../services/image.service';
 import { PlayAnimation } from '../cmps/PlayAnimation.jsx';
+import { saveStation } from '../store/actions/station.actions';
 
 export const Test = ({ setCurrentCategory }) => {
     const [testCategory, setTestCategory] = useState(null);
@@ -18,6 +20,73 @@ export const Test = ({ setCurrentCategory }) => {
         "color": "",
         "image": ""
     }]
+
+    const demoStation = {
+        "_id": "s165",
+        "name": "The Matrix Soundtrack",
+        "artist": "The Matrix",
+        "imgUrl": "https://i.ytimg.com/vi/IfRcYLPmegg/sddefault.jpg",
+        "tags": [
+          "Soundtrack",
+          "Electronic",
+          "Rock",
+          "1990s"
+        ],
+        "createdBy": {
+          "_id": "u115",
+          "fullname": "Matthew Lewis",
+          "imgUrl": "http://some-photo/"
+        },
+        "likedByUsers": [
+          {
+            "_id": "u102",
+            "fullname": "Mary Johnson",
+            "imgUrl": "http://some-photo/"
+          },
+          {
+            "_id": "u103",
+            "fullname": "James Brown",
+            "imgUrl": "http://some-photo/"
+          }
+        ],
+        "tracks": [
+          {
+            "title": "The Matrix Soundtrack Track 1. \"Rock Is Dead\" Marilyn Manson",
+            "artist": "Flix Soundtracks",
+            "url": "IfRcYLPmegg",
+            "imgUrl": "https://i.ytimg.com/vi/IfRcYLPmegg/sddefault.jpg",
+            "addedBy": {
+              "_id": "u115",
+              "fullname": "Matthew Lewis",
+              "imgUrl": "http://some-photo/"
+            }
+          },
+          {
+            "title": "The Matrix Soundtrack Track 2. \"Spybreak! (Short One)\" Propellerheads",
+            "artist": "Flix Soundtracks",
+            "url": "-zdAicjlnao",
+            "imgUrl": "https://i.ytimg.com/vi/-zdAicjlnao/sddefault.jpg",
+            "addedBy": {
+              "_id": "u115",
+              "fullname": "Matthew Lewis",
+              "imgUrl": "http://some-photo/"
+            }
+          },
+        ],
+        "mostCommonColor": "#39.f45d1745d17696.ae8ba2e8ba2c5.0ba2e8ba2e88",
+        "msgs": [
+          {
+            "id": "m101",
+            "from": {
+              "_id": "u115",
+              "fullname": "Matthew Lewis",
+              "imgUrl": "http://some-photo/"
+            },
+            "txt": "consectetur nulla exercitation deserunt ex"
+          }
+        ]
+      }
+    
 
     // const BASE_URL = '//localhost:3001'
 
@@ -86,10 +155,42 @@ export const Test = ({ setCurrentCategory }) => {
         console.log("stationsImgUrls", stationsImgUrls)
     }
 
+    async function printStationsDurations() {
+        const newStation = await dataService.setVideoDurations(demoStation)
+        console.log("newStation", newStation)
+    }
+
+    async function fixStations() {
+        const stations = useSelector(storeState => storeState.stationModule.stations);
+    
+        try {
+            const updatedStations = await Promise.all(stations.map(async station => {
+                const updatedStation = await dataService.setVideoDurations(station);
+                await saveStation(updatedStation); // Save each updated station individually
+                return updatedStation;
+            }));
+    
+            console.log("newStations", updatedStations);
+        } catch (error) {
+            console.error('Error fixing stations:', error);
+        }
+    }        
+
+    
+    const stationId = useSelector(state => state.queueModule.station._id);
+    console.log("station", stationId)
+
     return (
         <div style={{ overflowY: 'scroll' }}>
             <PlayAnimation />
-            
+            <br />
+            <button onClick={() => console.log("station", stationId)}>QueueStation1</button>
+
+            <br />
+            {/* <button onClick={() => fixStations()}>FixStations1</button> */}
+            <br />
+            <button onClick={() => printStationsDurations()}>SetDurationy1</button>
+            <br />
             <button onClick={() => showAllStations()}>AllStation1</button>
             <br />
             <button onClick={() => printStationsImgUrls()}>Station1</button>
