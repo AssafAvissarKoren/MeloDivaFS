@@ -7,18 +7,16 @@
     &:hover {
         background-color: #303030;
 
-        & .btn-like-track,
-        .btn-more {
-            opacity: 1;
-        }
-
         & .track-number {
             & .track-num {
                 display: none;
                 width: 0;
+                z-index: 0;
+                opacity: 0;
             }
             & .btn-track-play {
                 display: block;
+                z-index: 1;
             }
         }
     }
@@ -32,15 +30,18 @@
             opacity: 1;
         }
 
-        & .track-number {
-            & .track-num {
-                display: none;
-                width: 0;
-            }
-            & .btn-track-play {
-                display: block;
-            }
-        }
+        // & .track-number {
+        //     & .track-num {
+        //         display: block;
+        //         z-index: 1;
+        //     }
+        //     & .btn-track-play {
+        //         display: none;
+        //         width: 0;
+        //         z-index: 0;
+        //         opacity: 0;
+        //     }
+        // }
     }
 
     & .track-number {
@@ -60,10 +61,6 @@
             border-radius: 50%;
             padding: 0;
             cursor: unset;
-        }
-
-        & .current-track-in-queue {
-            color: #1ed760;
         }
     }
 
@@ -164,5 +161,4 @@
             margin-top: -16px;
         }
     }
-
 }

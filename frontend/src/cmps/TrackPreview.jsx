@@ -85,10 +85,12 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
     return (
         <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
             <div className='track-number'>
-                <p className='track-num'>{trackNum}</p>
+                <span className='track-num' onClick={() => handleTrackClick(track)}>
+                    {(isPlaying && selected) ? <PlayAnimation /> : trackNum}
+                </span>
                 <button className="btn-track-play" onClick={() => handleTrackClick(track)}>
                     <span className="action-button-wrapper"> 
-                        {(isPlaying && selected) ? <PlayAnimation /> : <svgSvc.player.PlayBtn color={"white"} /> }
+                        {(isPlaying && selected) ? <svgSvc.player.PauseBtn color={"white"} /> : <svgSvc.player.PlayBtn color={"white"} /> }
                     </span>
                 </button>
             </div>

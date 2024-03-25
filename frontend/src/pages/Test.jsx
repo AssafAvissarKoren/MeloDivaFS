@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { CategoryDisplay } from '../cmps/CategoryDisplay';
 import { categoryService } from '../services/category.service';
@@ -13,10 +13,16 @@ import { userService } from '../services/user.service';
 import { stationService } from '../services/station.service.js';
 import { preService } from '../services/pre.service.js';
 import { store } from '../store/store';
+import { getIsTrackPlaying } from '../store/actions/player.actions.js';
+import { pause, play } from "../store/actions/player.actions.js"
+import { getCurrentTrackInQueue, setQueueToStation } from '../store/actions/queue.actions.js'
+import { svgSvc } from "../services/svg.service"
+
 
 export const Test = ({ setCurrentCategory }) => {
     const [testCategory, setTestCategory] = useState(null);
-
+    const dispatch = useDispatch();
+    
     const demoCategory = [{
         "_id": "fakeId",
         "name": "",
@@ -209,11 +215,59 @@ export const Test = ({ setCurrentCategory }) => {
     // console.log("station", stationId)
     // const queue = useSelector(state => state.queueModule);
     // console.log("queue", queue)
+    
+    const [isPlaying, setIsPlaying] = useState(false)
+    const [isSelected, setSelected] = useState(false)
+    const layout = "station-content-layout" //'station-search-track-layout' 'search-track-layout'
+    const selected = isSelected ? 'selected' : ''
+    const trackNum = 1
+
+    function onToggleSelected(ev) { // problem with the call from handleClickOutside setting the Track, problem with de-selecting the other tracks
+        setSelected(prevIsSelected => !prevIsSelected)
+    }
+
+    function onTogglePlaying() {
+        setIsPlaying(prevIsPlaying => !prevIsPlaying)
+    }
+
+
+    const handleTrackClick = (track) => {
+        if(getCurrentTrackInQueue().url === track.url) {
+            getIsTrackPlaying() ? dispatch(pause()) : dispatch(play())
+        } else {
+            setQueueToStation(station, trackNum-1);
+        }
+    }
+
+    const track = {
+        "title": "The Matrix Soundtrack Track 5. \"Prime Audio Soup\" Meat Beat Manifesto",
+        "artist": "Flix Soundtracks",
+        "url": "hyhfx_XDDdE",
+        "imgUrl": "https://i.ytimg.com/vi/hyhfx_XDDdE/sddefault.jpg",
+        "addedBy": {
+          "_id": "u115",
+          "fullname": "Matthew Lewis",
+          "imgUrl": "http://some-photo/"
+        },
+        "duration": "PT6M18S"
+      }
 
     return (
         <div style={{ overflowY: 'scroll' }}>
-            <button onClick={() => preToStations()}>GetStationy1</button>
+            <button onClick={() => onTogglePlaying()}>TogglePlaying</button>
             <br />
+
+            <section className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
+                <div className='track-number'>
+                    <p className='track-num'>{trackNum}</p>
+                    <button className="btn-track-play" onClick={() => handleTrackClick(track)}>
+                        <span className="action-button-wrapper"> 
+                            {(isPlaying && selected) ? <PlayAnimation /> : <svgSvc.player.PlayBtn color={"white"} /> }
+                        </span>
+                    </button>
+                </div>
+            </section>
+
             {/* <button onClick={() => printStation()}>GetStationy1</button>
             <br /> */}
             {/* <button onClick={() => printUser()}>GetUsery1</button>

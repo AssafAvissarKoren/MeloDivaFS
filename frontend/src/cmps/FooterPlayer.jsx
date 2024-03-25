@@ -40,9 +40,11 @@ export function FooterPlayer({ video }) {
         if (playerRef.current) {
             if (isPlaying) {
                 playerRef.current.playVideo();
+                // dispatch(play());
                 console.log("vid playing!")
             } else {
                 playerRef.current.pauseVideo();
+                // dispatch(pause());
                 console.log("vid paused!")
             }
         }
@@ -68,7 +70,7 @@ export function FooterPlayer({ video }) {
 
     useEffect(() => {
         const playNextAsync = async () => {
-            console.log("currentTime", currentTime, "videoDuration", utilService.durationInSeconds(videoDuration))
+            // console.log("currentTime", currentTime, "videoDuration", utilService.durationInSeconds(videoDuration))
             if (currentTime === (utilService.durationInSeconds(videoDuration) - 1)) {
                 if (video) {
                     if(isLooping) {

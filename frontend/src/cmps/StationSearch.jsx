@@ -1,11 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { dataService } from '../services/data.service.js';
-import { getCurrentTrackInQueue, setQueueToTrack } from '../store/actions/queue.actions.js';
 import { trackService } from '../services/track.service.js';
 import { useSelector } from 'react-redux';
 import { utilService } from '../services/util.service.js';
 import { TrackPreview } from '../cmps/TrackPreview.jsx';
+import { getCurrentTrackInQueue, setQueueToStation } from '../store/actions/queue.actions.js';
 import { getIsTrackPlaying } from '../store/actions/player.actions.js';
+import { pause, play } from "../store/actions/player.actions.js"
 
 
 export function StationSearch({addTrackToStation}) {
@@ -47,7 +48,7 @@ export function StationSearch({addTrackToStation}) {
 
     const handleTrackClick = (track) => {
         if(getCurrentTrackInQueue().url === track.url) {
-            getIsTrackPlaying() ? pause() : play()
+            getIsTrackPlaying() ? dispatch(pause()) : dispatch(play())
         } else {
             setQueueToStation(station, trackNum-1);
         }

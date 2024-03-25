@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { useParams } from "react-router"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleCheck, faList, faPlayCircle, faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons'
 import { faClockFour, faHeart as heartLined } from '@fortawesome/free-regular-svg-icons'
@@ -24,6 +24,7 @@ import { svgSvc } from "../services/svg.service"
 import { StationSearch } from "../cmps/StationSearch.jsx"
 import { pause, play } from "../store/actions/player.actions.js"
 
+
 export function StationDetails() {
     const { collectionId } =  useParams()
     const { setFilterBy } = useContext(IndexContext)
@@ -32,6 +33,7 @@ export function StationDetails() {
     const [menu, setMenu] = useState(0)
     const [tracksWithDurations, setTracksWithDurations] = useState([])
     const isPlaying = useSelector(state => state.playerModule.isPlaying)
+    const dispatch = useDispatch();
 
     useEffect(() => {
         loadStation()
@@ -128,7 +130,7 @@ export function StationDetails() {
     
     const handlePlayClick = () => {
         if(getQueuedStaion()?._id === station._id) {
-            isPlaying ? pause() : play()
+            isPlaying ? dispatch(pause()) : dispatch(play())
         } else {
             setQueueToStation(station)
         }
@@ -136,7 +138,7 @@ export function StationDetails() {
 
     const handleTrackClick = (trackNum) => {
         if(getCurrentTrackInQueue()?.url === station.tracks[trackNum-1].url) {
-            isPlaying ? pause() : play()
+            isPlaying ? dispatch(pause()) : dispatch(play())
         } else {
             setQueueToStation(station, trackNum-1)
         }

@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { CategoryDisplay } from '../cmps/CategoryDisplay.jsx';
 import { categoryService } from '../services/category.service';
 import { dataService } from '../services/data.service.js';
-import { getCurrentTrackInQueue, setQueueToTrack } from '../store/actions/queue.actions.js';
 import { trackService } from '../services/track.service.js';
 import { useSelector } from 'react-redux';
 import { utilService } from '../services/util.service.js';
 import { TrackPreview } from '../cmps/TrackPreview.jsx';
 import { getStationById, saveStation } from '../store/actions/station.actions.js';
+import { getCurrentTrackInQueue, setQueueToStation } from '../store/actions/queue.actions.js';
 import { getIsTrackPlaying } from '../store/actions/player.actions.js';
+import { pause, play } from "../store/actions/player.actions.js"
 
 
 export function Search({ searchText }) {

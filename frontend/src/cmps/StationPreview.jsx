@@ -1,16 +1,17 @@
 import React, { useContext } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import defaultImgUrl from '../assets/imgs/MeloDiva.png';
 import { IndexContext } from '../cmps/IndexContext.jsx';
 import { svgSvc } from '../services/svg.service.jsx';
 import { getQueuedStaion, setQueueToStation } from '../store/actions/queue.actions.js';
 import { stationService } from '../services/station.service.js';
-import { getIsTrackPlaying, pause, play } from '../store/actions/player.actions.js';
-import { useSelector } from 'react-redux';
+import { pause, play } from '../store/actions/player.actions.js';
 
 export const StationPreview = ({ station }) => {
   const { setFilterBy } = useContext(IndexContext);
   const queuedStationId = useSelector(state => state.queueModule.station?._id)
   const isPlaying = useSelector(state => state.playerModule.isPlaying);
+  const dispatch = useDispatch();
 
   function handleOnClick(collectionId) {
     const newFilterBy = {
@@ -25,7 +26,7 @@ export const StationPreview = ({ station }) => {
   function onPlayClicked(ev) {
     ev.stopPropagation()
     if( getQueuedStaion()?._id === station._id) {
-      isPlaying ? pause() : play()
+      isPlaying ? dispatch(pause()) : dispatch(play())
     } else {
         setQueueToStation(station)
     }
