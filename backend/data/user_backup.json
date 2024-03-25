@@ -1,0 +1,72 @@
+[
+    {
+      "_id": "u101",
+      "username": "puki",
+      "fullname": "Puki Ja",
+      "password": "secret1",
+      "score": 100
+    },
+    {
+      "_id": "u102",
+      "username": "muki",
+      "fullname": "Muki Ba",
+      "password": "secret2",
+      "score": 100
+    },
+    { 
+      "_id" : "u103",
+      "username" : "muki", 
+      "fullname" : "Muki Ja",
+      "password" : "muki1234", 
+      "score" : 100 
+    },
+    {
+      "_id": "u104",
+      "username": "harry",
+      "fullname": "Harry Potter",
+      "password": "harry123",
+      "score": 100
+    },
+    {
+      "_id": "u105",
+      "username": "hermione",
+      "fullname": "Hermione Granger",
+      "password": "hermione123",
+      "score": 100
+    },
+    {
+      "_id": "u106",
+      "username": "ron",
+      "fullname": "Ron Weasley",
+      "password": "ron123",
+      "score": 100
+    },
+    {
+      "_id": "u107",
+      "username": "dumbledore",
+      "fullname": "Albus Dumbledore",
+      "password": "dumbledore123",
+      "score": 100
+    },
+    {
+      "_id": "u108",
+      "username": "snape",
+      "fullname": "Severus Snape",
+      "password": "snape123",
+      "score": 100
+    },
+    {
+      "_id": "u109",
+      "username": "luna",
+      "fullname": "Luna Lovegood",
+      "password": "luna123",
+      "score": 100
+    },
+    {
+      "_id": "u110",
+      "username": "draco",
+      "fullname": "Draco Malfoy",
+      "password": "draco123",
+      "score": 100
+    }
+  ]
