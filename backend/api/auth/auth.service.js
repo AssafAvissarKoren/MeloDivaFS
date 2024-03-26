@@ -32,8 +32,8 @@ function validateToken(token) {
     return null
 }
 
-async function login(username, password) {
-    const user = await userService.getByUsername(username)
+async function login(fullname, password) {
+    const user = await userService.getByUsername(fullname)
     if (!user) throw 'Unkown username'
 
     //  un-comment for real login
@@ -45,8 +45,7 @@ async function login(username, password) {
         _id: user._id,
         fullname: user.fullname,
         imgUrl: user.imgUrl,
-        score: user.score,
-
+        likedTracks: user.likedTracks,
         isAdmin: user.isAdmin,
         // Additional fields required for miniuser
     }
@@ -54,15 +53,15 @@ async function login(username, password) {
 
 }
 
-async function signup({ username, password, fullname }) {
+async function signup(user) {
     
-    loggerService.debug(`auth.service - signup with username: ${username}, fullname: ${fullname}`)
-    if (!username || !password || !fullname) throw 'Missing required signup information'
+    loggerService.debug(`auth.service - signup with fullname: ${user.fullname}`)
+    if (!user.password || !user.fullname) throw 'Missing required signup information'
     
-    const userExist = await userService.getByUsername(username)
+    const userExist = await userService.getByUsername(user.fullname)
     if (userExist) throw 'Username already taken'
     
     const saltRounds = 10
-    const hash = await bcrypt.hash(password, saltRounds)
-    return userService.add({ username, password: hash, fullname })
+    const hash = await bcrypt.hash(user.password, saltRounds)
+    return userService.add({...user, password: hash})
 }

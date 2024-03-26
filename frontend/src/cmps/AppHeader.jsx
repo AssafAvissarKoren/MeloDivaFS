@@ -1,12 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { utilService } from '../services/util.service.js';
 import { svgSvc } from '../services/svg.service.jsx';
+import { getCurrentUser, login } from '../store/actions/user.actions.js';
+import { Logout } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
 
 export const AppHeader = ({ filterBy, setFilterBy }) => {
     const params = useParams();
     const [text, setText] = useState('');
     const typingTimeoutRef = useRef(null);
+    const currentUser = useSelector(state => state.userModule)
+
+    const navigate = useNavigate();
     
     useEffect(() => {
         if (params.tab === "search") {
@@ -74,6 +80,11 @@ export const AppHeader = ({ filterBy, setFilterBy }) => {
         })
     }
 
+    async function onLogout() {
+        await login("Guest", '')
+        navigate("/")
+    }
+
     const isBackHistory = filterBy.tabHistoryLoc
     const isForwardHistory = filterBy.tabHistoryLoc < filterBy.tabHistory.length - 1
     return (
@@ -106,7 +117,17 @@ export const AppHeader = ({ filterBy, setFilterBy }) => {
                     }
                 </label>
             }
-            <div className="login-btn">Login</div>
+            {currentUser.fullname === "Guest" ?
+                <div className="user-options">
+                    <button className="sign-up-btn" onClick={() => {navigate("/melodiva/signup")}}>Sign up</button>
+                    <button className="login-btn" onClick={() => {navigate("/melodiva/login")}}>Login</button>
+                </div>
+                :
+                <div className="user-options">
+                    <button className="sign-up-btn" onClick={onLogout}>Log out</button>
+                    <div className="user-icon">{currentUser.fullname.charAt(0)}</div>
+                </div>
+            }
         </header>
     )
 };

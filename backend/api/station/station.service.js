@@ -1,5 +1,6 @@
 import { loggerService } from '../../services/logger.service.js'
 import { dbService } from '../../services/db.service.js'
+import { utilService } from '../../services/util.service.js';
 
 const COLL_NAME = 'station'
 const collection = await dbService.getCollection(COLL_NAME);
@@ -58,6 +59,9 @@ async function update(station) {
 
 async function add(station) {
     try {
+        station._id = utilService.makeId()
+        station.mostCommonColor = "#333333"
+
         const checkedStation = _checkStation(station)
         await collection.insertOne(checkedStation)
         return checkedStation
@@ -68,15 +72,17 @@ async function add(station) {
 }
 
 function _checkStation(station) {
+    console.log(station)
     if (typeof station._id !== 'string' ||
         typeof station.name !== 'string' ||
         typeof station.description !== 'string' ||
-        typeof station.artist !== 'string' ||
+        // typeof station.artist !== 'string' ||
         typeof station.imgUrl !== 'string' ||
         !Array.isArray(station.tags) || !station.tags.every(tag => typeof tag === 'string') ||
         typeof station.createdBy !== 'object' || 
         typeof station.createdBy._id !== 'string' || 
         typeof station.createdBy.fullname !== 'string' ||
+        typeof station.createdBy.imgUrl !== 'string' ||
         !Array.isArray(station.likedByUsers) || !station.likedByUsers.every(user => typeof user === 'object' && typeof user._id === 'string' && typeof user.fullname === 'string' && typeof user.imgUrl === 'string') ||
         !Array.isArray(station.tracks) || !station.tracks.every(track => typeof track === 'object' && typeof track.title === 'string' && typeof track.artist === 'string' && typeof track.url === 'string' && typeof track.imgUrl === 'string' && typeof track.duration === 'string' && typeof track.addedBy === 'object' && typeof track.addedBy._id === 'string' && typeof track.addedBy.fullname === 'string' && typeof track.addedBy.imgUrl === 'string') ||
         typeof station.mostCommonColor !== 'string' ||

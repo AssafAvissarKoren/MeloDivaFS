@@ -42,8 +42,8 @@ export const Index = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            await loadStationsLocal();
             await initUser();
+            await loadStationsLocal();
             playerService.initPlayState();
             await categoryService.createCategories();
         };

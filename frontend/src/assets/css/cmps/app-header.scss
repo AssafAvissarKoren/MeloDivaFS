@@ -102,12 +102,56 @@
     grid-template-columns: auto auto;
 }
 
-.login-btn {
-    background-color: white;
-    color: black;
-    border-radius: 20px;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-weight: bold;
-    margin-right: 20px; /* Adjust the margin as needed */
+.user-options {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    margin-right: 20px;
+
+    & > * {
+        border: 0;
+        background-color: unset;
+    }
+
+    & > *:hover {   
+        font-size: 14px;
+        margin: -1px;
+    }
+
+    .sign-up-btn {
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .login-btn {
+        background-color: white;
+        color: black;
+        border-radius: 20px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .user-icon {
+        display: grid;
+        background-color: cornflowerblue;
+        color: black;
+        font-size: 32px;
+        border-radius: 999px;
+        height: 40px;
+        width: 40px;
+        cursor: default;
+        font-weight: bold;
+        text-align: center;
+        align-content: center;
+        margin-left: -8px;
+        &:hover {   
+            font-size: 32px;
+            margin: 0;
+            margin-left: -8px;
+        }
+    }
 }
