@@ -10,6 +10,8 @@ import { getStationById, saveStation } from '../store/actions/station.actions.js
 import { getCurrentTrackInQueue, setQueueToStation } from '../store/actions/queue.actions.js';
 import { getIsTrackPlaying } from '../store/actions/player.actions.js';
 import { pause, play } from "../store/actions/player.actions.js"
+import { getCurrentUser } from '../store/actions/user.actions.js';
+import { eventBusService } from '../services/event-bus.service.js';
 
 
 export function Search({ searchText }) {
@@ -72,6 +74,14 @@ export function Search({ searchText }) {
     }
 
     async function addTrackToStation(track, stationId) {
+        const user = getCurrentUser()
+        if(!track.addedBy) {
+            track.addedBy = {
+                _id: user._id,
+                fullname: user.fullname,
+                imgUrl: user.imgUrl
+            }
+        }
         try {
             const station = await getStationById(stationId)
             const tracks = station.tracks
