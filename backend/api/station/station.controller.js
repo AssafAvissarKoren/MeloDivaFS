@@ -4,7 +4,7 @@ import { loggerService } from '../../services/logger.service.js'
 // List
 export async function getStations(req, res) {
     try {
-        const stations = await stationService.query()
+        const stations = await stationService.getAll()
         res.send(stations)
     } catch (err) {
         loggerService.error('Failed to get stations', err)

@@ -17,17 +17,19 @@ app.use(cookieParser())
 
 
 // Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes
-import { preRoutes } from './api/pre/pre.routes.js'
+import { base_dataRoutes } from './api/base_data/base_data.routes.js'
 import { categoryRoutes } from './api/category/category.routes.js'
 import { stationRoutes } from './api/station/station.routes.js'
+import { queryRoutes } from './api/query/query.routes.js'
 import { userRoutes } from './api/user/user.routes.js'
 import { authRoutes } from './api/auth/auth.routes.js'
 import { msgRoutes } from './api/msg/msg.routes.js'
 import path from 'path'
 
-app.use('/api/pre', preRoutes)
+app.use('/api/base_data', base_dataRoutes)
 app.use('/api/category', categoryRoutes)
 app.use('/api/station', stationRoutes)
+app.use('/api/query', queryRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/msg', msgRoutes)

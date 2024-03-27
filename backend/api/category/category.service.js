@@ -2,10 +2,9 @@ import { loggerService } from '../../services/logger.service.js'
 import { dbService } from '../../services/db.service.js'
 
 const COLL_NAME = 'category'
-const collection = await dbService.getCollection(COLL_NAME);
 
 export const categoryService = {
-    query,
+    getAll,
     getById,
     remove,
     update,
@@ -14,53 +13,19 @@ export const categoryService = {
     queryByUserId,
 }
 
-
-async function query(filterBy = {}) {
+async function getAll() {
     try {
-        let criteria = {};
-        if (filterBy.text) {
-            const regExp = new RegExp(filterBy.text, 'i')
-            criteria.$or = [
-                { title: { $regex: regExp } },
-                { description: { $regex: regExp } }
-            ];
-        } 
-        if (filterBy.minSeverity) {
-            criteria.severity = { $gte: filterBy.minSeverity };
-        }
-        if (filterBy.labels && filterBy.labels.length > 0) {
-            criteria.labels = { $in: filterBy.labels };
-        }
-        if (filterBy.createdBy) {
-            criteria['creator._id'] = filterBy.createdBy;
-        }
-
-        let sortCriteria = {};
-        if (filterBy.sortCriterion === 'date') {
-            sortCriteria = { createdAt: 1 };
-        } else if (filterBy.sortCriterion === 'title') {
-            sortCriteria = { title: 1 };
-        }
-
-        let categoriesCursor = collection.find(criteria).sort(sortCriteria);
-
-        const { categoriesPerPage } = await getSettings()
-
-        if (filterBy.pageIdx !== undefined) {
-            const startIdx = (parseInt(filterBy.pageIdx) - 1) * categoriesPerPage;
-            categoriesCursor = categoriesCursor.skip(startIdx).limit(categoriesPerPage);
-        }
-        const categories = await categoriesCursor.toArray();
-
-        return categories
+        const collection = await dbService.getCollection(COLL_NAME);
+        return await collection.find({}).toArray();
     } catch (err) {
-        loggerService.error(err)
-        throw err
+        loggerService.error(err);
+        throw err;
     }
 }
 
 async function getById(categoryId) {
     try {
+        const collection = await dbService.getCollection(COLL_NAME);
         const category = await collection.findOne({ _id: categoryId })
         return category
     } catch (err) {
@@ -71,6 +36,7 @@ async function getById(categoryId) {
 
 async function remove(categoryId) {
     try {
+        const collection = await dbService.getCollection(COLL_NAME);
         return await collection.deleteOne({ _id: categoryId })
     } catch (err) {
         console.log(`ERROR: cannot remove category ${categoryId}`)
@@ -81,6 +47,7 @@ async function remove(categoryId) {
 async function update(category) {
     try {
         const checkedCategory = _checkCategory(category)
+        const collection = await dbService.getCollection(COLL_NAME);
         const {updatedCount} = await collection.updateOne({ _id: checkedCategory._id }, { $set: checkedCategory })
         // if(updatedCount > 1)
         return checkedCategory
@@ -93,6 +60,7 @@ async function update(category) {
 async function add(category) {
     try {
         const checkedCategory = _checkCategory(category)
+        const collection = await dbService.getCollection(COLL_NAME);
         await collection.insertOne(checkedCategory)
         return checkedCategory
     } catch (err) {
@@ -124,7 +92,7 @@ function _checkCategory(category) {
 }
 
 async function getSettings() {
-    const collection = await dbService.getCollection(COLL_NAME);    
+    const collection = await dbService.getCollection(COLL_NAME);
     return {
         categoriesPerPage: 4,
         totalNumberOfCategories: await collection.countDocuments()
@@ -133,7 +101,8 @@ async function getSettings() {
 
 async function queryByUserId(userId) {
     try {
-        let criteria = { 'creator._id': userId }; 
+        let criteria = { 'creator._id': userId };
+        const collection = await dbService.getCollection(COLL_NAME);
         return collection.find(criteria).toArray();
     } catch (err) {
         loggerService.error(err)

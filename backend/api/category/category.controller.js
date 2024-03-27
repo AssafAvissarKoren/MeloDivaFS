@@ -4,7 +4,7 @@ import { loggerService } from '../../services/logger.service.js'
 // List
 export async function getCategories(req, res) {
     try {
-        const categories = await categoryService.query()
+        const categories = await categoryService.getAll()
         res.send(categories)
     } catch (err) {
         loggerService.error('Failed to get categories', err)

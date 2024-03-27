@@ -2,10 +2,9 @@ import { loggerService } from '../../services/logger.service.js'
 import { dbService } from '../../services/db.service.js'
 
 const COLL_NAME = 'station'
-const collection = await dbService.getCollection(COLL_NAME);
 
 export const stationService = {
-    query,
+    getAll,
     getById,
     remove,
     update,
@@ -15,7 +14,7 @@ export const stationService = {
 }
 
 
-async function query() {
+async function getAll() {
     try {
         const collection = await dbService.getCollection(COLL_NAME);
         return await collection.find({}).toArray();
@@ -27,6 +26,7 @@ async function query() {
 
 async function getById(stationId) {
     try {
+        const collection = await dbService.getCollection(COLL_NAME);
         const station = await collection.findOne({ _id: stationId })
         return station
     } catch (err) {
@@ -37,6 +37,7 @@ async function getById(stationId) {
 
 async function remove(stationId) {
     try {
+        const collection = await dbService.getCollection(COLL_NAME);
         return await collection.deleteOne({ _id: stationId })
     } catch (err) {
         console.log(`ERROR: cannot remove station ${stationId}`)
@@ -47,6 +48,7 @@ async function remove(stationId) {
 async function update(station) {
     try {
         const checkedStation = _checkStation(station)
+        const collection = await dbService.getCollection(COLL_NAME);
         const {updatedCount} = await collection.updateOne({ _id: checkedStation._id }, { $set: checkedStation })
         // if(updatedCount > 1)
         return checkedStation
@@ -59,6 +61,7 @@ async function update(station) {
 async function add(station) {
     try {
         const checkedStation = _checkStation(station)
+        const collection = await dbService.getCollection(COLL_NAME);
         await collection.insertOne(checkedStation)
         return checkedStation
     } catch (err) {
@@ -116,7 +119,8 @@ async function getSettings() {
 
 async function queryByUserId(userId) {
     try {
-        let criteria = { 'creator._id': userId }; 
+        let criteria = { 'creator._id': userId };
+        const collection = await dbService.getCollection(COLL_NAME);
         return collection.find(criteria).toArray();
     } catch (err) {
         loggerService.error(err)
