@@ -632,6 +632,20 @@ const ActivationDot = ({ color = "#1ed760", ...props }) => (
 )
 
 
+const ListDisplay = ({ color = "#909090", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    className="Svg-sc-ytk21e-0 cAMMLk"
+    data-encore-id="icon"
+    viewBox="0 0 16 16"
+    {...props}
+  >
+    <path fill={color} d="M15 14.5H5V13h10v1.5zm0-5.75H5v-1.5h10v1.5zM15 3H5V1.5h10V3zM3 3H1V1.5h2V3zm0 11.5H1V13h2v1.5zm0-5.75H1v-1.5h2v1.5z" />
+  </svg>
+)
+
+
 export const svgSvc = {
   player: {
     ActivationDot,
@@ -672,6 +686,7 @@ export const svgSvc = {
     PlaylistPauseBtn,
     LibrarySearch,
     Logo,
+    ListDisplay,
   },
   sortBy: {
     List,

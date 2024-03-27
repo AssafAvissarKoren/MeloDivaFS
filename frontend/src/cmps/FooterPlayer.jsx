@@ -188,7 +188,7 @@ export function FooterPlayer({ video }) {
                     {thumbnailUrl && <img src={thumbnailUrl} alt={`${video.snippet.title} thumbnail`} />}
                 </div>
                 <div className="title-and-channel">
-                    <div className="video-name">{shortenText(video.snippet.title)}</div>
+                    <div className="video-name">{video.snippet.title}</div>
                     <div className="channel-name">{video.snippet.channelTitle}</div>
                 </div>
                 {/* <div className="fade-out"/> */}

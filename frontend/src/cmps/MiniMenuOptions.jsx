@@ -180,7 +180,7 @@ function editStation(imgUrl, name, description, submit, onClose ) {
                     name="name"
                     placeholder="Add a name"
                     defaultValue={name}
-                    maxlength="100"
+                    maxLength="100"
                     onKeyDown={handleKeyDown}
                     autocomplete="off"
                 />
@@ -188,7 +188,7 @@ function editStation(imgUrl, name, description, submit, onClose ) {
                     name="description"
                     placeholder="Add an optional description"
                     defaultValue={description}
-                    maxlength="300"
+                    maxLength="300"
                     onKeyDown={handleKeyDown}
                     autocomplete="off"
                 />

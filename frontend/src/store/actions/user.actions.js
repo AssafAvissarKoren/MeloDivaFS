@@ -30,7 +30,9 @@ export async function initUser() {
 export async function doseUserExist(fullname) {
     try {
         const users = await userService.getUsers()
+        console.log("doseUserExist", fullname, users)
         const user = users.filter(user => user.fullname === fullname)
+        console.log("doseUserExist", user)
         return user.length
     } catch (err) {
         console.log('Had issues checking user', err);

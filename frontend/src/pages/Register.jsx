@@ -53,7 +53,7 @@ export function Register({ type }) {
         <div className="register">
             {type === "signup" ?
                 <form className="content">
-                    <h1>Sign up to start listening</h1>
+                    <h1>Sign up to Start Listening</h1>
 
                     <label htmlFor="register-name">Name</label>
                     <input className="input register-name" 
@@ -89,7 +89,7 @@ export function Register({ type }) {
                 </form>
                 :
                 <form className="content">
-                    <h1>Log in to Spotify</h1>
+                    <h1>Log in to MeloDiva</h1>
 
                     <label htmlFor="register-name">Name</label>
                     <input className="input register-name" 

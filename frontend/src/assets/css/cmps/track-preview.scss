@@ -96,8 +96,15 @@
                 object-fit: cover;
                 margin-top: -18.5%;
                 margin-bottom: -18.5%;
-            }
+            }            
         }
+
+        p {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
 
         & .current-track-in-queue {
             color: #1ed760;
