@@ -1,4 +1,4 @@
 export default {
-    dbURL: 'mongodb://127.0.0.1:27017',
+    dbURL: 'mongodb+srv://AssafAvissarKoren:E34uUZ$Ad366Zf$@atlascluster.kynmwke.mongodb.net/?retryWrites=true&w=majority&appName=AtlasCluster',
     dbName: 'melodiva'
 }

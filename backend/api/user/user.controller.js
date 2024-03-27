@@ -39,12 +39,7 @@ export async function deleteUser(req, res) {
 export async function addUser(req, res) {
     try {
         const user = req.body
-        // const fullUser = { ...user, 
-        //     _id: utilService.makeId(), 
-        //     isAdmin: false,
-        // }
-        // console.log('addUser fullUser:', fullUser)
-        const savedUser = await userService.add(user) //fullUser
+        const savedUser = await userService.add(user)
         res.send(savedUser)
     } catch (err) {
         loggerService.error('Failed to create user', err)

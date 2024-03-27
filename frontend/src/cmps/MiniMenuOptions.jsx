@@ -157,11 +157,11 @@ function editStation(imgUrl, name, description, submit, onClose ) {
         submit(dataObject)
     }
 
-      function handleKeyDown(ev) {
+    function handleKeyDown(ev) {
         if (ev.key === 'Enter') {
-          ev.preventDefault();
+            ev.preventDefault();
         }
-      }
+    }
 
     return (
         <form className="edit-station" onSubmit={handleSubmit}>

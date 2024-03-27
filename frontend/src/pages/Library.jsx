@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from "react-redux"
 import { StationPreview } from "../cmps/StationPreview"
-import { getBasicUser, getLikedTracksAsStation } from "../store/actions/user.actions"
+import { getCurrentUser, getLikedTracksAsStation } from "../store/actions/user.actions"
 import { stationService } from "../services/station.service"
 import { getStationsInLibrary, saveStation } from "../store/actions/station.actions"
 import { utilService } from "../services/util.service"
@@ -19,7 +19,7 @@ export function Library() {
     async function createNewStation() {
         const name = 'New Playlist'
         const imgUrl = utilService.getImgUrl('../assets/imgs/MeloDiva.png')
-        let newStation = stationService.createStation(name, getBasicUser(), imgUrl)
+        let newStation = stationService.createStation(name, getCurrentUser(), imgUrl)
         newStation = await saveStation(newStation)
 
         const newFilterBy = {
@@ -31,7 +31,7 @@ export function Library() {
         setFilterBy(prevFilterBy => ({...stationService.filterByUpdateHistory(prevFilterBy, newFilterBy)}))
     }
 
-    if (!stations || !getBasicUser()._id) {
+    if (!stations || !getCurrentUser()._id) {
         return <div></div> //Loading...
     } else {
         return (

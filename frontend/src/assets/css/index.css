@@ -10,6 +10,7 @@
 @import "./pages/search.scss";
 @import "./pages/station-details.scss";
 @import "./pages/index.scss";
+@import "./pages/register.scss";
 
 /* Components */
 @import "./cmps/app-header.scss";

@@ -16,7 +16,7 @@ import { TrackPreview } from "../cmps/TrackPreview"
 
 import { getStationById, removeStation, saveStation } from "../store/actions/station.actions"
 import { getCurrentTrackInQueue, getQueuedStaion, setQueueToStation } from '../store/actions/queue.actions.js'
-import { LIKED_TRACK_AS_STATION_ID, getBasicUser, getLikedTracksAsStation } from "../store/actions/user.actions.js"
+import { LIKED_TRACK_AS_STATION_ID, getCurrentUser, getLikedTracksAsStation } from "../store/actions/user.actions.js"
 import { IndexContext } from '../cmps/IndexContext.jsx'
 import { MiniMenu } from "../cmps/MiniMenu.jsx"
 import { miniMenuOptions } from "../cmps/MiniMenuOptions.jsx"
@@ -76,7 +76,7 @@ export function StationDetails() {
     }
     
     async function onToggleUserLiked() {
-        const user = getBasicUser()
+        const user = getCurrentUser()
         const numOfLikedUsers = station.likedByUsers.length
         var newLikedByUsers = station.likedByUsers.filter(likedByUser => likedByUser._id !== user._id)
         const wasLiked = numOfLikedUsers !== newLikedByUsers.length
@@ -151,6 +151,14 @@ export function StationDetails() {
     }
 
     async function addTrackToStation(track, stationId = station._id) {
+        const user = getCurrentUser()
+        if(!track.addedBy) {
+            track.addedBy = {
+                _id: user._id,
+                fullname: user.fullname,
+                imgUrl: user.imgUrl
+            }
+        }
         try {
             if(station._id === stationId) {
                 const tracks = station.tracks
@@ -185,10 +193,10 @@ export function StationDetails() {
         return <div></div> //loading...
     } else {
         const likedTrackStation = collectionId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
-        // const stationByUser = getBasicUser()._id === station.createdBy._id ? 'hiden' : ''
-        const stationByUser = getBasicUser()?._id === station?.createdBy?._id ? 'hiden' : '';
-        // const isLiked = station.likedByUsers && station.likedByUsers.filter(likedByUser => likedByUser && likedByUser._id === getBasicUser()._id).length !== 0;
-        const isLiked = station?.likedByUsers?.filter(likedByUser => likedByUser && likedByUser._id === getBasicUser()?._id)?.length !== 0;
+        // const stationByUser = getCurrentUser()._id === station.createdBy._id ? 'hiden' : ''
+        const stationByUser = getCurrentUser()?._id === station?.createdBy?._id ? 'hiden' : '';
+        // const isLiked = station.likedByUsers && station.likedByUsers.filter(likedByUser => likedByUser && likedByUser._id === getCurrentUser()._id).length !== 0;
+        const isLiked = station?.likedByUsers?.filter(likedByUser => likedByUser && likedByUser._id === getCurrentUser()?._id)?.length !== 0;
         const gradientColor = station.mostCommonColor
    
         return (
