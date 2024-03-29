@@ -15,25 +15,25 @@ import { CategoryDisplay } from '../cmps/CategoryDisplay.jsx'
 import { FooterPlayer } from  '../cmps/FooterPlayer.jsx'
 
 import { loadStations } from '../store/actions/station.actions.js';
-import { getCurrentTrackInQueue } from '../store/actions/queue.actions.js';
 
 import { stationService } from '../services/station.service.js';
 import { categoryService } from '../services/category.service.js';
 import { trackService } from '../services/track.service.js';
 import { initUser } from '../store/actions/user.actions.js';
-import { store } from '../store/store.js';
 import { playerService } from '../services/player.service.js';
+import { useResizer } from '../customHooks/useResizer.js';
 
+
+const MIN_NAV_WIDTH = 280 // px
+const MIN_MAIN_WIDTH = 520 // px
+const MINI_NAV_WIDTH = 72 // px
 
 export const Index = () => {
     const params = useParams();
     const [filterBy, setFilterBy] = useState(stationService.getDefaultFilter(params));
     const [currentCategory, setCurrentCategory] = useState(null);
     
-    const MIN_NAV_WIDTH = 280 // px
-    const MAX_NAV_WIDTH = window.innerWidth - 500 - 20 // px
-    const [isResizing, setIsResizing] = useState(false);
-    const [sideNavWidth, setSideNavWidth] = useState(MIN_NAV_WIDTH)
+    const [sideNavWidth, isResizing, startResize, toggleMini] = useResizer(MIN_NAV_WIDTH, MIN_MAIN_WIDTH, MINI_NAV_WIDTH)
 
     const currentTrack = useSelector(state => state.queueModule.currentTrack.track)
     const [trackToPlay, setTrackToPlay] = useState(null)
@@ -58,41 +58,6 @@ export const Index = () => {
         const filterURL = stationService.filterURL(filterBy);
         navigate(filterURL, { replace: true }) 
     }, [filterBy]);
-
-    useEffect(() => {
-        if(isResizing) {
-            document.addEventListener('mousemove', handleMouseMove)
-            document.addEventListener('mouseup', handleMouseUp)
-        } else {
-            document.removeEventListener('mousemove', handleMouseMove)
-            document.removeEventListener('mouseup', handleMouseUp)
-        }
-    
-        return () => {
-          document.removeEventListener('mousemove', handleMouseMove)
-          document.removeEventListener('mouseup', handleMouseUp)
-        }
-    }, [isResizing])
-
-    function startResize(ev) {
-        ev.preventDefault()
-        setIsResizing(true)
-    }
-
-    function handleMouseMove(ev){
-        if (isResizing) {
-          let newNavWidth
-          if(ev.clientX < MIN_NAV_WIDTH) newNavWidth = MIN_NAV_WIDTH
-          else if(ev.clientX > MAX_NAV_WIDTH) newNavWidth = MAX_NAV_WIDTH
-          else newNavWidth = ev.clientX
-
-          setSideNavWidth(newNavWidth)
-        }
-    }
-
-    function handleMouseUp(){
-        setIsResizing(false)
-    }
 
     async function loadStationsLocal() {
         await loadStations()
@@ -125,15 +90,16 @@ export const Index = () => {
             break;
     }
     
+
     return (
         <IndexContext.Provider value={{ setFilterBy ,setCurrentCategory }}>
-            <div className="index-container">
+            <div className="index-container" style={{minWidth: `${MIN_NAV_WIDTH + MIN_MAIN_WIDTH}px`}}>
                 <div className="index-side">
                     <div className="index-side-nav" style={{width: `${sideNavWidth}px`}}>
-                        <SideNav setFilterBy={setFilterBy} />
+                        <SideNav setFilterBy={setFilterBy} type={sideNavWidth === MINI_NAV_WIDTH ? 'mini' : null}/>
                     </div>
                     <div className="index-side-bottom" style={{width: `${sideNavWidth}px`}}>
-                        <Library/>
+                        <Library toggleWidth={toggleMini} type={sideNavWidth === MINI_NAV_WIDTH ? 'mini' : 'basic'}/>
                     </div>
                 </div>
                 <div className="index-side-resizer" onMouseDown={startResize}>

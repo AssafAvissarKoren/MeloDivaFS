@@ -10,7 +10,7 @@ import { useContext } from "react"
 import { svgSvc } from '../services/svg.service.jsx';
 
 
-export function Library() {
+export function Library({toggleWidth, type = "basic" }) {
     const { setFilterBy } = useContext(IndexContext)
     const stations = useSelector(storeState => storeState.stationModule.stations)
     const userId = useSelector(storeState => storeState.userModule._id)
@@ -35,11 +35,11 @@ export function Library() {
         return <div></div> //Loading...
     } else {
         return (
-            <div className="library">
+            <div className={`library ${type}`}>
                 <div className="head">
                     <div className="title">
-                        <span className="button-wrapper"> <svgSvc.icon.YourLibrary /> </span>
-                        <p>Your Library</p>
+                        <span className="icon-wrapper" onClick={toggleWidth}> <svgSvc.icon.YourLibrary /> </span>
+                        <p onClick={toggleWidth}>Your Library</p>
                         <span className="action-button-wrapper add-station-btn" onClick={createNewStation}> <svgSvc.miniMenu.AddToPlaylist /> </span>
                     </div>
                     <div className="library-search">
@@ -50,11 +50,11 @@ export function Library() {
                 </div>
                 <ul className="content">
                     <li>
-                        <StationPreview station={getLikedTracksAsStation()} />
+                        <StationPreview station={getLikedTracksAsStation()} type={type} />
                     </li>
                     {getStationsInLibrary().map(station => {
                         return <li key={`library${station._id}`}>
-                            <StationPreview station={station} />
+                            <StationPreview station={station} type={type} />
                         </li>
                     })}
                 </ul>

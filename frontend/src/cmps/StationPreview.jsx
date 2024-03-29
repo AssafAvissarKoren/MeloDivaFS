@@ -7,7 +7,7 @@ import { getQueuedStaion, setQueueToStation } from '../store/actions/queue.actio
 import { stationService } from '../services/station.service.js';
 import { pause, play } from '../store/actions/player.actions.js';
 
-export const StationPreview = ({ station, style = "basic" }) => {
+export const StationPreview = ({ station, type = "basic" }) => {
   const { setFilterBy } = useContext(IndexContext);
   const queuedStationId = useSelector(state => state.queueModule.station?._id)
   const isPlaying = useSelector(state => state.playerModule.isPlaying);
@@ -35,7 +35,7 @@ export const StationPreview = ({ station, style = "basic" }) => {
   const stationImgURL = station?.imgUrl === "default_thumbnail_url" ? defaultImgUrl : station?.imgUrl;
 
   if (!station) {
-    switch(style) {
+    switch(type) {
       case "basic":
         return (
           <div className="station-preview skeleton basic">
@@ -59,11 +59,19 @@ export const StationPreview = ({ station, style = "basic" }) => {
             </div>
           </div>
         )
+      case "mini":
+        return (
+          <div className="station-preview skeleton mini">
+            <div className="image-container skeleton">
+              <div className="img skeleton"></div>
+            </div>
+          </div>
+        )
     }
   }
 
   const isThisStationPlaying = queuedStationId === station?._id && isPlaying
-  switch(style) {
+  switch(type) {
     case "basic":
       return (
         <div className="station-preview basic" onClick={() => handleOnClick(station._id)}>
@@ -102,6 +110,14 @@ export const StationPreview = ({ station, style = "basic" }) => {
                 <svgSvc.general.PlaylistPlayBtn color={"black"}/>
               </button>
             }
+          </div>
+        </div>
+      )
+    case "mini":
+      return (
+        <div className="station-preview mini" onClick={() => handleOnClick(station._id)}>
+          <div className="image-container">
+            <img className="img" src={stationImgURL} alt={station?.artist} />
           </div>
         </div>
       )

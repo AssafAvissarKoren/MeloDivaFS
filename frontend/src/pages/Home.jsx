@@ -19,7 +19,7 @@ export function Home({ }) {
 
     function getHeadStations(stationNum) {
         return stations.slice(0, stationNum).map((station) =>
-            <StationPreview key={`home-head ${station._id}`} station={station} style={"home-head"} />
+            <StationPreview key={`home-head ${station._id}`} station={station} type={"home-head"} />
         )
     }
     

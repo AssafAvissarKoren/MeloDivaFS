@@ -1,6 +1,6 @@
 .index-container {
     display: grid;
-    grid-template-columns: minmax(250px, auto) 8px minmax(auto, 1fr);
+    grid-template-columns: auto 8px minmax(auto, 1fr);
     grid-template-rows: 1fr auto;
     height: 100vh;
     padding: 8px;

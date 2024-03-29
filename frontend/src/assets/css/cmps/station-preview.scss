@@ -152,4 +152,17 @@
       }
     }
   }
+
+  &.mini {
+    border-radius: 8px;
+    padding: 6px;
+
+    &:hover {
+      background-color: #272727;
+
+      &.play-btn {
+        bottom: 15px;
+      }
+    }
+  }
 }

@@ -24,9 +24,28 @@
             color: white;
             transition: background-color 0.3s, color 0.3s;
             align-items: center;
+
+            span{
+                display: flex;
+                align-items: center;
+                font-weight: bold;
+    
+                &.icon-wrapper {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 10px;
+                    margin-left: 4px
+                }            
+            }
     
             & p {
                 font-weight: bold;
+                color: grey;
+                transition: background-color 0.3s, color 0.3s;
+
+                &:hover {
+                    color: white;
+                }
             }
             
             & .add-station-btn {
@@ -76,4 +95,30 @@
         align-content: start;
         overflow-y: auto;
     }
-}
+
+    &.mini {
+        grid-template-columns: 4px 1fr 4px;
+
+        & .head {
+
+            & .title {
+                height: 52px;
+                & :not(:nth-child(1)) {
+                    opacity: 0;
+                    height: 0;
+                }
+            }
+        
+            & .library-search {
+                height: 0;
+                padding: 0;
+                opacity: 0;
+            }
+        }
+    
+        & .content {
+            grid-template-columns: 1fr;
+        }
+    }
+}   
+
