@@ -31,9 +31,10 @@ async function fetchChannelData(videoOwnerChannelId) {
 
 async function searchYoutube(query) {
     const foundQuery = await queryService.findQuery(query);
+    console.log("searchYoutube", foundQuery)
     if (foundQuery) {
       console.log("Query found in DB!")
-      return foundQuery;
+      return foundQuery.tracks;
     }
     const response = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
         params: {

@@ -19,6 +19,7 @@ export function FooterPlayer({ video }) {
     const isShuffle = useSelector(state => state.playerModule.isShuffle);
     const isLooping = useSelector(state => state.playerModule.isLooping);
     const dispatch = useDispatch();
+    const [muteVolume, setMuteVolume] = useState(0);
 
     const opts = {
         height: '390',
@@ -37,15 +38,18 @@ export function FooterPlayer({ video }) {
     useEffect(() => {
         let interval;
 
+        // dispatch(play()); dispatch(pause()); this changes the playerModule.isPlaying to which isPlaying is subscribed
         if (playerRef.current) {
             if (isPlaying) {
-                playerRef.current.playVideo();
-                // dispatch(play());
-                console.log("vid playing!")
+                if (playerRef.current.playVideo) {
+                    playerRef.current.playVideo();
+                    console.log("vid playing!")
+                }
             } else {
-                playerRef.current.pauseVideo();
-                // dispatch(pause());
-                console.log("vid paused!")
+                if (playerRef.current.pauseVideo) {
+                    playerRef.current.pauseVideo();
+                    console.log("vid paused!")
+                }
             }
         }
 
@@ -54,7 +58,7 @@ export function FooterPlayer({ video }) {
                 if (playerRef.current && playerRef.current.getCurrentTime) {
                     setCurrentTime(Math.round(playerRef.current.getCurrentTime()));
                 }
-            }, 1000); // Update every second
+            }, 1000);
         }
 
         return () => {
@@ -79,8 +83,6 @@ export function FooterPlayer({ video }) {
                         await playNextTrack()
                     }
                 }
-                // Alternatively, if you want to use playNextTrack, you can await it too
-                // await playNextTrack(isShuffling);
             }
         };
         playNextAsync();
@@ -89,25 +91,12 @@ export function FooterPlayer({ video }) {
     useEffect(() => {
         setTimeout( async () => {
             if (playerRef.current && playerRef.current.playVideo) {
-                // playerRef.current.pauseVideo();
-                // playerRef.current.playVideo();
-                // await play();
-                dispatch(pause());
+                playerRef.current.pauseVideo(); //play sequance for loading a new track, no need for play pause when setting the track via next prev
+                playerRef.current.playVideo();
                 dispatch(play());
-                // setIsPlaying(true);
             }
         }, 1000);
     }, [newTrack])
-
-    // const togglePlay = async () => {
-    //     if(isPlaying) pause()
-    //     else play()
-    // };
-
-    // const togglePlay = () => {
-    //     if (isPlaying) dispatch(pause());
-    //     else dispatch(play());
-    // };
 
     const togglePlay = () => {
         if (isPlaying) {
@@ -130,7 +119,6 @@ export function FooterPlayer({ video }) {
 
     const changeVolume = (newVolume) => {
         if (playerRef.current) {
-            // Ensure the volume is within the valid range (0-100)
             const validVolume = Math.min(100, Math.max(0, newVolume));
             playerRef.current.setVolume(validVolume);
             setVolume(validVolume);
@@ -144,11 +132,6 @@ export function FooterPlayer({ video }) {
                 resetAndPlay()
             } else {
                 await playNextTrack()
-                // playerRef.current.pauseVideo();
-                // playerRef.current.playVideo();
-                // await play();
-                dispatch(pause());
-                dispatch(play());
             }
         }
     };
@@ -160,11 +143,6 @@ export function FooterPlayer({ video }) {
                 resetAndPlay()
             } else {
                 await playPrevTrack()
-                // playerRef.current.pauseVideo();
-                // playerRef.current.playVideo();
-                // await play();
-                dispatch(pause());
-                dispatch(play());
             }
         }
     };
@@ -175,6 +153,16 @@ export function FooterPlayer({ video }) {
         }
         return text;
     };
+
+    const toggleMute = () => {
+        if (volume == 0) {
+            changeVolume(muteVolume)
+            setMuteVolume(0)
+        } else {
+            setMuteVolume(volume)
+            changeVolume(0)
+        }
+    }
 
     const jump15Back = () => {
         setCurrentTime(Math.round(Math.max(0, currentTime - 15)));
@@ -200,7 +188,7 @@ export function FooterPlayer({ video }) {
                     {thumbnailUrl && <img src={thumbnailUrl} alt={`${video.snippet.title} thumbnail`} />}
                 </div>
                 <div className="title-and-channel">
-                    <div className="video-name">{shortenText(video.snippet.title)}</div>
+                    <div className="video-name">{video.snippet.title}</div>
                     <div className="channel-name">{video.snippet.channelTitle}</div>
                 </div>
                 {/* <div className="fade-out"/> */}
@@ -268,7 +256,7 @@ export function FooterPlayer({ video }) {
                 </div>
             </div>
             <div className="volume-control">
-                <button onClick={() => {}} name="Now playing view" className="action-button play-in-view">
+                {/* <button onClick={() => {}} name="Now playing view" className="action-button play-in-view">
                     <span className="action-button-wrapper"> <svgSvc.player.NowPlayingView />  </span>
                 </button>
                 <button onClick={() => {}} name="Queue" className="action-button queue">
@@ -276,8 +264,8 @@ export function FooterPlayer({ video }) {
                 </button>
                 <button onClick={() => {}} name="Connect to a device" className="action-button connect-to-device">
                     <span className="action-button-wrapper"> <svgSvc.player.ConnectToADevice />  </span>
-                </button>
-                <button onClick={() => {}} name="Mute" className="action-button mute">
+                </button> */}
+                <button onClick={() => {toggleMute()}} name="Mute" className="action-button mute">
                     <span className="action-button-wrapper">
                         {volume === 0 && <svgSvc.player.VolumeMute />}
                         {volume > 0 && volume <= 33 && <svgSvc.player.VolumeLow />}
@@ -294,12 +282,12 @@ export function FooterPlayer({ video }) {
                     valueLabelDisplay="auto"
                     valueLabelFormat={(value) => `${value}%`}
                 />
-                <button onClick={() => {}} name="Open Miniplayer" className="action-button open-miniplayer">
+                {/* <button onClick={() => {}} name="Open Miniplayer" className="action-button open-miniplayer">
                     <span className="action-button-wrapper"> <svgSvc.player.OpenMiniplayer />  </span>
                 </button>
                 <button onClick={() => {}} name="Full Screen" className="action-button full-screen">
                     <span className="action-button-wrapper"> <svgSvc.player.FullScreen />  </span>
-                </button>
+                </button> */}
             </div>
             <div className="youtube-container">
                 <YouTube videoId={video.id.videoId} opts={opts} onReady={onReady} />

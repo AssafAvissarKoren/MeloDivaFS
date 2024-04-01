@@ -1,13 +1,11 @@
 import { loggerService } from '../../services/logger.service.js'
 import { dbService } from '../../services/db.service.js'
-import { bugService } from '../bug/bug.service.js'
 import { utilService } from '../../services/util.service.js';
 
 const COLL_NAME = 'user'
-const collection = await dbService.getCollection(COLL_NAME);
 
 export const userService = {
-    query,
+    getAll,
     getById,
     remove,
     add,
@@ -16,8 +14,9 @@ export const userService = {
     getFullById,
 }
 
-async function query(filterBy) { //CRQ
+async function getAll() {
     try {
+        const collection = await dbService.getCollection(COLL_NAME);
         const users = await collection.find({}).toArray();
         const miniUsers = _miniUsers(users);
         console.log('miniUsers:', miniUsers)
@@ -28,8 +27,9 @@ async function query(filterBy) { //CRQ
     }
 }
 
-async function getFullById(userId) { // CRQ, since the front can't get the password, when updating the user, I need to bring the password from the DB?
+async function getFullById(userId) {
     try {
+        const collection = await dbService.getCollection(COLL_NAME);
         const user = await collection.findOne({ _id: userId });
         if (!user) throw `Couldn't find user with _id ${userId}`;
         return user;
@@ -39,9 +39,9 @@ async function getFullById(userId) { // CRQ, since the front can't get the passw
     }
 }
 
-
 async function getById(userId) {
     try {
+        const collection = await dbService.getCollection(COLL_NAME);
         const user = await collection.findOne({ _id: userId });
         if (!user) throw `Couldn't find user with _id ${userId}`;
         const miniUser = _miniUsers([user])[0];
@@ -54,6 +54,7 @@ async function getById(userId) {
 
 async function getByUsername(fullname) {
     try {
+        const collection = await dbService.getCollection(COLL_NAME);
         const user = await collection.findOne({ fullname: fullname });
         if (!user) return null
         const miniUser = _miniUsers([user])[0];
@@ -66,9 +67,7 @@ async function getByUsername(fullname) {
 
 async function remove(userId) {
     try {
-        const userBugs = await bugService.queryByUserId()
-        if (!userBugs) throw `User with _id ${userId} has bugs and can't be deleted`;
-        
+        const collection = await dbService.getCollection(COLL_NAME);
         const result = await collection.deleteOne({ _id: userId });
         if (result.deletedCount === 0) throw `Couldn't remove user with _id ${userId}`;
         return result;
@@ -83,6 +82,7 @@ async function add(user) {
         user._id = utilService.makeId()
 
         const checkedUser = _checkUser(user)
+        const collection = await dbService.getCollection(COLL_NAME);
         await collection.insertOne(checkedUser);
         const miniUser = _miniUsers([checkedUser])[0];
         return miniUser;
@@ -97,6 +97,7 @@ async function update(user) {
     try {
         console.log(user)
         const checkedUser = _checkUser(user)
+        const collection = await dbService.getCollection(COLL_NAME);
         const result = await collection.updateOne({ _id: checkedUser._id }, { $set: checkedUser });
         if (result.modifiedCount === 0) throw `Couldn't find user with _id ${checkedUser._id}`;
         const miniUser = _miniUsers([checkedUser])[0];

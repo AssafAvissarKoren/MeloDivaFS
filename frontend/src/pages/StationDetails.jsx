@@ -273,6 +273,7 @@ export function StationDetails() {
                     </div>
                     <button className="station-sort-btn" onClick={() => {}}>
                         <p>List</p>
+                        {/* <svgSvc.general.ListDisplay/>  */}
                         <FontAwesomeIcon icon={faList} />
                     </button>
                 </div>

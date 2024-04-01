@@ -98,7 +98,7 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
                 <div className="track-preview-img-container">
                     <img src={trackImgURL} className="track-preview-img"/>
                 </div>
-                <p style={{"color": (isPlaying && selected) ? "#1ed760" : "white"}}>{track.title}</p>
+                <p className="track-title" style={{"color": selected ? "#1ed760" : "white"}}>{track.title}</p>
             </div>
             {layout === 'station-search-track-layout' ?
                 <div>

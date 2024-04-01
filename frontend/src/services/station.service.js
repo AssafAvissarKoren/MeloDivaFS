@@ -1,7 +1,7 @@
 import { storageService } from './async-storage.service.js'
 import { dataService } from './data.service.js'
 import { httpService } from './http.service.js'
-import { preService } from './pre.service.js'
+import { base_dataService } from './base_data.service.js'
 
 export const stationService = {
     getStations,

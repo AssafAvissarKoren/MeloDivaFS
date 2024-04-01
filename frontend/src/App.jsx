@@ -1,4 +1,6 @@
-import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+// import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+
 import { AppFooter } from './cmps/AppFooter.jsx';
 import { Index } from './pages/Index.jsx';
 import { UserMsg } from './cmps/UserMsg';

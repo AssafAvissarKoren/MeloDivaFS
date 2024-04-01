@@ -18,7 +18,7 @@ export async function getUsers(req, res) {
             text: req.query.text || '',
             minScore: +req.query.minScore || 0
         }
-        const users = await userService.query(filterBy)
+        const users = await userService.getAll(filterBy)
         res.send(users)
     } catch (err) {
         loggerService.error('Failed to get users', err)

@@ -632,6 +632,37 @@ const ActivationDot = ({ color = "#1ed760", ...props }) => (
 )
 
 
+const ListDisplay = ({ color = "#909090", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    className="Svg-sc-ytk21e-0 cAMMLk"
+    data-encore-id="icon"
+    viewBox="0 0 16 16"
+    {...props}
+  >
+    <path fill={color} d="M15 14.5H5V13h10v1.5zm0-5.75H5v-1.5h10v1.5zM15 3H5V1.5h10V3zM3 3H1V1.5h2V3zm0 11.5H1V13h2v1.5zm0-5.75H1v-1.5h2v1.5z" />
+  </svg>
+)
+
+
+const Logo2 = ({ color = "1ed760", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={800}
+    height={800}
+    viewBox="0 0 32 32"
+    {...props}
+  >
+    <title>{"sunset 2"}</title>
+    <path
+      fill={color}
+      fillRule="evenodd"
+      d="M28 26H4a1 1 0 1 0 0 2h24a1 1 0 1 0 0-2Zm3-4H1a1 1 0 1 0 0 2h30a1 1 0 1 0 0-2Zm.476-2c.33-1.28.524-2.616.524-4 0-8.836-7.163-16-16-16S0 7.164 0 16c0 1.384.194 2.72.524 4h30.952ZM21 30H11a1 1 0 1 0 0 2h10a1 1 0 1 0 0-2Z"
+    />
+  </svg>
+)
+
 export const svgSvc = {
   player: {
     ActivationDot,
@@ -672,6 +703,8 @@ export const svgSvc = {
     PlaylistPauseBtn,
     LibrarySearch,
     Logo,
+    Logo2,
+    ListDisplay,
   },
   sortBy: {
     List,

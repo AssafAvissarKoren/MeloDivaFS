@@ -1,20 +1,20 @@
 import { loggerService } from '../../services/logger.service.js'
 import { dbService } from '../../services/db.service.js'
 
-const PRE_STATION_NAME = 'pre_station'
-const PRE_CATEGORY_NAME = 'pre_category'
+const BASE_DATA_STATION_COLL = 'pre_station'
+const BASE_DATA_CATEGORY_COLL = 'pre_category'
 
-export const preService = {
+export const base_dataService = {
     getStations,
     getCategories,
 }
 
 async function getCategories() {
-    return await _getColl(PRE_CATEGORY_NAME);
+    return await _getColl(BASE_DATA_CATEGORY_COLL);
 }
 
 async function getStations() {
-    return await _getColl(PRE_STATION_NAME);
+    return await _getColl(BASE_DATA_STATION_COLL);
 }
 
 async function _getColl(collectionName) {

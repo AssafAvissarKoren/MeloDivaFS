@@ -11,6 +11,7 @@ export const userService = {
 }
 
 async function getUsers() {
+    console.log("getUsers")
     const users = await httpService.get(`user`)
     return users
 }

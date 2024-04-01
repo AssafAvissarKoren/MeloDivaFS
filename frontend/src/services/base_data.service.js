@@ -7,7 +7,7 @@ import { utilService } from "./util.service.js"
 
 const STATION_API_URL = 'https://youtube.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50'
 
-export const preService = {
+export const base_dataService = {
     getStations,
     getCategories,
     createStationData,
@@ -24,7 +24,7 @@ async function getCategories() {
 async function createStationData() {
     // let stations = utilService.loadFromStorage(storageKey);
     let stations = store.getState().stationModule.stations
-    const defaultStations = await preService.getStations()
+    const defaultStations = await base_dataService.getStations()
 
     if (!stations || !stations.length) {
         stations = [];
