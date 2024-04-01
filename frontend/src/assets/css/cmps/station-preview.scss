@@ -166,3 +166,11 @@
     }
   }
 }
+
+@media screen and (max-width: 616px) {
+  .station-preview {
+    & .play-btn, .pause-btn {
+      display: none;
+    }
+  }
+}

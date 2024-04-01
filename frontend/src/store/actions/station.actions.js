@@ -49,6 +49,7 @@ export async function removeStation(stationId) {
 
 export async function saveStation(stationToSave) {
     // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
+    if(typeof stationToSave.isPublic !== 'boolean') stationToSave.isPublic = false
     const type = stationToSave._id ? UPDATE_STATION : ADD_STATION
     try {
         const station = await stationService.saveStation(stationToSave)
@@ -92,4 +93,19 @@ export function getStationsByUser() {
     return stations.filter(station => {
         return station.createdBy._id === userId
     })
+}
+
+export function getPublicStations() {
+    const stations = store.getState().stationModule.stations
+    return stations?.filter(s => s.isPublic)
+}
+
+export function editPublicStation(stationToEdit) {
+    const stations = store.getState().stationModule.stations
+    const type = stations.filter(station => station._id === stationToEdit._id).length ? UPDATE_STATION : ADD_STATION
+    store.dispatch({ type, station: stationToEdit })
+}
+
+export function removePublicStation(stationId) {
+    store.dispatch({ type: REMOVE_STATION, stationId })
 }

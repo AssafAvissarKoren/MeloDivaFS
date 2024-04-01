@@ -83,7 +83,7 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
     }
     
     return (
-        <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
+        <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={(window.innerWidth > 616) ? onToggleSelected : () => handleTrackClick(track)} >
             <div className='track-number'>
                 <span className='track-num' onClick={() => handleTrackClick(track)}>
                     {(isPlaying && selected) ? <PlayAnimation /> : trackNum}
@@ -109,7 +109,7 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
                     <button className={`btn-like-track ${isLiked && 'green'}`} onClick={onToggleLiked}>
                         <span className="action-button-wrapper"> {isLiked ? <svgSvc.track.HeartFilled/> : <svgSvc.track.HeartBlank/>}  </span>
                     </button>
-                    <p>{duration}</p>
+                    <p className="duration">{duration}</p>
                     <button className="btn-more" onClick={toggleMenu}>
                         <p>...</p>
                     </button>

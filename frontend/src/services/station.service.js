@@ -81,7 +81,8 @@ function createStation(name, createdBy, imgUrl = 'blank') {
         createdBy: createdBy,
         likedByUsers: [],
         tracks: [],
-        msgs: []
+        msgs: [],
+        isPublic: false,
     }
 }
 

@@ -23,6 +23,8 @@ import { miniMenuOptions } from "../cmps/MiniMenuOptions.jsx"
 import { svgSvc } from "../services/svg.service"
 import { StationSearch } from "../cmps/StationSearch.jsx"
 import { pause, play } from "../store/actions/player.actions.js"
+import { MiniMenuStationEdit } from "../cmps/miniMenuStationEdit.jsx";
+import { SOCKET_EMIT_EDIT_PUBLIC_STATION, SOCKET_EMIT_REMOVE_PUBLIC_STATION, socketService } from "../services/socket.service.js";
 
 
 export function StationDetails() {
@@ -33,6 +35,7 @@ export function StationDetails() {
     const [menu, setMenu] = useState(0)
     const [tracksWithDurations, setTracksWithDurations] = useState([])
     const isPlaying = useSelector(state => state.playerModule.isPlaying)
+    const stations = useSelector(storeState => storeState.stationModule.stations) // track if station changed through sockets
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -48,18 +51,18 @@ export function StationDetails() {
 
     useEffect(() => {
         if (station && station.tracks) {
-            // const fetchAndSetDurations = async () => {
-            //     const durations = await dataService.fetchVideoDurations(station);
-            //     const updatedTracks = station.tracks.map((track, index) => ({
-            //         ...track,
-            //         duration: durations[index] || 'N/A'
-            //     }))
-            //     setTracksWithDurations(updatedTracks)
-            // }
-            // fetchAndSetDurations()
             setTracksWithDurations(station.tracks)
         }
     }, [station])
+
+    useEffect(() => {
+        if (!station) return
+
+        const thisStationInStore = stations.filter(s => s._id === station._id).pop()
+        if (JSON.stringify(thisStationInStore) !== JSON.stringify(station)) {
+            setStation(thisStationInStore)
+        }
+    }, [stations])
 
     async function loadStation() {
         if (collectionId === LIKED_TRACK_AS_STATION_ID) {
@@ -88,7 +91,7 @@ export function StationDetails() {
             onCloseMiniMenu()
             await saveStation({...station, likedByUsers: newLikedByUsers})
 
-            if(wasLiked) eventBusService.showErrorMsg('Remove from library.')
+            if(wasLiked) eventBusService.showErrorMsg('Removed from library.')
             else eventBusService.showErrorMsg('Added to library.')
 
             setStation(prevStation => ({...prevStation, likedByUsers: newLikedByUsers}))
@@ -117,6 +120,7 @@ export function StationDetails() {
     async function onDeleteStation() {
         try {
             await removeStation(collectionId)
+            if(station.isPublic) socketService.emit(SOCKET_EMIT_REMOVE_PUBLIC_STATION, station._id)
             const newFilterBy = {
                 tab: 'home',
                 collectionId: '',
@@ -180,8 +184,10 @@ export function StationDetails() {
 
     async function onEditDetails(data) {
         try {
+            console.log(data)
             onCloseMiniMenu()
             await saveStation(({...station, ...data}))
+            if(station.isPublic || data.isPublic) socketService.emit(SOCKET_EMIT_EDIT_PUBLIC_STATION, {...station, ...data})
             setStation(prevStation => ({...prevStation, ...data}))
         } catch (err) {
             eventBusService.showErrorMsg('Faild to save details.')
@@ -213,7 +219,14 @@ export function StationDetails() {
                 }
                 {menu === 1 && 
                     <MiniMenu location={'center'} onCloseMiniMenu={onCloseMiniMenu}>
-                        {miniMenuOptions.editStation(getImage(), station.name, station.description, onEditDetails, onCloseMiniMenu)}
+                        <MiniMenuStationEdit 
+                            imgUrl={getImage()} 
+                            name={station.name} 
+                            description={station.description} 
+                            isPublic={station.isPublic} 
+                            submit={onEditDetails} 
+                            onClose={onCloseMiniMenu} 
+                        />
                     </MiniMenu>
                 }
                 <div className="station-head-info">
@@ -228,6 +241,7 @@ export function StationDetails() {
                 </div>
             </div>
             <div className="station-content-gradient" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}/>
+            <div className="station-content-gradient-small-screen" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 500px)` } : {}}/>
             <div className="station-content">
                 <div className="station-options">
                     <button className="station-play-btn" onClick={handlePlayClick}>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 export const useResizer = (MIN_NAV_WIDTH, MIN_MAIN_WIDTH, MINI_NAV_WIDTH) => {
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 616);
     const [isResizing, setIsResizing] = useState(false);
     const [sideNavWidth, setSideNavWidth] = useState(startCollapsed() ? MINI_NAV_WIDTH : MIN_NAV_WIDTH)
     const [collapsedWidth, setCollapsedWidth] = useState(startCollapsed() ? MIN_NAV_WIDTH : 0) // hold width before width became MINI_NAV_WIDTH
@@ -32,6 +33,7 @@ export const useResizer = (MIN_NAV_WIDTH, MIN_MAIN_WIDTH, MINI_NAV_WIDTH) => {
     }
 
     function handleWindowChangeWidth() {
+        setIsSmallScreen(window.innerWidth <= 616)
         setSideNavWidth( (prevSideNavWidth) => {
             const windowWidth = window.innerWidth - 24 // for padding
             let newNavWidth = prevSideNavWidth
@@ -78,7 +80,6 @@ export const useResizer = (MIN_NAV_WIDTH, MIN_MAIN_WIDTH, MINI_NAV_WIDTH) => {
             return
         }
 
-        console.log('collapsed width', collapsedWidth)
         const windowWidth = window.innerWidth - 24 // for padding
         if(windowWidth >= collapsedWidth + MIN_MAIN_WIDTH) {
             setCollapsedWidth(0)
@@ -86,5 +87,5 @@ export const useResizer = (MIN_NAV_WIDTH, MIN_MAIN_WIDTH, MINI_NAV_WIDTH) => {
         }
     }
 
-    return [sideNavWidth, isResizing, startResize, toggleMini]
+    return [isSmallScreen, sideNavWidth, isResizing, startResize, toggleMini]
 }

@@ -87,13 +87,21 @@
         grid-column: 2;
         grid-row: 2;
 
-        list-style: none;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(94px, 1fr));
-        margin: 0;
-        padding: 0;
-        align-content: start;
         overflow-y: auto;
+
+        & ul {
+           list-style: none;
+           display: grid;
+           grid-template-columns: repeat(auto-fill, minmax(94px, 1fr));
+           margin: 0;
+           padding: 0;
+           align-content: start;
+       }
+
+        & p {
+            margin: 32px 0 16px 10px;
+            font-weight: bold;
+        }
     }
 
     &.mini {
@@ -117,8 +125,18 @@
         }
     
         & .content {
-            grid-template-columns: 1fr;
+            & ul{
+                grid-template-columns: 1fr;
+            }
+            & p {
+                margin-left: 0;
+            }
         }
     }
 }   
 
+@media screen and (max-width: 616px) {
+    .library .content {
+        padding-bottom: 50px;
+    }
+}

@@ -1,7 +1,9 @@
 // Settings---Settings---Settings---Settings---Settings---Settings---Settings---Settings---Settings---Settings---Settings---Settings---Settings
+import http from 'http'
 import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+
 
 const app = express()
 
@@ -14,6 +16,7 @@ app.use(cors(corsOptions))
 app.use(express.static('public'))
 app.use(express.json())
 app.use(cookieParser())
+const server = http.createServer(app)
 
 
 // Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes---Routes
@@ -23,6 +26,7 @@ import { stationRoutes } from './api/station/station.routes.js'
 import { userRoutes } from './api/user/user.routes.js'
 import { authRoutes } from './api/auth/auth.routes.js'
 import { msgRoutes } from './api/msg/msg.routes.js'
+import { setupSocketAPI } from './services/socket.service.js'
 import path from 'path'
 
 app.use('/api/pre', preRoutes)
@@ -31,6 +35,8 @@ app.use('/api/station', stationRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/msg', msgRoutes)
+
+setupSocketAPI(server)
 
 app.get('/**', (req, res) => {
     res.sendFile(path.resolve('public/index.html'))
@@ -41,6 +47,6 @@ app.get('/**', (req, res) => {
 import { loggerService } from './services/logger.service.js'
 
 const PORT = process.env.PORT || 3030
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     loggerService.info('Up and running on port', PORT)
 })

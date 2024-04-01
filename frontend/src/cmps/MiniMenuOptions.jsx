@@ -16,7 +16,6 @@ export const miniMenuOptions = {
     removeFromLikedSongs,
     deleteObj,
     editDetails,
-    editStation,
 }
 
 // Add to playlist 
@@ -140,66 +139,5 @@ function editDetails(func) {
             <FontAwesomeIcon icon={faPen} className="icon"/>
             <p>Edit details</p>
         </button>
-    )
-}
-
-function editStation(imgUrl, name, description, submit, onClose ) {
-
-    function handleSubmit(ev) {
-        ev.preventDefault()
-        const data = new FormData(ev.target)
-        const dataObject = {}
-
-        for (const [name, value] of data.entries()) {
-          dataObject[name] = value
-        }
-        
-        submit(dataObject)
-    }
-
-    function handleKeyDown(ev) {
-        if (ev.key === 'Enter') {
-            ev.preventDefault();
-        }
-    }
-
-    return (
-        <form className="edit-station" onSubmit={handleSubmit}>
-            <div className="head">
-                <h2>Edit details</h2>
-                <button onClick={onClose}>
-                    <svgSvc.miniMenu.Ex/>
-                </button>
-            </div>
-            <div className="body">
-                <button className="btn-img-container">
-                    <img src={imgUrl} />
-                </button>
-                <input className="input input-name" 
-                    type="text" 
-                    name="name"
-                    placeholder="Add a name"
-                    defaultValue={name}
-                    maxlength="100"
-                    onKeyDown={handleKeyDown}
-                    autocomplete="off"
-                />
-                <textarea className="input input-description" 
-                    name="description"
-                    placeholder="Add an optional description"
-                    defaultValue={description}
-                    maxlength="300"
-                    onKeyDown={handleKeyDown}
-                    autocomplete="off"
-                />
-                <div className="save-container">
-                    <input type="submit" className="btn-save" value="Save" />
-                </div>
-                <p className="info">
-                    By proceeding, you agree to give Melodiva access to the image you choose to upload. Please make sure you have the right to upload the image.
-                </p>
-            </div>
-
-        </form>
     )
 }
