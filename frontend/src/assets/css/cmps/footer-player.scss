@@ -3,7 +3,8 @@
     grid-template-columns: repeat(3, minmax(200px, 1fr));
     gap: 10px;
     padding: 10px;
-    background-color: #181818;
+    // background-color: #181818;
+    background-color: black;
     color: #fff;
     height: 100px;
 
@@ -20,10 +21,18 @@
             grid-area: 1 / 1 / -1 / 2;
             display: grid;
             width: 80px;
-            height: 80px;
+            aspect-ratio: 1 / 1;
             margin-right: 10px;
             overflow: hidden;
             align-items: center;
+
+            & img {
+                height: 136%;
+                width: 136%;
+                object-fit: cover; /* Options: fill, contain, cover, none, scale-down */
+                margin-top: -18.5%;
+                margin-bottom: -18.5%;
+            }
         }
 
         .title-and-channel {
@@ -335,4 +344,3 @@
         }
     }
 }
-

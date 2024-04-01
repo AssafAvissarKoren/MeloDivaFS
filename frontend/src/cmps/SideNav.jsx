@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { svgSvc } from '../services/svg.service.jsx';
 import { stationService } from '../services/station.service.js';
 
-export const SideNav = ({ setFilterBy }) => {
+export const SideNav = ({ setFilterBy, type }) => {
     const params = useParams();
     const tab = params.tab
 
@@ -17,14 +17,15 @@ export const SideNav = ({ setFilterBy }) => {
         }))
     };
 
-    const tabData = {
+    let tabData = {
         home: { name: "Home", iconActive: <svgSvc.icon.HomeActiveIcon />, icon: <svgSvc.icon.HomeIcon /> },
         search: { name: "Search", iconActive: <svgSvc.icon.SearchActiveIcon />, icon: <svgSvc.icon.SearchIcon /> },
         // test: { name: "Test", iconActive: <svgSvc.icon.CheckIcon />, icon: <svgSvc.icon.CheckIcon /> },
     };
+    if(type === "small-screen") tabData.library = { name: "Library", iconActive: <svgSvc.icon.YourLibrary />, icon: <svgSvc.icon.YourLibrary /> }
 
     return (
-        <div className="side-nav">
+        <div className={`side-nav ${type}`}>
             {Object.entries(tabData).map(([key, { name, iconActive, icon }]) => {
                 return (
                     <div
@@ -32,12 +33,10 @@ export const SideNav = ({ setFilterBy }) => {
                         onClick={() => handleTabSelect(key)}
                         className={key === tab ? 'active' : ''}
                     >
-                        <span>
-                            <span className={key === tab ? 'icon-wrapper active' : 'icon-wrapper'}>
-                                {key === tab ? iconActive : icon}
-                            </span>
-                            <span className="name-style">{name}</span>
+                        <span className={key === tab ? 'icon-wrapper active' : 'icon-wrapper'}>
+                            {key === tab ? iconActive : icon}
                         </span>
+                        <span className="name-style">{name}</span>
                     </div>
                 );
             })}

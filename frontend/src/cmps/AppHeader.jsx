@@ -124,7 +124,7 @@ export const AppHeader = ({ filterBy, setFilterBy }) => {
                 </div>
                 :
                 <div className="user-options">
-                    <button className="sign-up-btn" onClick={onLogout}>Log out</button>
+                    <button className="logout-btn" onClick={onLogout}>Log out</button>
                     <div className="user-icon">{currentUser?.fullname?.charAt(0)}</div>
                 </div>
             }

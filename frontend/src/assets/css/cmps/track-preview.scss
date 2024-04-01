@@ -7,22 +7,27 @@
     &:hover {
         background-color: #303030;
 
-        & .track-number {
-            & .track-num {
-                display: none;
-                width: 0;
-                z-index: 0;
-                opacity: 0;
-            }
-            & .btn-track-play {
-                display: block;
-                z-index: 1;
-            }
+        &
+        .btn-like-track,
+        .btn-more {
+            opacity: 1;
         }
+        // & .track-number {
+        //     & .track-num {
+        //         display: none;
+        //         width: 0;
+        //         z-index: 0;
+        //         opacity: 0;
+        //     }
+        //     & .btn-track-play {
+        //         display: block;
+        //         z-index: 1;
+        //     }
+        // }
     }
 
     &.selected {
-        // background-color: #555555;
+        background-color: #555555;
 
         &
         .btn-like-track,
@@ -167,5 +172,40 @@
         & > * {
             margin-top: -16px;
         }
+    }
+}
+
+@media screen and (max-width: 616px) {
+    .track-preview {
+
+        &:hover {
+            background-color: unset;
+        }
+    
+        & .track-number {
+            display: none;
+        }
+    
+        & .track-preview-options {
+            grid-template-columns: 1fr;
+
+            & .btn-like-track {
+                display: none;
+            }
+    
+            & .duration {
+                display: none;
+            }
+        
+            & .btn-more {
+                opacity: 1;
+                transform: rotate(-90deg);
+
+                & p {
+                    display: block;
+                }
+            }
+        }
+    
     }
 }

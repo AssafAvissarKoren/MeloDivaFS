@@ -1,0 +1,169 @@
+.edit-station {
+    & .head {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        padding: 16px;
+        align-items: center;
+
+        & :nth-last-child(1) {
+            grid-column: -1;
+
+            position: absolute;
+
+            right: 11px;
+            top: 16px;
+            background-color: unset;
+            border: 0;
+            border-radius: 999px;
+            width: 32px;
+            height: 32px;
+            
+            & > * {
+                margin-top: -8px;
+                margin-right: -3px;
+                width: 16px;
+                height: 16px;
+            }
+
+            &:hover {
+                background-color: #333333;
+            }
+        }
+    }
+    & .body {
+        display: grid;
+        grid-template-columns: 180px 280px;
+        grid-template-rows: auto 1fr auto auto;
+        padding: 0 16px 16px 16px;
+        gap: 16px;
+
+        & .btn-img-container {
+            grid-area: 1 / 1 / 3 / 2;
+
+            display: block;
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border: 0;
+            padding: 0;
+            margin: 0;
+            cursor: unset;
+            background-color: unset;
+
+            & img {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+                border-radius: 4px;
+            }
+        }
+
+        & .input {
+            width: 100%;
+            background-color: #333333;
+            border: 1px;
+            border-color: unset;
+            border-radius: 4px;
+            padding: 12px;
+            color: white;
+            
+            &.input-name {
+                grid-area: 1 / 2 / 2 / -1;
+            }
+            
+            &.input-description {
+                grid-area: 2 / 2 / 3 / -1;
+                
+                resize: none;
+                font-family: OpenSans, sans-serif;
+            }
+        }
+
+        & .public-private-container {
+            grid-column: 1 / 2;
+
+            display: grid;
+            grid-template-columns: 110px auto;
+            align-items: center;
+            margin-top: -28px;
+
+            & p {
+                font-weight: bold;
+            }
+
+            & .public-private-toggle {
+                position: relative;
+                display: block;
+                width: 64px;
+                height: 32px;
+                border-radius: 9999px;
+                cursor: pointer;
+                transition: 0.3s;
+
+                & input[type="checkbox"] {
+                    display: none;
+                }
+                
+                & .circle {
+                    position: absolute;
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 9999px;
+                    margin: 4px;
+                    transition: 0.3s;
+                }
+            }
+
+            &.public .public-private-toggle {
+                background-color: #1db954;
+                & .circle {
+                    left: 0%;
+                    background-color: white;
+                }
+            }
+
+            &.private .public-private-toggle {
+                background-color: white;
+                & .circle {
+                    left: 50%;
+                    background-color: #1db954;
+                }
+            }
+
+        }
+
+        & .save-container {
+            grid-column: -2 / -1;
+
+            justify-self: right;
+            height: 48px;
+            margin: -10px -2px 22px 0;
+
+            & .btn-save {
+                
+                font-size: 16px;
+                font-weight: bold;
+                padding: 15px 32px;
+                border: 0;
+                border-radius: 9999px;
+                text-align: center;
+    
+                &:hover {
+                    font-size: 18px;
+                    margin: -1px;
+                }
+            }
+        }
+
+        & .info {
+            grid-column: 1 / -1;
+
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-top: -28px;
+            padding-bottom: 16px;
+        }
+    }
+
+}

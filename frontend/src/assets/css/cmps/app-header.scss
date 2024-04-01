@@ -39,7 +39,8 @@
         background-color: #242424;
         display: grid;
         grid-template-columns: auto 1fr auto;
-        width: 364px;
+        max-width: 364px;
+        min-width: 250px;
         border: none;
         border-radius: 999px;
         padding: 7px;
@@ -107,6 +108,7 @@
     grid-template-columns: auto auto;
     align-items: center;
     margin-right: 20px;
+    min-width: 170px;
 
     & > * {
         border: 0;
@@ -135,6 +137,14 @@
         font-weight: bold;
     }
 
+    .logout-btn {
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
     .user-icon {
         display: grid;
         background-color: cornflowerblue;
@@ -152,6 +162,43 @@
             font-size: 32px;
             margin: 0;
             margin-left: -8px;
+        }
+    }
+}
+
+@media screen and (max-width: 616px) {
+    .app-header {
+        grid-template-columns: 1fr auto;
+        padding-left: 0;
+
+        & .arrow-options {
+            display: none;
+        }
+    
+    
+        & .search-bar-container {
+            width: 100%;
+        }
+    
+        & .search-bar {
+            background-color: unset;
+            border: none;
+            padding: 10px 0;
+            color: white;
+            text-indent: 4px;
+    
+            &:focus {
+                outline: none;
+            }
+        }
+
+        .user-options {
+            margin: 0;
+            grid-column: -1;
+
+            .login-btn {
+                margin-right: 10px;
+            }
         }
     }
 }

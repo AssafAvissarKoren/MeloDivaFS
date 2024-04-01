@@ -14,26 +14,27 @@ import { AppHeader } from '../cmps/AppHeader.jsx';
 import { CategoryDisplay } from '../cmps/CategoryDisplay.jsx'
 import { FooterPlayer } from  '../cmps/FooterPlayer.jsx'
 
-import { loadStations } from '../store/actions/station.actions.js';
-import { getCurrentTrackInQueue } from '../store/actions/queue.actions.js';
+import { editPublicStation, loadStations, removePublicStation } from '../store/actions/station.actions.js';
 
 import { stationService } from '../services/station.service.js';
 import { categoryService } from '../services/category.service.js';
 import { trackService } from '../services/track.service.js';
 import { initUser } from '../store/actions/user.actions.js';
-import { store } from '../store/store.js';
 import { playerService } from '../services/player.service.js';
+import { useResizer } from '../customHooks/useResizer.js';
+import { SOCKET_EVENT_EDIT_PUBLIC_STATION, SOCKET_EVENT_REMOVE_PUBLIC_STATION, socketService } from '../services/socket.service.js';
 
+
+const MIN_NAV_WIDTH = 280 // px
+const MIN_MAIN_WIDTH = 520 // px
+const MINI_NAV_WIDTH = 72 // px
 
 export const Index = () => {
     const params = useParams();
     const [filterBy, setFilterBy] = useState(stationService.getDefaultFilter(params));
     const [currentCategory, setCurrentCategory] = useState(null);
     
-    const MIN_NAV_WIDTH = 280 // px
-    const MAX_NAV_WIDTH = window.innerWidth - 500 - 20 // px
-    const [isResizing, setIsResizing] = useState(false);
-    const [sideNavWidth, setSideNavWidth] = useState(MIN_NAV_WIDTH)
+    const [isSmallScreen, sideNavWidth, isResizing, startResize, toggleMini] = useResizer(MIN_NAV_WIDTH, MIN_MAIN_WIDTH, MINI_NAV_WIDTH)
 
     const currentTrack = useSelector(state => state.queueModule.currentTrack.track)
     const [trackToPlay, setTrackToPlay] = useState(null)
@@ -48,6 +49,11 @@ export const Index = () => {
             await categoryService.createCategories();
         };
         fetchData();
+
+        setUpSockets()
+        return () => {
+            removeSockets()
+        }
     }, []);
     
     useEffect(() => {
@@ -59,39 +65,14 @@ export const Index = () => {
         navigate(filterURL, { replace: true }) 
     }, [filterBy]);
 
-    useEffect(() => {
-        if(isResizing) {
-            document.addEventListener('mousemove', handleMouseMove)
-            document.addEventListener('mouseup', handleMouseUp)
-        } else {
-            document.removeEventListener('mousemove', handleMouseMove)
-            document.removeEventListener('mouseup', handleMouseUp)
-        }
-    
-        return () => {
-          document.removeEventListener('mousemove', handleMouseMove)
-          document.removeEventListener('mouseup', handleMouseUp)
-        }
-    }, [isResizing])
-
-    function startResize(ev) {
-        ev.preventDefault()
-        setIsResizing(true)
+    function setUpSockets() {
+        socketService.on(SOCKET_EVENT_EDIT_PUBLIC_STATION, (station) => editPublicStation(station))
+        socketService.on(SOCKET_EVENT_REMOVE_PUBLIC_STATION, (stationId) => removePublicStation(stationId))
     }
 
-    function handleMouseMove(ev){
-        if (isResizing) {
-          let newNavWidth
-          if(ev.clientX < MIN_NAV_WIDTH) newNavWidth = MIN_NAV_WIDTH
-          else if(ev.clientX > MAX_NAV_WIDTH) newNavWidth = MAX_NAV_WIDTH
-          else newNavWidth = ev.clientX
-
-          setSideNavWidth(newNavWidth)
-        }
-    }
-
-    function handleMouseUp(){
-        setIsResizing(false)
+    function removeSockets() {
+        socketService.off(SOCKET_EVENT_EDIT_PUBLIC_STATION, (station) => editPublicStation(station))
+        socketService.off(SOCKET_EVENT_REMOVE_PUBLIC_STATION, (stationId) => removePublicStation(stationId))
     }
 
     async function loadStationsLocal() {
@@ -116,6 +97,9 @@ export const Index = () => {
             MainViewComponent = Search;
             mainViewComponentProps.searchText = filterBy.text;
             break;
+        case 'library':
+            MainViewComponent = Library;
+            break;
         case 'test':
             MainViewComponent = Test;
             break;
@@ -125,20 +109,37 @@ export const Index = () => {
             break;
     }
     
+
+    if(!isSmallScreen)
+        return (
+            <IndexContext.Provider value={{ setFilterBy ,setCurrentCategory }}>
+                <div className="index-container">
+                    <div className="index-side">
+                        <div className="index-side-nav" style={{width: `${sideNavWidth}px`}}>
+                            <SideNav setFilterBy={setFilterBy} type={sideNavWidth === MINI_NAV_WIDTH ? 'mini' : null}/>
+                        </div>
+                        <div className="index-side-bottom" style={{width: `${sideNavWidth}px`}}>
+                            <Library toggleWidth={toggleMini} type={sideNavWidth === MINI_NAV_WIDTH ? 'mini' : 'basic'}/>
+                        </div>
+                    </div>
+                    <div className="index-side-resizer" onMouseDown={startResize}>
+                        <div className={`resizer-line ${isResizing && "unhide"}`}/>
+                    </div>
+                    <div className="index-main">
+                        <AppHeader filterBy={filterBy} setFilterBy={setFilterBy}/>
+                        <MainViewComponent {...mainViewComponentProps} />
+                    </div>
+                    {trackToPlay && <div className="index-footer-player">
+                        <FooterPlayer 
+                            video={trackService.trackToVideo(trackToPlay)}
+                        />
+                    </div>}
+                </div>
+            </IndexContext.Provider>
+        );
     return (
         <IndexContext.Provider value={{ setFilterBy ,setCurrentCategory }}>
             <div className="index-container">
-                <div className="index-side">
-                    <div className="index-side-nav" style={{width: `${sideNavWidth}px`}}>
-                        <SideNav setFilterBy={setFilterBy} />
-                    </div>
-                    <div className="index-side-bottom" style={{width: `${sideNavWidth}px`}}>
-                        <Library/>
-                    </div>
-                </div>
-                <div className="index-side-resizer" onMouseDown={startResize}>
-                    <div className={`resizer-line ${isResizing && "unhide"}`}/>
-                </div>
                 <div className="index-main">
                     <AppHeader filterBy={filterBy} setFilterBy={setFilterBy}/>
                     <MainViewComponent {...mainViewComponentProps} />
@@ -148,6 +149,11 @@ export const Index = () => {
                         video={trackService.trackToVideo(trackToPlay)}
                     />
                 </div>}
+                <div className="index-side">
+                    <div className="index-side-nav">
+                        <SideNav setFilterBy={setFilterBy} type={"small-screen"}/>
+                    </div>
+                </div>
             </div>
         </IndexContext.Provider>
     );
