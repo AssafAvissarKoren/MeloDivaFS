@@ -11,14 +11,14 @@ export async function initUser() {
     // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
     try {
         const user = await userService.getLoggedinUser()
-        console.log("logged in user", user)
+        // console.log("logged in user", user)
         const { _id, fullname, imgUrl, likedTracks, isAdmin } = user
         store.dispatch({ type: SET_ID, _id })
         store.dispatch({ type: SET_NAME, fullname })
         store.dispatch({ type: SET_IMG, imgUrl })
         store.dispatch({ type: SET_LIKED_TRACKS, likedTracks })
         store.dispatch({ type: SET_IS_ADMIN, isAdmin })
-        console.log("logged in user", store.getState().userModule)
+        // console.log("logged in user", store.getState().userModule)
     } catch (err) {
         console.log('Had issues Initalizing liked tracks', err);
         throw err

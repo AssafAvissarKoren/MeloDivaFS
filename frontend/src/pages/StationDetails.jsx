@@ -1,16 +1,12 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { useParams } from "react-router"
 import { useSelector, useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCircleCheck, faList, faPlayCircle, faHeart as heartSolid } from '@fortawesome/free-solid-svg-icons'
-import { faClockFour, faHeart as heartLined } from '@fortawesome/free-regular-svg-icons'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 
 import { eventBusService } from "../services/event-bus.service"
 import { dataService } from  '../services/data.service.js'
 import { utilService } from '../services/util.service.js'
 import { stationService } from '../services/station.service.js'
-import { imageService } from '../services/image.service.js'
 
 import { TrackPreview } from "../cmps/TrackPreview"
 
@@ -31,7 +27,7 @@ export function StationDetails() {
     const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
     const [station, setStation] = useState()
     const [menu, setMenu] = useState(0)
-    const [tracksWithDurations, setTracksWithDurations] = useState([])
+    const [stationTracks, setStationTracks] = useState([])
     const isPlaying = useSelector(state => state.playerModule.isPlaying)
     const dispatch = useDispatch();
 
@@ -48,16 +44,8 @@ export function StationDetails() {
 
     useEffect(() => {
         if (station && station.tracks) {
-            // const fetchAndSetDurations = async () => {
-            //     const durations = await dataService.fetchVideoDurations(station);
-            //     const updatedTracks = station.tracks.map((track, index) => ({
-            //         ...track,
-            //         duration: durations[index] || 'N/A'
-            //     }))
-            //     setTracksWithDurations(updatedTracks)
-            // }
-            // fetchAndSetDurations()
-            setTracksWithDurations(station.tracks)
+            setStationTracks(station.tracks)
+            console.log('stationTracks', station.tracks)
         }
     }, [station])
 
@@ -136,11 +124,15 @@ export function StationDetails() {
         }
     }
 
-    const handleTrackClick = (trackNum) => {
-        if(getCurrentTrackInQueue()?.url === station.tracks[trackNum-1].url) {
+    const handleTrackClick = (track) => {
+        console.log('handleTrackClick', track)
+        const trackNum = stationTracks.findIndex((t) => t.url === track.url);
+        const reorderedStation = { ...station, tracks: stationTracks };
+        console.log('handleTrackClick', reorderedStation, trackNum)
+        if(getCurrentTrackInQueue()?.url === track.url) {
             isPlaying ? dispatch(pause()) : dispatch(play())
         } else {
-            setQueueToStation(station, trackNum-1)
+            setQueueToStation(reorderedStation, trackNum)
         }
     }
 
@@ -179,6 +171,7 @@ export function StationDetails() {
     }
 
     async function onEditDetails(data) {
+        console.log("onEditDetails", data)
         try {
             onCloseMiniMenu()
             await saveStation(({...station, ...data}))
@@ -189,18 +182,8 @@ export function StationDetails() {
         }
     }
 
-    if(!station) {
-        return <div></div> //loading...
-    } else {
-        const likedTrackStation = collectionId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
-        // const stationByUser = getCurrentUser()._id === station.createdBy._id ? 'hiden' : ''
-        const stationByUser = getCurrentUser()?._id === station?.createdBy?._id ? 'hiden' : '';
-        // const isLiked = station.likedByUsers && station.likedByUsers.filter(likedByUser => likedByUser && likedByUser._id === getCurrentUser()._id).length !== 0;
-        const isLiked = station?.likedByUsers?.filter(likedByUser => likedByUser && likedByUser._id === getCurrentUser()?._id)?.length !== 0;
-        const gradientColor = station.mostCommonColor
-   
+    function StationHead({ likedTrackStation, stationByUser, gradientColor }) {
         return (
-        <section className="station-container">
             <div className="station-head" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 175%)` } : {}}>
                 {stationByUser && !likedTrackStation ?
                     <button className="station-head-img-container" onClick={() => setMenu(1)}>
@@ -213,7 +196,13 @@ export function StationDetails() {
                 }
                 {menu === 1 && 
                     <MiniMenu location={'center'} onCloseMiniMenu={onCloseMiniMenu}>
-                        {miniMenuOptions.editStation(getImage(), station.name, station.description, onEditDetails, onCloseMiniMenu)}
+                        {miniMenuOptions.editStation({
+                            imgUrl: getImage(),
+                            name: station.name,
+                            description: station.description,
+                            submit: onEditDetails,
+                            onClose: onCloseMiniMenu
+                        })}
                     </MiniMenu>
                 }
                 <div className="station-head-info">
@@ -227,78 +216,136 @@ export function StationDetails() {
                     <p>{station.createdBy.fullname} - {station.tracks.length}</p>
                 </div>
             </div>
-            <div className="station-content-gradient" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}/>
-            <div className="station-content">
-                <div className="station-options">
-                    <button className="station-play-btn" onClick={handlePlayClick}>
-                        {isPlaying ? <svgSvc.general.PlaylistPauseBtn color={"black"}/> : <svgSvc.general.PlaylistPlayBtn color={"black"}/>}
+        )
+    }
+
+    
+    function StationOptions({ likedTrackStation, stationByUser, isLiked }) {
+        return (
+            <div className="station-options">
+                <button className="station-play-btn" onClick={handlePlayClick}>
+                    {isPlaying ? <svgSvc.general.PlaylistPauseBtn color={"black"}/> : <svgSvc.general.PlaylistPlayBtn color={"black"}/>}
+                </button>
+                { !likedTrackStation && !stationByUser && 
+                    <button className="station-like-btn" onClick={onToggleUserLiked}>
+                        {isLiked ? <svgSvc.track.HeartFilled/> : <svgSvc.track.HeartBlank/>} 
                     </button>
-                    { !likedTrackStation && !stationByUser && 
-                        <button className="station-like-btn" onClick={onToggleUserLiked}>
-                            {isLiked ? <svgSvc.track.HeartFilled/> : <svgSvc.track.HeartBlank/>} 
-                        </button>
+                }
+                <div className={`station-more-btn ${likedTrackStation}`}>
+                    <button className="btn-more" onClick={() => setMenu(2)}>
+                        <p>...</p>
+                    </button>
+                    {menu === 2 && 
+                        <MiniMenu location={'right bottom'} onCloseMiniMenu={onCloseMiniMenu}>
+                            {!stationByUser && (isLiked ?
+                                miniMenuOptions.removeFromLibrary(onToggleUserLiked) :
+                                miniMenuOptions.addToLibrary(onToggleUserLiked))
+                            }
+                            {miniMenuOptions.addToQueue(onCloseMiniMenu)}
+                            {miniMenuOptions.hr()}
+                            {stationByUser && miniMenuOptions.editDetails(() => setMenu(1))}
+                            {stationByUser && miniMenuOptions.deleteObj(onDeleteStation)}
+                            {stationByUser && miniMenuOptions.hr()}
+                            {miniMenuOptions.share(onCloseMiniMenu)}
+                        </MiniMenu> 
                     }
-                    <div className={`station-more-btn ${likedTrackStation}`}>
-                        <button className="btn-more" onClick={() => setMenu(2)}>
-                            <p>...</p>
-                        </button>
-                        {menu === 2 && 
-                            <MiniMenu location={'right bottom'} onCloseMiniMenu={onCloseMiniMenu}>
-                                {!stationByUser && (isLiked ?
-                                    miniMenuOptions.removeFromLibrary(onToggleUserLiked) :
-                                    miniMenuOptions.addToLibrary(onToggleUserLiked))
-                                }
-                                {miniMenuOptions.addToQueue(onCloseMiniMenu)}
-                                {miniMenuOptions.hr()}
-                                {stationByUser && miniMenuOptions.editDetails(() => setMenu(1))}
-                                {stationByUser && miniMenuOptions.deleteObj(onDeleteStation)}
-                                {stationByUser && miniMenuOptions.hr()}
-                                {miniMenuOptions.share(onCloseMiniMenu)}
-                            </MiniMenu> 
-                        }
-                    </div>
-                    <button className="station-sort-btn" onClick={() => {}}>
-                        <p>List</p>
-                        {/* <svgSvc.general.ListDisplay/>  */}
-                        <FontAwesomeIcon icon={faList} />
-                    </button>
                 </div>
-                <div className="station-list">
-                    <div className="station-list-head station-content-layout">
-                        <p className="track-number">#</p>
-                        <p>Title</p>
-                        <div className="track-time">
-                            <FontAwesomeIcon icon={faClockFour} />
-                        </div>
-                    </div>
-                    <div className="br"/>
-                    <ul className="station-track-list">
-                        {tracksWithDurations
-                            .filter(track => track.url && track.duration && track.title !== "Deleted video")
-                            .map((track, trackNum) => (
-                                <li key={track.url + trackNum}>
-                                    <TrackPreview 
-                                        layout={"station-content-layout"}
-                                        track={track} 
-                                        trackNum={++trackNum}
-                                        isLiked={likedTracks[track.url] ? true : false}
-                                        deleteTrack={(!stationByUser || likedTrackStation) ? null : deleteTrack}
-                                        duration={utilService.formatDuration(track.duration)}
-                                        handleTrackClick={() => handleTrackClick(trackNum)}
-                                        addTrackToStation={addTrackToStation}
-                                        stationImg={station.imgUrl}
-                                    />
-                                </li> 
-                            ))
-                        }
-                    </ul>
-                </div>
-                {stationByUser && !likedTrackStation && <div className="station-foot">
-                    {tracksWithDurations?.length !== 0 && <div className="br"/>}
-                    <StationSearch addTrackToStation={addTrackToStation}/>
-                </div>}
+                <button className="station-sort-btn" onClick={() => {}}>
+                    <p>List</p>
+                    <span className="button-wrapper"> <svgSvc.sortBy.List color={"#909090"} style = {{ width: '16px', height: '16px' }} /> </span>
+                </button>
             </div>
-        </section>
+        )
+    }
+
+    function StationList({ likedTrackStation, stationByUser }) {
+
+        const handleDragStart = (e, track) => {
+            e.dataTransfer.setData("text/plain", track.url);
+        };
+    
+        const handleDragOver = (e) => {
+            e.preventDefault();
+        };
+    
+        const handleDrop = (e, trackNum) => {
+            e.preventDefault();
+            const draggedTrackUrl = e.dataTransfer.getData("text/plain");
+            const updatedTracks = [...stationTracks];
+            const draggedTrack = updatedTracks.find((track) => draggedTrackUrl.includes(track.url));
+            const draggedTrackIndex = updatedTracks.indexOf(draggedTrack);
+            
+            if (draggedTrackIndex !== -1) {
+                updatedTracks.splice(draggedTrackIndex, 1); // Remove the dragged track
+                const insertionIndex = Math.max(0, Math.min(trackNum, updatedTracks.length)); // Ensure insertion index is within bounds
+                updatedTracks.splice(insertionIndex, 0, draggedTrack); // Insert the dragged track at the correct position
+                setStationTracks(updatedTracks);
+            }
+        };
+                    
+        return (
+            <div className="station-list">
+                <div className="station-list-head station-content-layout">
+                    <p className="track-number">#</p>
+                    <div className="track-title-artist">
+                        <p className="track-title">Title</p>
+                        <p className="track-artist">Artist</p>
+                    </div>
+                    <div className="track-time">
+                        <span className="button-wrapper"> <svgSvc.general.Clock style = {{ width: '16px', height: '16px' }} /> </span>
+                    </div>
+                </div>
+                <div className="br"/>
+                <ul className="station-track-list">
+                    {stationTracks
+                        .filter(track => track.url && track.duration && track.title !== "Deleted video")
+                        .map((track, trackNum) => (
+                            <li key={track.url} onDragOver={(e) => handleDragOver(e)} onDrop={(e) => handleDrop(e, trackNum)}>
+                                <TrackPreview 
+                                    layout={"station-content-layout"}
+                                    track={track} 
+                                    trackNum={++trackNum}
+                                    isLiked={likedTracks[track.url] ? true : false}
+                                    deleteTrack={(!stationByUser || likedTrackStation) ? null : deleteTrack}
+                                    duration={utilService.formatDuration(track.duration)}
+                                    handleTrackClick={handleTrackClick}
+                                    addTrackToStation={addTrackToStation}
+                                    station={station}
+                                    draggable // Add draggable attribute
+                                    onDragStart={(e) => handleDragStart(e, track)} // Add drag start handler
+                                />
+                            </li> 
+                        ))
+                    }
+                </ul>
+            </div>
+        )
+    }
+
+    if(!station) {
+        return <div></div> //loading...
+    } else {
+        const likedTrackStation = collectionId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
+        const stationByUser = getCurrentUser()?._id === station?.createdBy?._id ? 'hiden' : '';
+        // const isLiked = station.likedByUsers && station.likedByUsers.filter(likedByUser => likedByUser && likedByUser._id === getCurrentUser()._id).length !== 0;
+        const isLiked = station?.likedByUsers?.filter(likedByUser => likedByUser && likedByUser._id === getCurrentUser()?._id)?.length !== 0;
+        const gradientColor = station.mostCommonColor
+
+        return (
+            <section className="station-container">
+                <StationHead likedTrackStation={likedTrackStation} stationByUser={stationByUser} gradientColor={gradientColor}/>
+                <div className="station-content-gradient" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}/>
+                <div className="station-content">
+                    <StationOptions likedTrackStation={likedTrackStation} stationByUser={stationByUser} isLiked={isLiked}/>
+                    <StationList likedTrackStation={likedTrackStation} stationByUser={stationByUser} />
+                    {stationByUser && !likedTrackStation && 
+                        <div className="station-foot">
+                            {stationTracks?.length !== 0 && <div className="br"/>}
+                            <StationSearch addTrackToStation={addTrackToStation}/>
+                        </div>
+                    }
+                </div>
+            </section>
         )
     }
 }

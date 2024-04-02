@@ -1,8 +1,10 @@
+import React, { useState } from 'react';
 import { utilService } from "../services/util.service"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPen, faMinus, faTrash, faCircleCheck, faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { svgSvc } from "../services/svg.service"
 import { getStationsByUser, getStationsInLibrary } from "../store/actions/station.actions"
+import { ImgUploader } from "./ImgUploader"
 
 export const miniMenuOptions = {
     hr,
@@ -143,19 +145,23 @@ function editDetails(func) {
     )
 }
 
-function editStation(imgUrl, name, description, submit, onClose ) {
+function editStation({ imgUrl: initialImgUrl, name, description, submit, onClose }) {
+    const [imgUrl, setImgUrl] = useState(initialImgUrl);
+
+    function handleImgUploaded(newImgUrl) {
+        setImgUrl(newImgUrl);
+    }
 
     function handleSubmit(ev) {
-        ev.preventDefault()
-        const data = new FormData(ev.target)
-        const dataObject = {}
-
-        for (const [name, value] of data.entries()) {
-          dataObject[name] = value
-        }
-        
-        submit(dataObject)
+        ev.preventDefault();
+        const dataObject = {
+            name: ev.target.name.value,
+            description: ev.target.description.value,
+            imgUrl: imgUrl // Include the imgUrl state in the form data
+        };
+        submit(dataObject);
     }
+
 
     function handleKeyDown(ev) {
         if (ev.key === 'Enter') {
@@ -173,8 +179,9 @@ function editStation(imgUrl, name, description, submit, onClose ) {
             </div>
             <div className="body">
                 <button className="btn-img-container">
-                    <img src={imgUrl} />
+                    <img src={imgUrl} alt="Station" />
                 </button>
+                <ImgUploader onUploaded={handleImgUploaded} />
                 <input className="input input-name" 
                     type="text" 
                     name="name"
@@ -182,7 +189,7 @@ function editStation(imgUrl, name, description, submit, onClose ) {
                     defaultValue={name}
                     maxLength="100"
                     onKeyDown={handleKeyDown}
-                    autocomplete="off"
+                    autoComplete="off"
                 />
                 <textarea className="input input-description" 
                     name="description"
@@ -190,7 +197,7 @@ function editStation(imgUrl, name, description, submit, onClose ) {
                     defaultValue={description}
                     maxLength="300"
                     onKeyDown={handleKeyDown}
-                    autocomplete="off"
+                    autoComplete="off"
                 />
                 <div className="save-container">
                     <input type="submit" className="btn-save" value="Save" />

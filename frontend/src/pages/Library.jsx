@@ -8,6 +8,7 @@ import { utilService } from "../services/util.service"
 import { IndexContext } from '../cmps/IndexContext.jsx'
 import { useContext } from "react"
 import { svgSvc } from '../services/svg.service.jsx';
+import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 
 
 export function Library() {
@@ -18,7 +19,7 @@ export function Library() {
 
     async function createNewStation() {
         const name = 'New Playlist'
-        const imgUrl = utilService.getImgUrl('../assets/imgs/MeloDiva.png')
+        const imgUrl = utilService.getImgUrl(defaultImgUrl)
         let newStation = stationService.createStation(name, getCurrentUser(), imgUrl)
         newStation = await saveStation(newStation)
 

@@ -111,10 +111,11 @@ async function update(user) {
 function _checkUser(user) {
     if (typeof user._id !== 'string' || 
         typeof user.fullname !== 'string' ||
-        (user.password ? typeof user.password !== 'string' : false) || 
+        // (user.password ? typeof user.password !== 'string' : false) || 
         typeof user.imgUrl !== 'string' || 
-        typeof user.likedTracks !== 'object' ||
-        typeof user.isAdmin !== 'boolean') {
+        typeof user.likedTracks !== 'object' // ||
+        // typeof user.isAdmin !== 'boolean'
+        ) {
         throw new Error("User object validation failed");
     }
 

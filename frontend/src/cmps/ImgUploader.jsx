@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { uploadService } from '../services/upload.service'
 
-export function ImgUploader({ onUploaded = null }) {
+export function ImgUploader({ onUploaded = null }) { //name, 
     const [imgData, setImgData] = useState({
         imgUrl: null,
         height: 500,
@@ -27,6 +27,7 @@ export function ImgUploader({ onUploaded = null }) {
             {imgData.imgUrl && <img src={imgData.imgUrl} style={{ maxWidth: '200px', float: 'right' }} />}
             <label htmlFor="imgUpload">{getUploadLabel()}</label>
             <input type="file" onChange={uploadImg} accept="img/*" id="imgUpload" />
+            {/* <input type="file" onChange={uploadImg} accept="img/*" id="imgUpload" name={name} /> */}
         </div>
     )
 }

@@ -7,6 +7,8 @@ import { svgSvc } from '../services/svg.service.jsx';
 import { Slider } from '@mui/material';
 import { playNextTrack, playPrevTrack } from '../store/actions/queue.actions.js'
 import { pause, play, toggleLooping, toggleShuffle } from '../store/actions/player.actions'
+import { VolumeControl } from './VolumeControl.jsx';
+import { ProgressSection } from './ProgressSection.jsx';
 
 export function FooterPlayer({ video }) {
     const [videoDuration, setVideoDuration] = useState("PT0M0S");
@@ -19,7 +21,6 @@ export function FooterPlayer({ video }) {
     const isShuffle = useSelector(state => state.playerModule.isShuffle);
     const isLooping = useSelector(state => state.playerModule.isLooping);
     const dispatch = useDispatch();
-    const [muteVolume, setMuteVolume] = useState(0);
 
     const opts = {
         height: '390',
@@ -106,23 +107,9 @@ export function FooterPlayer({ video }) {
         }
     };
 
-    const formatTime = (timeInSeconds) => {
-        const seconds = Math.floor(timeInSeconds % 60);
-        const minutes = Math.floor(timeInSeconds / 60);
-        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    };
-
     const onReady = (event) => {
         playerRef.current = event.target;
         setNewTrack(!newTrack)
-    };
-
-    const changeVolume = (newVolume) => {
-        if (playerRef.current) {
-            const validVolume = Math.min(100, Math.max(0, newVolume));
-            playerRef.current.setVolume(validVolume);
-            setVolume(validVolume);
-        }
     };
 
     const playNext = async () => { 
@@ -147,23 +134,6 @@ export function FooterPlayer({ video }) {
         }
     };
 
-    const shortenText = (text, maxLength = 50) => {
-        if (text?.length > maxLength) {
-          return text.slice(0, maxLength) + '...';
-        }
-        return text;
-    };
-
-    const toggleMute = () => {
-        if (volume == 0) {
-            changeVolume(muteVolume)
-            setMuteVolume(0)
-        } else {
-            setMuteVolume(volume)
-            changeVolume(0)
-        }
-    }
-
     const jump15Back = () => {
         setCurrentTime(Math.round(Math.max(0, currentTime - 15)));
     };
@@ -180,9 +150,9 @@ export function FooterPlayer({ video }) {
             dispatch(play());
         }
     };
-    
-    return (
-        <footer className="footer-player">
+
+    function VideoInfo({}) {
+        return (
             <div className="video-info">
                 <div className="thumbnail">
                     {thumbnailUrl && <img src={thumbnailUrl} alt={`${video.snippet.title} thumbnail`} />}
@@ -193,102 +163,73 @@ export function FooterPlayer({ video }) {
                 </div>
                 {/* <div className="fade-out"/> */}
             </div>
-            <div className="player-controls">
-                <div className="player-action-buttons-container">
-                    <div className="player-action-buttons">
-                        {/* <button onClick={jump15Back} name="Jump15Back" className="jump-15-back">
-                            <span className="action-button-wrapper"> <svgSvc.player.Jump15SecBack />  </span>
-                        </button> */}
-                        <button onClick={toggleShuffle} name="Shuffle" className="shuffle">
-                            <span className="action-button-wrapper"> <svgSvc.player.Shuffle color={isShuffle ? "#1ed760" : "white"}/>  </span>
-                        </button>
-                        <button onClick={playPrev} name="Previous" className="previous">
-                            <span className="action-button-wrapper"> <svgSvc.player.TrackPrev />  </span>
-                        </button>
-                        <button onClick={togglePlay} name={isPlaying ? "Pause" : "Play"} className="play-pause">
-                            <span className="action-button-wrapper"> {isPlaying ? <svgSvc.player.PauseBtn /> : <svgSvc.player.PlayBtn />}  </span>
-                        </button>
-                        <button onClick={playNext} name="Next" className="next">
-                            <span className="action-button-wrapper"> <svgSvc.player.TrackNext />  </span>
-                        </button>
-                        <button onClick={toggleLooping} name="Repeat" className="repeat">
-                            <span className="action-button-wrapper"> <svgSvc.player.Repeat color={isLooping ? "#1ed760" : "white"}/>  </span>
-                        </button>
-                        {/* <button onClick={jump15Forward} name="Jump15Back" className="jump-15-back">
-                        </button> */}
-                    </div>
-                    <div className="player-action-buttons" style={{ "height": "3px"}} >
-                        {/* <button onClick={jump15Back} name="Jump15Back" className="jump-15-back">
-                        </button> */}
-                        <button onClick={toggleShuffle} name="Shuffle" className="shuffle">
-                            {isShuffle && <span className="action-button-wrapper"> <svgSvc.player.ActivationDot/>  </span>}
-                        </button>
-                        <button onClick={playPrev} name="Previous" className="previous">
-                        </button>
-                        <button onClick={togglePlay} name={isPlaying ? "Pause" : "Play"} className="play-pause">
-                        </button>
-                        <button onClick={playNext} name="Next" className="next">
-                        </button>
-                        <button onClick={toggleLooping} name="Repeat" className="repeat">
-                            {isLooping && <span className="action-button-wrapper"> <svgSvc.player.ActivationDot/>  </span>}
-                        </button>
-                        {/* <button onClick={jump15Forward} name="Jump15Back" className="jump-15-back">
-                        </button>  */}
-                    </div>
+        );
+    }
+    
+    function PlayerActionButtons({}) {
+        return (
+            <div className="player-action-buttons-container">
+                <div className="player-action-buttons">
+                    {/* <button onClick={jump15Back} name="Jump15Back" className="jump-15-back">
+                        <span className="action-button-wrapper"> <svgSvc.player.Jump15SecBack />  </span>
+                    </button> */}
+                    <button onClick={toggleShuffle} name="Shuffle" className="shuffle">
+                        <span className="action-button-wrapper"> <svgSvc.player.Shuffle color={isShuffle ? "#1ed760" : "white"}/>  </span>
+                    </button>
+                    <button onClick={playPrev} name="Previous" className="previous">
+                        <span className="action-button-wrapper"> <svgSvc.player.TrackPrev />  </span>
+                    </button>
+                    <button onClick={togglePlay} name={isPlaying ? "Pause" : "Play"} className="play-pause">
+                        <span className="action-button-wrapper"> {isPlaying ? <svgSvc.player.PauseBtn /> : <svgSvc.player.PlayBtn />}  </span>
+                    </button>
+                    <button onClick={playNext} name="Next" className="next">
+                        <span className="action-button-wrapper"> <svgSvc.player.TrackNext />  </span>
+                    </button>
+                    <button onClick={toggleLooping} name="Repeat" className="repeat">
+                        <span className="action-button-wrapper"> <svgSvc.player.Repeat color={isLooping ? "#1ed760" : "white"}/>  </span>
+                    </button>
+                    {/* <button onClick={jump15Forward} name="Jump15Back" className="jump-15-back">
+                    </button> */}
+                </div>
+                <div className="player-action-buttons" style={{ "height": "3px"}} >
+                    {/* <button onClick={jump15Back} name="Jump15Back" className="jump-15-back">
+                    </button> */}
+                    <button onClick={toggleShuffle} name="Shuffle" className="shuffle">
+                        {isShuffle && <span className="action-button-wrapper"> <svgSvc.player.ActivationDot/>  </span>}
+                    </button>
+                    <button onClick={playPrev} name="Previous" className="previous">
+                    </button>
+                    <button onClick={togglePlay} name={isPlaying ? "Pause" : "Play"} className="play-pause">
+                    </button>
+                    <button onClick={playNext} name="Next" className="next">
+                    </button>
+                    <button onClick={toggleLooping} name="Repeat" className="repeat">
+                        {isLooping && <span className="action-button-wrapper"> <svgSvc.player.ActivationDot/>  </span>}
+                    </button>
+                    {/* <button onClick={jump15Forward} name="Jump15Back" className="jump-15-back">
+                    </button>  */}
+                </div>
+            </div>
+        )
+    }
 
-                </div>
-                <div className="progress-section">
-                    <span className="current-time">{formatTime(currentTime)}</span>
-                    <Slider
-                        className="progress-slider"
-                        value={currentTime}
-                        max={utilService.durationInSeconds(videoDuration)}
-                        onChange={(event, newValue) => {
-                            if (playerRef.current && playerRef.current.getCurrentTime) {
-                                setCurrentTime(Math.round(newValue));
-                                playerRef.current.seekTo(newValue);
-                            }
-                        }}                    
-                        valueLabelDisplay="auto"
-                        valueLabelFormat={(value) => formatTime(value)}
-                    />
-                    <span className="end-time">{utilService.formatDuration(videoDuration)}</span>
-                </div>
-            </div>
-            <div className="volume-control">
-                {/* <button onClick={() => {}} name="Now playing view" className="action-button play-in-view">
-                    <span className="action-button-wrapper"> <svgSvc.player.NowPlayingView />  </span>
-                </button>
-                <button onClick={() => {}} name="Queue" className="action-button queue">
-                    <span className="action-button-wrapper"> <svgSvc.player.Queue />  </span>
-                </button>
-                <button onClick={() => {}} name="Connect to a device" className="action-button connect-to-device">
-                    <span className="action-button-wrapper"> <svgSvc.player.ConnectToADevice />  </span>
-                </button> */}
-                <button onClick={() => {toggleMute()}} name="Mute" className="action-button mute">
-                    <span className="action-button-wrapper">
-                        {volume === 0 && <svgSvc.player.VolumeMute />}
-                        {volume > 0 && volume <= 33 && <svgSvc.player.VolumeLow />}
-                        {volume > 33  && volume <= 66 && <svgSvc.player.VolumeHalf />}                
-                        {volume > 66 && volume <= 100 && <svgSvc.player.VolumeFull />}
-                    </span>
-                </button>
-                <Slider
-                    className="volume-slider"
-                    value={volume}
-                    min={0}
-                    max={100}
-                    onChange={(event, newValue) => changeVolume(newValue)}
-                    valueLabelDisplay="auto"
-                    valueLabelFormat={(value) => `${value}%`}
+    return (
+        <footer className="footer-player">
+            <VideoInfo thumbnailUrl={thumbnailUrl} video={video}/>
+            <div className="player-controls">
+                <PlayerActionButtons />
+                <ProgressSection 
+                    currentTime={currentTime}
+                    videoDuration={videoDuration}
+                    playerRef={playerRef}
+                    setCurrentTime={setCurrentTime}
                 />
-                {/* <button onClick={() => {}} name="Open Miniplayer" className="action-button open-miniplayer">
-                    <span className="action-button-wrapper"> <svgSvc.player.OpenMiniplayer />  </span>
-                </button>
-                <button onClick={() => {}} name="Full Screen" className="action-button full-screen">
-                    <span className="action-button-wrapper"> <svgSvc.player.FullScreen />  </span>
-                </button> */}
             </div>
+            <VolumeControl 
+                volume={volume} 
+                setVolume={setVolume}
+                playerRef={playerRef}
+            />
             <div className="youtube-container">
                 <YouTube videoId={video.id.videoId} opts={opts} onReady={onReady} />
             </div>

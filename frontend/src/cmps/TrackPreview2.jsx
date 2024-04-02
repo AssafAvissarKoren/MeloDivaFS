@@ -9,7 +9,7 @@ import { svgSvc } from "../services/svg.service"
 import { PlayAnimation } from './PlayAnimation'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 
-export function TrackPreview({ layout = '', track = null, trackNum = null, isLiked, deleteTrack = null, duration, handleTrackClick, addTrackToStation, station = null}, draggable, onDragStart) {
+export function TrackPreview2({ layout = '', track = null, trackNum = null, isLiked, deleteTrack = null, duration, handleTrackClick, addTrackToStation, station = null}) {
     const [isSelected, setSelected] = useState(false)
     const [isMenu, setIsMenu] = useState(false)
     const modalRef = useRef(track.url)
@@ -89,7 +89,7 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
         );
     }
 
-    function TrackPreviewTitle({title, artist}) {
+    function TrackPreviewTitle({ artist, title }) {
         return (
             <div className="track-preview-title">
                 <div className="track-preview-img-container">
@@ -131,6 +131,13 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
     const trackImgURL = track.imgUrl === "default_thumbnail_url" ? (station === null ? null : (station.imgUrl === null ? defaultImgUrl : station.imgUrl)) : track.imgUrl;
     const selected = (isSelected || (queueTrackNum === (trackNum - 1) && queueStationId === collectionId)) ? 'selected' : ''
 
+    const separatorIndex = track.title.indexOf('-');
+    const trackArtist = track.title.slice(0, separatorIndex).trim();
+    const titleStartIndex = track.title.indexOf('-') + 1;
+    const titleEndIndex = track.title.lastIndexOf('(') - 1;
+    const trackTitle = track.title.slice(titleStartIndex, titleEndIndex).trim();
+    // {trackArtist} {trackTitle}
+
     let titleNoArtist = ''
     let artist = ''
     let title = ''
@@ -149,13 +156,20 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
             const secondQuoteIndex = titleNoArtist.indexOf('"', firstQuoteIndex + 1);
             artist = titleNoArtist.substring(0, firstQuoteIndex).trim();
             title = titleNoArtist.substring(firstQuoteIndex + 1, secondQuoteIndex).trim();
-        }        
+        }
+        
+        // console.log("titleNoArtist", titleNoArtist, "| station.name", station.name, "| track.title", track.title)
     }
 
+    if(selected) {
+        console.log(trackNum)
+    }
+    
+
     return (
-        <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} draggable={draggable} onDragStart={onDragStart}>
+        <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
             <TrackNumber />
-            <TrackPreviewTitle title={title} artist={artist}/>
+            <TrackPreviewTitle artist={artist} title={title}/>
             {layout === 'station-search-track-layout' ?
                 <div>
                     <button className="track-preview-add" onClick={() => addTrackToStation(track)}>Add</button>
@@ -168,53 +182,55 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
 }
 
 
-// return (
-//     <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
+return (
+    <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} >
 
-//         <div className='track-number'>
-//             <span className='track-num' onClick={() => handleTrackClick(track)}>
-//                 {(isPlaying && selected) ? <PlayAnimation /> : trackNum}
-//             </span>
-//             <button className="btn-track-play" onClick={() => handleTrackClick(track)}>
-//                 <span className="action-button-wrapper"> 
-//                     {(isPlaying && selected) ? <svgSvc.player.PauseBtn color={"white"} /> : <svgSvc.player.PlayBtn color={"white"} /> }
-//                 </span>
-//             </button>
-//         </div>
+        <div className='track-number'>
+            <span className='track-num' onClick={() => handleTrackClick(track)}>
+                {(isPlaying && selected) ? <PlayAnimation /> : trackNum}
+            </span>
+            <button className="btn-track-play" onClick={() => handleTrackClick(track)}>
+                <span className="action-button-wrapper"> 
+                    {(isPlaying && selected) ? <svgSvc.player.PauseBtn color={"white"} /> : <svgSvc.player.PlayBtn color={"white"} /> }
+                </span>
+            </button>
+        </div>
 
-//         <div className="track-preview-img-container">
-//             <img src={trackImgURL} className="track-preview-img"/>
-//         </div>
-//         <p className="track-title" style={{"color": selected ? "#1ed760" : "white"}}>{title}</p>
-//         <p className="track-artist" style={{"color": selected ? "#1ed760" : "white"}}>{artist}</p>
+        <div className="track-preview-title">
+            <div className="track-preview-img-container">
+                <img src={trackImgURL} className="track-preview-img"/>
+            </div>
+            <p className="track-title" style={{"color": selected ? "#1ed760" : "white"}}>{title}</p>
+            <p className="track-artist" style={{"color": selected ? "#1ed760" : "white"}}>{artist}</p>
+        </div>
 
-//         {layout === 'station-search-track-layout' ?
-//             <div>
-//                 <button className="track-preview-add" onClick={() => addTrackToStation(track)}>Add</button>
-//             </div>
-//         :
-//             <div className="track-preview-options">
-//                 <button className={`btn-like-track ${isLiked && 'green'}`} onClick={onToggleLiked}>
-//                     <span className="action-button-wrapper"> {isLiked ? <svgSvc.track.HeartFilled/> : <svgSvc.track.HeartBlank/>}  </span>
-//                 </button>
-//                 <p className="track-duration">{duration}</p>
-//                 <button className="btn-more" onClick={toggleMenu}>
-//                     <p>...</p>
-//                 </button>
-//                 {isMenu && 
-//                     <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
-//                         {miniMenuOptions.addToPlaylist(onAddToStation)}
-//                         { deleteTrack &&  miniMenuOptions.removeFromPlaylist(onDeleteTrack) }
-//                         {isLiked ? 
-//                             miniMenuOptions.removeFromLikedSongs(onToggleLiked) :
-//                             miniMenuOptions.addToLikedSongs(onToggleLiked)
-//                         }
-//                         {miniMenuOptions.addToQueue(onAddToQueue)}
-//                         {miniMenuOptions.hr()}
-//                         {miniMenuOptions.share(onCloseMiniMenu)}
-//                     </MiniMenu> 
-//                 }
-//             </div>
-//         }
-//     </section>
-// )
+        {layout === 'station-search-track-layout' ?
+            <div>
+                <button className="track-preview-add" onClick={() => addTrackToStation(track)}>Add</button>
+            </div>
+        :
+            <div className="track-preview-options">
+                <button className={`btn-like-track ${isLiked && 'green'}`} onClick={onToggleLiked}>
+                    <span className="action-button-wrapper"> {isLiked ? <svgSvc.track.HeartFilled/> : <svgSvc.track.HeartBlank/>}  </span>
+                </button>
+                <p className="track-duration">{duration}</p>
+                <button className="btn-more" onClick={toggleMenu}>
+                    <p>...</p>
+                </button>
+                {isMenu && 
+                    <MiniMenu location={'left bottom'} onCloseMiniMenu={onCloseMiniMenu}>
+                        {miniMenuOptions.addToPlaylist(onAddToStation)}
+                        { deleteTrack &&  miniMenuOptions.removeFromPlaylist(onDeleteTrack) }
+                        {isLiked ? 
+                            miniMenuOptions.removeFromLikedSongs(onToggleLiked) :
+                            miniMenuOptions.addToLikedSongs(onToggleLiked)
+                        }
+                        {miniMenuOptions.addToQueue(onAddToQueue)}
+                        {miniMenuOptions.hr()}
+                        {miniMenuOptions.share(onCloseMiniMenu)}
+                    </MiniMenu> 
+                }
+            </div>
+        }
+    </section>
+)

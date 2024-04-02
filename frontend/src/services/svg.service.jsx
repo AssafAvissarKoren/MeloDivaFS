@@ -631,21 +631,6 @@ const ActivationDot = ({ color = "#1ed760", ...props }) => (
   </svg>
 )
 
-
-const ListDisplay = ({ color = "#909090", ...props }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-    className="Svg-sc-ytk21e-0 cAMMLk"
-    data-encore-id="icon"
-    viewBox="0 0 16 16"
-    {...props}
-  >
-    <path fill={color} d="M15 14.5H5V13h10v1.5zm0-5.75H5v-1.5h10v1.5zM15 3H5V1.5h10V3zM3 3H1V1.5h2V3zm0 11.5H1V13h2v1.5zm0-5.75H1v-1.5h2v1.5z" />
-  </svg>
-)
-
-
 const Logo2 = ({ color = "1ed760", ...props }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -660,6 +645,20 @@ const Logo2 = ({ color = "1ed760", ...props }) => (
       fillRule="evenodd"
       d="M28 26H4a1 1 0 1 0 0 2h24a1 1 0 1 0 0-2Zm3-4H1a1 1 0 1 0 0 2h30a1 1 0 1 0 0-2Zm.476-2c.33-1.28.524-2.616.524-4 0-8.836-7.163-16-16-16S0 7.164 0 16c0 1.384.194 2.72.524 4h30.952ZM21 30H11a1 1 0 1 0 0 2h10a1 1 0 1 0 0-2Z"
     />
+  </svg>
+)
+
+const Clock = ({ color = "#909090", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    className="Svg-sc-ytk21e-0 dYnaPI"
+    data-encore-id="icon"
+    viewBox="0 0 16 16"
+    {...props}
+  >
+    <path fill={color} d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z" />
+    <path fill={color} d="M8 3.25a.75.75 0 0 1 .75.75v3.25H11a.75.75 0 0 1 0 1.5H7.25V4A.75.75 0 0 1 8 3.25z" />
   </svg>
 )
 
@@ -704,7 +703,7 @@ export const svgSvc = {
     LibrarySearch,
     Logo,
     Logo2,
-    ListDisplay,
+    Clock,
   },
   sortBy: {
     List,
