@@ -107,7 +107,8 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
                 <button className={`btn-like-track ${isLiked && 'green'}`} onClick={onToggleLiked}>
                     <span className="action-button-wrapper"> {isLiked ? <svgSvc.track.HeartFilled/> : <svgSvc.track.HeartBlank/>}  </span>
                 </button>
-                <p className="track-duration">{duration}</p>
+                <p className="track-duration">{duration}</p> 
+                {/* className="duration" */}
                 <button className="btn-more" onClick={toggleMenu}>
                     <p>...</p>
                 </button>

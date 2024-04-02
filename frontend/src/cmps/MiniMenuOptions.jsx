@@ -18,7 +18,6 @@ export const miniMenuOptions = {
     removeFromLikedSongs,
     deleteObj,
     editDetails,
-    editStation,
 }
 
 // Add to playlist 

@@ -156,4 +156,25 @@
       }
     }
   }
+
+  &.mini {
+    border-radius: 8px;
+    padding: 6px;
+
+    &:hover {
+      background-color: #272727;
+
+      &.play-btn {
+        bottom: 15px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 616px) {
+  .station-preview {
+    & .play-btn, .pause-btn {
+      display: none;
+    }
+  }
 }

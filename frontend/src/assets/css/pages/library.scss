@@ -24,9 +24,28 @@
             color: white;
             transition: background-color 0.3s, color 0.3s;
             align-items: center;
+
+            span{
+                display: flex;
+                align-items: center;
+                font-weight: bold;
+    
+                &.icon-wrapper {
+                    width: 20px;
+                    height: 20px;
+                    margin-right: 10px;
+                    margin-left: 4px
+                }            
+            }
     
             & p {
                 font-weight: bold;
+                color: grey;
+                transition: background-color 0.3s, color 0.3s;
+
+                &:hover {
+                    color: white;
+                }
             }
             
             & .add-station-btn {
@@ -68,12 +87,56 @@
         grid-column: 2;
         grid-row: 2;
 
-        list-style: none;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(94px, 1fr));
-        margin: 0;
-        padding: 0;
-        align-content: start;
         overflow-y: auto;
+
+        & ul {
+           list-style: none;
+           display: grid;
+           grid-template-columns: repeat(auto-fill, minmax(94px, 1fr));
+           margin: 0;
+           padding: 0;
+           align-content: start;
+       }
+
+        & p {
+            margin: 32px 0 16px 10px;
+            font-weight: bold;
+        }
+    }
+
+    &.mini {
+        grid-template-columns: 4px 1fr 4px;
+
+        & .head {
+
+            & .title {
+                height: 52px;
+                & :not(:nth-child(1)) {
+                    opacity: 0;
+                    height: 0;
+                }
+            }
+        
+            & .library-search {
+                height: 0;
+                padding: 0;
+                opacity: 0;
+            }
+        }
+    
+        & .content {
+            & ul{
+                grid-template-columns: 1fr;
+            }
+            & p {
+                margin-left: 0;
+            }
+        }
+    }
+}   
+
+@media screen and (max-width: 616px) {
+    .library .content {
+        padding-bottom: 50px;
     }
 }

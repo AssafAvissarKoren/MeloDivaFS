@@ -89,7 +89,8 @@ function _checkStation(station) {
         !Array.isArray(station.likedByUsers) || !station.likedByUsers.every(user => typeof user === 'object' && typeof user._id === 'string' && typeof user.fullname === 'string' && typeof user.imgUrl === 'string') ||
         !Array.isArray(station.tracks) || !station.tracks.every(track => typeof track === 'object' && typeof track.title === 'string' && typeof track.artist === 'string' && typeof track.url === 'string' && typeof track.imgUrl === 'string' && typeof track.duration === 'string' && typeof track.addedBy === 'object' && typeof track.addedBy._id === 'string' && typeof track.addedBy.fullname === 'string' && typeof track.addedBy.imgUrl === 'string') ||
         typeof station.mostCommonColor !== 'string' ||
-        !Array.isArray(station.msgs) || !station.msgs.every(msg => typeof msg === 'object' && typeof msg.id === 'string' && typeof msg.from === 'object' && typeof msg.from._id === 'string' && typeof msg.from.fullname === 'string' && typeof msg.from.imgUrl === 'string' && typeof msg.txt === 'string')
+        !Array.isArray(station.msgs) || !station.msgs.every(msg => typeof msg === 'object' && typeof msg.id === 'string' && typeof msg.from === 'object' && typeof msg.from._id === 'string' && typeof msg.from.fullname === 'string' && typeof msg.from.imgUrl === 'string' && typeof msg.txt === 'string') ||
+        typeof station.isPublic !== 'boolean'
     ) {
         throw new Error("Station object validation failed");
     }
@@ -110,7 +111,8 @@ function _checkStation(station) {
         likedByUsers: [...station.likedByUsers],
         tracks: [...station.tracks],
         mostCommonColor: station.mostCommonColor,
-        msgs: [...station.msgs]
+        msgs: [...station.msgs],
+        isPublic: station.isPublic
     };
     return checkedStation;
 }
