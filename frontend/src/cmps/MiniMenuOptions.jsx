@@ -20,16 +20,14 @@ export const miniMenuOptions = {
     editDetails,
 }
 
-// Add to playlist 
-// Remove from your Liked Songs 
-// Add to queue 
-// Go to song radio 
-// Go to artist 
-// Go to album 
-// Show credits 
-// Share 
-// Open in Desktop app 
-
+// {stationByUser && miniMenuOptions.editStation({
+//     imgUrl: getImage(),
+//     name: station.name,
+//     description: station.description,
+//     submit: onEditDetails,
+//     onClose: onCloseMiniMenu
+// })
+// }
 
 function hr() {
     return (
@@ -144,68 +142,68 @@ function editDetails(func) {
     )
 }
 
-function editStation({ imgUrl: initialImgUrl, name, description, submit, onClose }) {
-    const [imgUrl, setImgUrl] = useState(initialImgUrl);
+// function editStation({ imgUrl: initialImgUrl, name, description, submit, onClose }) {
+//     const [imgUrl, setImgUrl] = useState(initialImgUrl);
 
-    function handleImgUploaded(newImgUrl) {
-        setImgUrl(newImgUrl);
-    }
+//     function handleImgUploaded(newImgUrl) {
+//         setImgUrl(newImgUrl);
+//     }
 
-    function handleSubmit(ev) {
-        ev.preventDefault();
-        const dataObject = {
-            name: ev.target.name.value,
-            description: ev.target.description.value,
-            imgUrl: imgUrl // Include the imgUrl state in the form data
-        };
-        submit(dataObject);
-    }
+//     function handleSubmit(ev) {
+//         ev.preventDefault();
+//         const dataObject = {
+//             name: ev.target.name.value,
+//             description: ev.target.description.value,
+//             imgUrl: imgUrl // Include the imgUrl state in the form data
+//         };
+//         submit(dataObject);
+//     }
 
 
-    function handleKeyDown(ev) {
-        if (ev.key === 'Enter') {
-            ev.preventDefault();
-        }
-    }
+//     function handleKeyDown(ev) {
+//         if (ev.key === 'Enter') {
+//             ev.preventDefault();
+//         }
+//     }
 
-    return (
-        <form className="edit-station" onSubmit={handleSubmit}>
-            <div className="head">
-                <h2>Edit details</h2>
-                <button onClick={onClose}>
-                    <svgSvc.miniMenu.Ex/>
-                </button>
-            </div>
-            <div className="body">
-                <button className="btn-img-container">
-                    <img src={imgUrl} alt="Station" />
-                </button>
-                <ImgUploader onUploaded={handleImgUploaded} />
-                <input className="input input-name" 
-                    type="text" 
-                    name="name"
-                    placeholder="Add a name"
-                    defaultValue={name}
-                    maxLength="100"
-                    onKeyDown={handleKeyDown}
-                    autoComplete="off"
-                />
-                <textarea className="input input-description" 
-                    name="description"
-                    placeholder="Add an optional description"
-                    defaultValue={description}
-                    maxLength="300"
-                    onKeyDown={handleKeyDown}
-                    autoComplete="off"
-                />
-                <div className="save-container">
-                    <input type="submit" className="btn-save" value="Save" />
-                </div>
-                <p className="info">
-                    By proceeding, you agree to give Melodiva access to the image you choose to upload. Please make sure you have the right to upload the image.
-                </p>
-            </div>
+//     return (
+//         <form className="edit-station" onSubmit={handleSubmit}>
+//             <div className="head">
+//                 <h2>Edit details</h2>
+//                 <button onClick={onClose}>
+//                     <svgSvc.miniMenu.Ex/>
+//                 </button>
+//             </div>
+//             <div className="body">
+//                 <button className="btn-img-container">
+//                     <img src={imgUrl} alt="Station" />
+//                 </button>
+//                 <ImgUploader onUploaded={handleImgUploaded} />
+//                 <input className="input input-name" 
+//                     type="text" 
+//                     name="name"
+//                     placeholder="Add a name"
+//                     defaultValue={name}
+//                     maxLength="100"
+//                     onKeyDown={handleKeyDown}
+//                     autoComplete="off"
+//                 />
+//                 <textarea className="input input-description" 
+//                     name="description"
+//                     placeholder="Add an optional description"
+//                     defaultValue={description}
+//                     maxLength="300"
+//                     onKeyDown={handleKeyDown}
+//                     autoComplete="off"
+//                 />
+//                 <div className="save-container">
+//                     <input type="submit" className="btn-save" value="Save" />
+//                 </div>
+//                 <p className="info">
+//                     By proceeding, you agree to give Melodiva access to the image you choose to upload. Please make sure you have the right to upload the image.
+//                 </p>
+//             </div>
 
-        </form>
-    )
-}
+//         </form>
+//     )
+// }

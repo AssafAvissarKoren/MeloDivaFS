@@ -123,8 +123,6 @@ export const StationPreview = ({ station, type = "basic" }) => {
       )
   }
 
-  const stationImgURL = station?.imgUrl === "default_thumbnail_url" ? defaultImgUrl : station?.imgUrl;
-
   if (!station) {
     switch(style) {
       case "basic":
@@ -132,14 +130,12 @@ export const StationPreview = ({ station, type = "basic" }) => {
       case "home-head":
         return (<StationPreviewHomeHead isSkeleton={true} />)
     }
-  }
-
-  const isThisStationPlaying = queuedStationId === station?._id && isPlaying
-
-  switch(style) {
-    case "basic":
-      return (<StationPreviewBasic isSkeleton={false}/>)
-    case "home-head":
-      return (<StationPreviewHomeHead isSkeleton={false} />)
+  } else {
+    switch(style) {
+      case "basic":
+        return (<StationPreviewBasic isSkeleton={false}/>)
+      case "home-head":
+        return (<StationPreviewHomeHead isSkeleton={false} />)
+    }
   }
 };

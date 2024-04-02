@@ -1,8 +1,14 @@
 import { useState } from "react"
 import { svgSvc } from "../services/svg.service"
+import { ImgUploader } from "./ImgUploader"
+import { imageService } from "../services/image.service"
 
 export function MiniMenuStationEdit({ imgUrl, name, description, isPublic = false, submit, onClose }) {
-    const [fields, setFields] = useState({ imgUrl, name, description, isPublic})
+    const [fields, setFields] = useState({ imgUrl, name, description, isPublic, mostCommonColor: "#333333"})
+
+    function handleImgUploaded(newImgUrl) {
+        setFields(prevFields => ({...prevFields, imgUrl: newImgUrl}));
+    }
 
     function handleChange({ target }) {
         let { name: field, value, type } = target
@@ -19,11 +25,12 @@ export function MiniMenuStationEdit({ imgUrl, name, description, isPublic = fals
         setFields((prevFields) => ({ ...prevFields, [field]: value }))
     }
 
-    function onSubmit(ev) {
-        ev.preventDefault()
-        submit(fields)
+    async function onSubmit(ev) {
+        ev.preventDefault();
+        const mostCommonColor = await imageService.analyzeCommonColor(fields.imgUrl);
+        submit({ ...fields, mostCommonColor });
     }
-
+    
     function handleKeyDown(ev) {
         if (ev.key === 'Enter') {
             ev.preventDefault()
@@ -40,8 +47,9 @@ export function MiniMenuStationEdit({ imgUrl, name, description, isPublic = fals
             </div>
             <div className="body">
                 <button className="btn-img-container">
-                    <img src={imgUrl} />
+                    <img src={fields.imgUrl} />
                 </button>
+                <ImgUploader onUploaded={handleImgUploaded} />
                 <input className="input input-name" 
                     type="text" 
                     name="name"

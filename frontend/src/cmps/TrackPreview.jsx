@@ -129,27 +129,57 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
         );
     }
 
+    function quotesParser1(inputString) {
+        // Split the input string by double quotes to extract the track
+        const trackRegex = /"(.*?)"/;
+        const trackMatch = inputString.match(trackRegex);
+        const title = trackMatch ? trackMatch[1] : '';
+    
+        // Extract the artist by removing the track from the input string
+        const artist = inputString.replace(trackRegex, '').trim();
+    
+        return { artist, title };
+    }
+
+    function quotesParser2(inputString) {
+        const firstQuoteIndex = inputString.indexOf('"');
+        const secondQuoteIndex = inputString.indexOf('"', firstQuoteIndex + 1);
+        artist = inputString.substring(0, firstQuoteIndex).trim();
+        title = inputString.substring(firstQuoteIndex + 1, secondQuoteIndex).trim();
+        return { artist, title };
+    }
+
+    function hyphenParser(inputString) {
+        const splitIndex = inputString.indexOf("-");
+        artist = inputString.substring(0, splitIndex).trim();
+        title = inputString.substring(splitIndex + 1).trim();
+        return { artist, title };
+    }
+    
+
     const trackImgURL = track.imgUrl === "default_thumbnail_url" ? (station === null ? null : (station.imgUrl === null ? defaultImgUrl : station.imgUrl)) : track.imgUrl;
     const selected = (isSelected || (queueTrackNum === (trackNum - 1) && queueStationId === collectionId)) ? 'selected' : ''
 
-    let titleNoArtist = ''
+    let titleNoStation = ''
     let artist = ''
     let title = ''
     if (station === null) {
-        titleNoArtist = track.title;
+        titleNoStation = track.title;
     } else {
         const regexPattern = new RegExp(`\\b${station.name}\\b|Track \\d+\\.`, 'gi');
-        titleNoArtist = track.title.replace(regexPattern, '').trim();
+        titleNoStation = track.title.replace(regexPattern, '').trim();
+        console.log(titleNoStation);
 
-        if (titleNoArtist.includes("-")) {
-            const splitIndex = titleNoArtist.indexOf("-");
-            artist = titleNoArtist.substring(0, splitIndex).trim();
-            title = titleNoArtist.substring(splitIndex + 1).trim();
-        } else if (titleNoArtist.includes('"')) {
-            const firstQuoteIndex = titleNoArtist.indexOf('"');
-            const secondQuoteIndex = titleNoArtist.indexOf('"', firstQuoteIndex + 1);
-            artist = titleNoArtist.substring(0, firstQuoteIndex).trim();
-            title = titleNoArtist.substring(firstQuoteIndex + 1, secondQuoteIndex).trim();
+        if (titleNoStation.includes("-")) {
+            console.log('hyphenParser');
+            ({ artist, title } = hyphenParser(titleNoStation));
+        } else if (titleNoStation.includes('"')) {
+            console.log('quotesParser1');
+            ({ artist, title } = quotesParser1(titleNoStation));
+            if (artist === '' || title === '') {
+                console.log('quotesParser2');
+                ({ artist, title } = quotesParser2(titleNoStation));
+            }
         }        
     }
 

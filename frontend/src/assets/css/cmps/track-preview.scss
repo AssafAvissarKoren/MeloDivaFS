@@ -15,18 +15,18 @@
         .btn-more {
             opacity: 1;
         }
-        // & .track-number {
-        //     & .track-num {
-        //         display: none;
-        //         width: 0;
-        //         z-index: 0;
-        //         opacity: 0;
-        //     }
-        //     & .btn-track-play {
-        //         display: block;
-        //         z-index: 1;
-        //     }
-        // }
+        & .track-number {
+            & .track-num {
+                display: none;
+                width: 0;
+                z-index: 0;
+                opacity: 0;
+            }
+            & .btn-track-play {
+                display: block;
+                z-index: 1;
+            }
+        }
         & .track-preview-options {
             & .btn-like-track {
                 opacity: 1;

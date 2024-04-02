@@ -351,6 +351,7 @@ export function StationDetails() {
             <section className="station-container">
                 <StationHead likedTrackStation={likedTrackStation} stationByUser={stationByUser} gradientColor={gradientColor}/>
                 <div className="station-content-gradient" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}/>
+                <div className="station-content-gradient-small-screen" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 500px)` } : {}}/>
                 <div className="station-content">
                     <StationOptions likedTrackStation={likedTrackStation} stationByUser={stationByUser} isLiked={isLiked}/>
                     <StationList likedTrackStation={likedTrackStation} stationByUser={stationByUser} />

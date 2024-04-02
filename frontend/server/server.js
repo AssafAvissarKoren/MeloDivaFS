@@ -88,6 +88,18 @@ app.post('/api/getImageColors', async (req, res) => {
     }
 });
 
+app.post('/api/getImageColor', async (req, res) => {
+    try {
+        const { imagePath } = req.body;
+        const color = await extractMostCommonColor(imagePath); // Extract color from image
+        res.json(color);
+    } catch (error) {
+        console.error("Error fetching image colors:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+
 app.post('/api/updateStations', async (req, res) => {
     try {
         const { updatedStations } = req.body;

@@ -62,7 +62,7 @@ async function update(station) {
 async function add(station) {
     try {
         station._id = utilService.makeId()
-        station.mostCommonColor = "#333333"
+        // station.mostCommonColor = "#333333"
 
         const checkedStation = _checkStation(station)
         const collection = await dbService.getCollection(COLL_NAME);
