@@ -32,47 +32,20 @@ export const StationPreview = ({ station, type = "basic" }) => {
     }
   }
 
-  const stationImgURL = station?.imgUrl === "default_thumbnail_url" ? defaultImgUrl : station?.imgUrl;
-
-  if (!station) {
-    switch(type) {
-      case "basic":
-        return (
-          <div className="station-preview skeleton basic">
-            <div className="image-container skeleton">
-              <div className="img skeleton"></div>
-            </div>
-            <div className="station-info skeleton">
-              <div className="station-name skeleton"></div>
-              <div className="creator-name skeleton"></div>
-            </div>
+  function StationPreviewBasic({isSkeleton}) {
+    if(isSkeleton) {
+      return (
+        <div className="station-preview skeleton basic">
+          <div className="image-container skeleton">
+            <div className="img skeleton"></div>
           </div>
-        )
-      case "home-head":
-        return (
-          <div className="station-preview skeleton home-head">
-            <div className="image-container skeleton">
-              <div className="img skeleton"></div>
-            </div>
-            <div className="station-info skeleton">
-              <div className="station-name skeleton"></div>
-            </div>
+          <div className="station-info skeleton">
+            <div className="station-name skeleton"></div>
+            <div className="creator-name skeleton"></div>
           </div>
-        )
-      case "mini":
-        return (
-          <div className="station-preview skeleton mini">
-            <div className="image-container skeleton">
-              <div className="img skeleton"></div>
-            </div>
-          </div>
-        )
-    }
-  }
-
-  const isThisStationPlaying = queuedStationId === station?._id && isPlaying
-  switch(type) {
-    case "basic":
+        </div>
+      )
+    } else {
       return (
         <div className="station-preview basic" onClick={() => handleOnClick(station._id)}>
           <div className="image-container">
@@ -93,7 +66,22 @@ export const StationPreview = ({ station, type = "basic" }) => {
           </div>
         </div>
       )
-    case "home-head":
+    }
+  }
+
+  function StationPreviewHomeHead({isSkeleton}) {
+    if(isSkeleton) {
+      return (
+        <div className="station-preview skeleton home-head">
+          <div className="image-container skeleton">
+            <div className="img skeleton"></div>
+          </div>
+          <div className="station-info skeleton">
+            <div className="station-name skeleton"></div>
+          </div>
+        </div>
+      )
+    } else {
       return (
         <div className="station-preview home-head" onClick={() => handleOnClick(station._id)}>
           <div className="image-container">
@@ -113,7 +101,19 @@ export const StationPreview = ({ station, type = "basic" }) => {
           </div>
         </div>
       )
-    case "mini":
+    }
+  }
+
+  function StationPreviewMini({isSkeleton}) {
+    if(isSkeleton) {
+      return (
+        <div className="station-preview skeleton mini">
+          <div className="image-container skeleton">
+            <div className="img skeleton"></div>
+          </div>
+        </div>
+      )
+    } else {
       return (
         <div className="station-preview mini" onClick={() => handleOnClick(station._id)}>
           <div className="image-container">
@@ -121,21 +121,30 @@ export const StationPreview = ({ station, type = "basic" }) => {
           </div>
         </div>
       )
+    }
   }
 
+  const isThisStationPlaying = queuedStationId === station?._id && isPlaying
+  const stationImgURL = station?.imgUrl === "default_thumbnail_url" ? defaultImgUrl : station?.imgUrl;
+
   if (!station) {
-    switch(style) {
+    switch(type) {
       case "basic":
         return (<StationPreviewBasic isSkeleton={true}/>)
       case "home-head":
         return (<StationPreviewHomeHead isSkeleton={true} />)
+      case "mini":
+        return (<StationPreviewMini isSkeleton={true} />)
     }
   } else {
-    switch(style) {
+    switch(type) {
       case "basic":
         return (<StationPreviewBasic isSkeleton={false}/>)
       case "home-head":
         return (<StationPreviewHomeHead isSkeleton={false} />)
+      case "mini":
+        return (<StationPreviewMini isSkeleton={false} />)
     }
   }
 };
+

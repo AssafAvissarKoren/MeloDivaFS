@@ -14,11 +14,11 @@ export const base_dataService = {
 }
 
 async function getStations() {
-    return await httpService.get(`pre/stations`)
+    return await httpService.get(`base_data/stations`)
 }
 
 async function getCategories() {
-    return await httpService.get(`pre/categories`)
+    return await httpService.get(`base_data/categories`)
 }
 
 async function createStationData() {

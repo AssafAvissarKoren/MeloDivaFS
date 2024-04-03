@@ -27,12 +27,12 @@ export async function initUser() {
     }
 }
 
-export async function doseUserExist(fullname) {
+export async function doesUserExist(fullname) {
     try {
         const users = await userService.getUsers()
-        console.log("doseUserExist", fullname, users)
+        console.log("doesUserExist", fullname, users)
         const user = users.filter(user => user.fullname === fullname)
-        console.log("doseUserExist", user)
+        console.log("doesUserExist", user)
         return user.length
     } catch (err) {
         console.log('Had issues checking user', err);

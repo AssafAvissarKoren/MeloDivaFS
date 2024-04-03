@@ -4,7 +4,8 @@
   overflow: hidden;
 
   .img {
-    background-color: grey;
+    // background-color: grey;
+    background-color: rgb(100, 100, 100); /* Darker grey */
   }
 
   &::after {
@@ -14,7 +15,8 @@
     left: 0; // Start at the left edge of the container
     width: 0; // Initial width is 0
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent); // White line animation
+    // background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent); // White line animation
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0), rgba(127, 127, 127, 0.5), rgba(0, 0, 0, 0)); /* Darker linear gradient */
     animation: loading 1.5s infinite; // Animation properties
   }
 }

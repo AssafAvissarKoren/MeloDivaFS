@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router"
 import { Link } from "react-router-dom"
 import { eventBusService } from "../services/event-bus.service"
-import { doseUserExist, login, signup } from "../store/actions/user.actions"
+import { doesUserExist, login, signup } from "../store/actions/user.actions"
 
 export function Register({ type }) {
     const [registerInfo, setRegisterInfo] = useState({username: '', password: ''})
@@ -18,7 +18,7 @@ export function Register({ type }) {
     async function onSignup(ev) {
         ev.preventDefault()
         try{
-            if(await doseUserExist(registerInfo.fullname)) {
+            if(await doesUserExist(registerInfo.fullname)) {
                 eventBusService.showErrorMsg('User already exists.')
                 return
             }
@@ -35,7 +35,7 @@ export function Register({ type }) {
     async function onLogin(ev) {
         ev.preventDefault()
         try{
-            if(!await doseUserExist(registerInfo.fullname)) {
+            if(!await doesUserExist(registerInfo.fullname)) {
                 eventBusService.showErrorMsg('User dosen\'t exists.')
                 return
             }

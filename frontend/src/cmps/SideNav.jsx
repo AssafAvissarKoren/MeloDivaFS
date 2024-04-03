@@ -20,7 +20,7 @@ export const SideNav = ({ setFilterBy, type }) => {
     let tabData = {
         home: { name: "Home", iconActive: <svgSvc.icon.HomeActiveIcon />, icon: <svgSvc.icon.HomeIcon /> },
         search: { name: "Search", iconActive: <svgSvc.icon.SearchActiveIcon />, icon: <svgSvc.icon.SearchIcon /> },
-        test: { name: "Test", iconActive: <svgSvc.icon.CheckIcon />, icon: <svgSvc.icon.CheckIcon /> },
+        // test: { name: "Test", iconActive: <svgSvc.icon.CheckIcon />, icon: <svgSvc.icon.CheckIcon /> },
     };
     if(type === "small-screen") tabData.library = { name: "Library", iconActive: <svgSvc.icon.YourLibrary />, icon: <svgSvc.icon.YourLibrary /> }
 
