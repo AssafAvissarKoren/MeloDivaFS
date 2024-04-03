@@ -169,19 +169,21 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
         const regexPattern = new RegExp(`\\b${station.name}\\b|Track \\d+\\.`, 'gi');
         titleNoStation = track.title.replace(regexPattern, '').trim();
         console.log(titleNoStation);
-
-        if (titleNoStation.includes("-")) {
-            console.log('hyphenParser');
-            ({ artist, title } = hyphenParser(titleNoStation));
-        } else if (titleNoStation.includes('"')) {
-            console.log('quotesParser1');
-            ({ artist, title } = quotesParser1(titleNoStation));
-            if (artist === '' || title === '') {
-                console.log('quotesParser2');
-                ({ artist, title } = quotesParser2(titleNoStation));
-            }
-        }        
     }
+
+    if (titleNoStation.includes("-")) {
+        console.log('hyphenParser');
+        ({ artist, title } = hyphenParser(titleNoStation));
+    } else if (titleNoStation.includes('"')) {
+        console.log('quotesParser1');
+        ({ artist, title } = quotesParser1(titleNoStation));
+        if (artist === '' || title === '') {
+            console.log('quotesParser2');
+            ({ artist, title } = quotesParser2(titleNoStation));
+        }
+    }        
+
+    if(!title) title = track.title
 
     return (
         <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} draggable={draggable} onDragStart={onDragStart}>
