@@ -146,5 +146,17 @@ export const StationPreview = ({ station, type = "basic" }) => {
         return (<StationPreviewMini isSkeleton={false} />)
     }
   }
+
+  // const isSkeleton = station === null;
+
+  // switch(type) {
+  //   case "basic":
+  //     return (<StationPreviewBasic isSkeleton={isSkeleton}/>)
+  //   case "home-head":
+  //     return (<StationPreviewHomeHead isSkeleton={isSkeleton} />)
+  //   case "mini":
+  //     return (<StationPreviewMini isSkeleton={isSkeleton} />)
+  // }
+
 };
 
