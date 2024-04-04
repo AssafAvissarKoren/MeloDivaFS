@@ -127,7 +127,7 @@ export const CategoryDisplay = ({ category, style }) => {
  
   const renderStations = (renderedStations) => { 
  
-    if (renderedStations && renderedStations.length > 0) {
+    if (currCategory && renderedStations && renderedStations.length > 0) {
       const startingPosition = currCategory.startingPosition % renderedStations.length;
 
       return renderedStations.map((station, index) => {

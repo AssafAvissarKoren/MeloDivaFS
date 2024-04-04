@@ -23,6 +23,7 @@ import { initUser } from '../store/actions/user.actions.js';
 import { playerService } from '../services/player.service.js';
 import { useResizer } from '../customHooks/useResizer.js';
 import { SOCKET_EVENT_EDIT_PUBLIC_STATION, SOCKET_EVENT_REMOVE_PUBLIC_STATION, socketService } from '../services/socket.service.js';
+import { loadCategories } from '../store/actions/category.actions.js';
 
 
 const MIN_NAV_WIDTH = 280 // px
@@ -45,8 +46,8 @@ export const Index = () => {
         const fetchData = async () => {
             await initUser();
             await loadStationsLocal();
+            await loadCategories()
             playerService.initPlayState();
-            await categoryService.createCategories();
         };
         fetchData();
 

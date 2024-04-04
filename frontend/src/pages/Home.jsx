@@ -5,17 +5,8 @@ import { useSelector } from 'react-redux';
 import { StationPreview } from '../cmps/StationPreview';
 
 export function Home({ }) {
-    const [categories, setCategories] = useState([]);
+    const categories = useSelector(storeState => storeState.categoryModule.categories)
     const stations = useSelector(storeState => storeState.stationModule.stations)
-
-    useEffect(() => {
-        const fetchCategories = async () => {
-            const fetchedCategories = await categoryService.getCategories();
-            setCategories(fetchedCategories);
-        };
-
-        fetchCategories();
-    }, []);
     
     // COMPONENTS
     function HeadStations({stationNum, isSkeleton}) {
@@ -69,7 +60,7 @@ export function Home({ }) {
     return (
         <section className="home">
             <HeadStations stationNum={6} isSkeleton={!stations}/>
-            <Categories isSkeleton={!categories.length}/>
+            <Categories isSkeleton={!categories}/>
         </section>
     )
 }
