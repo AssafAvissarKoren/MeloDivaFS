@@ -68,6 +68,7 @@ export function Library({toggleWidth, type = "basic" }) {
         )
     }
 
+    
     return (
         <div className={`library ${type}`}>
             <div className="head">

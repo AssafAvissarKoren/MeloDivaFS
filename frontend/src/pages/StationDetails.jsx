@@ -197,7 +197,16 @@ export function StationDetails() {
         }
     }
 
-    function StationHead({ likedTrackStation, stationByUser, gradientColor }) {
+    function StationHead({ likedTrackStation, stationByUser, gradientColor, isSkeleton }) {
+        if(isSkeleton) return (
+            <div className="station-head" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 175%)` } : {}}>
+                <div className="station-head-img-container">
+                    <img className="station-head-img skeleton"/>
+                </div>
+                <div className="station-head-info">
+                </div>
+            </div>
+        )
         return (
             <div className="station-head" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 175%)` } : {}}>
                 {stationByUser && !likedTrackStation ?
@@ -234,9 +243,11 @@ export function StationDetails() {
             </div>
         )
     }
-
     
-    function StationOptions({ likedTrackStation, stationByUser, isLiked }) {
+    function StationOptions({ likedTrackStation, stationByUser, isLiked, isSkeleton }) {
+        if(isSkeleton) return (
+            <div className="station-options"/>
+        )
         return (
             <div className="station-options">
                 <button className="station-play-btn" onClick={handlePlayClick}>
@@ -274,7 +285,7 @@ export function StationDetails() {
         )
     }
 
-    function StationList({ likedTrackStation, stationByUser }) {
+    function StationList({ likedTrackStation, stationByUser, isSkeleton}) {
 
         const handleDragStart = (e, track) => {
             e.dataTransfer.setData("text/plain", track.url);
@@ -298,7 +309,24 @@ export function StationDetails() {
                 setStationTracks(updatedTracks);
             }
         };
-                    
+        
+        if(isSkeleton) return (
+            <div className="station-list">
+                <div className="station-list-head station-content-layout">
+                    <p className="track-number">#</p>
+                    <div className="track-title-artist">
+                        <p className="track-title">Title</p>
+                        <p className="track-artist">Artist</p>
+                    </div>
+                    <div className="track-time">
+                        <span className="button-wrapper"> <svgSvc.general.Clock style = {{ width: '16px', height: '16px' }} /> </span>
+                    </div>
+                </div>
+                <div className="br"/>
+                <ul className="station-track-list">
+                </ul>
+            </div>
+        )
         return (
             <div className="station-list">
                 <div className="station-list-head station-content-layout">
@@ -338,31 +366,28 @@ export function StationDetails() {
         )
     }
 
-    if(!station) {
-        return <div></div> //loading...
-    } else {
-        const likedTrackStation = collectionId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
-        const stationByUser = getCurrentUser()?._id === station?.createdBy?._id ? 'hiden' : '';
-        // const isLiked = station.likedByUsers && station.likedByUsers.filter(likedByUser => likedByUser && likedByUser._id === getCurrentUser()._id).length !== 0;
-        const isLiked = station?.likedByUsers?.filter(likedByUser => likedByUser && likedByUser._id === getCurrentUser()?._id)?.length !== 0;
-        const gradientColor = station.mostCommonColor
 
-        return (
-            <section className="station-container">
-                <StationHead likedTrackStation={likedTrackStation} stationByUser={stationByUser} gradientColor={gradientColor}/>
-                <div className="station-content-gradient" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}/>
-                <div className="station-content-gradient-small-screen" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 500px)` } : {}}/>
-                <div className="station-content">
-                    <StationOptions likedTrackStation={likedTrackStation} stationByUser={stationByUser} isLiked={isLiked}/>
-                    <StationList likedTrackStation={likedTrackStation} stationByUser={stationByUser} />
-                    {stationByUser && !likedTrackStation && 
-                        <div className="station-foot">
-                            {stationTracks?.length !== 0 && <div className="br"/>}
-                            <StationSearch addTrackToStation={addTrackToStation}/>
-                        </div>
-                    }
-                </div>
-            </section>
-        )
-    }
+    const likedTrackStation = collectionId === LIKED_TRACK_AS_STATION_ID ? 'hiden' : ''
+    const stationByUser = getCurrentUser()?._id === station?.createdBy?._id ? 'hiden' : '';
+    // const isLiked = station.likedByUsers && station.likedByUsers.filter(likedByUser => likedByUser && likedByUser._id === getCurrentUser()._id).length !== 0;
+    const isLiked = station?.likedByUsers?.filter(likedByUser => likedByUser && likedByUser._id === getCurrentUser()?._id)?.length !== 0;
+    const gradientColor = station ? station.mostCommonColor : '#333333'
+
+    return (
+        <section className="station-container">
+            <StationHead likedTrackStation={likedTrackStation} stationByUser={stationByUser} gradientColor={gradientColor} isSkeleton={!station}/>
+            <div className="station-content-gradient" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 220px)` } : {}}/>
+            <div className="station-content-gradient-small-screen" style={gradientColor ? { background: `linear-gradient(to bottom, ${gradientColor} 0px, #121212 500px)` } : {}}/>
+            <div className="station-content">
+                <StationOptions likedTrackStation={likedTrackStation} stationByUser={stationByUser} isLiked={isLiked} isSkeleton={!station}/>
+                <StationList likedTrackStation={likedTrackStation} stationByUser={stationByUser} isSkeleton={!station}/>
+                {stationByUser && !likedTrackStation && 
+                    <div className="station-foot">
+                        {stationTracks?.length !== 0 && <div className="br"/>}
+                        <StationSearch addTrackToStation={addTrackToStation}/>
+                    </div>
+                }
+            </div>
+        </section>
+    )
 }

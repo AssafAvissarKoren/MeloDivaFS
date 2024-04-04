@@ -40,6 +40,7 @@
         & .btn-img-container {
             grid-area: 1 / 1 / 3 / 2;
 
+            position: relative;
             display: block;
             width: 180px;
             height: 180px;
@@ -50,11 +51,33 @@
             cursor: unset;
             background-color: unset;
 
+            & input[type="file"] {
+                display: none;
+            }
+
             & img {
                 height: 100%;
                 width: 100%;
                 object-fit: cover;
                 border-radius: 4px;
+            }
+
+            & .hover-cover {
+                position: absolute;
+                opacity: 0;
+                display: grid;
+                align-content: center;
+                justify-content: center;
+                height: 100%;
+                width: 100%;
+                border-radius: 4px;
+                top: 0;
+                background-color: rgba(18, 18, 18, 0.6);
+                font-weight: 500;
+
+                &:hover {
+                    opacity: 1;
+                }
             }
         }
 
@@ -83,7 +106,7 @@
             grid-column: 1 / 2;
 
             display: grid;
-            grid-template-columns: 110px auto;
+            grid-template-columns: 65px auto;
             align-items: center;
             margin-top: -28px;
 
@@ -117,7 +140,7 @@
             &.public .public-private-toggle {
                 background-color: #1db954;
                 & .circle {
-                    left: 0%;
+                    left: 50%;
                     background-color: white;
                 }
             }
@@ -125,7 +148,7 @@
             &.private .public-private-toggle {
                 background-color: white;
                 & .circle {
-                    left: 50%;
+                    left: 0%;
                     background-color: #1db954;
                 }
             }
