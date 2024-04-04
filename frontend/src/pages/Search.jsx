@@ -17,7 +17,6 @@ import { eventBusService } from '../services/event-bus.service.js';
 export function Search({ searchText }) {
     const [tracks, setTracks] = useState([]);
     const [categories, setCategories] = useState([]);
-    const stations = useSelector(storeState => storeState.stationModule.stations)
     const likedTracks = useSelector(storeState => storeState.userModule.likedTracks)
 
     useEffect(() => {
@@ -94,39 +93,56 @@ export function Search({ searchText }) {
         }
     }
 
-    if (!stations || !categories.length) {
-        return <div></div> //Loading...
-    } else {
-        return (
-            <div className="search">
-                <h1>Browse All</h1>
-                {searchText ? (
-                    <>
-                        {tracks.map((track, index) => (
-                            <div key={track.url || index}>
-                                <TrackPreview 
-                                    layout={'search-track-layout'}
-                                    track={track} 
-                                    isLiked={likedTracks[track.url] ? true : false}
-                                    duration={utilService.formatDuration(track.duration)}
-                                    handleTrackClick={handleTrackClick}
-                                    addTrackToStation={addTrackToStation}
-                                />
-                            </div>
-                        ))}
-                    </>
-                ) : (
-                    <div className="search-categories">
-                        {categories.map(category => (
-                            <CategoryDisplay 
-                                key={category._id}
-                                category={category}
-                                style={categoryService.Status.CUBE}
-                            />
-                        ))}
-                    </div>
-                )} // 
-            </div>
-        );
+    // COMPONENTS
+    function Categories({isSkeleton}) {
+        if(isSkeleton) {
+            return (
+                <div className="search-categories">
+                    {Array.from({ length: 20 }, (_, i) => (
+                        <CategoryDisplay 
+                        key={`search-categories ${i}`} 
+                        category={null} 
+                        style={categoryService.Status.CUBE}
+                        />
+                    ))}
+                </div>
+            )
+        } else {
+            return (
+                <div className="search-categories">
+                    {categories.map(category => (
+                        <CategoryDisplay 
+                            key={category._id}
+                            category={category}
+                            style={categoryService.Status.CUBE}
+                        />
+                    ))}
+                </div>
+            )
+        }
     }
+
+    return (
+        <div className="search">
+            <h1>Browse All</h1>
+            {searchText ? (
+                <>
+                    {tracks.map((track, index) => (
+                        <div key={track.url || index}>
+                            <TrackPreview 
+                                layout={'search-track-layout'}
+                                track={track} 
+                                isLiked={likedTracks[track.url] ? true : false}
+                                duration={utilService.formatDuration(track.duration)}
+                                handleTrackClick={handleTrackClick}
+                                addTrackToStation={addTrackToStation}
+                            />
+                        </div>
+                    ))}
+                </>
+            ) : (
+                <Categories isSkeleton={!categories.length}/>
+            )}
+        </div>
+    )
 }
