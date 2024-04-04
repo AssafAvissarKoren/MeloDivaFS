@@ -129,10 +129,10 @@
             grid-template-rows: auto;
             height: auto;
             z-index: 99;
-
+            
             & > * {
                 background-color: rgba(18, 18, 18, 0.7);
-                border-radius: 8px;
+                border-radius: 0;
             }
         }
     

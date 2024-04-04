@@ -161,6 +161,10 @@
     border-radius: 8px;
     padding: 6px;
 
+  & .image-container {
+    width: 100%;
+  }
+
     &:hover {
       background-color: #272727;
 

@@ -32,6 +32,10 @@ h2 {
       text-decoration: underline;
       text-decoration-thickness: 0.1rem;
     }
+
+    &.skeleton {
+      height: 32px;
+    }
   }
   
   .row {
@@ -97,12 +101,17 @@ h2 {
 
   h2 {
     padding: 0 10px;
+    
+    &.skeleton {
+      height: 32px;
+    }
   }
 
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   }
+
 }
 
 .category-display{
@@ -114,8 +123,15 @@ h2 {
 @media screen and (max-width: 616px) {
   .category-row {
 
-    & .title p {
-      display: none;
+    & .title {
+
+      & p {
+        display: none;
+      }
+
+      &.skeleton {
+        height: 24px;
+      }
     }
     
     .row {

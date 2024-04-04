@@ -16,22 +16,43 @@ export function Home({ }) {
 
         fetchCategories();
     }, []);
-
-    function getHeadStations(stationNum) {
-        return stations.slice(0, stationNum).map((station) =>
-            <StationPreview key={`home-head ${station._id}`} station={station} type={"home-head"} />
+    
+    // COMPONENTS
+    function HeadStations({stationNum, isSkeleton}) {
+        return (
+            <div className='head-stations'>
+                {isSkeleton ?
+                    Array.from({ length: stationNum }, (_, i) => (
+                        <StationPreview 
+                        key={`home-head ${i}`} 
+                        station={null} 
+                        type={"home-head"}
+                        />
+                    ))
+                :
+                    stations.slice(0, stationNum).map((station) =>
+                        <StationPreview key={`home-head ${station._id}`} station={station} type={"home-head"} />
+                    )
+                }
+            </div>
         )
     }
     
-
-    if (!stations || !categories.length) {
-        return <div></div>; //Loading...
-    } else {
+    function Categories({isSkeleton}) {
+        if(isSkeleton) {
             return (
-            <section className="home">
-                <div className='head-stations'>
-                    {getHeadStations(6)}
+                <div className='category-display'>
+                    {Array.from({ length: 10 }, (_, i) => (
+                        <CategoryDisplay 
+                        key={`category-display ${i}`} 
+                        category={null} 
+                        style={categoryService.Status.ROW}
+                        />
+                    ))}
                 </div>
+            )
+        } else {
+            return (
                 <div className='category-display'>
                     {categories.map(category => (
                         <CategoryDisplay 
@@ -41,7 +62,14 @@ export function Home({ }) {
                         />
                     ))}
                 </div>
-            </section>
-        );
+            )
+        }
     }
+
+    return (
+        <section className="home">
+            <HeadStations stationNum={6} isSkeleton={!stations}/>
+            <Categories isSkeleton={!categories.length}/>
+        </section>
+    )
 }

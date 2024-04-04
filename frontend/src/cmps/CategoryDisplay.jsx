@@ -51,41 +51,75 @@ export const CategoryDisplay = ({ category, style }) => {
     setCurrentCategory(category)
   }
 
-  const renderCategory = () => {
+  const renderCategory = (isSkeleton) => {
     switch (currStyle.current) {
       case "row":
-        return (
-          <div className="category-row">
-            <div className="title">
-              <h2 onClick={() => handleOnClick(currCategory)}>{currCategory.name} </h2>
-              <p onClick={() => handleOnClick(currCategory)}>Show all</p>
+        if(isSkeleton) {
+          return (
+            <div className="category-row">
+              <div className="title skeleton"/>
+              <div className="row">{renderStations(categoryStations)}</div>
             </div>
-            <div className="row">{renderStations(categoryStations)}</div>
-          </div>
-        );
+          )
+        } else {
+          return (
+            <div className="category-row">
+              <div className="title">
+                <h2 onClick={() => handleOnClick(currCategory)}>{currCategory.name} </h2>
+                <p onClick={() => handleOnClick(currCategory)}>Show all</p>
+              </div>
+              <div className="row">{renderStations(categoryStations)}</div>
+            </div>
+          )
+        }
       case "cube":
-        return (
-          <div className="category-cube" onClick={() => handleOnClick(currCategory)} style={{ backgroundColor: currCategory.color }}>
-            <h2>{currCategory.name}</h2>
-            <div className="cube-image-container">
-              <img src={currCategory.image} alt={currCategory.name} className="cube-image" />
+        if(isSkeleton) {
+          return (
+            <div className="category-cube skeleton">
             </div>
-          </div>
-        );
+          )
+        } else {
+          return (
+            <div className="category-cube" onClick={() => handleOnClick(currCategory)} style={{ backgroundColor: currCategory.color }}>
+              <h2>{currCategory.name}</h2>
+              <div className="cube-image-container">
+                <img src={currCategory.image} alt={currCategory.name} className="cube-image" />
+              </div>
+            </div>
+          )
+        }
       case "results":
-        return (
-          <div className="category-results">
-            <h2>{currCategory.name}</h2>
-            <div className="grid">{renderStations(categoryStations)}</div>
-          </div>
-        );
+        if(isSkeleton) {
+          return (
+            <div className="category-results">
+              <h2 className='skeleton'/>
+              <div className="grid">{renderStations(categoryStations)}</div>
+            </div>
+          )
+        } else {
+          return (
+            <div className="category-results">
+              <h2>{currCategory.name}</h2>
+              <div className="grid">{renderStations(categoryStations)}</div>
+            </div>
+          )
+        }
       case "test":
-        return (
-          <div className="category-test">
+        if(isSkeleton) {
+          return (
+            <div className="category-test">
+              <h2 className='skeleton'/>
+              <div className="grid">{renderStations(null)}</div>
+            </div>
+          )
+        } else {
+          return (
+            <div className="category-test">
             <h2>{currCategory.name}</h2>
             <div className="grid">{renderStations(null)}</div>
           </div>
-        );
+          )
+        }
       default:
         return null;
     }
@@ -116,9 +150,8 @@ export const CategoryDisplay = ({ category, style }) => {
     }
   };
   
-  if (currCategory) {
-    return renderCategory();
-  } else {
-    return null;
-  }  
-};
+
+  return (
+    renderCategory(!currCategory)
+  )
+}
