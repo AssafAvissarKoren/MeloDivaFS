@@ -109,7 +109,7 @@ export const StationPreview = ({ station, type = "basic" }) => {
       return (
         <div className="station-preview skeleton mini">
           <div className="image-container skeleton">
-            <div className="img skeleton"></div>
+            <img className="img skeleton"/>
           </div>
         </div>
       )

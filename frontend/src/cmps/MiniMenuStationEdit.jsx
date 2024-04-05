@@ -2,12 +2,14 @@ import { useState } from "react"
 import { svgSvc } from "../services/svg.service"
 import { ImgUploader } from "./ImgUploader"
 import { imageService } from "../services/image.service"
+import { uploadService } from '../services/upload.service'
 
 export function MiniMenuStationEdit({ imgUrl, name, description, isPublic = false, submit, onClose }) {
     const [fields, setFields] = useState({ imgUrl, name, description, isPublic, mostCommonColor: "#333333"})
 
-    function handleImgUploaded(newImgUrl) {
-        setFields(prevFields => ({...prevFields, imgUrl: newImgUrl}));
+    async function handleImgUploaded(ev) {
+        const { secure_url, height, width } = await uploadService.uploadImg(ev)
+        setFields(prevFields => ({...prevFields, imgUrl: secure_url}));
     }
 
     function handleChange({ target }) {
@@ -45,11 +47,13 @@ export function MiniMenuStationEdit({ imgUrl, name, description, isPublic = fals
                     <svgSvc.miniMenu.Ex/>
                 </button>
             </div>
-            <div className="body">
-                <button className="btn-img-container">
+            <div className="body" >
+                <label htmlFor='imgUpload' className="btn-img-container">
+                    <input type="file" onChange={handleImgUploaded} accept="img/*" id="imgUpload" />
                     <img src={fields.imgUrl} />
-                </button>
-                <ImgUploader onUploaded={handleImgUploaded} />
+                    <div className="hover-cover">Choose photo</div>
+                </label>
+                {/* <ImgUploader onUploaded={handleImgUploaded} /> */}
                 <input className="input input-name" 
                     type="text" 
                     name="name"
@@ -70,7 +74,7 @@ export function MiniMenuStationEdit({ imgUrl, name, description, isPublic = fals
                     autoComplete="off"
                 />
                 <div className={`public-private-container ${fields.isPublic ? 'public' : 'private'}`}>
-                    {fields.isPublic ? <p>Make private</p> : <p>Make public</p>}
+                    <p>Public</p>
                     <label className="public-private-toggle">
                         <input type="checkbox" 
                         name="isPublic"

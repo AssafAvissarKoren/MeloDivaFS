@@ -2,10 +2,10 @@ import { categoryService } from "../../services/category.service";
 import { ADD_CATEGORY, REMOVE_CATEGORY, SET_IS_LOADING, SET_CATEGORIES, UPDATE_CATEGORY } from "../reducers/category.reducer";
 import { store } from "../store";
 
-export async function createCategories() {
+export async function loadCategories() {
     // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
     try {
-        const categories = await categoryService.createCategories()
+        const categories = await categoryService.getCategories()
         store.dispatch({ type: SET_CATEGORIES, categories })
     } catch (err) {
         console.log('Had issues loading categories', err);
@@ -17,9 +17,11 @@ export async function createCategories() {
 
 export async function getCategory(categoryId) {
     // store.dispatch({ type: SET_IS_LOADING, isLoading: true })
+    const categories = store.getState().categoryModule.categories
     try {
+        const categoryInArray = categories?.filter(category => category._id === categoryId)
+        if(categoryInArray.length) return categoryInArray[0]
         const category = await categoryService.getCategory(categoryId)
-        store.dispatch({ type: SET_CATEGORIES, category })
     } catch (err) {
         console.log('Had issues loading categories', err);
         throw err
