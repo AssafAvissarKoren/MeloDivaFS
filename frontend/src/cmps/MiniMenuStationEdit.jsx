@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { svgSvc } from "../services/svg.service"
-import { ImgUploader } from "./ImgUploader"
+// import { ImgUploader } from "./ImgUploader"
 import { imageService } from "../services/image.service"
 import { uploadService } from '../services/upload.service'
 
@@ -8,7 +8,7 @@ export function MiniMenuStationEdit({ imgUrl, name, description, isPublic = fals
     const [fields, setFields] = useState({ imgUrl, name, description, isPublic, mostCommonColor: "#333333"})
 
     async function handleImgUploaded(ev) {
-        const { secure_url, height, width } = await uploadService.uploadImg(ev)
+        const { secure_url, height, width } = await uploadService.uploadImg({ ev, isDummy: true });
         setFields(prevFields => ({...prevFields, imgUrl: secure_url}));
     }
 
@@ -51,7 +51,11 @@ export function MiniMenuStationEdit({ imgUrl, name, description, isPublic = fals
                 <label htmlFor='imgUpload' className="btn-img-container">
                     <input type="file" onChange={handleImgUploaded} accept="img/*" id="imgUpload" />
                     <img src={fields.imgUrl} />
-                    <div className="hover-cover">Choose photo</div>
+                    <div className="hover-cover" style={{justifyItems: "center"}}><
+                        svgSvc.icon.ChoosePhotoPen style={{height: "48px", width:"48px"}}/>
+                        <br/>
+                        Choose photo
+                    </div>
                 </label>
                 {/* <ImgUploader onUploaded={handleImgUploaded} /> */}
                 <input className="input input-name" 

@@ -631,7 +631,7 @@ const ActivationDot = ({ color = "#1ed760", ...props }) => (
   </svg>
 )
 
-const Logo2 = ({ color = "1ed760", ...props }) => (
+const Logo2 = ({ color = "#1ed760", ...props }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={800}
@@ -659,6 +659,19 @@ const Clock = ({ color = "#909090", ...props }) => (
   >
     <path fill={color} d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8z" />
     <path fill={color} d="M8 3.25a.75.75 0 0 1 .75.75v3.25H11a.75.75 0 0 1 0 1.5H7.25V4A.75.75 0 0 1 8 3.25z" />
+  </svg>
+)
+
+const ChoosePhotoPen = ({ color = "white", ...props }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    className="Svg-sc-ytk21e-0 bHdpig"
+    data-encore-id="icon"
+    viewBox="0 0 24 24"
+    {...props}
+  >
+    <path fill={color} d="M17.318 1.975a3.329 3.329 0 1 1 4.707 4.707L8.451 20.256c-.49.49-1.082.867-1.735 1.103L2.34 22.94a1 1 0 0 1-1.28-1.28l1.581-4.376a4.726 4.726 0 0 1 1.103-1.735L17.318 1.975zm3.293 1.414a1.329 1.329 0 0 0-1.88 0L5.159 16.963c-.283.283-.5.624-.636 1l-.857 2.372 2.371-.857a2.726 2.726 0 0 0 1.001-.636L20.611 5.268a1.329 1.329 0 0 0 0-1.879z" />
   </svg>
 )
 
@@ -692,6 +705,7 @@ export const svgSvc = {
     SearchActiveIcon,
     SearchIcon,
     YourLibrary,
+    ChoosePhotoPen,
   },
   general: {
     ArrowRight,

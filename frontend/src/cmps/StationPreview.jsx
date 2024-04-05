@@ -69,7 +69,7 @@ export const StationPreview = ({ station, type = "basic" }) => {
     }
   }
 
-  function StationPreviewHomeHead({isSkeleton}) {
+  function StationPreviewHomeMini({isSkeleton}) {
     if(isSkeleton) {
       return (
         <div className="station-preview skeleton home-head">
@@ -104,7 +104,7 @@ export const StationPreview = ({ station, type = "basic" }) => {
     }
   }
 
-  function StationPreviewMini({isSkeleton}) {
+  function StationPreviewLibMini({isSkeleton}) {
     if(isSkeleton) {
       return (
         <div className="station-preview skeleton mini">
@@ -127,35 +127,13 @@ export const StationPreview = ({ station, type = "basic" }) => {
   const isThisStationPlaying = queuedStationId === station?._id && isPlaying
   const stationImgURL = station?.imgUrl === "default_thumbnail_url" ? defaultImgUrl : station?.imgUrl;
 
-  if (!station) {
-    switch(type) {
-      case "basic":
-        return (<StationPreviewBasic isSkeleton={true}/>)
-      case "home-head":
-        return (<StationPreviewHomeHead isSkeleton={true} />)
-      case "mini":
-        return (<StationPreviewMini isSkeleton={true} />)
-    }
-  } else {
-    switch(type) {
-      case "basic":
-        return (<StationPreviewBasic isSkeleton={false}/>)
-      case "home-head":
-        return (<StationPreviewHomeHead isSkeleton={false} />)
-      case "mini":
-        return (<StationPreviewMini isSkeleton={false} />)
-    }
+  switch(type) {
+    case "basic":
+      return (<StationPreviewBasic isSkeleton={!station}/>)
+    case "home-head":
+      return (<StationPreviewHomeMini isSkeleton={!station} />)
+    case "mini":
+      return (<StationPreviewLibMini isSkeleton={!station} />)
   }
-
-  // const isSkeleton = station === null;
-
-  // switch(type) {
-  //   case "basic":
-  //     return (<StationPreviewBasic isSkeleton={isSkeleton}/>)
-  //   case "home-head":
-  //     return (<StationPreviewHomeHead isSkeleton={isSkeleton} />)
-  //   case "mini":
-  //     return (<StationPreviewMini isSkeleton={isSkeleton} />)
-  // }
 };
 
