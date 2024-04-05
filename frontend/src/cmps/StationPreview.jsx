@@ -157,6 +157,5 @@ export const StationPreview = ({ station, type = "basic" }) => {
   //   case "mini":
   //     return (<StationPreviewMini isSkeleton={isSkeleton} />)
   // }
-
 };
 
