@@ -7,7 +7,7 @@ import { TrackPreview } from '../cmps/TrackPreview.jsx';
 import { getCurrentTrackInQueue, setQueueToStation } from '../store/actions/queue.actions.js';
 import { getIsTrackPlaying } from '../store/actions/player.actions.js';
 import { pause, play } from "../store/actions/player.actions.js"
-
+import { svgSvc } from '../services/svg.service.jsx';
 
 export function StationSearch({addTrackToStation}) {
     const [searchText, setSearchText] = useState('')
@@ -80,7 +80,8 @@ export function StationSearch({addTrackToStation}) {
             <h2 className="search-title">Let's find something for your playlist</h2>
             <label className="search-bar-container">
                 <div className="img-container">
-                    <img className="search-img" src={utilService.getImgUrl("../assets/imgs/search.svg")} />
+                    <svgSvc.icon.SearchIcon />
+                    {/* <img className="search-img" src={utilService.getImgUrl("../assets/imgs/search.svg")} /> */}
                 </div>
                 <input 
                     className="search-bar"
@@ -92,7 +93,8 @@ export function StationSearch({addTrackToStation}) {
                 />  
                 {searchText &&
                     <div className="img-container" onClick={clearSearch}>
-                        <img className="ex-img" src={utilService.getImgUrl("../assets/imgs/ex.svg")} />
+                        <svgSvc.miniMenu.Ex />
+                        {/* <img className="ex-img" src={utilService.getImgUrl("../assets/imgs/ex.svg")} /> */}
                     </div>
                 }
             </label>
