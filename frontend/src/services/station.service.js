@@ -72,7 +72,7 @@ async function saveStations(stations) {
     }
 }
 
-function createStation(name, createdBy, imgUrl = 'blank') {
+function createStation(name, createdBy, imgUrl = 'blank', mostCommonColor = '') {
     return {
         name: name,
         description: '',
@@ -81,6 +81,7 @@ function createStation(name, createdBy, imgUrl = 'blank') {
         createdBy: createdBy,
         likedByUsers: [],
         tracks: [],
+        mostCommonColor: mostCommonColor,
         msgs: [],
         isPublic: false,
     }
