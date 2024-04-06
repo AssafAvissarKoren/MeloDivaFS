@@ -9,7 +9,7 @@ import { svgSvc } from "../services/svg.service"
 import { PlayAnimation } from './PlayAnimation'
 import defaultImgUrl from '../assets/imgs/MeloDiva.png'
 
-export function TrackPreview({ layout = '', track = null, trackNum = null, isLiked, deleteTrack = null, duration, handleTrackClick, addTrackToStation, station = null}, draggable, onDragStart) {
+export function TrackPreview({ layout = '', track = null, trackNum = null, isLiked, deleteTrack = null, duration, handleTrackClick, addTrackToStation, station = null}) {
     const [isSelected, setSelected] = useState(false)
     const [isMenu, setIsMenu] = useState(false)
     const modalRef = useRef(track.url)
@@ -95,8 +95,8 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
                 <div className="track-preview-img-container">
                     <img src={trackImgURL} className="track-preview-img"/>
                 </div>
-                <p className="track-title" style={{"color": selected ? "#1ed760" : "white"}}>{title}</p>
-                <p className="track-artist" style={{"color": selected ? "#1ed760" : "white"}}>{artist}</p>
+                <p className="track-title">{title}</p> {/*tyle={{"color": selected ? "#1ed760" : "white"}}*/}
+                <p className="track-artist">{artist}</p> {/*tyle={{"color": selected ? "#1ed760" : "white"}}*/}
             </div>
         );
     }
@@ -185,7 +185,7 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
     if(!title) title = track.title
 
     return (
-        <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected} draggable={draggable} onDragStart={onDragStart}>
+        <section ref={modalRef} className={`track-preview ${layout} ${selected}`} onClick={onToggleSelected}>
             <TrackNumber />
             <TrackPreviewTitle title={title} artist={artist}/>
             {layout === 'station-search-track-layout' ?
