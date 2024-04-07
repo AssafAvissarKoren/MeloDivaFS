@@ -9,7 +9,8 @@ import { getIsTrackPlaying } from '../store/actions/player.actions.js';
 import { pause, play } from "../store/actions/player.actions.js"
 import { svgSvc } from '../services/svg.service.jsx';
 
-export function StationSearch({addTrackToStation}) {
+export function StationSearch({addTrackToStation, addBr}) {
+    const [isActive, setIsActive] = useState(false)
     const [searchText, setSearchText] = useState('')
     const [tracks, setTracks] = useState([])
     const typingTimeoutRef = useRef(null);
@@ -44,7 +45,7 @@ export function StationSearch({addTrackToStation}) {
         } catch (error) {
             console.error('Error fetching data from YouTube API', error);
         }
-    };
+    }
 
     const handleTrackClick = (track) => {
         if(getCurrentTrackInQueue().url === track.url) {
@@ -75,29 +76,43 @@ export function StationSearch({addTrackToStation}) {
         setTracks([])
     }
     
+    if(!isActive) return (
+        <div className="station-search">
+            <div className="find-more" onClick={() => setIsActive(true)}>
+                Find more
+            </div>
+        </div>
+    )
     return (
         <div className="station-search">
-            <h2 className="search-title">Let's find something for your playlist</h2>
-            <label className="search-bar-container">
-                <div className="img-container">
-                    <svgSvc.icon.SearchIcon />
-                    {/* <img className="search-img" src={utilService.getImgUrl("../assets/imgs/search.svg")} /> */}
-                </div>
-                <input 
-                    className="search-bar"
-                    type="text" 
-                    placeholder="What do you want to play?" 
-                    value={searchText} 
-                    onChange={handleTextChange}
-                    onKeyDown={handleKeyDown}
-                />  
-                {searchText &&
-                    <div className="img-container" onClick={clearSearch}>
-                        <svgSvc.miniMenu.Ex />
-                        {/* <img className="ex-img" src={utilService.getImgUrl("../assets/imgs/ex.svg")} /> */}
+            {addBr && <div className="br"/>}
+            <div className='search-head'>
+                <h2 className="search-title">Let's find something for your playlist</h2>
+                <label className="search-bar-container">
+                    <div className="img-container">
+                        <svgSvc.icon.SearchIcon />
+                        {/* <img className="search-img" src={utilService.getImgUrl("../assets/imgs/search.svg")} /> */}
                     </div>
-                }
-            </label>
+                    <input 
+                        className="search-bar"
+                        type="text" 
+                        placeholder="What do you want to play?" 
+                        value={searchText} 
+                        onChange={handleTextChange}
+                        onKeyDown={handleKeyDown}
+                    />  
+                    {searchText &&
+                        <div className="img-container" onClick={clearSearch}>
+                            <svgSvc.miniMenu.Ex />
+                            {/* <img className="ex-img" src={utilService.getImgUrl("../assets/imgs/ex.svg")} /> */}
+                        </div>
+                    }
+                </label>
+                <div className="btn-container" onClick={() => {setIsActive(prev => !prev); clearSearch()}}>
+                    <svgSvc.miniMenu.Ex color={'grey'}/>
+                    {/* <img className="ex-img" src={utilService.getImgUrl("../assets/imgs/ex.svg")} /> */}
+                </div>
+            </div>
             <div className="search-res">
                 {tracks.map((track, index) => (
                     <div key={track.url || index}>

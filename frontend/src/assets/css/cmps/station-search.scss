@@ -1,55 +1,80 @@
 .station-search {
+    display: grid;
 
-    & .search-title {
-        margin-top: 20px;
-        font-size: x-large;
+    & .find-more {
+        justify-self: end;
         font-weight: bold;
-        letter-spacing: -1px;
+        padding: 12px;
     }
-        
-    & .search-bar-container {
-        background-color: #333333;
+
+    & .search-head {
         display: grid;
-        grid-template-columns: auto 1fr auto;
-        width: 364px;
-        border: none;   
-        padding: 2px;
-        margin-top: 16px;
-        border-radius: 4px;
-        align-items: center;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto auto;
+
+        & .search-title {
+            grid-area: 1 / 1 / 2 / 2;
+            margin-top: 20px;
+            font-size: x-large;
+            font-weight: bold;
+            letter-spacing: -1px;
+        }
+            
+        & .search-bar-container {
+            grid-area: 2 / 1 / -1 / 2;
+
+            background-color: #333333;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            width: 364px;
+            border: none;   
+            padding: 2px;
+            margin-top: 16px;
+            border-radius: 4px;
+            align-items: center;
+        
+            & .img-container {   
+                margin-left: 8px;
+                margin-right: 4px;
+                width: 18px;
+                height: 18px;
     
-        & .img-container {   
-            margin-left: 8px;
-            margin-right: 4px;
-            width: 18px;
-            height: 18px;
-
-            & .search-img {
-                // filter svg to b3b3b3
-                filter: invert(71%) sepia(4%) saturate(67%) hue-rotate(314deg) brightness(105%) contrast(81%);
+                & .search-img {
+                    // filter svg to b3b3b3
+                    filter: invert(71%) sepia(4%) saturate(67%) hue-rotate(314deg) brightness(105%) contrast(81%);
+                }
+    
+                & .ex-img {
+                    // filter svg to #b3b3b3
+                    filter: invert(71%) sepia(4%) saturate(67%) hue-rotate(314deg) brightness(105%) contrast(81%);
+                }
             }
-
-            & .ex-img {
-                // filter svg to #b3b3b3
-                filter: invert(71%) sepia(4%) saturate(67%) hue-rotate(314deg) brightness(105%) contrast(81%);
+        
+            & .filter {
+                margin: 3px;
+                height: 27px;
+            }
+        }
+        
+        & .search-bar {
+            background-color: unset;
+            border: none;
+            padding: 10px 0;
+            color: white;
+            text-indent: 4px;
+        
+            &:focus {
+                outline: none;
             }
         }
     
-        & .filter {
-            margin: 3px;
-            height: 27px;
-        }
-    }
-    
-    & .search-bar {
-        background-color: unset;
-        border: none;
-        padding: 10px 0;
-        color: white;
-        text-indent: 4px;
-    
-        &:focus {
-            outline: none;
+        & .btn-container {
+            grid-area: 1 / -2 / -1 / -1;
+
+            align-self: center;
+            width: 24px;
+            height: 24px;
+            margin-right: 6px;
         }
     }
 
