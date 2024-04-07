@@ -304,11 +304,12 @@ export function StationDetails() {
             
             if (draggedTrackIndex !== -1) {
                 updatedTracks.splice(draggedTrackIndex, 1); // Remove the dragged track
-                const insertionIndex = Math.max(0, Math.min(trackNum, updatedTracks.length)); // Ensure insertion index is within bounds
-                updatedTracks.splice(insertionIndex, 0, draggedTrack); // Insert the dragged track at the correct position
+                const insertionIndex = Math.max(0, Math.min(trackNum, updatedTracks.length+1)); // Ensure insertion index is within bounds
+                updatedTracks.splice(insertionIndex-1, 0, draggedTrack); // Insert the dragged track at the correct position
                 setStationTracks(updatedTracks);
             }
         };
+
         
         if(isSkeleton) return (
             <div className="station-list">
@@ -344,7 +345,7 @@ export function StationDetails() {
                     {stationTracks
                         .filter(track => track.url && track.duration && track.title !== "Deleted video")
                         .map((track, trackNum) => (
-                            <li key={track.url} onDragOver={(e) => handleDragOver(e)} onDrop={(e) => handleDrop(e, trackNum)}>
+                            <li key={track.url} draggable={true} onDragStart={(e) => handleDragStart(e, track)} onDragOver={(e) => handleDragOver(e)} onDrop={(e) => handleDrop(e, trackNum)}>
                                 <TrackPreview 
                                     layout={"station-content-layout"}
                                     track={track} 
@@ -355,8 +356,6 @@ export function StationDetails() {
                                     handleTrackClick={handleTrackClick}
                                     addTrackToStation={addTrackToStation}
                                     station={station}
-                                    draggable // Add draggable attribute
-                                    onDragStart={(e) => handleDragStart(e, track)} // Add drag start handler
                                 />
                             </li> 
                         ))

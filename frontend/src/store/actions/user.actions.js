@@ -69,7 +69,7 @@ export async function login(fullname, password) {
 
 export function getLikedTracksAsStation() {
     const likedTracks = store.getState().userModule.likedTracks
-    const station = stationService.createStation('Liked Songs', getCurrentUser(), utilService.getImgUrl('../assets/imgs/LikedSongs.png'))
+    const station = stationService.createStation('Liked Songs', getCurrentUser(), "https://res.cloudinary.com/dbwxscqid/image/upload/v1712428148/qu7mq1ebwpveweyygva5.png", "#4f1bf4")
     station.tracks = Object.keys(likedTracks).map((key) => likedTracks[key])
     station._id = LIKED_TRACK_AS_STATION_ID
     return station

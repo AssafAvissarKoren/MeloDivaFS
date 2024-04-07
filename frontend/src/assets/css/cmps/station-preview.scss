@@ -81,14 +81,14 @@
     &:hover {
       background-color: #272727;
 
-      &.play-btn {
+      & .play-btn {
         bottom: 15px;
       }
     }
 
     & .play-btn, .pause-btn {
       position: absolute;
-      bottom: 10px;
+      bottom: 5px;
       right: 15px;
       transform: translate(15%, 15%);
       width: 48px;

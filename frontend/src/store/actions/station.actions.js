@@ -26,7 +26,7 @@ export async function getStationById(stationId) {
     const stations = store.getState().stationModule.stations
     try {
         const stationInArray = stations?.filter(station => station._id === stationId)
-        if(stationInArray.length) return stationInArray[0]
+        if(stationInArray?.length) return stationInArray[0]
         return await stationService.getById(stationId)
     } catch (err) {
         console.log('Had issues Getting station', err);
