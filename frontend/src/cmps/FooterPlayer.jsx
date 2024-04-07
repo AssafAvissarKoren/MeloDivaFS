@@ -2,21 +2,23 @@ import React, { useState, useEffect, useRef } from 'react';
 import YouTube from 'react-youtube';
 import { useSelector, useDispatch } from 'react-redux';
 import { utilService } from '../services/util.service.js'
-import { dataService } from '../services/data.service.js'
 import { svgSvc } from '../services/svg.service.jsx';
-import { Slider } from '@mui/material';
 import { playNextTrack, playPrevTrack } from '../store/actions/queue.actions.js'
 import { pause, play, toggleLooping, toggleShuffle } from '../store/actions/player.actions'
 import { VolumeControl } from './VolumeControl.jsx';
 import { ProgressSection } from './ProgressSection.jsx';
+import defaultImgUrl from '../assets/imgs/MeloDiva.png';
 
 export function FooterPlayer({ video }) {
     const [videoDuration, setVideoDuration] = useState("PT0M0S");
     const [currentTime, setCurrentTime] = useState(0);
     const [volume, setVolume] = useState(50);
     const [newTrack, setNewTrack] = useState(false);
+    const [prevThumbnail, setPrevThumbnail] = useState(defaultImgUrl);
     const playerRef = useRef(null);
-    const thumbnailUrl = video.snippet.thumbnails.default.url;
+    // const thumbnailUrl = video.snippet.thumbnails.default.url;
+    // const stationImgURL = station?.imgUrl === "default_thumbnail_url" ? defaultImgUrl : station?.imgUrl; 
+    const thumbnailUrl = video ? video.snippet.thumbnails.default.url : prevThumbnail;
     const isPlaying = useSelector(state => state.playerModule.isPlaying);
     const isShuffle = useSelector(state => state.playerModule.isShuffle);
     const isLooping = useSelector(state => state.playerModule.isLooping);
@@ -92,6 +94,7 @@ export function FooterPlayer({ video }) {
     useEffect(() => {
         setTimeout( async () => {
             if (playerRef.current && playerRef.current.playVideo) {
+                setPrevThumbnail(thumbnailUrl)
                 playerRef.current.pauseVideo(); //play sequance for loading a new track, no need for play pause when setting the track via next prev
                 playerRef.current.playVideo();
                 dispatch(play());
@@ -155,11 +158,11 @@ export function FooterPlayer({ video }) {
         return (
             <div className="video-info">
                 <div className="thumbnail">
-                    {thumbnailUrl && <img src={thumbnailUrl} alt={`${video.snippet.title} thumbnail`} />}
+                    {video.snippet.title && <img src={thumbnailUrl} alt={`${video.snippet.title} thumbnail`} />}
                 </div>
                 <div className="title-and-channel">
-                    <div className="video-name">{video.snippet.title}</div>
-                    <div className="channel-name">{video.snippet.channelTitle}</div>
+                    {video.snippet.title && <div className="video-name">{video.snippet.title}</div>}
+                    {video.snippet.channelTitle && <div className="channel-name">{video.snippet.channelTitle}</div>}
                 </div>
                 {/* <div className="fade-out"/> */}
             </div>
@@ -231,7 +234,9 @@ export function FooterPlayer({ video }) {
                 playerRef={playerRef}
             />
             <div className="youtube-container">
-                <YouTube videoId={video.id.videoId} opts={opts} onReady={onReady} />
+                {video && video.id && video.id.videoId && (
+                    <YouTube videoId={video.id.videoId} opts={opts} onReady={onReady} />
+                )}
             </div>
         </footer>
     );
