@@ -382,8 +382,7 @@ export function StationDetails() {
                 <StationList likedTrackStation={likedTrackStation} stationByUser={stationByUser} isSkeleton={!station}/>
                 {stationByUser && !likedTrackStation && 
                     <div className="station-foot">
-                        {stationTracks?.length !== 0 && <div className="br"/>}
-                        <StationSearch addTrackToStation={addTrackToStation}/>
+                        <StationSearch addTrackToStation={addTrackToStation} addBr={stationTracks?.length !== 0}/>
                     </div>
                 }
             </div>

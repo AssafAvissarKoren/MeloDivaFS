@@ -78,7 +78,7 @@ export function MiniMenuStationEdit({ imgUrl, name, description, isPublic = fals
                     autoComplete="off"
                 />
                 <div className={`public-private-container ${fields.isPublic ? 'public' : 'private'}`}>
-                    <p>Public</p>
+                    {fields.isPublic ? <p>Public</p> : <p>Private</p>}
                     <label className="public-private-toggle">
                         <input type="checkbox" 
                         name="isPublic"
