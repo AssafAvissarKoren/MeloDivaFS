@@ -1,0 +1,573 @@
+[
+  {
+    "_id": "c107",
+    "name": "Pop",
+    "stationTags": [
+      "Pop"
+    ],
+    "color": "#990066",
+    "startingPosition": 6,
+    "image": "https://i.ytimg.com/vi/U05fwua9-D4/sddefault.jpg",
+    "stationIds": [
+      "s167",
+      "s168",
+      "s169",
+      "s170",
+      "s176",
+      "s101",
+      "s150",
+      "s151",
+      "s163",
+      "s164",
+      "s187",
+      "s152",
+      "s154",
+      "s156",
+      "s160",
+      "s190",
+      "s191",
+      "s192",
+      "s104",
+      "s110",
+      "s112",
+      "s153",
+      "s155",
+      "s157",
+      "s158",
+      "s159",
+      "s161",
+      "s162"
+    ]
+  }, 
+  {
+    "_id": "c113",
+    "name": "1960s",
+    "stationTags": [
+      "1960s"
+    ],
+    "color": "#006633",
+    "startingPosition": 10,
+    "image": "https://i.ytimg.com/vi/-QPu-8_FZbo/sddefault.jpg",
+    "stationIds": [
+      "s102",
+      "s113",
+      "s117",
+      "s133",
+      "s134",
+      "s135",
+      "s142",
+      "s164",
+      "s178",
+      "s179",
+      "s180",
+      "s120",
+      "s115"
+    ]
+  },
+{
+  "_id": "c101",
+  "name": "Soundtrack",
+  "stationTags": [
+    "Soundtrack"
+  ],
+  "color": "#990099",
+  "startingPosition": 8,
+  "image": "https://i.ytimg.com/vi/-9vEwpLL1y4/sddefault.jpg",
+  "stationIds": [
+    "s165",
+    "s166",
+    "s167",
+    "s168",
+    "s169",
+    "s170",
+    "s173",
+    "s175",
+    "s176",
+    "s189"
+  ]
+},
+{
+  "_id": "c108",
+  "name": "Dance",
+  "stationTags": [
+    "Dance"
+  ],
+  "color": "#996600",
+  "startingPosition": 1,
+  "image": "https://i.ytimg.com/vi/MdYGQ7B0Vew/sddefault.jpg",
+  "stationIds": [
+    "s150",
+    "s163",
+    "s106",
+    "s152",
+    "s154",
+    "s156",
+    "s160",
+    "s190",
+    "s191",
+    "s192",
+    "s104",
+    "s153",
+    "s155",
+    "s157",
+    "s158",
+    "s159",
+    "s161",
+    "s162"
+  ]
+},
+{
+  "_id": "c110",
+  "name": "Soul",
+  "stationTags": [
+    "Soul"
+  ],
+  "color": "#990066",
+  "startingPosition": 8,
+  "image": "https://i.ytimg.com/vi/-0wbtk6_vpE/sddefault.jpg",
+  "stationIds": [
+    "s167",
+    "s168",
+    "s164",
+    "s116",
+    "s120",
+    "s122",
+    "s115",
+    "s110",
+    "s153"
+  ]
+},
+{
+  "_id": "c103",
+  "name": "Electronic",
+  "stationTags": [
+    "Electronic"
+  ],
+  "color": "#993300",
+  "startingPosition": 7,
+  "image": "https://i.ytimg.com/vi/kTHNpusq654/sddefault.jpg",
+  "stationIds": [
+    "s165",
+    "s166",
+    "s169",
+    "s148",
+    "s103",
+    "s106",
+    "s152",
+    "s154",
+    "s156",
+    "s160",
+    "s190",
+    "s191",
+    "s192"
+  ]
+},
+{
+  "_id": "c116",
+  "name": "1990s",
+  "stationTags": [
+    "1990s"
+  ],
+  "color": "#990000",
+  "startingPosition": 6,
+  "image": "https://i.ytimg.com/vi/hTWKbfoikeg/sddefault.jpg",
+  "stationIds": [
+    "s165",
+    "s166",
+    "s167",
+    "s169",
+    "s176",
+    "s145",
+    "s146",
+    "s147",
+    "s148",
+    "s149",
+    "s112",
+    "s171",
+    "s182"
+  ]
+},
+{
+  "_id": "c115",
+  "name": "1980s",
+  "stationTags": [
+    "1980s"
+  ],
+  "color": "#996600",
+  "startingPosition": 9,
+  "image": "https://i.ytimg.com/vi/NrI-UBIB8Jk/sddefault.jpg",
+  "stationIds": [
+    "s168",
+    "s101",
+    "s132",
+    "s139",
+    "s140",
+    "s143",
+    "s144",
+    "s156",
+    "s158"
+  ]
+},
+{
+  "_id": "c117",
+  "name": "2000s",
+  "stationTags": [
+    "2000s"
+  ],
+  "color": "#669900",
+  "startingPosition": 5,
+  "image": "https://i.ytimg.com/vi/dvgZkm1xWPE/sddefault.jpg",
+  "stationIds": [
+    "s170",
+    "s173",
+    "s175",
+    "s189",
+    "s150",
+    "s151",
+    "s163",
+    "s152",
+    "s154",
+    "s160",
+    "s153",
+    "s155",
+    "s157",
+    "s159",
+    "s161",
+    "s162",
+    "s108",
+    "s109",
+    "s172",
+    "s183",
+    "s184"
+  ]
+},
+{
+  "_id": "c106",
+  "name": "Jazz",
+  "stationTags": [
+    "Jazz"
+  ],
+  "color": "#990000",
+  "startingPosition": 5,
+  "image": "https://i.ytimg.com/vi/-YngEIIYxlk/sddefault.jpg",
+  "stationIds": [
+    "s142",
+    "s164",
+    "s122",
+    "s114",
+    "s115",
+    "s118",
+    "s121",
+    "s123",
+    "s124",
+    "s125",
+    "s126",
+    "s127",
+    "s128",
+    "s129"
+  ]
+},
+{
+  "_id": "c102",
+  "name": "Rock",
+  "stationTags": [
+    "Rock"
+  ],
+  "color": "#669900",
+  "startingPosition": 2,
+  "image": "https://i.ytimg.com/vi/ChCp6xuaFiA/sddefault.jpg",
+  "stationIds": [
+    "s165",
+    "s166",
+    "s167",
+    "s168",
+    "s169",
+    "s170",
+    "s101",
+    "s102",
+    "s113",
+    "s117",
+    "s130",
+    "s131",
+    "s132",
+    "s133",
+    "s134",
+    "s135",
+    "s136",
+    "s137",
+    "s138",
+    "s139",
+    "s140",
+    "s141",
+    "s142",
+    "s143",
+    "s144",
+    "s145",
+    "s146",
+    "s147",
+    "s148",
+    "s149",
+    "s150",
+    "s151",
+    "s163",
+    "s164",
+    "s178",
+    "s179",
+    "s180",
+    "s185",
+    "s186",
+    "s187"
+  ]
+},
+{
+  "_id": "c104",
+  "name": "Blues",
+  "stationTags": [
+    "Blues"
+  ],
+  "color": "#006633",
+  "startingPosition": 6,
+  "image": "https://i.ytimg.com/vi/A84AktICCg8/sddefault.jpg",
+  "stationIds": [
+    "s113",
+    "s130",
+    "s135",
+    "s137",
+    "s138",
+    "s142",
+    "s178",
+    "s116",
+    "s120",
+    "s122"
+  ]
+},
+{
+  "_id": "c111",
+  "name": "Metal",
+  "stationTags": [
+    "Metal"
+  ],
+  "color": "#006633",
+  "startingPosition": 4,
+  "image": "https://i.ytimg.com/vi/mg5zzivyOcA/sddefault.jpg",
+  "stationIds": [
+    "s131",
+    "s132",
+    "s133",
+    "s137",
+    "s139",
+    "s140",
+    "s141",
+    "s144",
+    "s145"
+  ]
+},
+{
+  "_id": "c109",
+  "name": "R&B",
+  "stationTags": [
+    "R&B"
+  ],
+  "color": "#996600",
+  "startingPosition": 7,
+  "image": "https://i.ytimg.com/vi/LLn3FT9BsRs/sddefault.jpg",
+  "stationIds": [
+    "s167",
+    "s168",
+    "s169",
+    "s170",
+    "s142",
+    "s116",
+    "s120",
+    "s115",
+    "s110",
+    "s112",
+    "s153",
+    "s157",
+    "s159"
+  ]
+},
+{
+  "_id": "c119",
+  "name": "American",
+  "stationTags": [
+    "American"
+  ],
+  "color": "#996600",
+  "startingPosition": 10,
+  "image": "https://i.ytimg.com/vi/MA3aKUwu-Dk/sddefault.jpg",
+  "stationIds": [
+    "s113",
+    "s117",
+    "s130",
+    "s131",
+    "s132",
+    "s142",
+    "s145",
+    "s146",
+    "s147",
+    "s150",
+    "s179",
+    "s180",
+    "s186",
+    "s103",
+    "s106",
+    "s152",
+    "s154",
+    "s156",
+    "s160",
+    "s190",
+    "s192",
+    "s116",
+    "s120",
+    "s122",
+    "s114",
+    "s115",
+    "s118",
+    "s121",
+    "s123",
+    "s124",
+    "s125",
+    "s126",
+    "s127",
+    "s128",
+    "s129",
+    "s104",
+    "s110",
+    "s112",
+    "s153",
+    "s155",
+    "s157",
+    "s159",
+    "s161",
+    "s107",
+    "s108",
+    "s109",
+    "s111",
+    "s181",
+    "s182",
+    "s183",
+    "s184",
+    "s105",
+    "s119"
+  ]
+},
+{
+  "_id": "c120",
+  "name": "British",
+  "stationTags": [
+    "British"
+  ],
+  "color": "#006666",
+  "startingPosition": 2,
+  "image": "https://i.ytimg.com/vi/lsZG7n7ries/sddefault.jpg",
+  "stationIds": [
+    "s101",
+    "s102",
+    "s133",
+    "s134",
+    "s135",
+    "s136",
+    "s138",
+    "s141",
+    "s144",
+    "s148",
+    "s149",
+    "s151",
+    "s163",
+    "s164",
+    "s178",
+    "s185",
+    "s187"
+  ]
+},
+{
+  "_id": "c105",
+  "name": "Psychedelic",
+  "stationTags": [
+    "Psychedelic"
+  ],
+  "color": "#006666",
+  "startingPosition": 3,
+  "image": "https://i.ytimg.com/vi/_FrOQC-zEog/sddefault.jpg",
+  "stationIds": [
+    "s117",
+    "s133",
+    "s135",
+    "s138",
+    "s142",
+    "s146",
+    "s178",
+    "s179",
+    "s180"
+  ]
+},
+{
+  "_id": "c114",
+  "name": "1970s",
+  "stationTags": [
+    "1970s"
+  ],
+  "color": "#993300",
+  "startingPosition": 8,
+  "image": "https://i.ytimg.com/vi/6ul-cZyuYq4/sddefault.jpg",
+  "stationIds": [
+    "s130",
+    "s131",
+    "s136",
+    "s137",
+    "s138",
+    "s141",
+    "s185",
+    "s186",
+    "s187",
+    "s181",
+    "s188"
+  ]
+},
+{
+  "_id": "c118",
+  "name": "2010s",
+  "stationTags": [
+    "2010s"
+  ],
+  "color": "#990099",
+  "startingPosition": 1,
+  "image": "https://i.ytimg.com/vi/FSWjU779FdE/sddefault.jpg",
+  "stationIds": [
+    "s103",
+    "s106",
+    "s190",
+    "s191",
+    "s192",
+    "s104",
+    "s110",
+    "s107",
+    "s111",
+    "s105"
+  ]
+},
+{
+  "_id": "c112",
+  "name": "Comedy",
+  "stationTags": [
+    "Comedy",
+    "Show",
+    "Animation"
+  ],
+  "color": "#006666",
+  "startingPosition": 3,
+  "image": "https://i.ytimg.com/vi/5M64D7_ECSU/sddefault.jpg",
+  "stationIds": [
+    "s107",
+    "s108",
+    "s109",
+    "s111",
+    "s171",
+    "s172",
+    "s181",
+    "s182",
+    "s183",
+    "s184"
+  ]
+}]

@@ -144,7 +144,7 @@ export const CategoryDisplay = ({ category, style }) => {
       return Array.from({ length: 10 }, (_, i) => (
         <StationPreview 
           key={i} 
-          station={null} 
+          station={null}
         />
       ));
     }
