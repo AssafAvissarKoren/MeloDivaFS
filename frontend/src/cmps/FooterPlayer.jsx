@@ -158,7 +158,7 @@ export function FooterPlayer({ video }) {
         return (
             <div className="video-info">
                 <div className="thumbnail">
-                    {video.snippet.title && thumbnailUrl && <img src={thumbnailUrl} alt={`${video.snippet.title} thumbnail`} />}
+                    {thumbnailUrl && video.snippet.title && <img src={thumbnailUrl} alt={`${video.snippet.title} thumbnail`} />}
                 </div>
                 <div className="title-and-channel">
                     {video.snippet.title && <div className="video-name">{video.snippet.title}</div>}

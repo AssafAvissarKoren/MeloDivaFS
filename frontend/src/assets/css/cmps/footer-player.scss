@@ -166,7 +166,7 @@
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: Add shadow for depth */
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); 
                   
                         svg {
                             width: 16px;
@@ -311,7 +311,7 @@
 }
 
 .action-button {
-    background-color: #181818;
+    background-color: black;
     color: white;
     border: none;
     position: relative;

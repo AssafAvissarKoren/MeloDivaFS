@@ -35,7 +35,7 @@ export const StationPreview = ({ station, type = "basic" }) => {
   function StationPreviewBasic({isSkeleton}) {
     if(isSkeleton) {
       return (
-        <div className="station-preview skeleton basic" style={{ "margin-right": "10px" }}>
+        <div className="station-preview skeleton basic" style={{ "marginRight": "10px" }}>
           <div className="image-container skeleton">
             <div className="img skeleton"></div>
           </div>
