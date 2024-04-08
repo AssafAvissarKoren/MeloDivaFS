@@ -4,7 +4,7 @@ import { trackService } from '../services/track.service.js';
 import { useSelector } from 'react-redux';
 import { utilService } from '../services/util.service.js';
 import { TrackPreview } from '../cmps/TrackPreview.jsx';
-import { getCurrentTrackInQueue, setQueueToStation } from '../store/actions/queue.actions.js';
+import { getCurrentTrackInQueue, setQueueToStation, setQueueToTrack } from '../store/actions/queue.actions.js';
 import { getIsTrackPlaying } from '../store/actions/player.actions.js';
 import { pause, play } from "../store/actions/player.actions.js"
 import { svgSvc } from '../services/svg.service.jsx';
@@ -51,7 +51,7 @@ export function StationSearch({addTrackToStation, addBr}) {
         if(getCurrentTrackInQueue().url === track.url) {
             getIsTrackPlaying() ? dispatch(pause()) : dispatch(play())
         } else {
-            setQueueToStation(station, trackNum-1);
+            setQueueToTrack(track);
         }
     }
 

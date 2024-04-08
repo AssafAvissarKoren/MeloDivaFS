@@ -181,6 +181,9 @@ export function TrackPreview({ layout = '', track = null, trackNum = null, isLik
             ({ artist, title } = quotesParser2(titleNoStation));
         }
     }        
+    if (artist == '') {
+        artist = track.artist;
+    }
 
     if(!title) title = track.title
 
