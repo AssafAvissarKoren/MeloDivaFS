@@ -31,6 +31,7 @@ export function StationDetails() {
     const [menu, setMenu] = useState(0)
     const [stationTracks, setStationTracks] = useState([])
     const isPlaying = useSelector(state => state.playerModule.isPlaying)
+    const queuedStationId = useSelector(state => state.queueModule.station?._id)
     const stations = useSelector(storeState => storeState.stationModule.stations) // track if station changed through sockets
     const dispatch = useDispatch();
 
@@ -251,7 +252,7 @@ export function StationDetails() {
         return (
             <div className="station-options">
                 <button className="station-play-btn" onClick={handlePlayClick}>
-                    {isPlaying ? <svgSvc.general.PlaylistPauseBtn color={"black"}/> : <svgSvc.general.PlaylistPlayBtn color={"black"}/>}
+                    {(isPlaying && queuedStationId === station?._id) ? <svgSvc.general.PlaylistPauseBtn color={"black"}/> : <svgSvc.general.PlaylistPlayBtn color={"black"}/>}
                 </button>
                 { !likedTrackStation && !stationByUser && 
                     <button className="station-like-btn" onClick={onToggleUserLiked}>
